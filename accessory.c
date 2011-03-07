@@ -48,6 +48,16 @@ mcrd neib(mcrd a, int i) {
 
 
 
+// TODO rename
+// возвращает противоположный индекс соседа
+int neib2(int i){
+  //i+=3; if(i>=6) i-=6;
+  int d[] = {3, 4,2, 5,1, 0};
+  return(i+d[i]);
+}
+
+
+
 // в пределах карты?
 bool inboard(mcrd t){
   return( t.x>=0 && t.x<MAP_W && t.y>=0 && t.y<MAP_H );
