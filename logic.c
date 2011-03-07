@@ -46,14 +46,24 @@ void start_attack(unit * u1, unit * u2, int type) {
   attack_index = 0;
   mp(attack_u1->mcrd)->unit = NULL;
 
-  // стрельба или рукопашная?
-  if(type==1){
-    attack_shoot_index = 0;
-    attack_is_shoot    = true;
-  }else if(type==0){
+  //0-рукопашная
+  if(type==0){
     attack_stage      = 0; // наступление
     attack_is_shoot   = false;
     attack_is_counter = false;
+  }
+  //1-стрельба 
+  if(type==1){
+    attack_shoot_index = 0;
+    attack_is_shoot    = true;
+  }
+  //2-метание
+  if(type==2){
+    /*todo*/;
+  }
+  //3-таран
+  if(type==3){
+    /*todo*/;
   }
 }
 
@@ -150,32 +160,41 @@ void on_reach_enemy(){
 
 
 
-// если это была контратака - закончить махаться
-// если нет и жив противник - начать контратаку
+void try_retreat(){
+  for(int i=0; i<6; i++){
+    //mcrd n = neib(attack_u1->mcrd, i);
+    mcrd n = neib(attack_u1->mcrd, neib2(i));
+    if(!mp(n)->unit){
+      attack_crd = n;
+      attack_stage = 2;
+      return;
+    }
+  }
+}
+
+
+
+void start_counterattack(){
+  start_attack(attack_u2, attack_u1, 0);
+  attack_is_counter=true;
+}
+
+
+
 void on_return_after_attack(){
   mp(attack_u1->mcrd)->unit = attack_u1;
-  if(attack_is_counter
-  || !attack_u2
-  //|| find_feature(attack_u2, FEATURE_RNG)){
-  ){
+
+  if(attack_is_counter || !attack_u2){
     if(attack_u1->health<attack_u1->type->health){
       mp(attack_u1->mcrd)->unit = NULL;
       attack_crd = attack_u1->mcrd;
-      for(int i=0; i<6; i++){
-        mcrd xxx = neib(attack_u1->mcrd, i);
-        if(!mp(xxx)->unit){
-          attack_crd = xxx;
-          attack_stage = 2;
-          return;
-        }
-      }
+      try_retreat();
     }else{
       attack_u1 = attack_u2 = NULL;
       mode = MODE_SELECT;
     }
   }else{
-    start_attack(attack_u2, attack_u1, 0);
-    attack_is_counter=true;
+    start_counterattack();
   }
 }
 
