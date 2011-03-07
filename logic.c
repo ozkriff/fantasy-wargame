@@ -69,12 +69,12 @@ void start_attack(unit * u1, unit * u2, int type) {
 
 
 
-void start_moving(mcrd m) {
-  if(mp(m)->cost > selunit->type->mvp || selunit->mvp == 0)
+void start_moving(unit * u, mcrd m) {
+  if(mp(m)->cost > u->type->mvp || u->mvp == 0)
     return;
 
-  move_unit = selunit;
-  mp(selunit->mcrd)->unit = NULL;
+  move_unit = u;
+  mp(u->mcrd)->unit = NULL;
 
   get_path(m);
   mode = MODE_MOVE;
@@ -87,18 +87,19 @@ void start_moving(mcrd m) {
 void finish_movement(){
   mode = MODE_SELECT;
 
-  selunit->mcrd = move_tile->crd;
-  selunit->scrd = map2scr(move_tile->crd);
-  mp(selunit->mcrd)->unit = move_unit;
-  move_unit = NULL;
+  move_unit->mcrd = move_tile->crd;
+  move_unit->scrd = map2scr(move_tile->crd);
+  mp(move_unit->mcrd)->unit = move_unit;
 
-  if(find_feature(selunit, FEATURE_IGNR))
-    selunit->mvp -= mp(selunit->mcrd)->cost;
+  if(find_feature(move_unit, FEATURE_IGNR))
+    move_unit->mvp -= mp(move_unit->mcrd)->cost;
   else
-    selunit->mvp = 0;
+    move_unit->mvp = 0;
 
   clear_path();
-  fill_map(selunit);
+  fill_map(move_unit);
+
+  move_unit = NULL;
 }
 
 
@@ -107,9 +108,10 @@ void ambush(){
   mnode * mnd = (mnode*) l_next(move_tile);
   unit * u = mp(mnd->crd)->unit;
   if( u && u->player != player){
+    // this unit will be attacked!
+    unit * xxx = move_unit;
     finish_movement();
-    start_attack(u, selunit, 0);
-    //start_attack(selunit, u);
+    start_attack(u, xxx, 0);
 
     // а можно разрешать окнтратаку, НО
     // но добавить специальный омдификатор "попал в засаду"

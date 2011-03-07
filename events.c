@@ -64,7 +64,7 @@ void mouseclick(SDL_Event E){
     select_unit(m);
   }else if(selunit){
     if(!u || (u && (is_invis(u)||!mp(m)->fog))){
-      start_moving(m);
+      start_moving(selunit, m);
       return;
     }
 
