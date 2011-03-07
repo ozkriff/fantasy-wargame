@@ -54,7 +54,7 @@ void initmapcost(){
   int mi = 0; // индекс в массиве 'map'
   for(int i=0; ini[i]!='\0'; i++){
     if(ini[i]!=' '){
-      tile * t = (tile*)map + mi;
+      tile * t = worlds[0].map + mi;
       if(ini[i]=='.') t->type = 0;
       if(ini[i]=='t') t->type = 1;
       if(ini[i]=='*') t->type = 2;
@@ -100,7 +100,39 @@ void add_unit(mcrd crd, int player, unit_type * type) {
   }
 
   // add new unit to list "units"
-  l_push(units, u);
+  l_push(worlds[0].units, u);
+}
+
+
+
+void init_worlds() {
+  for(int i=0; i<8; i++){
+    worlds[0].map   = calloc(MAP_W*MAP_H, sizeof(tile));
+    worlds[0].st    = calloc(1, sizeof(l_list));
+    worlds[0].path  = calloc(1, sizeof(l_list));
+    worlds[0].units = calloc(1, sizeof(l_list));
+    worlds[0].selhex = (mcrd){-1,-1};
+    worlds[0].mode = MODE_SELECT;
+    worlds[0].selunit = NULL;
+  }
+}
+
+
+
+void add_units(){
+  add_unit( (mcrd){1,2}, 0, &utypes[0] );
+  add_unit( (mcrd){1,3}, 0, &utypes[0] );
+  add_unit( (mcrd){1,4}, 0, &utypes[0] );
+  add_unit( (mcrd){1,5}, 0, &utypes[1] );
+  add_unit( (mcrd){2,5}, 0, &utypes[1] );
+  add_unit( (mcrd){2,6}, 0, &utypes[1] );
+            
+  add_unit( (mcrd){3,5}, 1, &utypes[0] );
+  add_unit( (mcrd){3,1}, 1, &utypes[2] );
+  add_unit( (mcrd){3,2}, 1, &utypes[2] );
+  add_unit( (mcrd){3,3}, 1, &utypes[2] );
+
+  add_unit( (mcrd){6,6}, 2, &utypes[1] );
 }
 
 
@@ -119,27 +151,11 @@ void init(){
   char * f = "LiberationMono-Regular.ttf";
   font = TTF_OpenFont(f, 12);
 
+  player = 0;
+
+  init_worlds();
   load_sprites();
   initmapcost();
-
-  player = 0;
-  mode = MODE_SELECT;
-  selunit = NULL;
-
-  add_unit( (mcrd){1,2}, 0, &utypes[0] );
-  add_unit( (mcrd){1,3}, 0, &utypes[0] );
-  add_unit( (mcrd){1,4}, 0, &utypes[0] );
-  add_unit( (mcrd){1,5}, 0, &utypes[1] );
-  add_unit( (mcrd){2,5}, 0, &utypes[1] );
-  add_unit( (mcrd){2,6}, 0, &utypes[1] );
-            
-  add_unit( (mcrd){3,5}, 1, &utypes[0] );
-  add_unit( (mcrd){3,1}, 1, &utypes[2] );
-  add_unit( (mcrd){3,2}, 1, &utypes[2] );
-  add_unit( (mcrd){3,3}, 1, &utypes[2] );
-
-  add_unit( (mcrd){6,6}, 2, &utypes[1] );
+  add_units();
 }
-
-
 

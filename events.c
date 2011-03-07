@@ -19,7 +19,7 @@ void onspace(){
   }
 #endif
 
-  selunit = NULL;
+  worlds[0].selunit = NULL;
 
   FOR_EACH_UNIT{
     if(u->player == player){
@@ -34,7 +34,7 @@ void onspace(){
 
 
 void keys(SDL_Event E){
-  if(mode!=MODE_SELECT) return;
+  if(worlds[0].mode!=MODE_SELECT) return;
 
   switch(E.key.keysym.sym) {
     case SDLK_ESCAPE:
@@ -46,7 +46,7 @@ void keys(SDL_Event E){
     case SDLK_LEFT:  map_offset.x += 72; break;
     case SDLK_RIGHT: map_offset.x -= 72; break;
     case SDLK_SPACE: onspace();          break;
-    case SDLK_r:     change_tile(selhex);break;
+    case SDLK_r:     change_tile(worlds[0].selhex);break;
     case SDLK_n:     select_next_unit(); break;
     default: break;
   }
@@ -55,29 +55,29 @@ void keys(SDL_Event E){
 
 
 void mouseclick(SDL_Event E){
-  if(mode!=MODE_SELECT) return;
+  if(worlds[0].mode!=MODE_SELECT) return;
 
   mcrd m = scr2map((scrd){E.button.x, E.button.y});
   unit * u = mp(m)->unit;
 
   if(u && u->player == player){
     select_unit(m);
-  }else if(selunit){
+  }else if(worlds[0].selunit){
     if(!u || (u && (is_invis(u)||!mp(m)->fog))){
-      start_moving(selunit, m);
+      start_moving(worlds[0].selunit, m);
       return;
     }
 
-    if(u && u->player!=player && selunit 
-    && selunit->can_attack
+    if(u && u->player!=player && worlds[0].selunit 
+    && worlds[0].selunit->can_attack
     && !is_invis(u) && mp(m)->fog > 0){
-      feature * rng = find_feature(selunit, FEATURE_RNG);
+      feature * rng = find_feature(worlds[0].selunit, FEATURE_RNG);
       if(rng){
-        if(mdist(selunit->mcrd, m) <= rng->data.rng.range)
-          start_attack(selunit, mp(m)->unit, 1);
+        if(mdist(worlds[0].selunit->mcrd, m) <= rng->data.rng.range)
+          start_attack(worlds[0].selunit, mp(m)->unit, 1);
       }else{
-        if(mdist(selunit->mcrd, m) <= 1)
-          start_attack(selunit, mp(m)->unit, 0);
+        if(mdist(worlds[0].selunit->mcrd, m) <= 1)
+          start_attack(worlds[0].selunit, mp(m)->unit, 0);
       }
     }
   }
@@ -86,7 +86,7 @@ void mouseclick(SDL_Event E){
 
 
 void mousemove(SDL_Event E){
-  selhex = scr2map((scrd){E.button.x, E.button.y});
+  worlds[0].selhex = scr2map((scrd){E.button.x, E.button.y});
 }
 
 

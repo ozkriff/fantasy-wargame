@@ -66,3 +66,36 @@ typedef union {
 defstruct {l_node n; int type; feature_data data;} feature;
 
 
+// map node / path node / used in pathfinding
+defstruct { l_node n; mcrd crd; } mnode;
+
+
+defstruct {
+  tile * map;
+  l_list * st;    // stack for filling map
+  l_list * path;  // stores path
+  l_list * units; // stires units
+
+  unit * selunit;
+  mcrd selhex;
+
+  int mode;
+
+  // костыль: нужно на случай убийства защищающегося
+  // хранит координаты защищающегося или координаты бегства
+  mcrd   attack_crd; 
+  int    attack_index;
+  unit * attack_u1;
+  unit * attack_u2;
+  int    attack_stage; //0-наступление, 1-отход, 2-бегство
+  int    attack_is_counter;
+  bool   attack_is_shoot;
+  int    attack_shoot_index;
+
+
+  // положение юнита при движении между клетками(см. STEPS)
+  int     move_index; // индекс движения между клетками
+  mnode * move_tile;
+  unit *  move_unit;
+} world;
+

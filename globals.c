@@ -1,15 +1,4 @@
 
-#define MAP_W  7
-#define MAP_H 14
-
-tile map[MAP_H][MAP_W];
-l_new(st);    // stack for filling map
-l_new(path);  // stores path
-l_new(units); // stires units
-
-// map node / path node / used in pathfinding
-typedef struct { l_node n; mcrd crd; } mnode;
-
 vec2i map_offset = {72,72/4};
 
 
@@ -21,7 +10,7 @@ SDL_Surface * hl6; // player 2 selection (blue)?
 
 SDL_Surface * grass;
 SDL_Surface * water;
-SDL_Surface * tree; // rename: forest
+SDL_Surface * tree;  // rename: forest
 SDL_Surface * hill;  // hills
 SDL_Surface * mount; // mounteens
 
@@ -40,45 +29,15 @@ bool done = false;
 
 TTF_Font * font = NULL;
 
-unit * selunit = NULL; // selected unit
-mcrd selhex = {-1,-1};
+#define WHITE SDL_MapRGBA(screen->format, 255,255,255, 255)
+#define GREY  SDL_MapRGBA(screen->format, 235,235,235, 255)
+#define BLACK SDL_MapRGBA(screen->format,   0,  0,  0, 255)
+#define RED   SDL_MapRGBA(screen->format, 255,  0,  0, 255)
+#define GREEN SDL_MapRGBA(screen->format,   0,255,  0, 255)
+#define BLUE  SDL_MapRGBA(screen->format,   0,  0,255, 255)
 
-#define _clr(r,g,b,a) SDL_MapRGBA(screen->format, r,g,b,a)
-#define WHITE _clr(255,255,255, 255)
-#define GREY  _clr(235,235,235, 255)
-#define BLACK _clr(  0,  0,  0, 255)
-#define RED   _clr(255,  0,  0, 255)
-#define GREEN _clr(  0,255,  0, 255)
-#define BLUE  _clr(  0,  0,255, 255)
+vec2i tile_center = {72*0.5, 72*0.75}; // 36 54
 
-vec2i tile_center = {72/2, 72*0.75}; // 36 54
-
-
-#define MODE_SELECT 0
-#define MODE_MOVE   1
-#define MODE_ATTACK 2
-int	mode;
-int	player; // current player's index
-
-
-// костыль: нужно на случай убийства защищающегося
-// хранит координаты защищающегося или координаты бегства
-mcrd	attack_crd; 
-int	attack_index;
-unit * 	attack_u1;
-unit * 	attack_u2;
-int	attack_stage; //0-наступление, 1-отход, 2-бегство
-int	attack_is_counter;
-bool    attack_is_shoot;
-int     attack_shoot_index;
-
-
-//количество промежуточных положений между клетками
-#define STEPS 6
-// положение юнита при движении между клетками(см. STEPS)
-int	move_index; // индекс движения между клетками
-mnode *	move_tile;
-unit * 	move_unit;
 
 // они вообще нужны?
 mcrd zmcrd = {0,0};   // zero
@@ -109,4 +68,16 @@ unit_type utypes[] = {
   {3,5, 8,4,2,4,"arch", tmvp3, tdef3, tatk1},
 };
 
+//количество промежуточных положений между клетками
+#define STEPS 6
 
+#define MAP_W  7
+#define MAP_H 14
+
+#define MODE_SELECT 0
+#define MODE_MOVE   1
+#define MODE_ATTACK 2
+
+int player; // current player's index
+
+world worlds[9];

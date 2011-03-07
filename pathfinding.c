@@ -6,13 +6,13 @@ void push(mcrd tile, mcrd parent, int newcost) {
   
   mnode * new = malloc(sizeof(mnode));
   new->crd = tile;
-  l_push(st, new);
+  l_push(worlds[0].st, new);
 }
 
 
 
 mcrd pop(){
-  mnode * tmp = (mnode*)l_pop(st);
+  mnode * tmp = (mnode*)l_pop(worlds[0].st);
   mcrd crd = tmp->crd;
   free(tmp);
   return(crd);
@@ -84,7 +84,7 @@ void fill_map(unit * u) {
     mp(mc)->parent = nmcrd;
   }  
   push(u->mcrd, u->mcrd, 0); // push start point
-  while(st->count>0){
+  while(worlds[0].st->count>0){
     mcrd t = pop();
     for(int i=0; i<6; i++)
       process_nbh(u, t, neib(t, i));
@@ -93,13 +93,16 @@ void fill_map(unit * u) {
 
 
 
-void clear_path(){ while(path->count) free(l_pop(path)); }
+void clear_path(){
+  while(worlds[0].path->count)
+    free(l_pop(worlds[0].path));
+}
 
 
 void addwaypoint(mcrd wp){
   mnode * new = malloc(sizeof(mnode));
   new->crd = wp;
-  l_push(path, new);
+  l_push(worlds[0].path, new);
 }
 
 

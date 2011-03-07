@@ -18,7 +18,10 @@ bool mcrdeq(mcrd a, mcrd b){ return(a.x==b.x&&a.y==b.y); }
 
 
 // доступ к ячейке по mcrd
-tile * mp(mcrd c){ return(&map[c.y][c.x]); }
+//tile * mp(mcrd c){ return(&map[c.y][c.x]); }
+tile * mp(mcrd c){
+  return(worlds[0].map + MAP_W*c.y + c.x);
+}
 
 
 

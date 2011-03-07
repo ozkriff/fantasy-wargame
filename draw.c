@@ -65,7 +65,7 @@ void draw_map() {
 void mline(mcrd a, mcrd b){
   scrd sa = map2scr(a), sb = map2scr(b);
   sa.x+=36; sa.y+=54; sb.x+=36; sb.y+=54;
-  if(mp(a)->cost <= selunit->mvp)
+  if(mp(a)->cost <= worlds[0].selunit->mvp)
     bzline(sa, sb, BLUE);
   else
     bzline(sa, sb, RED);
@@ -75,8 +75,8 @@ void mline(mcrd a, mcrd b){
 
 // draw current path
 void draw_path() {
-  if(path->count>0){
-    mnode * tile = (mnode*)l_first(path);
+  if(worlds[0].path->count>0){
+    mnode * tile = (mnode*)l_first(worlds[0].path);
     while(l_next(tile)){
       if(l_next(tile)){
         mcrd a = tile->crd;
@@ -94,7 +94,7 @@ void draw_path() {
 void draw_path_2_mcrd(mcrd a){
   if(mp(a)->cost==30000) return;
   mcrd tmp = a;
-  while( ! mcrdeq(tmp,selunit->mcrd) ){
+  while( ! mcrdeq(tmp,worlds[0].selunit->mcrd) ){
     mline(tmp, mp(tmp)->parent);
     tmp = mp(tmp)->parent;
   }
@@ -150,7 +150,7 @@ void draw_unit(unit *u){
 
 void draw_units(){
   FOR_EACH_UNIT{
-    if(move_unit!=u && attack_u1!=u
+    if(worlds[0].move_unit!=u && worlds[0].attack_u1!=u
     && mp(u->mcrd)->fog>0 
     && !(u->player!=player && is_invis(u)) )
       draw_unit(u);
@@ -160,19 +160,19 @@ void draw_units(){
 
 
 void draw_moving_unit(){
-  mcrd a = move_tile->crd;
-  mcrd b = ((mnode*)l_next(move_tile))->crd;
-  scrd crd = mbetween(a, b, move_index);
-  mblit(type2srf(move_unit->type), crd);
+  mcrd a = worlds[0].move_tile->crd;
+  mcrd b = ((mnode*)l_next(worlds[0].move_tile))->crd;
+  scrd crd = mbetween(a, b, worlds[0].move_index);
+  mblit(type2srf(worlds[0].move_unit->type), crd);
 }
 
 
 
 void draw_attacking_unit(){
-  mcrd a = attack_u1->mcrd;
-  mcrd b = attack_crd; //attack_u2->crd;
-  scrd crd = mbetween(a, b, attack_index);
-  mblit(type2srf(attack_u1->type), crd);
+  mcrd a = worlds[0].attack_u1->mcrd;
+  mcrd b = worlds[0].attack_crd; //attack_u2->crd;
+  scrd crd = mbetween(a, b, worlds[0].attack_index);
+  mblit(type2srf(worlds[0].attack_u1->type), crd);
 }
 
 
@@ -181,7 +181,7 @@ void draw_possible_tiles(){
   FOR_EACH_TILE{
     mcrd p = mp(mc)->parent;
     if(!(p.x==0 && p.y==0)
-    && mp(mc)->cost <= selunit->mvp) {
+    && mp(mc)->cost <= worlds[0].selunit->mvp) {
       mblit(hl1, map2scr(mc));
       mline(mc, p);
     }
@@ -205,17 +205,17 @@ void maptext(){
 
 
 void draw_shoot_attack(){
-  scrd a = map2scr(attack_u1->mcrd);
-  scrd b = map2scr(attack_u2->mcrd);
+  scrd a = map2scr(worlds[0].attack_u1->mcrd);
+  scrd b = map2scr(worlds[0].attack_u2->mcrd);
   int steps = sdist(a,b)/6;
   float dx  = (float)(b.x-a.x)/steps;
   float dy  = (float)(b.y-a.y)/steps;
 
-  a.x += dx * attack_shoot_index;
-  a.y += dy * attack_shoot_index;
+  a.x += dx * worlds[0].attack_shoot_index;
+  a.y += dy * worlds[0].attack_shoot_index;
 
   // пройденное снарядом расстояние. от 0.0 до 1.0
-  float xxx = (float)attack_shoot_index/steps;
+  float xxx = (float)worlds[0].attack_shoot_index/steps;
 
   // вертикальная поправка
   int dh = 36 * sinf(xxx*3.14);
@@ -233,15 +233,15 @@ void draw(){
   updatefog(); 
 
   draw_map();
-  if(mode==MODE_SELECT && selunit)
+  if(worlds[0].mode==MODE_SELECT && worlds[0].selunit)
     draw_possible_tiles();
-  mblit(sel, map2scr(selhex));
-  if(selunit) mblit(sel, map2scr(selunit->mcrd));
+  mblit(sel, map2scr(worlds[0].selhex));
+  if(worlds[0].selunit) mblit(sel, map2scr(worlds[0].selunit->mcrd));
   draw_units();
-  if(mode==MODE_MOVE){ draw_moving_unit(); draw_path(); }
-  if(mode==MODE_ATTACK){
+  if(worlds[0].mode==MODE_MOVE){ draw_moving_unit(); draw_path(); }
+  if(worlds[0].mode==MODE_ATTACK){
     draw_attacking_unit();
-    if(attack_is_shoot) draw_shoot_attack();
+    if(worlds[0].attack_is_shoot) draw_shoot_attack();
   }
   //maptext();
   text( (player==0)?"[pl:0]":"[pl:1]", (scrd){0,0}, false);
