@@ -87,6 +87,11 @@ void add_unit(mcrd crd, int player, unit_type * type) {
   // на всякий инициализировать список
   *(u->features) = (l_list){0, 0, 0};
   mp(crd)->unit = u;
+
+  if(worlds[0].units->count>0)
+    u->id = ((unit*)l_last(worlds[0].units))->id;
+  else
+    u->id = 0;
   
   // инициализировать нужные особенности юнитов
   if(type == &utypes[2]){ // archer

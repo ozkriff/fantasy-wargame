@@ -24,6 +24,7 @@ defstruct {
 defstruct {
   l_node  n;
   unit_type *  type;
+  int   id;
   int   health;
   int   player;
   bool  can_attack;
@@ -70,11 +71,21 @@ defstruct {l_node n; int type; feature_data data;} feature;
 defstruct { l_node n; mcrd crd; } mnode;
 
 
+defstruct {int id; mcrd dest;} event_move ;
+defstruct {int id0, id1;     } event_attack ;
+defstruct {
+  int type;
+  union {event_move mv; event_attack attck;} data;
+} event ;
+
+
 defstruct {
   tile * map;
   l_list * st;    // stack for filling map
   l_list * path;  // stores path
   l_list * units; // stires units
+
+  l_list * event_queue;
 
   unit * selunit;
   mcrd selhex;
