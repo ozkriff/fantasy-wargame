@@ -10,7 +10,7 @@ void pxl32(int x, int y, Uint32 pixel) {
 
 
 // рисует "большой"(size)  пиксель
-void pxl(Uint32 colr, int size, int x, int y){
+void bigpxl(Uint32 colr, int size, int x, int y){
   SDL_Rect rect = {x, y, size, size};
   SDL_FillRect(screen, &rect, colr);
 }
