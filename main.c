@@ -15,11 +15,11 @@
 #include "globals.c"
 #include "units.c"
 #include "accessory.c"
-#include "pathfinding.c"
+#include "path.c"
 #include "logic.c"
 #include "events.c"
 #include "draw.c"
-#include "initialize.c"
+#include "init.c"
 
 
 void mainloop(){
