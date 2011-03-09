@@ -12,6 +12,25 @@ void PrintFError (char * format, ...) {
 
 
 
+void print_event_queue(l_list * l){
+  event * e;
+  for(e = (event*)l_first(l); e; e = (event*)l_next(e)){
+    printf("%i, ", e->type);
+  }
+  puts("");
+}
+
+
+void add_event(int type, event_data * data){
+  event * e = calloc(1, sizeof(event));
+  e->type = type;
+  e->data = *data;
+  //l_enq(worlds[0].event_queue, e);
+  l_addt(worlds[0].event_queue, e);
+}
+
+
+
 // равны ли mcrd?
 bool mcrdeq(mcrd a, mcrd b){ return(a.x==b.x&&a.y==b.y); }
 

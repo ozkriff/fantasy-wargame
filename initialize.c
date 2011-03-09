@@ -116,6 +116,8 @@ void init_worlds() {
     worlds[0].st    = calloc(1, sizeof(l_list));
     worlds[0].path  = calloc(1, sizeof(l_list));
     worlds[0].units = calloc(1, sizeof(l_list));
+    worlds[0].event_queue
+                    = calloc(1, sizeof(l_list));
     worlds[0].selhex = (mcrd){-1,-1};
     worlds[0].mode = MODE_SELECT;
     worlds[0].selunit = NULL;
@@ -162,5 +164,17 @@ void init(){
   load_sprites();
   initmapcost();
   add_units();
+
+
+  event_move e0 = {0, {0,0}};
+  add_event(EVENT_MOVE, (event_data*)&e0 );
+
+  event_move e1 = {1, {0,1}};
+  add_event(EVENT_MOVE, (event_data*)&e1 );
+
+  event_attack e2 = {1, 3};
+  add_event(EVENT_ATTACK, (event_data*)&e2 );
+
+  print_event_queue(worlds[0].event_queue);
 }
 

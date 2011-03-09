@@ -71,12 +71,19 @@ defstruct {l_node n; int type; feature_data data;} feature;
 defstruct { l_node n; mcrd crd; } mnode;
 
 
-defstruct {int id; mcrd dest;} event_move ;
-defstruct {int id0, id1;     } event_attack ;
-defstruct {
-  int type;
-  union {event_move mv; event_attack attck;} data;
-} event ;
+#define EVENT_MOVE_NORMAL   0 (int id, )
+#define EVENT_MOVE_AMBUSHED   0
+#define EVENT_ATTACK_with_retrun 0
+
+#define EVENT_MOVE   0
+#define EVENT_ATTACK 1
+defstruct {int id; mcrd dest;} event_move;
+defstruct {int id0; int id1; } event_attack;
+typedef union {
+  event_move   mv;
+  event_attack at;
+} event_data;
+defstruct { l_node n; int type; event_data data; } event ;
 
 
 defstruct {
