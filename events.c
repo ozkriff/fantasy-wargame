@@ -84,11 +84,17 @@ void mouseclick(SDL_Event E){
     && !is_invis(u) && mp(m)->fog > 0){
       feature * rng = find_feature(cw->selunit, FEATURE_RNG);
       if(rng){
-        if(mdist(cw->selunit->mcrd, m) <= rng->data.rng.range)
-          start_attack(cw->selunit, mp(m)->unit, 1);
+        if(mdist(cw->selunit->mcrd, m) <= rng->data.rng.range){
+          //start_attack(cw->selunit, mp(m)->unit, 1);
+          event_attack e = {1, cw->selunit->id, mp(m)->unit->id};
+          add_event(EVENT_ATTACK, (event_data*)&e );
+        }
       }else{
-        if(mdist(cw->selunit->mcrd, m) <= 1)
-          start_attack(cw->selunit, mp(m)->unit, 0);
+        if(mdist(cw->selunit->mcrd, m) <= 1){
+          //start_attack(cw->selunit, mp(m)->unit, 0);
+          event_attack e = {0, cw->selunit->id, mp(m)->unit->id};
+          add_event(EVENT_ATTACK, (event_data*)&e );
+        }
       }
     }
   }

@@ -78,7 +78,7 @@ defstruct { l_node n; mcrd crd; } mnode;
 #define EVENT_MOVE   0
 #define EVENT_ATTACK 1
 defstruct {int id; mcrd dest;} event_move;
-defstruct {int id0; int id1; } event_attack;
+defstruct {int type; int id0; int id1; } event_attack;
 typedef union {
   event_move   mv;
   event_attack at;

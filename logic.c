@@ -273,12 +273,18 @@ void logic(){
 
   if(cw->mode==MODE_SELECT && cw->event_queue->count>0){
     event * e = (event*)l_deq(cw->event_queue);
-    if(e->type == 0){
+    if(e->type == EVENT_MOVE){
       unit * u = id2unit(e->data.mv.id);
       updatefog(u->player); 
       fill_map(u);
       updatefog(player); 
       start_moving(u, e->data.mv.dest);
+    }
+    if(e->type == EVENT_ATTACK){
+      unit * u0 = id2unit(e->data.at.id0);
+      unit * u1 = id2unit(e->data.at.id1);
+      int type = e->data.at.type;
+      start_attack(u0, u1, type);
     }
   }
 }
