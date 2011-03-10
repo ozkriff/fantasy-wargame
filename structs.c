@@ -71,9 +71,9 @@ defstruct {l_node n; int type; feature_data data;} feature;
 defstruct { l_node n; mcrd crd; } mnode;
 
 
-#define EVENT_MOVE_NORMAL   0 (int id, )
-#define EVENT_MOVE_AMBUSHED   0
-#define EVENT_ATTACK_with_retrun 0
+//#define EVENT_MOVE_NORMAL   0 (int id, )
+//#define EVENT_MOVE_AMBUSHED   0
+//#define EVENT_ATTACK_with_retrun 0
 
 #define EVENT_MOVE   0
 #define EVENT_ATTACK 1

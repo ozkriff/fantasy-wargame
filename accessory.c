@@ -14,19 +14,24 @@ void PrintFError (char * format, ...) {
 
 void print_event_queue(l_list * l){
   event * e;
-  for(e = (event*)l_first(l); e; e = (event*)l_next(e)){
-    printf("%i, ", e->type);
+  for(int i=0; i<players_count; i++){
+    for(e = (event*)l_first(l); e; e = (event*)l_next(e)){
+      printf("%i.%i(%i.%i), ",
+          e->data.mv.id, e->type,
+          e->data.mv.dest.x, e->data.mv.dest.y);
+    }
+    puts("");
   }
-  puts("");
 }
 
 
 void add_event(int type, event_data * data){
-  event * e = calloc(1, sizeof(event));
-  e->type = type;
-  e->data = *data;
-  //l_enq(worlds[0].event_queue, e);
-  l_addt(worlds[0].event_queue, e);
+  for(int i=0; i<players_count; i++){
+    event * e = calloc(1, sizeof(event));
+    e->type = type;
+    e->data = *data;
+    l_addt(worlds[i].event_queue, e);
+  }
 }
 
 
@@ -37,10 +42,7 @@ bool mcrdeq(mcrd a, mcrd b){ return(a.x==b.x&&a.y==b.y); }
 
 
 // доступ к ячейке по mcrd
-//tile * mp(mcrd c){ return(&map[c.y][c.x]); }
-tile * mp(mcrd c){
-  return(worlds[0].map + MAP_W*c.y + c.x);
-}
+tile * mp(mcrd c){ return(cw->map + MAP_W*c.y + c.x); }
 
 
 
@@ -151,3 +153,10 @@ scrd mbetween(mcrd a, mcrd b, int i){
 
 
 
+unit * id2unit(int id){
+  FOR_EACH_UNIT{
+    if(u->id == id)
+      return(u);
+  }
+  return(NULL);
+}

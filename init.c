@@ -50,17 +50,20 @@ void initmapcost(){
     "   . . . . . . .  "
     "  . . . . . . .   "
     "\0";
-    
-  int mi = 0; // индекс в массиве 'map'
-  for(int i=0; ini[i]!='\0'; i++){
-    if(ini[i]!=' '){
-      tile * t = worlds[0].map + mi;
-      if(ini[i]=='.') t->type = 0;
-      if(ini[i]=='t') t->type = 1;
-      if(ini[i]=='*') t->type = 2;
-      if(ini[i]=='h') t->type = 3;
-      if(ini[i]=='M') t->type = 4;
-      mi++;
+      
+  for(int wrld=0; wrld<players_count; wrld++){
+    int mi = 0; // индекс в массиве 'map'
+    for(int i=0; ini[i]; i++){
+      if(ini[i]!=' '){
+        //tile * t = cw->map + mi;
+        tile * t = worlds[wrld].map + mi;
+        if(ini[i]=='.') t->type = 0;
+        if(ini[i]=='t') t->type = 1;
+        if(ini[i]=='*') t->type = 2;
+        if(ini[i]=='h') t->type = 3;
+        if(ini[i]=='M') t->type = 4;
+        mi++;
+      }
     }
   }
 }
@@ -75,9 +78,11 @@ void add_feature(unit * u, int type, feature_data * data){
 
 
 
-void add_unit(mcrd crd, int player, unit_type * type) {
+void add_unit(mcrd crd, int plr, unit_type * type, int wrld) {
+  l_list * units = worlds[wrld].units;
+
   unit * u  = malloc(sizeof(unit));
-  u->player = player;
+  u->player = plr;
   u->mvp    = type->mvp;
   u->can_attack = true;
   u->health = type->health;
@@ -86,12 +91,11 @@ void add_unit(mcrd crd, int player, unit_type * type) {
   u->type   = type;
   // на всякий инициализировать список
   *(u->features) = (l_list){0, 0, 0};
-  mp(crd)->unit = u;
+  
+  //mp(crd)->unit = u;
+  (worlds[wrld].map + crd.x + MAP_W*crd.y)->unit = u;
 
-  if(worlds[0].units->count>0)
-    u->id = ((unit*)l_last(worlds[0].units))->id;
-  else
-    u->id = 0;
+  u->id = units->count>0 ? ((unit*)units->h)->id+1 : 0;
   
   // инициализировать нужные особенности юнитов
   if(type == &utypes[2]){ // archer
@@ -104,42 +108,43 @@ void add_unit(mcrd crd, int player, unit_type * type) {
     add_feature(u, FEATURE_INVIS, (feature_data*)&btrue);
   }
 
-  // add new unit to list "units"
-  l_push(worlds[0].units, u);
+  l_push(units, u);
 }
 
 
 
 void init_worlds() {
-  for(int i=0; i<8; i++){
-    worlds[0].map   = calloc(MAP_W*MAP_H, sizeof(tile));
-    worlds[0].st    = calloc(1, sizeof(l_list));
-    worlds[0].path  = calloc(1, sizeof(l_list));
-    worlds[0].units = calloc(1, sizeof(l_list));
-    worlds[0].event_queue
+  for(int i=0; i<players_count; i++){
+    worlds[i].map   = calloc(MAP_W*MAP_H, sizeof(tile));
+    worlds[i].st    = calloc(1, sizeof(l_list));
+    worlds[i].path  = calloc(1, sizeof(l_list));
+    worlds[i].units = calloc(1, sizeof(l_list));
+    worlds[i].event_queue
                     = calloc(1, sizeof(l_list));
-    worlds[0].selhex = (mcrd){-1,-1};
-    worlds[0].mode = MODE_SELECT;
-    worlds[0].selunit = NULL;
+    worlds[i].selhex = (mcrd){-1,-1};
+    worlds[i].mode = MODE_SELECT;
+    worlds[i].selunit = NULL;
   }
 }
 
 
 
 void add_units(){
-  add_unit( (mcrd){1,2}, 0, &utypes[0] );
-  add_unit( (mcrd){1,3}, 0, &utypes[0] );
-  add_unit( (mcrd){1,4}, 0, &utypes[0] );
-  add_unit( (mcrd){1,5}, 0, &utypes[1] );
-  add_unit( (mcrd){2,5}, 0, &utypes[1] );
-  add_unit( (mcrd){2,6}, 0, &utypes[1] );
-            
-  add_unit( (mcrd){3,5}, 1, &utypes[0] );
-  add_unit( (mcrd){3,1}, 1, &utypes[2] );
-  add_unit( (mcrd){3,2}, 1, &utypes[2] );
-  add_unit( (mcrd){3,3}, 1, &utypes[2] );
+  for(int i=0; i<players_count; i++){
+    add_unit( (mcrd){1,2}, 0, &utypes[0], i );
+    add_unit( (mcrd){1,3}, 0, &utypes[0], i );
+    add_unit( (mcrd){1,4}, 0, &utypes[0], i );
+    add_unit( (mcrd){1,5}, 0, &utypes[1], i );
+    add_unit( (mcrd){2,5}, 0, &utypes[1], i );
+    add_unit( (mcrd){2,6}, 0, &utypes[1], i );
+              
+    add_unit( (mcrd){3,5}, 1, &utypes[0], i );
+    add_unit( (mcrd){3,1}, 1, &utypes[2], i );
+    add_unit( (mcrd){3,2}, 1, &utypes[2], i );
+    add_unit( (mcrd){3,3}, 1, &utypes[2], i );
 
-  add_unit( (mcrd){6,6}, 2, &utypes[1] );
+    add_unit( (mcrd){6,6}, 2, &utypes[1], i );
+  }
 }
 
 
@@ -152,29 +157,18 @@ void init(){
   atexit(SDL_Quit);
 
   Uint32 flags = SDL_SWSURFACE | SDL_RESIZABLE;
-  //screen = SDL_SetVideoMode(320, 240, 32, flags);
-  screen = SDL_SetVideoMode(640, 480, 32, flags);
+  screen = SDL_SetVideoMode(320, 240, 32, flags);
+  //screen = SDL_SetVideoMode(640, 480, 32, flags);
 
   char * f = "LiberationMono-Regular.ttf";
   font = TTF_OpenFont(f, 12);
 
   player = 0;
+  cw = &worlds[player];
 
   init_worlds();
   load_sprites();
   initmapcost();
   add_units();
-
-
-  event_move e0 = {0, {0,0}};
-  add_event(EVENT_MOVE, (event_data*)&e0 );
-
-  event_move e1 = {1, {0,1}};
-  add_event(EVENT_MOVE, (event_data*)&e1 );
-
-  event_attack e2 = {1, 3};
-  add_event(EVENT_ATTACK, (event_data*)&e2 );
-
-  print_event_queue(worlds[0].event_queue);
 }
 

@@ -79,5 +79,7 @@ unit_type utypes[] = {
 #define MODE_ATTACK 2
 
 int player; // current player's index
+int players_count = 3;
+world worlds[3];
+world * cw = NULL; // current world
 
-world worlds[9];

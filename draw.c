@@ -65,7 +65,10 @@ void draw_map() {
 void mline(mcrd a, mcrd b){
   scrd sa = map2scr(a), sb = map2scr(b);
   sa.x+=36; sa.y+=54; sb.x+=36; sb.y+=54;
-  if(mp(a)->cost <= worlds[0].selunit->mvp)
+  unit * u = cw->selunit ? cw->selunit : cw->move_unit;
+  if(!u)
+    return;
+  if(mp(a)->cost <= u->mvp)
     bzline(sa, sb, BLUE);
   else
     bzline(sa, sb, RED);
@@ -75,8 +78,8 @@ void mline(mcrd a, mcrd b){
 
 // draw current path
 void draw_path() {
-  if(worlds[0].path->count>0){
-    mnode * tile = (mnode*)l_first(worlds[0].path);
+  if(cw->path->count>0){
+    mnode * tile = (mnode*)l_first(cw->path);
     while(l_next(tile)){
       if(l_next(tile)){
         mcrd a = tile->crd;
@@ -94,7 +97,7 @@ void draw_path() {
 void draw_path_2_mcrd(mcrd a){
   if(mp(a)->cost==30000) return;
   mcrd tmp = a;
-  while( ! mcrdeq(tmp,worlds[0].selunit->mcrd) ){
+  while( ! mcrdeq(tmp,cw->selunit->mcrd) ){
     mline(tmp, mp(tmp)->parent);
     tmp = mp(tmp)->parent;
   }
@@ -150,29 +153,34 @@ void draw_unit(unit *u){
 
 void draw_units(){
   FOR_EACH_UNIT{
-    if(worlds[0].move_unit!=u && worlds[0].attack_u1!=u
+#if 1
+    if(cw->move_unit!=u && cw->attack_u1!=u
     && mp(u->mcrd)->fog>0 
     && !(u->player!=player && is_invis(u)) )
       draw_unit(u);
+#else
+    if(cw->move_unit!=u && cw->attack_u1!=u)
+      draw_unit(u);
+#endif
   }
 }
 
 
 
 void draw_moving_unit(){
-  mcrd a = worlds[0].move_tile->crd;
-  mcrd b = ((mnode*)l_next(worlds[0].move_tile))->crd;
-  scrd crd = mbetween(a, b, worlds[0].move_index);
-  mblit(type2srf(worlds[0].move_unit->type), crd);
+  mcrd a = cw->move_tile->crd;
+  mcrd b = ((mnode*)l_next(cw->move_tile))->crd;
+  scrd crd = mbetween(a, b, cw->move_index);
+  mblit(type2srf(cw->move_unit->type), crd);
 }
 
 
 
 void draw_attacking_unit(){
-  mcrd a = worlds[0].attack_u1->mcrd;
-  mcrd b = worlds[0].attack_crd; //attack_u2->crd;
-  scrd crd = mbetween(a, b, worlds[0].attack_index);
-  mblit(type2srf(worlds[0].attack_u1->type), crd);
+  mcrd a = cw->attack_u1->mcrd;
+  mcrd b = cw->attack_crd; //attack_u2->crd;
+  scrd crd = mbetween(a, b, cw->attack_index);
+  mblit(type2srf(cw->attack_u1->type), crd);
 }
 
 
@@ -181,7 +189,7 @@ void draw_possible_tiles(){
   FOR_EACH_TILE{
     mcrd p = mp(mc)->parent;
     if(!(p.x==0 && p.y==0)
-    && mp(mc)->cost <= worlds[0].selunit->mvp) {
+    && mp(mc)->cost <= cw->selunit->mvp) {
       mblit(hl1, map2scr(mc));
       mline(mc, p);
     }
@@ -205,17 +213,17 @@ void maptext(){
 
 
 void draw_shoot_attack(){
-  scrd a = map2scr(worlds[0].attack_u1->mcrd);
-  scrd b = map2scr(worlds[0].attack_u2->mcrd);
+  scrd a = map2scr(cw->attack_u1->mcrd);
+  scrd b = map2scr(cw->attack_u2->mcrd);
   int steps = sdist(a,b)/6;
   float dx  = (float)(b.x-a.x)/steps;
   float dy  = (float)(b.y-a.y)/steps;
 
-  a.x += dx * worlds[0].attack_shoot_index;
-  a.y += dy * worlds[0].attack_shoot_index;
+  a.x += dx * cw->attack_shoot_index;
+  a.y += dy * cw->attack_shoot_index;
 
   // пройденное снарядом расстояние. от 0.0 до 1.0
-  float xxx = (float)worlds[0].attack_shoot_index/steps;
+  float xxx = (float)cw->attack_shoot_index/steps;
 
   // вертикальная поправка
   int dh = 36 * sinf(xxx*3.14);
@@ -230,18 +238,18 @@ void draw(){
   draw_bg(BLACK);
 
   // TODO нужно вызывать не отсюда. смотри NOTES
-  updatefog(); 
+  updatefog(player); 
 
   draw_map();
-  if(worlds[0].mode==MODE_SELECT && worlds[0].selunit)
+  if(cw->mode==MODE_SELECT && cw->selunit)
     draw_possible_tiles();
-  mblit(sel, map2scr(worlds[0].selhex));
-  if(worlds[0].selunit) mblit(sel, map2scr(worlds[0].selunit->mcrd));
+  mblit(sel, map2scr(cw->selhex));
+  if(cw->selunit) mblit(sel, map2scr(cw->selunit->mcrd));
   draw_units();
-  if(worlds[0].mode==MODE_MOVE){ draw_moving_unit(); draw_path(); }
-  if(worlds[0].mode==MODE_ATTACK){
+  if(cw->mode==MODE_MOVE){ draw_moving_unit(); draw_path(); }
+  if(cw->mode==MODE_ATTACK){
     draw_attacking_unit();
-    if(worlds[0].attack_is_shoot) draw_shoot_attack();
+    if(cw->attack_is_shoot) draw_shoot_attack();
   }
   //maptext();
   text( (player==0)?"[pl:0]":"[pl:1]", (scrd){0,0}, false);

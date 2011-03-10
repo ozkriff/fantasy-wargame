@@ -12,6 +12,12 @@ bool checkunitsleft(){
 void onspace(){
   player++; if(player==3) player=0;
 
+  {
+    cw++;
+    if(cw == &worlds[players_count])
+      cw = &worlds[0];
+  }
+
 #if 0
   if(!checkunitsleft()){
     puts("WINNER!");
@@ -19,7 +25,7 @@ void onspace(){
   }
 #endif
 
-  worlds[0].selunit = NULL;
+  cw->selunit = NULL;
 
   FOR_EACH_UNIT{
     if(u->player == player){
@@ -34,7 +40,7 @@ void onspace(){
 
 
 void keys(SDL_Event E){
-  if(worlds[0].mode!=MODE_SELECT) return;
+  if(cw->mode!=MODE_SELECT) return;
 
   switch(E.key.keysym.sym) {
     case SDLK_ESCAPE:
@@ -46,7 +52,7 @@ void keys(SDL_Event E){
     case SDLK_LEFT:  map_offset.x += 72; break;
     case SDLK_RIGHT: map_offset.x -= 72; break;
     case SDLK_SPACE: onspace();          break;
-    case SDLK_r:     change_tile(worlds[0].selhex);break;
+    case SDLK_r:     change_tile(cw->selhex);break;
     case SDLK_n:     select_next_unit(); break;
     default: break;
   }
@@ -55,29 +61,34 @@ void keys(SDL_Event E){
 
 
 void mouseclick(SDL_Event E){
-  if(worlds[0].mode!=MODE_SELECT) return;
+  if(cw->mode!=MODE_SELECT) return;
 
   mcrd m = scr2map((scrd){E.button.x, E.button.y});
   unit * u = mp(m)->unit;
 
   if(u && u->player == player){
     select_unit(m);
-  }else if(worlds[0].selunit){
+  }else if(cw->selunit){
     if(!u || (u && (is_invis(u)||!mp(m)->fog))){
-      start_moving(worlds[0].selunit, m);
+      //start_moving(cw->selunit, m);
+
+      event_move e = {cw->selunit->id, m};
+      add_event(EVENT_MOVE, (event_data*)&e );
+      //print_event_queue(cw->event_queue);
+      
       return;
     }
 
-    if(u && u->player!=player && worlds[0].selunit 
-    && worlds[0].selunit->can_attack
+    if(u && u->player!=player && cw->selunit 
+    && cw->selunit->can_attack
     && !is_invis(u) && mp(m)->fog > 0){
-      feature * rng = find_feature(worlds[0].selunit, FEATURE_RNG);
+      feature * rng = find_feature(cw->selunit, FEATURE_RNG);
       if(rng){
-        if(mdist(worlds[0].selunit->mcrd, m) <= rng->data.rng.range)
-          start_attack(worlds[0].selunit, mp(m)->unit, 1);
+        if(mdist(cw->selunit->mcrd, m) <= rng->data.rng.range)
+          start_attack(cw->selunit, mp(m)->unit, 1);
       }else{
-        if(mdist(worlds[0].selunit->mcrd, m) <= 1)
-          start_attack(worlds[0].selunit, mp(m)->unit, 0);
+        if(mdist(cw->selunit->mcrd, m) <= 1)
+          start_attack(cw->selunit, mp(m)->unit, 0);
       }
     }
   }
@@ -86,7 +97,7 @@ void mouseclick(SDL_Event E){
 
 
 void mousemove(SDL_Event E){
-  worlds[0].selhex = scr2map((scrd){E.button.x, E.button.y});
+  cw->selhex = scr2map((scrd){E.button.x, E.button.y});
 }
 
 
