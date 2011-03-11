@@ -104,8 +104,9 @@ void add_unit(mcrd crd, int plr, unit_type * type, int wrld) {
   }
   if(type == &utypes[1]) { // hunter
     int btrue = 1;
-    add_feature(u, FEATURE_IGNR,  (feature_data*)&btrue);
-    add_feature(u, FEATURE_INVIS, (feature_data*)&btrue);
+    add_feature(u, FEATURE_IGNR,     (feature_data*)&btrue);
+    add_feature(u, FEATURE_INVIS,    (feature_data*)&btrue);
+    add_feature(u, FEATURE_NORETURN, (feature_data*)&btrue);
   }
 
   l_push(units, u);

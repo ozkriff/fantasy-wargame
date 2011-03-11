@@ -51,6 +51,7 @@ defstruct {
 #define FEATURE_IGNR      4
 #define FEATURE_ARMORED   5
 #define FEATURE_ARMPIERC  6
+#define FEATURE_NORETURN  7
 
 defstruct { int power;              } feature_berserk;
 defstruct { int power, range, ammo; } feature_range;
@@ -62,6 +63,7 @@ typedef union {
   bool ignr;               // ignore enemys ZOC
   bool armored;
   bool armour_piercing;    // ignores armor
+  bool noreturn;
 } feature_data;
 
 defstruct {l_node n; int type; feature_data data;} feature;

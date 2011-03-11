@@ -186,7 +186,9 @@ void start_counterattack(){
 void on_return_after_attack(){
   mp(cw->attack_u1->mcrd)->unit = cw->attack_u1;
 
-  if(cw->attack_is_counter || !cw->attack_u2){
+  if(cw->attack_is_counter
+  || !cw->attack_u2 
+  || find_feature(cw->attack_u1, FEATURE_NORETURN)){
     if(cw->attack_u1->health < cw->attack_u1->type->health){
       mp(cw->attack_u1->mcrd)->unit = NULL;
       cw->attack_crd = cw->attack_u1->mcrd;
