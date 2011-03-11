@@ -13,7 +13,6 @@
 #include "list.c"
 #include "structs.c"
 #include "globals.c"
-#include "units.c"
 #include "accessory.c"
 #include "path.c"
 #include "logic.c"
