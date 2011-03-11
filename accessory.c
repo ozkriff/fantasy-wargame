@@ -33,6 +33,7 @@ feature * find_feature(unit * u, int type){
 
 
 
+
 void print_event_queue(l_list * l){
   event * e;
   for(int i=0; i<players_count; i++){
@@ -181,3 +182,17 @@ unit * id2unit(int id){
   }
   return(NULL);
 }
+bool is_invis (unit * u){
+  if(!find_feature(u, FEATURE_INVIS))
+    return(false);
+
+  for(int i=0; i<6; i++){
+    mcrd nb = neib(u->mcrd, i);
+    unit * u2 = mp(nb)->unit;
+    if(u2 && u2->player != u->player)
+      return(false);
+  }
+  return(true);
+}
+
+
