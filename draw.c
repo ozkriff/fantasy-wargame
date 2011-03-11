@@ -232,6 +232,31 @@ void draw_shoot_attack(){
 }
 
 
+// рисует "хвост" стрелы. через задницу!
+// TODO переписать!
+void draw_shoot_attack_tail(){
+  scrd a = map2scr(cw->attack_u1->mcrd);
+  scrd b = map2scr(cw->attack_u2->mcrd);
+  int steps = sdist(a,b)/6;
+  float dx  = (float)(b.x-a.x)/steps;
+  float dy  = (float)(b.y-a.y)/steps;
+
+  for(int i=1; i<cw->attack_shoot_index; i++){
+    int d0 = 36 * sinf((float)i/steps*3.14);
+    int d1 = 36 * sinf((float)(i-1)/steps*3.14);
+
+    scrd n0 = map2scr(cw->attack_u1->mcrd);
+    n0.x += 36+ dx*i;  n0.y += 36+ dy*i-d0;
+
+    scrd n1 = map2scr(cw->attack_u1->mcrd);
+    n1.x += 36+ dx*(i-1);  n1.y += 36+ dy*(i-1)-d1;
+
+    bzline(n0, n1, RED);
+  }
+}
+
+
+
 
 
 void draw(){
@@ -250,6 +275,7 @@ void draw(){
   if(cw->mode==MODE_ATTACK){
     draw_attacking_unit();
     if(cw->attack_is_shoot) draw_shoot_attack();
+    if(cw->attack_is_shoot) draw_shoot_attack_tail();
   }
   //maptext();
   text( (player==0)?"[pl:0]":"[pl:1]", (scrd){0,0}, false);
