@@ -160,8 +160,8 @@ void init(){
   screen = SDL_SetVideoMode(320, 240, 32, flags);
   //screen = SDL_SetVideoMode(640, 480, 32, flags);
 
-  char * f = "LiberationMono-Regular.ttf";
-  font = TTF_OpenFont(f, 12);
+  //char * f = "LiberationMono-Regular.ttf";
+  font = TTF_OpenFont("font.ttf", 12);
 
   player = 0;
   cw = &worlds[player];
