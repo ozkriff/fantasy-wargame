@@ -38,20 +38,20 @@ void print_event_queue(l_list * l){
   event * e;
   for(int i=0; i<players_count; i++){
     for(e = (event*)l_first(l); e; e = (event*)l_next(e)){
-      printf("%i.%i(%i.%i), ",
-          e->data.mv.id, e->type,
-          e->data.mv.dest.x, e->data.mv.dest.y);
+      for(int j=0; j<e->data[0]; j++)
+        printf("%i ", e->data[i]);
     }
     puts("");
   }
 }
 
 
-void add_event(int type, event_data * data){
+void add_event(int * data){
   for(int i=0; i<players_count; i++){
     event * e = calloc(1, sizeof(event));
-    e->type = type;
-    e->data = *data;
+    e->data   = calloc(data[0], sizeof(int));
+    for(int j=0; j<data[0]; j++)
+      e->data[j] = data[j];
     l_addt(worlds[i].event_queue, e);
   }
 }
@@ -100,6 +100,16 @@ int neib2(int i){
   //i+=3; if(i>=6) i-=6;
   int d[] = {3, 4,2, 5,1, 0};
   return(i+d[i]);
+}
+
+
+
+int mcrd2index(mcrd a, mcrd b){
+  for(int i=0; i<6; i++){
+    if(mcrdeq(neib(a,i), b))
+      return(i);
+  }
+  exit(1); // ERROR
 }
 
 
@@ -182,6 +192,9 @@ unit * id2unit(int id){
   }
   return(NULL);
 }
+
+
+
 bool is_invis (unit * u){
   if(!find_feature(u, FEATURE_INVIS))
     return(false);

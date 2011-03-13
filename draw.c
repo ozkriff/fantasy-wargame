@@ -65,12 +65,12 @@ void draw_map() {
 void mline(mcrd a, mcrd b){
   scrd sa = map2scr(a), sb = map2scr(b);
   sa.x+=36; sa.y+=54; sb.x+=36; sb.y+=54;
-  unit * u = cw->selunit ? cw->selunit : cw->move_unit;
-  if(!u)
-    return;
-  if(mp(a)->cost <= u->mvp)
-    bzline(sa, sb, BLUE);
-  else
+  //unit * u = cw->selunit ? cw->selunit : cw->move_unit;
+  //if(!u)
+    //return;
+  //if(mp(a)->cost <= u->mvp)
+    //bzline(sa, sb, BLUE);
+  //else
     bzline(sa, sb, RED);
 }
 
@@ -140,11 +140,9 @@ void draw_unit(unit *u){
   if(u->player==1) mblit(hl6, s);
   mblit(type2srf(u->type), s);
 
-  if(0){
+  if(1){
     char str[100];
-    sprintf(str, "[%i.%i.%i.%i]",
-        u->health, u->mvp>0, u->can_attack,
-        (bool)find_feature(u, FEATURE_RNG));
+    sprintf(str, "%i", u->health);
     text(str, (scrd){s.x+10, s.y+60}, false);
   }
 }
@@ -153,36 +151,43 @@ void draw_unit(unit *u){
 
 void draw_units(){
   FOR_EACH_UNIT{
-#if 1
-    if(cw->move_unit!=u && cw->attack_u1!=u
-    && mp(u->mcrd)->fog>0 
-    && !(u->player!=player && is_invis(u)) )
-      draw_unit(u);
-#else
-    if(cw->move_unit!=u && cw->attack_u1!=u)
-      draw_unit(u);
-#endif
+    if(cw->mode==MODE_ATTACK
+    && cw->e[1]==EVENT_MELEE
+    && cw->e[2]==u->id)
+      continue;
+
+    if(cw->mode==MODE_MOVE
+    && cw->e[1]==EVENT_MOVE
+    && cw->e[2]==u->id)
+      continue;
+
+    if( u->player!=player
+    && (mp(u->mcrd)->fog==0 || is_invis(u)) )
+      continue;
+
+    draw_unit(u);
   }
 }
 
 
 
 void draw_moving_unit(){
-  mcrd a = cw->move_tile->crd;
-  mcrd b = ((mnode*)l_next(cw->move_tile))->crd;
-  scrd crd = mbetween(a, b, cw->move_index);
-  mblit(type2srf(cw->move_unit->type), crd);
+  unit * u = id2unit(cw->e[2]);
+  mcrd a = u->mcrd;
+  mcrd b = neib(u->mcrd, cw->e[cw->mi+1]);
+  scrd crd = mbetween(a, b, cw->index);
+  mblit(type2srf(u->type), crd);
 }
 
 
 
 void draw_attacking_unit(){
-  mcrd a = cw->attack_u1->mcrd;
-  mcrd b = cw->attack_crd; //attack_u2->crd;
-  scrd crd = mbetween(a, b, cw->attack_index);
-  mblit(type2srf(cw->attack_u1->type), crd);
+  mcrd a = id2unit(cw->e[2])->mcrd;
+  mcrd b = neib(a, cw->e[3]);
+  int i = (cw->index<STEPS/2) ? (cw->index) : (STEPS-cw->index);
+  scrd crd = mbetween(a, b, i);
+  mblit(type2srf(id2unit(cw->e[2])->type), crd);
 }
-
 
 
 void draw_possible_tiles(){
@@ -213,48 +218,36 @@ void maptext(){
 
 
 void draw_shoot_attack(){
-  scrd a = map2scr(cw->attack_u1->mcrd);
-  scrd b = map2scr(cw->attack_u2->mcrd);
+  unit * u1 = id2unit(cw->e[2]);
+  unit * u2 = id2unit(cw->e[3]);
+  scrd a = u1->scrd;
+  scrd b = u2->scrd;
   int steps = sdist(a,b)/6;
   float dx  = (float)(b.x-a.x)/steps;
   float dy  = (float)(b.y-a.y)/steps;
 
-  a.x += dx * cw->attack_shoot_index;
-  a.y += dy * cw->attack_shoot_index;
-
-  // пройденное снарядом расстояние. от 0.0 до 1.0
-  float xxx = (float)cw->attack_shoot_index/steps;
+  a.x += dx * cw->index;
+  a.y += dy * cw->index;
 
   // вертикальная поправка
-  int dh = 36 * sinf(xxx*3.14);
-
+  //int dh = 36 * sinf((float)cw->index/steps*3.14);
+  int dh = 26 * sinf((float)cw->index/steps*3.14);
   blit(arrow, a.x, a.y-dh);
-}
 
-
-// рисует "хвост" стрелы. через задницу!
-// TODO переписать!
-void draw_shoot_attack_tail(){
-  scrd a = map2scr(cw->attack_u1->mcrd);
-  scrd b = map2scr(cw->attack_u2->mcrd);
-  int steps = sdist(a,b)/6;
-  float dx  = (float)(b.x-a.x)/steps;
-  float dy  = (float)(b.y-a.y)/steps;
-
-  for(int i=1; i<cw->attack_shoot_index; i++){
+  // рисует "хвост" стрелы. через задницу!
+  for(int i=1; i<cw->index; i++){
+    // вертикальная поправка
     int d0 = 36 * sinf((float)(i  )/steps*3.14);
     int d1 = 36 * sinf((float)(i-1)/steps*3.14);
 
-    scrd n0 = map2scr(cw->attack_u1->mcrd);
-    scrd n1 = map2scr(cw->attack_u1->mcrd);
-    n0.x += 36+ dx*(i  ); n0.y += 36+ dy*(i  )-d0;
-    n1.x += 36+ dx*(i-1); n1.y += 36+ dy*(i-1)-d1;
+    scrd n0 = u1->scrd;
+    scrd n1 = u1->scrd;
+    n0.x += 36+ dx*(i  );  n0.y += 36+ dy*(i  )-d0;
+    n1.x += 36+ dx*(i-1);  n1.y += 36+ dy*(i-1)-d1;
 
     bzline(n0, n1, RED);
   }
 }
-
-
 
 
 
@@ -270,13 +263,10 @@ void draw(){
   mblit(sel, map2scr(cw->selhex));
   if(cw->selunit) mblit(sel, map2scr(cw->selunit->mcrd));
   draw_units();
-  if(cw->mode==MODE_MOVE){ draw_moving_unit(); draw_path(); }
+  if(cw->mode==MODE_MOVE){ draw_moving_unit(); /*draw_path();*/ }
   if(cw->mode==MODE_ATTACK){
-    draw_attacking_unit();
-    if(cw->attack_is_shoot){
-      draw_shoot_attack();
-      draw_shoot_attack_tail();
-    }
+    if(cw->e[1]==EVENT_MELEE) draw_attacking_unit();
+    if(cw->e[1]==EVENT_RANGE) draw_shoot_attack();
   }
   //maptext();
   text( (player==0)?"[pl:0]":"[pl:1]", (scrd){0,0}, false);

@@ -73,49 +73,32 @@ defstruct {l_node n; int type; feature_data data;} feature;
 defstruct { l_node n; mcrd crd; } mnode;
 
 
-//#define EVENT_MOVE_NORMAL   0 (int id, )
-//#define EVENT_MOVE_AMBUSHED   0
-//#define EVENT_ATTACK_with_retrun 0
-
 #define EVENT_MOVE   0
-#define EVENT_ATTACK 1
-defstruct {int id; mcrd dest;} event_move;
-defstruct {int type; int id0; int id1; } event_attack;
-typedef union {
-  event_move   mv;
-  event_attack at;
-} event_data;
-defstruct { l_node n; int type; event_data data; } event ;
+#define EVENT_MELEE  1
+#define EVENT_RANGE  2
+
+// byte-count  event_move   unit-id     directon[0..5]
+// byte-count  event_melee  attacker-id direction   dead
+// byte-count  event_range  attacker-id defender-id dead
+
+defstruct { l_node n; int * data; } event ;
+
 
 
 defstruct {
   tile * map;
   l_list * st;    // stack for filling map
   l_list * path;  // stores path
-  l_list * units; // stires units
-
-  l_list * event_queue;
-
+  l_list * units; // stores units
+  //l_list * eq; // events queue
+  l_list * event_queue; // events queue
+  int * e; //event data
+  //unit * su;
   unit * selunit;
+  int    mi; // move index... rename!
   mcrd selhex;
-
   int mode;
-
-  // костыль: нужно на случай убийства защищающегося
-  // хранит координаты защищающегося или координаты бегства
-  mcrd   attack_crd; 
-  int    attack_index;
-  unit * attack_u1;
-  unit * attack_u2;
-  int    attack_stage; //0-наступление, 1-отход, 2-бегство
-  int    attack_is_counter;
-  bool   attack_is_shoot;
-  int    attack_shoot_index;
-
-
-  // положение юнита при движении между клетками(см. STEPS)
-  int     move_index; // индекс движения между клетками
-  mnode * move_tile;
-  unit *  move_unit;
+  int index; // внутренний индекс события
+  //int i; // внутренний индекс события
 } world;
 

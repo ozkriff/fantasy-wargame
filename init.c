@@ -99,7 +99,7 @@ void add_unit(mcrd crd, int plr, unit_type * type, int wrld) {
   
   // инициализировать нужные особенности юнитов
   if(type == &utypes[2]){ // archer
-    feature_range fd = {5,2,999};
+    feature_range fd = {5,4,999};
     add_feature(u, FEATURE_RNG, (feature_data*)&fd );
   }
   if(type == &utypes[1]) { // hunter
