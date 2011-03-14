@@ -60,6 +60,122 @@ void keys(SDL_Event E){
 
 
 
+// rename
+void ambush(){
+  mnode * t = (mnode*)l_first(cw->path);
+  while(t){
+    unit * u = mp(t->crd)->unit ;
+    if(u && u->player!=player){
+      int dir = mcrd2index(t->crd, ((mnode*)l_prev(t))->crd);
+      int data[5] = {5, EVENT_MELEE, u->id, dir, 1};
+      add_event(data);
+      break;
+    }
+    t = (mnode*)l_next(t);
+  }
+}
+
+
+
+void mv(mcrd m){
+  get_path(m);
+  int d[100] = {0, EVENT_MOVE, cw->selunit->id};
+
+  int len=3;
+  mnode * t = (mnode*)(l_first(cw->path));
+  while(l_next(t)){
+    unit * u = mp( ((mnode*)l_next(t))->crd )->unit;
+    if(u && u->player!=cw->selunit->player)
+      break; // ambush!
+    mnode * n = (mnode*)l_next(t);
+    d[len] = mcrd2index(t->crd, n->crd);
+    t = (mnode*)l_next(t);
+    len++;
+  }
+  d[0] = len;
+  //for(int i=0; i<10; i++) printf("%i ", d[i]); puts("");
+  add_event(d);
+
+  ambush();
+}
+
+
+
+void support_range(mcrd m, unit * u){
+  for(int i=0; i<6; i++){
+    mcrd n = neib(m, i);
+    if( mp(n)->unit && mp(n)->unit->player == u->player ){
+      feature * rng = find_feature(mp(n)->unit, FEATURE_RNG);
+      if(rng){
+        int data[5] = {5, EVENT_RANGE,
+            mp(n)->unit->id, cw->selunit->id, 2};
+        add_event(data);
+        if(cw->selunit->health - data[4] <= 0)
+          return;
+      }
+    }
+  }
+}
+
+
+
+void attack_melee(mcrd m, unit * u){
+  //огонь поддержки
+  support_range(m, u);
+
+  // собственно, это и есть заказанная атака
+  int dir = mcrd2index(cw->selunit->mcrd, u->mcrd);
+  int data[5] = {5, EVENT_MELEE, cw->selunit->id, dir, 3};
+  add_event(data);
+
+  /*проверка на то, что оппонент выживет*/
+  if(u->health - data[4] <= 0)
+    return;
+
+  // а это уже контратака
+  int dir2 = mcrd2index(u->mcrd, cw->selunit->mcrd);
+  int data2[5] = {5, EVENT_MELEE, u->id, dir2, 3};
+  add_event(data2);
+
+  //добавить проверку на необходимость отступления-бегства
+  //if(отстпать?)
+  if(0)
+    return;
+
+  // направление нужно выбирать в цикле, а не так как сейчас
+  // криво-криво. переделать! должен пытатья убежатьr
+  // в противоположном направлении
+  int d; // direction
+  for(d=0; d<6; d++){
+    if( ! mp(neib(m, d))->unit )
+      break;
+  }
+  if(d==6){
+    return;
+  }else{
+    int data3[4] = {4, EVENT_MOVE, u->id, d};
+    add_event(data3);
+  }
+}
+
+
+
+void attack(mcrd m, unit * u){
+  feature * rng = find_feature(cw->selunit, FEATURE_RNG);
+  if(rng){
+    if(mdist(cw->selunit->mcrd, m) <= rng->data.rng.range){
+      int data[5] = {5, EVENT_RANGE,
+          cw->selunit->id, u->id, 2};
+      add_event(data);
+    }
+  }else{
+    if(mdist(cw->selunit->mcrd, m) <= 1){
+      attack_melee(m, u);
+    }
+  }
+}
+
+
 void mouseclick(SDL_Event E){
   if(cw->mode!=MODE_SELECT) return;
 
@@ -70,101 +186,13 @@ void mouseclick(SDL_Event E){
     select_unit(m);
   }else if(cw->selunit){
     if( !u || (u && (is_invis(u)||!mp(m)->fog)) ){
-      get_path(m);
-      int d[100] = {0, EVENT_MOVE, cw->selunit->id};
-
-      int len=3;
-      mnode * t = (mnode*)(l_first(cw->path));
-      while(l_next(t)){
-        unit * u = mp( ((mnode*)l_next(t))->crd )->unit;
-        if(u && u->player!=cw->selunit->player)
-          break; // ambush!
-        mnode * n = (mnode*)l_next(t);
-        d[len] = mcrd2index(t->crd, n->crd);
-        t = (mnode*)l_next(t);
-        len++;
-      }
-      d[0] = len;
-      //for(int i=0; i<10; i++) printf("%i ", d[i]); puts("");
-      add_event(d);
-
-      //ambush
-      { 
-        mnode * t = (mnode*)l_first(cw->path);
-        while(t){
-          unit * u = mp(t->crd)->unit ;
-          if(u && u->player!=player){
-            int dir = mcrd2index(t->crd, ((mnode*)l_prev(t))->crd);
-            int data[5] = {5, EVENT_MELEE, u->id, dir, 1};
-            add_event(data);
-            break;
-          }
-          t = (mnode*)l_next(t);
-        }
-      }
+      mv(m);
       return;
     }
-
     if(u && u->player!=player && cw->selunit 
     && cw->selunit->can_attack
     && !is_invis(u) && mp(m)->fog > 0){
-      feature * rng = find_feature(cw->selunit, FEATURE_RNG);
-      if(rng){
-        if(mdist(cw->selunit->mcrd, m) <= rng->data.rng.range){
-          int data[5] = {5, EVENT_RANGE, cw->selunit->id, u->id, 2};
-          add_event(data);
-        }
-      }else{
-        if(mdist(cw->selunit->mcrd, m) <= 1){
-
-          /*огонь поддержки*/
-          for(int i=0; i<6; i++){
-            mcrd n = neib(m, i);
-            if( mp(n)->unit && mp(n)->unit->player == u->player ){
-              feature * rng = find_feature(mp(n)->unit, FEATURE_RNG);
-              if(rng){
-                int data[5] = {5, EVENT_RANGE, mp(n)->unit->id, cw->selunit->id, 2};
-                add_event(data);
-                if(cw->selunit->health - data[4] <= 0)
-                  return;
-              }
-            }
-          }
-
-
-          int dir = mcrd2index(cw->selunit->mcrd, u->mcrd);
-          int data[5] = {5, EVENT_MELEE, cw->selunit->id, dir, 3};
-          add_event(data);
-
-          /*проверка на то, что оппонент выживет*/
-          if(u->health - data[4] <= 0)
-            return;
-
-          int dir2 = mcrd2index(u->mcrd, cw->selunit->mcrd);
-          int data2[5] = {5, EVENT_MELEE, u->id, dir2, 3};
-          add_event(data2);
-
-          /*тут добавить проверку на необходимость отступления-бегства*/
-          //if(отстпать?)
-          if(0)
-            return;
-
-          // и направление нужно выбирать в цикле, а не так как сейчас
-          // криво-криво. переделать! должен пытатья убежатьr
-          // в противоположном направлении
-          int d; // direction
-          for(d=0; d<6; d++){
-            if( ! mp(neib(m, d))->unit )
-              break;
-          }
-          if(d==6){
-            return;
-          }else{
-            int data3[4] = {4, EVENT_MOVE, u->id, d};
-            add_event(data3);
-          }
-        }
-      }
+      attack(m, u);
     }
   }
 }
