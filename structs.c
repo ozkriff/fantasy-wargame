@@ -90,8 +90,7 @@ defstruct {
   l_list * st;    // stack for filling map
   l_list * path;  // stores path
   l_list * units; // stores units
-  //l_list * eq; // events queue
-  l_list * event_queue; // events queue
+  l_list * eq; // events queue
   int * e; //event data
   //unit * su;
   unit * selunit;

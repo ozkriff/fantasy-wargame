@@ -52,7 +52,7 @@ void add_event(int * data){
     e->data   = calloc(data[0], sizeof(int));
     for(int j=0; j<data[0]; j++)
       e->data[j] = data[j];
-    l_addt(worlds[i].event_queue, e);
+    l_addt(worlds[i].eq, e);
   }
 }
 

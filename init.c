@@ -120,8 +120,7 @@ void init_worlds() {
     worlds[i].st    = calloc(1, sizeof(l_list));
     worlds[i].path  = calloc(1, sizeof(l_list));
     worlds[i].units = calloc(1, sizeof(l_list));
-    worlds[i].event_queue
-                    = calloc(1, sizeof(l_list));
+    worlds[i].eq    = calloc(1, sizeof(l_list));
     worlds[i].selhex = (mcrd){-1,-1};
     worlds[i].mode = MODE_SELECT;
     worlds[i].selunit = NULL;

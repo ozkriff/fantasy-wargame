@@ -142,8 +142,8 @@ void logic(){
   if(cw->mode==MODE_MOVE)   move_logic();
   if(cw->mode==MODE_ATTACK) attack_logic();
 
-  if(cw->mode==MODE_SELECT && cw->event_queue->count>0){
-    event * e = (event*)l_deq(cw->event_queue);
+  if(cw->mode==MODE_SELECT && cw->eq->count>0){
+    event * e = (event*)l_deq(cw->eq);
     cw->e = calloc(e->data[0], sizeof(int));
     for(int i=0; i<e->data[0]; i++)
       cw->e[i] = e->data[i];
