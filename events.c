@@ -111,42 +111,56 @@ void mouseclick(SDL_Event E){
       feature * rng = find_feature(cw->selunit, FEATURE_RNG);
       if(rng){
         if(mdist(cw->selunit->mcrd, m) <= rng->data.rng.range){
-          int data[5] = {5, EVENT_RANGE, cw->selunit->id, mp(m)->unit->id, 2};
+          int data[5] = {5, EVENT_RANGE, cw->selunit->id, u->id, 2};
           add_event(data);
         }
       }else{
         if(mdist(cw->selunit->mcrd, m) <= 1){
 
-          /*тут добавить огонь поддержки*/
-          {
-            for(int i=0; i<6; i++){
-              mcrd n = neib(m, i);
-              if( mp(n)->unit && mp(n)->unit->player == mp(m)->unit->player ){
-                feature * rng = find_feature(mp(n)->unit, FEATURE_RNG);
-                if(rng){
-                  int data[5] = {5, EVENT_RANGE, mp(n)->unit->id, cw->selunit->id, 2};
-                  add_event(data);
-                }
+          /*огонь поддержки*/
+          for(int i=0; i<6; i++){
+            mcrd n = neib(m, i);
+            if( mp(n)->unit && mp(n)->unit->player == u->player ){
+              feature * rng = find_feature(mp(n)->unit, FEATURE_RNG);
+              if(rng){
+                int data[5] = {5, EVENT_RANGE, mp(n)->unit->id, cw->selunit->id, 2};
+                add_event(data);
+                if(cw->selunit->health - data[4] <= 0)
+                  return;
               }
             }
           }
 
-          int dir = mcrd2index(cw->selunit->mcrd, mp(m)->unit->mcrd);
-          int data[5] = {5, EVENT_MELEE, cw->selunit->id, dir, 1};
+
+          int dir = mcrd2index(cw->selunit->mcrd, u->mcrd);
+          int data[5] = {5, EVENT_MELEE, cw->selunit->id, dir, 3};
           add_event(data);
 
-          /*тут добавить проверку на то, что оппонент выживет*/
+          /*проверка на то, что оппонент выживет*/
+          if(u->health - data[4] <= 0)
+            return;
 
-          if(1){
-            int dir2 = mcrd2index(mp(m)->unit->mcrd, cw->selunit->mcrd);
-            int data2[5] = {5, EVENT_MELEE, mp(m)->unit->id, dir2, 1};
-            add_event(data2);
-          }
+          int dir2 = mcrd2index(u->mcrd, cw->selunit->mcrd);
+          int data2[5] = {5, EVENT_MELEE, u->id, dir2, 3};
+          add_event(data2);
 
           /*тут добавить проверку на необходимость отступления-бегства*/
+          //if(отстпать?)
+          if(0)
+            return;
+
           // и направление нужно выбирать в цикле, а не так как сейчас
-          if(1){
-            int data3[4] = {4, EVENT_MOVE, mp(m)->unit->id, dir};
+          // криво-криво. переделать! должен пытатья убежатьr
+          // в противоположном направлении
+          int d; // direction
+          for(d=0; d<6; d++){
+            if( ! mp(neib(m, d))->unit )
+              break;
+          }
+          if(d==6){
+            return;
+          }else{
+            int data3[4] = {4, EVENT_MOVE, u->id, d};
             add_event(data3);
           }
         }

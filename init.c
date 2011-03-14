@@ -136,7 +136,8 @@ void add_units(){
     add_unit( (mcrd){1,4}, 0, &utypes[0], i );
     add_unit( (mcrd){1,5}, 0, &utypes[1], i );
     add_unit( (mcrd){2,5}, 0, &utypes[1], i );
-    add_unit( (mcrd){2,6}, 0, &utypes[1], i );
+    add_unit( (mcrd){3,6}, 0, &utypes[1], i );
+    add_unit( (mcrd){1,6}, 0, &utypes[1], i );
               
     add_unit( (mcrd){3,5}, 1, &utypes[0], i );
     add_unit( (mcrd){3,1}, 1, &utypes[2], i );

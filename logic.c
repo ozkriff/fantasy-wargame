@@ -73,13 +73,12 @@ int calc_damage(unit * a, unit * b){
 
 
 void on_reach_enemy(){
-  //int damage = calc_damage(cw->attack_u1, cw->attack_u2);
-  int damage = cw->e[3];
+  int damage = cw->e[4];
 
   unit * u1 = id2unit(cw->e[2]);
   unit * u2 = mp( neib(u1->mcrd, cw->e[3]) )->unit;
 
-  //u2->health -= damage;
+  u2->health -= damage;
   if(u2->health <= 0) {
     kill_unit(u2);
     fill_map(u1);
@@ -100,7 +99,7 @@ void shoot_attack(){
   //стрела долетела
   if(cw->index >= steps){
     //int dmg = calc_damage(cw->attack_u1, cw->attack_u2);
-    int dmg = 1;
+    int dmg = cw->e[4];
     u2->health -= dmg;
     if(u2->health <= 0) {
       kill_unit(u2);
