@@ -186,7 +186,8 @@ void mouseclick(SDL_Event E){
     select_unit(m);
   }else if(cw->selunit){
     if( !u || (u && (is_invis(u)||!mp(m)->fog)) ){
-      mv(m);
+      if(mp(m)->cost <= cw->selunit->mvp)
+        mv(m);
       return;
     }
     if(u && u->player!=player && cw->selunit 
