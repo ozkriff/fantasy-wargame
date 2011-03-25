@@ -125,7 +125,8 @@ void attack_melee(mcrd m, unit * u){
 
   // собственно, это и есть заказанная атака
   int dir = mcrd2index(cw->selunit->mcrd, u->mcrd);
-  int data[5] = {5, EVENT_MELEE, cw->selunit->id, dir, 3};
+  int data[5] = {5, EVENT_MELEE, cw->selunit->id,
+      dir, melee_attack_damage(cw->selunit, u)};
   add_event(data);
 
   /*проверка на то, что оппонент выживет*/
@@ -134,7 +135,8 @@ void attack_melee(mcrd m, unit * u){
 
   // а это уже контратака
   int dir2 = mcrd2index(u->mcrd, cw->selunit->mcrd);
-  int data2[5] = {5, EVENT_MELEE, u->id, dir2, 3};
+  int data2[5] = {5, EVENT_MELEE, u->id, dir2,
+      melee_return_damage(u, cw->selunit)};
   add_event(data2);
 
   //добавить проверку на необходимость отступления-бегства
@@ -165,7 +167,8 @@ void attack(mcrd m, unit * u){
   if(rng){
     if(mdist(cw->selunit->mcrd, m) <= rng->data.rng.range){
       int data[5] = {5, EVENT_RANGE,
-          cw->selunit->id, u->id, 2};
+          cw->selunit->id, u->id,
+          range_damage(cw->selunit, u)};
       add_event(data);
     }
   }else{

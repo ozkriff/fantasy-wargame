@@ -63,9 +63,9 @@ int tatk3[] = {  0, 1,-4, 0, 0 };
 
 
 unit_type utypes[] = {
-  {1,5,10,4,6,4,"defc", tmvp1, tdef1, tatk1},
-  {4,5, 4,4,4,6,"hunt", tmvp2, tdef2, tatk1},
-  {3,5, 8,4,2,4,"arch", tmvp3, tdef3, tatk1},
+  {1,5,10,5,6,3,"defc", tmvp1, tdef1, tatk1},
+  {4,5,10,5,4,4,"hunt", tmvp2, tdef2, tatk1},
+  {3,5,10,4,3,3,"arch", tmvp3, tdef3, tatk1},
 };
 
 //количество промежуточных положений между клетками

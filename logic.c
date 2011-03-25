@@ -65,10 +65,57 @@ void move_logic(){
 
 
 
-int calc_damage(unit * a, unit * b){
-  a = b;
-  return(4); // random
+// dmg = E(attack_skill) / E(defence_skill) * HPi/HPo * K
+// основная разница в коеффициентах и бонусах поверхности:
+// при рукопашной бонусы берутся с клетки защищающегося
+// при стрельбе каждый юнит перед со своей клетки
+
+// a - attacking unit, b - defender
+int melee_attack_damage (unit * a, unit * b){
+  int terrain_attack  = a->type->ter_atk[mp(b->mcrd)->type];
+  int terrain_defence = b->type->ter_def[mp(b->mcrd)->type];
+
+  float hp_a = (float)a->health / a->type->health;
+  float hp_b = (float)a->health / a->type->health;
+  
+  int attack  = a->type->attack  + terrain_attack  * hp_a;
+  int defence = b->type->defence + terrain_defence * hp_b;
+
+  return(4 * attack/defence);
 }
+
+
+
+// a - defender, a - attacking unit
+int melee_return_damage (unit * a, unit * b){
+  int terrain_attack  = a->type->ter_atk[mp(a->mcrd)->type];
+  int terrain_defence = b->type->ter_def[mp(a->mcrd)->type];
+
+  float hp_a = (float)a->health / a->type->health;
+  float hp_b = (float)a->health / a->type->health;
+  
+  int attack  = a->type->attack  + terrain_attack  * hp_a;
+  int defence = b->type->defence + terrain_defence * hp_b;
+
+  return(3 * attack/defence);
+}
+
+
+// a - shooting unit, a - target
+int range_damage (unit * a, unit * b){
+  int terrain_attack  = a->type->ter_atk[mp(a->mcrd)->type];
+  int terrain_defence = b->type->ter_def[mp(b->mcrd)->type];
+
+  float hp_a = (float)a->health / a->type->health;
+  float hp_b = (float)a->health / a->type->health;
+  
+  int attack  = a->type->attack  + terrain_attack  * hp_a;
+  int defence = b->type->defence + terrain_defence * hp_b;
+
+  return(3 * attack/defence);
+}
+
+
 
 
 
