@@ -41,7 +41,6 @@ defstruct {
   int  cost; // цена полного пути до клетки
   int  type;
   mcrd parent;
-  unit * unit;
 } tile;
 
 

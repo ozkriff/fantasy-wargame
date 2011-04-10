@@ -21,15 +21,7 @@ void select_next_unit(){
 
 
 
-void select_unit(mcrd m){
-  cw->selunit = mp(m)->unit;
-  fill_map(cw->selunit);
-}
-
-
-
 void kill_unit(unit * u){
-  mp(u->mcrd)->unit = NULL;
   if(u == cw->selunit) cw->selunit = NULL;
   free( l_rem(cw->units, u) );
 }
@@ -40,7 +32,6 @@ void kill_unit(unit * u){
 void finish_movement(){
   //mcrd m = {cw->e[1+cw->mi+1], cw->e[1+cw->mi]};
   unit * u = id2unit(cw->e[2]);
-  mp(u->mcrd)->unit = u;
   u->scrd = map2scr(u->mcrd);
   u->mvp -= mp(u->mcrd)->cost;
   if(cw->selunit==u)
@@ -123,7 +114,7 @@ void on_reach_enemy(){
   int damage = cw->e[4];
 
   unit * u1 = id2unit(cw->e[2]);
-  unit * u2 = mp( neib(u1->mcrd, cw->e[3]) )->unit;
+  unit * u2 = find_unit_at( neib(u1->mcrd, cw->e[3]) );
 
   u2->health -= damage;
   if(u2->health <= 0) {
@@ -198,7 +189,6 @@ void logic(){
 
     if(cw->e[1] == EVENT_MOVE){
       cw->mode = MODE_MOVE;
-      mp(id2unit(cw->e[2])->mcrd)->unit = NULL;
       cw->mi = 2;
     }
     if(e->data[1] == EVENT_MELEE) cw->mode = MODE_ATTACK;

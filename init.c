@@ -93,7 +93,6 @@ void add_unit(mcrd crd, int plr, unit_type * type, int wrld) {
   *(u->features) = (l_list){0, 0, 0};
   
   //mp(crd)->unit = u;
-  (worlds[wrld].map + crd.x + MAP_W*crd.y)->unit = u;
 
   u->id = units->count>0 ? ((unit*)units->h)->id+1 : 0;
   

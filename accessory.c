@@ -195,17 +195,26 @@ unit * id2unit(int id){
 
 
 
+unit * find_unit_at(mcrd crd){
+  FOR_EACH_UNIT{
+    if(mcrdeq(u->mcrd, crd))
+      return(u);
+  }
+  return(NULL);
+}
+
+
+
 bool is_invis (unit * u){
   if(!find_feature(u, FEATURE_INVIS))
     return(false);
 
   for(int i=0; i<6; i++){
     mcrd nb = neib(u->mcrd, i);
-    unit * u2 = mp(nb)->unit;
+    unit * u2 = find_unit_at(nb);
     if(u2 && u2->player != u->player)
       return(false);
   }
   return(true);
 }
-
 

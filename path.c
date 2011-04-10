@@ -32,7 +32,7 @@ int zoc(mcrd a, unit * u, int cost){
   int mvp = u->type->mvp;
   for(int i=0; i<6; i++){
     mcrd n = neib(a, i);
-    unit * u2 = mp(n)->unit;
+    unit * u2 = find_unit_at(n);
     if(inboard(n) && cost%mvp!=0
     && u2 && u2->player!=u->player
     && mp(n)->fog>0 && !is_invis(u2) )
@@ -49,7 +49,7 @@ void process_nbh (unit * u, mcrd t, mcrd nb){
     return;
 
   // что бы не проходить через видимых врагов
-  unit * u2 = mp(nb)->unit;
+  unit * u2 = find_unit_at(nb);
   if(u2 // && u2->player!=u->player
   && mp(nb)->fog>0
   && !is_invis(u2) )

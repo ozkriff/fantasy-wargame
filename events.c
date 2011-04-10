@@ -64,7 +64,7 @@ void keys(SDL_Event E){
 void ambush(){
   mnode * t = (mnode*)l_first(cw->path);
   while(t){
-    unit * u = mp(t->crd)->unit ;
+    unit * u = find_unit_at(t->crd);
     if(u && u->player!=player){
       int dir = mcrd2index(t->crd, ((mnode*)l_prev(t))->crd);
       int data[5] = {5, EVENT_MELEE, u->id, dir, 1};
@@ -84,7 +84,7 @@ void mv(mcrd m){
   int len=3;
   mnode * t = (mnode*)(l_first(cw->path));
   while(l_next(t)){
-    unit * u = mp( ((mnode*)l_next(t))->crd )->unit;
+    unit * u = find_unit_at( ((mnode*)l_next(t))->crd );
     if(u && u->player!=cw->selunit->player)
       break; // ambush!
     mnode * n = (mnode*)l_next(t);
@@ -103,12 +103,12 @@ void mv(mcrd m){
 
 void support_range(mcrd m, unit * u){
   for(int i=0; i<6; i++){
-    mcrd n = neib(m, i);
-    if( mp(n)->unit && mp(n)->unit->player == u->player ){
-      feature * rng = find_feature(mp(n)->unit, FEATURE_RNG);
+    unit * mu = find_unit_at( neib(m,i) );
+    if( mu && mu->player == u->player ){
+      feature * rng = find_feature(mu, FEATURE_RNG);
       if(rng){
         int data[5] = {5, EVENT_RANGE,
-            mp(n)->unit->id, cw->selunit->id, 2};
+            mu->id, cw->selunit->id, 2};
         add_event(data);
         if(cw->selunit->health - data[4] <= 0)
           return;
@@ -149,7 +149,7 @@ void attack_melee(mcrd m, unit * u){
   // в противоположном направлении
   int d; // direction
   for(d=0; d<6; d++){
-    if( ! mp(neib(m, d))->unit )
+    if( ! find_unit_at(neib(m, d)) )
       break;
   }
   if(d==6){
@@ -183,10 +183,11 @@ void mouseclick(SDL_Event E){
   if(cw->mode!=MODE_SELECT) return;
 
   mcrd m = scr2map((scrd){E.button.x, E.button.y});
-  unit * u = mp(m)->unit;
+  unit * u = find_unit_at(m);
 
   if(u && u->player == player){
-    select_unit(m);
+    cw->selunit = u;
+    fill_map(cw->selunit);
   }else if(cw->selunit){
     if( !u || (u && (is_invis(u)||!mp(m)->fog)) ){
       if(mp(m)->cost <= cw->selunit->mvp)
