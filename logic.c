@@ -163,7 +163,8 @@ void attack_logic() {
 
 
 void updatefog(int plr){
-  FOR_EACH_TILE{
+  mcrd mc;
+  FOR_EACH_MCRD(mc){
     mp(mc)->fog=0;
     unit * u;
     FOR_EACH_UNIT(u){

@@ -15,8 +15,8 @@ void PrintFError (char * format, ...) {
 #define FOR_EACH_UNIT(u) \
   for(u=(unit*)l_first(cw->units); u; u=(unit*)l_next(u))
 
-#define FOR_EACH_TILE \
-  for(mcrd mc={0,0}; mc.y<MAP_H; mc.y++) \
+#define FOR_EACH_MCRD(mc) \
+  for(mc.y=0; mc.y<MAP_H; mc.y++) \
     for(mc.x=0; mc.x<MAP_W; mc.x++)    
     
 feature * find_feature(unit * u, int type){
@@ -155,7 +155,8 @@ mcrd scr2map(scrd m) {
 
   m.x/=2;
 
-  FOR_EACH_TILE{
+  mcrd mc;
+  FOR_EACH_MCRD(mc){
     scrd wp = map2scr(mc);
     wp.x += 36; wp.y += 54; wp.x/=2;
     if(sdist(m, wp) < min_dist){

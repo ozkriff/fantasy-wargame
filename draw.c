@@ -52,7 +52,8 @@ void mblit(SDL_Surface *src, mcrd crd) {
 
 
 void draw_map() {
-  FOR_EACH_TILE{
+  mcrd mc;
+  FOR_EACH_MCRD(mc){
     mblit(terrsrf[ mp(mc)->type ], map2scr(mc));
     if(mp(mc)->fog<=0)  mblit(hl3, map2scr(mc));
   }
@@ -192,7 +193,8 @@ void draw_attacking_unit(){
 
 
 void draw_possible_tiles(){
-  FOR_EACH_TILE{
+  mcrd mc;
+  FOR_EACH_MCRD(mc){
     mcrd p = mp(mc)->parent;
     if(!(p.x==0 && p.y==0)
     && mp(mc)->cost <= cw->selunit->mvp) {
@@ -205,7 +207,8 @@ void draw_possible_tiles(){
 
 
 void maptext(){
-  FOR_EACH_TILE{
+  mcrd mc;
+  FOR_EACH_MCRD(mc){
     if(mp(mc)->cost!=30000 && mp(mc)->cost!=0){
       scrd s = map2scr(mc);
       s.x+=36; s.y+=54;

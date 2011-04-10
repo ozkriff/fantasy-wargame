@@ -65,9 +65,10 @@ void process_nbh (unit * u, mcrd t, mcrd nb){
 
 
 void fill_map(unit * u) {
-  FOR_EACH_TILE{
-    mp(mc)->cost   = 30000;
-    mp(mc)->parent = nmcrd;
+  mcrd m;
+  FOR_EACH_MCRD(m){
+    mp(m)->cost   = 30000;
+    mp(m)->parent = nmcrd;
   }  
   push(u->mcrd, u->mcrd, 0); // push start point
   while(cw->st->count>0){
