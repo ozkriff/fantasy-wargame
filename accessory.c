@@ -12,9 +12,8 @@ void PrintFError (char * format, ...) {
 
 
 
-#define FOR_EACH_UNIT \
-  for(unit * u=(unit*)l_first(cw->units); \
-  u; u=(unit*)l_next(u))
+#define FOR_EACH_UNIT(u) \
+  for(u=(unit*)l_first(cw->units); u; u=(unit*)l_next(u))
 
 #define FOR_EACH_TILE \
   for(mcrd mc={0,0}; mc.y<MAP_H; mc.y++) \
@@ -186,7 +185,8 @@ scrd mbetween(mcrd a, mcrd b, int i){
 
 
 unit * id2unit(int id){
-  FOR_EACH_UNIT{
+  unit * u;
+  FOR_EACH_UNIT(u){
     if(u->id == id)
       return(u);
   }
@@ -196,7 +196,8 @@ unit * id2unit(int id){
 
 
 unit * find_unit_at(mcrd crd){
-  FOR_EACH_UNIT{
+  unit * u;
+  FOR_EACH_UNIT(u){
     if(mcrdeq(u->mcrd, crd))
       return(u);
   }

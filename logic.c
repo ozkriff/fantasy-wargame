@@ -165,7 +165,8 @@ void attack_logic() {
 void updatefog(int plr){
   FOR_EACH_TILE{
     mp(mc)->fog=0;
-    FOR_EACH_UNIT{
+    unit * u;
+    FOR_EACH_UNIT(u){
       if(u->player == plr
       && mdist(mc, u->mcrd) <= u->type->see)
         mp(mc)->fog++;

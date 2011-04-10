@@ -1,6 +1,7 @@
 
 bool checkunitsleft(){
-  FOR_EACH_UNIT {
+  unit * u;
+  FOR_EACH_UNIT(u){
     if(u->player == player)
       return(true);
   }
@@ -27,7 +28,8 @@ void onspace(){
 
   cw->selunit = NULL;
 
-  FOR_EACH_UNIT{
+  unit * u;
+  FOR_EACH_UNIT(u){
     if(u->player == player){
       u->mvp = u->type->mvp;
       u->can_attack = true;

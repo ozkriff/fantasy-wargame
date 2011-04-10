@@ -150,7 +150,8 @@ void draw_unit(unit *u){
 
 
 void draw_units(){
-  FOR_EACH_UNIT{
+  unit * u;
+  FOR_EACH_UNIT(u){
     if(cw->mode==MODE_ATTACK
     && cw->e[1]==EVENT_MELEE
     && cw->e[2]==u->id)
