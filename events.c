@@ -62,44 +62,31 @@ void keys(SDL_Event E){
 
 
 
-// rename
-void ambush(){
-  mnode * t = (mnode*)l_first(cw->path);
-  while(t){
-    unit * u = find_unit_at(t->crd);
-    if(u && u->player!=player){
-      int dir = mcrd2index(t->crd, ((mnode*)l_prev(t))->crd);
+void mv(mcrd m){
+  get_path(m);
+  int d[5] = {5, EVENT_MOVE, cw->selunit->id};
+
+  mnode * current = (mnode*)(l_first(cw->path));
+  while(l_next(current)){
+    mnode * next = (mnode*)(l_next(current));
+
+    unit * u = find_unit_at( next->crd );
+    if(u && u->player!=cw->selunit->player){
+      // AMBUSH
+      int dir = mcrd2index(next->crd, current->crd);
       int data[5] = {5, EVENT_MELEE, u->id, dir, 1};
       add_event(data);
       break;
     }
-    t = (mnode*)l_next(t);
+    
+    d[3] = next->crd.x;
+    d[4] = next->crd.y;
+    add_event(d);
+
+    current = next;
   }
 }
 
-
-
-void mv(mcrd m){
-  get_path(m);
-  int d[100] = {0, EVENT_MOVE, cw->selunit->id};
-
-  int len=3;
-  mnode * t = (mnode*)(l_first(cw->path));
-  while(l_next(t)){
-    unit * u = find_unit_at( ((mnode*)l_next(t))->crd );
-    if(u && u->player!=cw->selunit->player)
-      break; // ambush!
-    mnode * n = (mnode*)l_next(t);
-    d[len] = mcrd2index(t->crd, n->crd);
-    t = (mnode*)l_next(t);
-    len++;
-  }
-  d[0] = len;
-  //for(int i=0; i<10; i++) printf("%i ", d[i]); puts("");
-  add_event(d);
-
-  ambush();
-}
 
 
 
@@ -155,9 +142,11 @@ void attack_melee(mcrd m, unit * u){
       break;
   }
   if(d==6){
-    return;
+    mcrd dest = neib(m, rand()%6);
+    attack_melee(dest, u);
   }else{
-    int data3[4] = {4, EVENT_MOVE, u->id, d};
+    mcrd dest = neib(m, d);
+    int data3[5] = {4, EVENT_MOVE, u->id, dest.x, dest.y};
     add_event(data3);
   }
 }

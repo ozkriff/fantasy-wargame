@@ -175,9 +175,8 @@ void draw_units(){
 
 void draw_moving_unit(){
   unit * u = id2unit(cw->e[2]);
-  mcrd a = u->mcrd;
-  mcrd b = neib(u->mcrd, cw->e[cw->mi+1]);
-  scrd crd = mbetween(a, b, cw->index);
+  mcrd b = {cw->e[3], cw->e[4]};
+  scrd crd = mbetween(u->mcrd, b, cw->index);
   mblit(type2srf(u->type), crd);
 }
 

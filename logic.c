@@ -28,28 +28,15 @@ void kill_unit(unit * u){
 
 
 
-
-void finish_movement(){
-  //mcrd m = {cw->e[1+cw->mi+1], cw->e[1+cw->mi]};
-  unit * u = id2unit(cw->e[2]);
-  u->scrd = map2scr(u->mcrd);
-  u->mvp -= mp(u->mcrd)->cost;
-  if(cw->selunit==u)
-    fill_map(u);
-  cw->mode = MODE_SELECT;
-}
-
-
-
 void move_logic(){
-  if(cw->index == STEPS){
-    cw->index = 0;
-    cw->mi++;
-    id2unit(cw->e[2])->mcrd
-      = neib(id2unit(cw->e[2])->mcrd, cw->e[cw->mi]);
-    // TODO вот именно тут и надо обновлять FOW
-    if(cw->mi == cw->e[0]-1)
-      finish_movement();
+  if(cw->index == STEPS-1){
+    // finish movement
+    unit * u = id2unit(cw->e[2]);
+    u->mvp -= mp(u->mcrd)->cost;
+    u->mcrd = (mcrd){cw->e[3], cw->e[4]};
+    if(cw->selunit==u) fill_map(u);
+    u->scrd = map2scr(u->mcrd);
+    cw->mode = MODE_SELECT;
   }
   cw->index++;
 }
@@ -189,10 +176,7 @@ void logic(){
 
     cw->index = 0;
 
-    if(cw->e[1] == EVENT_MOVE){
-      cw->mode = MODE_MOVE;
-      cw->mi = 2;
-    }
+    if(cw->e[1] == EVENT_MOVE)    cw->mode = MODE_MOVE;
     if(e->data[1] == EVENT_MELEE) cw->mode = MODE_ATTACK;
     if(e->data[1] == EVENT_RANGE) cw->mode = MODE_ATTACK;
   }

@@ -93,7 +93,6 @@ defstruct {
   int * e; //event data
   //unit * su;
   unit * selunit;
-  int    mi; // move index... rename!
   mcrd selhex;
   int mode;
   int index; // внутренний индекс события
