@@ -90,16 +90,16 @@ void mv(mcrd m){
 
 
 
-void support_range(mcrd m, unit * u){
+// [a]ttacker, [d]efender
+void support_range(unit * a, unit * d){
   for(int i=0; i<6; i++){
-    unit * mu = find_unit_at( neib(m,i) );
-    if( mu && mu->player == u->player ){
-      feature * rng = find_feature(mu, FEATURE_RNG);
-      if(rng){
-        int data[5] = {5, EVENT_RANGE,
-            mu->id, cw->selunit->id, 2};
+    // [sup]porter
+    unit * sup = find_unit_at( neib(d->mcrd, i) );
+    if( sup && sup->player == d->player ){
+      if(find_feature(sup, FEATURE_RNG)){
+        int data[5] = {5, EVENT_RANGE, sup->id, a->id, 2};
         add_event(data);
-        if(cw->selunit->health - data[4] <= 0)
+        if(a->health - data[4] <= 0)
           return;
       }
     }
@@ -108,63 +108,66 @@ void support_range(mcrd m, unit * u){
 
 
 
-void attack_melee(mcrd m, unit * u){
+// [a]ttacker, [d]efender
+void attack_melee(unit * a, unit * d){
+  mcrd md = d->mcrd;
+  mcrd ma = a->mcrd;
+
   //огонь поддержки
-  support_range(m, u);
+  support_range(a, d);
 
   // собственно, это и есть заказанная атака
-  int dir = mcrd2index(cw->selunit->mcrd, u->mcrd);
-  int data[5] = {5, EVENT_MELEE, cw->selunit->id,
-      dir, melee_attack_damage(cw->selunit, u)};
+  int dir = mcrd2index(ma, md);
+  int data[5] = {5, EVENT_MELEE, a->id,
+      dir, melee_attack_damage(a, d)};
   add_event(data);
 
   /*проверка на то, что оппонент выживет*/
-  if(u->health - data[4] <= 0)
+  if(d->health - data[4] <= 0)
     return;
 
   // а это уже контратака
-  int dir2 = mcrd2index(u->mcrd, cw->selunit->mcrd);
-  int data2[5] = {5, EVENT_MELEE, u->id, dir2,
-      melee_return_damage(u, cw->selunit)};
+  int dir2 = mcrd2index(md, ma);
+  int data2[5] = {5, EVENT_MELEE, d->id, dir2,
+      melee_return_damage(d, a)};
   add_event(data2);
 
-  //добавить проверку на необходимость отступления-бегства
-  //if(отстпать?)
-  if(0)
+  // проверка на необходимость отступления-бегства
+  if(d->health - data[4] > d->type->health / 2)
     return;
 
-  // направление нужно выбирать в цикле, а не так как сейчас
-  // криво-криво. переделать! должен пытатья убежатьr
-  // в противоположном направлении
-  int d; // direction
-  for(d=0; d<6; d++){
-    if( ! find_unit_at(neib(m, d)) )
+  // пытатья убежатьr в противоположном направлении или драться
+  int dir3; // direction
+  for(dir3=0; dir3<6; dir3++){
+    if( ! find_unit_at(neib(md, dir3)) )
       break;
   }
-  if(d==6){
-    mcrd dest = neib(m, rand()%6);
-    attack_melee(dest, u);
+  if(dir3==6){
+    attack_melee(d, a); // паника!
   }else{
-    mcrd dest = neib(m, d);
-    int data3[5] = {4, EVENT_MOVE, u->id, dest.x, dest.y};
+    mcrd dest = neib(md, dir3);
+    int data3[5] = {5, EVENT_MOVE, d->id, dest.x, dest.y};
     add_event(data3);
   }
 }
 
 
 
-void attack(mcrd m, unit * u){
-  feature * rng = find_feature(cw->selunit, FEATURE_RNG);
+// [a]ttacker, [d]efender
+void attack(unit * a, unit * d){
+  mcrd md = d->mcrd;
+  mcrd ma = a->mcrd;
+  feature * rng = find_feature(a, FEATURE_RNG);
   if(rng){
-    if(mdist(cw->selunit->mcrd, m) <= rng->data.rng.range){
+    if(mdist(ma, md) <= rng->data.rng.range){
       int data[5] = {5, EVENT_RANGE,
-          cw->selunit->id, u->id,
-          range_damage(cw->selunit, u)};
+          a->id, d->id,
+          range_damage(a, d)};
       add_event(data);
     }
   }else{
-    if(mdist(cw->selunit->mcrd, m) <= 1){
-      attack_melee(m, u);
+    if(mdist(ma, md) <= 1){
+      attack_melee(a, d);
     }
   }
 }
@@ -188,7 +191,7 @@ void mouseclick(SDL_Event E){
     if(u && u->player!=player && cw->selunit 
     && cw->selunit->can_attack
     && !is_invis(u) && mp(m)->fog > 0){
-      attack(m, u);
+      attack(cw->selunit, u);
     }
   }
 }
