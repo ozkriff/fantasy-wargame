@@ -233,8 +233,7 @@ void draw_shoot_attack(){
   a.y += dy * cw->index;
 
   // вертикальная поправка
-  //int dh = 36 * sinf((float)cw->index/steps*3.14);
-  int dh = 26 * sinf((float)cw->index/steps*3.14);
+  int dh = 36 * sinf((float)cw->index/steps*3.14);
   blit(arrow, a.x, a.y-dh);
 
   // рисует "хвост" стрелы. через задницу!
