@@ -25,10 +25,18 @@ void select_next_unit(){
 void kill_unit(Unit * u){
   if(u == cw->selunit) cw->selunit = NULL;
 
-  // нельзя так просто освобождать память юнита!
-  // надо еще и его внутренние списки почистить.
+  Node * nd;
+  FOR_EACH_NODE(cw->units, nd){
+    Unit * iter = nd->d;
+    if(iter==u){
+      // удаляем список свойств
+      Node * feature_node;
+      FOR_EACH_NODE(u->features, feature_node)
+        l_delete_node(u->features, feature_node);
 
-  //l_delete_node(cw->units, 
+      l_delete_node(cw->units, nd);
+    }
+  }
 }
 
 
