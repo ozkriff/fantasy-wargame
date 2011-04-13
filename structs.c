@@ -22,7 +22,6 @@ defstruct {
 
 
 defstruct {
-  Node  n;
   Unit_type *  type;
   int   id;
   int   health;
@@ -65,7 +64,7 @@ typedef union {
   bool noreturn;
 } Feature_data;
 
-defstruct {Node n; int type; Feature_data data;} Feature;
+defstruct {int type; Feature_data data;} Feature;
 
 
 #define EVENT_MOVE   0
