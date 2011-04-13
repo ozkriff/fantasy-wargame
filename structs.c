@@ -68,10 +68,6 @@ typedef union {
 defstruct {l_node n; int type; feature_data data;} feature;
 
 
-// map node / path node / used in pathfinding
-defstruct { l_node n; mcrd crd; } mnode;
-
-
 #define EVENT_MOVE   0
 #define EVENT_MELEE  1
 #define EVENT_RANGE  2
@@ -98,4 +94,5 @@ defstruct {
   int index; // внутренний индекс события
   //int i; // внутренний индекс события
 } world;
+
 

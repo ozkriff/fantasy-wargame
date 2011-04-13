@@ -80,14 +80,11 @@ void mline(mcrd a, mcrd b){
 // draw current path
 void draw_path() {
   if(cw->path->count>0){
-    mnode * tile = (mnode*)l_first(cw->path);
-    while(l_next(tile)){
-      if(l_next(tile)){
-        mcrd a = tile->crd;
-        mcrd b = ((mnode*)l_next(tile))->crd;
-        mline(a,b);
-      }
-      tile = (mnode*)l_next(tile);
+    l_node * node;
+    for(node=cw->path->h; node->n; node=node->n){
+      mcrd * current = node->d;
+      mcrd * next    = node->n->d;
+      mline(*current, *next);
     }
   }
 }
@@ -151,8 +148,10 @@ void draw_unit(unit *u){
 
 
 void draw_units(){
-  unit * u;
-  FOR_EACH_UNIT(u){
+  l_node * node;
+  FOR_EACH_NODE(cw->units, node){
+    unit * u = node->d;
+
     if(cw->mode==MODE_ATTACK
     && cw->e[1]==EVENT_MELEE
     && cw->e[2]==u->id)

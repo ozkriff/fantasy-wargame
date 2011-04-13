@@ -12,19 +12,16 @@ void PrintFError (char * format, ...) {
 
 
 
-#define FOR_EACH_UNIT(u) \
-  for(u=(unit*)l_first(cw->units); u; u=(unit*)l_next(u))
-
 #define FOR_EACH_MCRD(mc) \
   for(mc.y=0; mc.y<MAP_H; mc.y++) \
     for(mc.x=0; mc.x<MAP_W; mc.x++)    
     
 feature * find_feature(unit * u, int type){
-  feature * f = (feature*)l_first(u->features);
-  while(f){
+  l_node * node;
+  FOR_EACH_NODE(u->features, node){
+    feature * f = node->d;
     if(f->type == type)
       return(f);
-    f = (feature*)l_next(f);
   }
   return(NULL);
 }
@@ -34,9 +31,10 @@ feature * find_feature(unit * u, int type){
 
 
 void print_event_queue(l_list * l){
-  event * e;
   for(int i=0; i<players_count; i++){
-    for(e = (event*)l_first(l); e; e = (event*)l_next(e)){
+    l_node * node;
+    FOR_EACH_NODE(l, node){
+      event * e = node->d;
       for(int j=0; j<e->data[0]; j++)
         printf("%i ", e->data[i]);
     }
@@ -51,7 +49,7 @@ void add_event(int * data){
     e->data   = calloc(data[0], sizeof(int));
     for(int j=0; j<data[0]; j++)
       e->data[j] = data[j];
-    l_addt(worlds[i].eq, e);
+    l_addtail(worlds[i].eq, e);
   }
 }
 
@@ -186,8 +184,9 @@ scrd mbetween(mcrd a, mcrd b, int i){
 
 
 unit * id2unit(int id){
-  unit * u;
-  FOR_EACH_UNIT(u){
+  l_node * node;
+  FOR_EACH_NODE(cw->units, node){
+    unit * u = node->d;
     if(u->id == id)
       return(u);
   }
@@ -197,8 +196,9 @@ unit * id2unit(int id){
 
 
 unit * find_unit_at(mcrd crd){
-  unit * u;
-  FOR_EACH_UNIT(u){
+  l_node * node;
+  FOR_EACH_NODE(cw->units, node){
+    unit * u = node->d;
     if(mcrdeq(u->mcrd, crd))
       return(u);
   }

@@ -1,7 +1,8 @@
 
 bool checkunitsleft(){
-  unit * u;
-  FOR_EACH_UNIT(u){
+  l_node * node;
+  FOR_EACH_NODE(cw->units, node){
+    unit * u = node->d;
     if(u->player == player)
       return(true);
   }
@@ -28,8 +29,9 @@ void onspace(){
 
   cw->selunit = NULL;
 
-  unit * u;
-  FOR_EACH_UNIT(u){
+  l_node * node;
+  FOR_EACH_NODE(cw->units, node){
+    unit * u = node->d;
     if(u->player == player){
       u->mvp = u->type->mvp;
       u->can_attack = true;
@@ -55,7 +57,7 @@ void keys(SDL_Event E){
     case SDLK_RIGHT: map_offset.x -= 72; break;
     case SDLK_SPACE: onspace();          break;
     case SDLK_r:     change_tile(cw->selhex);break;
-    case SDLK_n:     select_next_unit(); break;
+    //case SDLK_n:     select_next_unit(); break;
     default: break;
   }
 }
@@ -66,24 +68,23 @@ void mv(mcrd m){
   get_path(m);
   int d[5] = {5, EVENT_MOVE, cw->selunit->id};
 
-  mnode * current = (mnode*)(l_first(cw->path));
-  while(l_next(current)){
-    mnode * next = (mnode*)(l_next(current));
+  l_node * node;
+  for(node=cw->path->h; node->n; node=node->n){
+    mcrd * current = node->d;
+    mcrd * next    = node->n->d;
 
-    unit * u = find_unit_at( next->crd );
+    unit * u = find_unit_at( *next );
     if(u && u->player!=cw->selunit->player){
       // AMBUSH
-      int dir = mcrd2index(next->crd, current->crd);
+      int dir = mcrd2index(*next, *current);
       int data[5] = {5, EVENT_MELEE, u->id, dir, 1};
       add_event(data);
       break;
     }
     
-    d[3] = next->crd.x;
-    d[4] = next->crd.y;
+    d[3] = next->x;
+    d[4] = next->y;
     add_event(d);
-
-    current = next;
   }
 }
 

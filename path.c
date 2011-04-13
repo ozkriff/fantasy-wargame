@@ -4,18 +4,17 @@ void push(mcrd tile, mcrd parent, int newcost) {
   mp(tile)->cost   = newcost;
   mp(tile)->parent = parent;
   
-  mnode * new = malloc(sizeof(mnode));
-  new->crd = tile;
-  l_push(cw->st, new);
+  mcrd * m = malloc(sizeof(mcrd));
+  m->x = tile.x;
+  m->y = tile.y;
+  l_push(cw->st, m);
 }
 
 
 
 mcrd pop(){
-  mnode * tmp = (mnode*)l_pop(cw->st);
-  mcrd crd = tmp->crd;
-  free(tmp);
-  return(crd);
+  mcrd m = *(mcrd*)l_pop(cw->st);
+  return( m );
 }
 
 
@@ -87,9 +86,10 @@ void clear_path(){
 
 
 void addwaypoint(mcrd wp){
-  mnode * new = malloc(sizeof(mnode));
-  new->crd = wp;
-  l_push(cw->path, new);
+  mcrd * m = malloc(sizeof(mcrd));
+  m->x = wp.x;
+  m->y = wp.y;
+  l_push(cw->path, m);
 }
 
 

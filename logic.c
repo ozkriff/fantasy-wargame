@@ -9,21 +9,26 @@ void change_tile(mcrd m){
 
 
 
+/*
 void select_next_unit(){
   do{
-    if(cw->selunit && cw->selunit != (unit*)l_last(cw->units))
+    if(cw->selunit && cw->selunit != l_last(cw->units->t->d)
       cw->selunit = (unit*)l_next(cw->selunit);
     else
       cw->selunit = (unit*)l_first(cw->units);
   }while(cw->selunit->player != player);
   fill_map(cw->selunit);
 }
-
+*/
 
 
 void kill_unit(unit * u){
   if(u == cw->selunit) cw->selunit = NULL;
-  free( l_rem(cw->units, u) );
+
+  // нельзя так просто освобождать память юнита!
+  // надо еще и его внутренние списки почистить.
+
+  //l_delete_node(cw->units, 
 }
 
 
@@ -153,8 +158,9 @@ void updatefog(int plr){
   mcrd mc;
   FOR_EACH_MCRD(mc){
     mp(mc)->fog=0;
-    unit * u;
-    FOR_EACH_UNIT(u){
+    l_node * node;
+    FOR_EACH_NODE(cw->units, node){
+      unit * u = node->d;
       if(u->player == plr
       && mdist(mc, u->mcrd) <= u->type->see)
         mp(mc)->fog++;
@@ -169,7 +175,7 @@ void logic(){
   if(cw->mode==MODE_ATTACK) attack_logic();
 
   if(cw->mode==MODE_SELECT && cw->eq->count>0){
-    event * e = (event*)l_deq(cw->eq);
+    event * e = l_dequeue(cw->eq);
     cw->e = calloc(e->data[0], sizeof(int));
     for(int i=0; i<e->data[0]; i++)
       cw->e[i] = e->data[i];
