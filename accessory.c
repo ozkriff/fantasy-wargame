@@ -16,10 +16,10 @@ void PrintFError (char * format, ...) {
   for(mc.y=0; mc.y<MAP_H; mc.y++) \
     for(mc.x=0; mc.x<MAP_W; mc.x++)    
     
-feature * find_feature(unit * u, int type){
-  l_node * node;
+Feature * find_feature(Unit * u, int type){
+  Node * node;
   FOR_EACH_NODE(u->features, node){
-    feature * f = node->d;
+    Feature * f = node->d;
     if(f->type == type)
       return(f);
   }
@@ -30,9 +30,9 @@ feature * find_feature(unit * u, int type){
 
 
 
-void print_event_queue(l_list * l){
+void print_event_queue(List * l){
   for(int i=0; i<players_count; i++){
-    l_node * node;
+    Node * node;
     FOR_EACH_NODE(l, node){
       event * e = node->d;
       for(int j=0; j<e->data[0]; j++)
@@ -56,17 +56,17 @@ void add_event(int * data){
 
 
 // равны ли mcrd?
-bool mcrdeq(mcrd a, mcrd b){ return(a.x==b.x&&a.y==b.y); }
+bool mcrdeq(Mcrd a, Mcrd b){ return(a.x==b.x&&a.y==b.y); }
 
 
 
 // доступ к ячейке по mcrd
-tile * mp(mcrd c){ return(cw->map + MAP_W*c.y + c.x); }
+Tile * mp(Mcrd c){ return(cw->map + MAP_W*c.y + c.x); }
 
 
 
 // дистанция между клетками
-int mdist(mcrd a, mcrd b) {
+int mdist(Mcrd a, Mcrd b) {
   a.x += a.y/2;
   b.x += b.y/2;
   
@@ -80,13 +80,13 @@ int mdist(mcrd a, mcrd b) {
 
 // int i - neib index
 // получить соседа клетки
-mcrd neib(mcrd a, int i) {
+Mcrd neib(Mcrd a, int i) {
   int d[2][6][2] = {
     { {1,-1}, {1,0}, {1,1}, { 0,1}, {-1,0}, { 0,-1}, },
     { {0,-1}, {1,0}, {0,1}, {-1,1}, {-1,0}, {-1,-1}, } };
   int dx = d[a.y%2][i][0];
   int dy = d[a.y%2][i][1];
-  return( (mcrd){a.x+dx, a.y+dy} );
+  return( (Mcrd){a.x+dx, a.y+dy} );
 }
 
 
@@ -101,7 +101,7 @@ int neib2(int i){
 
 
 
-int mcrd2index(mcrd a, mcrd b){
+int mcrd2index(Mcrd a, Mcrd b){
   for(int i=0; i<6; i++){
     if(mcrdeq(neib(a,i), b))
       return(i);
@@ -112,14 +112,14 @@ int mcrd2index(mcrd a, mcrd b){
 
 
 // в пределах карты?
-bool inboard(mcrd t){
+bool inboard(Mcrd t){
   return( t.x>=0 && t.x<MAP_W && t.y>=0 && t.y<MAP_H );
 }
 
 
 
 // расстояние между двумя экранными точками
-int sdist(scrd a, scrd b) {
+int sdist(Scrd a, Scrd b) {
   int dx = abs(b.x - a.x);
   int dy = abs(b.y - a.y);
 
@@ -128,8 +128,8 @@ int sdist(scrd a, scrd b) {
 
 
 
-scrd map2scr(mcrd map) {
-  scrd scr;
+Scrd map2scr(Mcrd map) {
+  Scrd scr;
 
   // space bwetween tiles
   int space = 0;
@@ -147,15 +147,15 @@ scrd map2scr(mcrd map) {
 // find tile with nearest coords
 // деление надва нужно потому,
 // что клетки `сплющены` по вертикали
-mcrd scr2map(scrd m) {
-  mcrd min;            
+Mcrd scr2map(Scrd m) {
+  Mcrd min;            
   int min_dist = 9000;
 
   m.x/=2;
 
-  mcrd mc;
+  Mcrd mc;
   FOR_EACH_MCRD(mc){
-    scrd wp = map2scr(mc);
+    Scrd wp = map2scr(mc);
     wp.x += 36; wp.y += 54; wp.x/=2;
     if(sdist(m, wp) < min_dist){
       min_dist = sdist(m, wp);
@@ -169,24 +169,24 @@ mcrd scr2map(scrd m) {
 
 // назвать понятнее
 // возвращает промежуточные координаты между клетками
-scrd between(scrd a, scrd b, int i) {
+Scrd between(Scrd a, Scrd b, int i) {
   float dx = (float)(b.x-a.x)/STEPS;
   float dy = (float)(b.y-a.y)/STEPS;
-  return( (scrd){a.x+dx*i, a.y+dy*i} );
+  return( (Scrd){a.x+dx*i, a.y+dy*i} );
 }
 
 
 
-scrd mbetween(mcrd a, mcrd b, int i){
+Scrd mbetween(Mcrd a, Mcrd b, int i){
   return(  between(map2scr(a), map2scr(b), i)  );
 }
 
 
 
-unit * id2unit(int id){
-  l_node * node;
+Unit * id2unit(int id){
+  Node * node;
   FOR_EACH_NODE(cw->units, node){
-    unit * u = node->d;
+    Unit * u = node->d;
     if(u->id == id)
       return(u);
   }
@@ -195,10 +195,10 @@ unit * id2unit(int id){
 
 
 
-unit * find_unit_at(mcrd crd){
-  l_node * node;
+Unit * find_unit_at(Mcrd crd){
+  Node * node;
   FOR_EACH_NODE(cw->units, node){
-    unit * u = node->d;
+    Unit * u = node->d;
     if(mcrdeq(u->mcrd, crd))
       return(u);
   }
@@ -207,13 +207,13 @@ unit * find_unit_at(mcrd crd){
 
 
 
-bool is_invis (unit * u){
+bool is_invis (Unit * u){
   if(!find_feature(u, FEATURE_INVIS))
     return(false);
 
   for(int i=0; i<6; i++){
-    mcrd nb = neib(u->mcrd, i);
-    unit * u2 = find_unit_at(nb);
+    Mcrd nb = neib(u->mcrd, i);
+    Unit * u2 = find_unit_at(nb);
     if(u2 && u2->player != u->player)
       return(false);
   }

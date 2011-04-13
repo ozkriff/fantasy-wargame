@@ -1,8 +1,8 @@
 
 bool checkunitsleft(){
-  l_node * node;
+  Node * node;
   FOR_EACH_NODE(cw->units, node){
-    unit * u = node->d;
+    Unit * u = node->d;
     if(u->player == player)
       return(true);
   }
@@ -29,9 +29,9 @@ void onspace(){
 
   cw->selunit = NULL;
 
-  l_node * node;
+  Node * node;
   FOR_EACH_NODE(cw->units, node){
-    unit * u = node->d;
+    Unit * u = node->d;
     if(u->player == player){
       u->mvp = u->type->mvp;
       u->can_attack = true;
@@ -64,16 +64,16 @@ void keys(SDL_Event E){
 
 
 
-void mv(mcrd m){
+void mv(Mcrd m){
   get_path(m);
   int d[5] = {5, EVENT_MOVE, cw->selunit->id};
 
-  l_node * node;
+  Node * node;
   for(node=cw->path->h; node->n; node=node->n){
-    mcrd * current = node->d;
-    mcrd * next    = node->n->d;
+    Mcrd * current = node->d;
+    Mcrd * next    = node->n->d;
 
-    unit * u = find_unit_at( *next );
+    Unit * u = find_unit_at( *next );
     if(u && u->player!=cw->selunit->player){
       // AMBUSH
       int dir = mcrd2index(*next, *current);
@@ -92,10 +92,10 @@ void mv(mcrd m){
 
 
 // [a]ttacker, [d]efender
-void support_range(unit * a, unit * d){
+void support_range(Unit * a, Unit * d){
   for(int i=0; i<6; i++){
     // [sup]porter
-    unit * sup = find_unit_at( neib(d->mcrd, i) );
+    Unit * sup = find_unit_at( neib(d->mcrd, i) );
     if( sup && sup->player == d->player ){
       if(find_feature(sup, FEATURE_RNG)){
         int data[5] = {5, EVENT_RANGE, sup->id, a->id, 2};
@@ -110,9 +110,9 @@ void support_range(unit * a, unit * d){
 
 
 // [a]ttacker, [d]efender
-void attack_melee(unit * a, unit * d){
-  mcrd md = d->mcrd;
-  mcrd ma = a->mcrd;
+void attack_melee(Unit * a, Unit * d){
+  Mcrd md = d->mcrd;
+  Mcrd ma = a->mcrd;
 
   //огонь поддержки
   support_range(a, d);
@@ -146,7 +146,7 @@ void attack_melee(unit * a, unit * d){
   if(dir3==6){
     attack_melee(d, a); // паника!
   }else{
-    mcrd dest = neib(md, dir3);
+    Mcrd dest = neib(md, dir3);
     int data3[5] = {5, EVENT_MOVE, d->id, dest.x, dest.y};
     add_event(data3);
   }
@@ -155,10 +155,10 @@ void attack_melee(unit * a, unit * d){
 
 
 // [a]ttacker, [d]efender
-void attack(unit * a, unit * d){
-  mcrd md = d->mcrd;
-  mcrd ma = a->mcrd;
-  feature * rng = find_feature(a, FEATURE_RNG);
+void attack(Unit * a, Unit * d){
+  Mcrd md = d->mcrd;
+  Mcrd ma = a->mcrd;
+  Feature * rng = find_feature(a, FEATURE_RNG);
   if(rng){
     if(mdist(ma, md) <= rng->data.rng.range){
       int data[5] = {5, EVENT_RANGE,
@@ -177,8 +177,8 @@ void attack(unit * a, unit * d){
 void mouseclick(SDL_Event E){
   if(cw->mode!=MODE_SELECT) return;
 
-  mcrd m = scr2map((scrd){E.button.x, E.button.y});
-  unit * u = find_unit_at(m);
+  Mcrd m = scr2map((Scrd){E.button.x, E.button.y});
+  Unit * u = find_unit_at(m);
 
   if(u && u->player == player){
     cw->selunit = u;
@@ -200,7 +200,7 @@ void mouseclick(SDL_Event E){
 
 
 void mousemove(SDL_Event E){
-  cw->selhex = scr2map((scrd){E.button.x, E.button.y});
+  cw->selhex = scr2map((Scrd){E.button.x, E.button.y});
 }
 
 

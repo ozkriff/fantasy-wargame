@@ -1,10 +1,10 @@
 
 
-void push(mcrd tile, mcrd parent, int newcost) {
+void push(Mcrd tile, Mcrd parent, int newcost) {
   mp(tile)->cost   = newcost;
   mp(tile)->parent = parent;
   
-  mcrd * m = malloc(sizeof(mcrd));
+  Mcrd * m = malloc(sizeof(Mcrd));
   m->x = tile.x;
   m->y = tile.y;
   l_push(cw->st, m);
@@ -12,8 +12,8 @@ void push(mcrd tile, mcrd parent, int newcost) {
 
 
 
-mcrd pop(){
-  mcrd m = *(mcrd*)l_pop(cw->st);
+Mcrd pop(){
+  Mcrd m = *(Mcrd*)l_pop(cw->st);
   return( m );
 }
 
@@ -24,14 +24,14 @@ mcrd pop(){
 // сделать так, что б ход заканчивался на этой клетке
 // т.е. дополнить стоимость до ближайшего кратного 
 // в этом случае он и так закончится тут
-int zoc(mcrd a, unit * u, int cost){
+int zoc(Mcrd a, Unit * u, int cost){
   if(find_feature(u, FEATURE_IGNR))
     return(cost);
 
   int mvp = u->type->mvp;
   for(int i=0; i<6; i++){
-    mcrd n = neib(a, i);
-    unit * u2 = find_unit_at(n);
+    Mcrd n = neib(a, i);
+    Unit * u2 = find_unit_at(n);
     if(inboard(n) && cost%mvp!=0
     && u2 && u2->player!=u->player
     && mp(n)->fog>0 && !is_invis(u2) )
@@ -43,12 +43,12 @@ int zoc(mcrd a, unit * u, int cost){
 
 
 // process neiborhood
-void process_nbh (unit * u, mcrd t, mcrd nb){
+void process_nbh (Unit * u, Mcrd t, Mcrd nb){
   if( ! inboard(nb) )
     return;
 
   // что бы не проходить через видимых врагов
-  unit * u2 = find_unit_at(nb);
+  Unit * u2 = find_unit_at(nb);
   if(u2 // && u2->player!=u->player
   && mp(nb)->fog>0
   && !is_invis(u2) )
@@ -63,15 +63,15 @@ void process_nbh (unit * u, mcrd t, mcrd nb){
 
 
 
-void fill_map(unit * u) {
-  mcrd m;
+void fill_map(Unit * u) {
+  Mcrd m;
   FOR_EACH_MCRD(m){
     mp(m)->cost   = 30000;
     mp(m)->parent = nmcrd;
   }  
   push(u->mcrd, u->mcrd, 0); // push start point
   while(cw->st->count>0){
-    mcrd t = pop();
+    Mcrd t = pop();
     for(int i=0; i<6; i++)
       process_nbh(u, t, neib(t, i));
   }
@@ -85,8 +85,8 @@ void clear_path(){
 }
 
 
-void addwaypoint(mcrd wp){
-  mcrd * m = malloc(sizeof(mcrd));
+void addwaypoint(Mcrd wp){
+  Mcrd * m = malloc(sizeof(Mcrd));
   m->x = wp.x;
   m->y = wp.y;
   l_push(cw->path, m);
@@ -94,7 +94,7 @@ void addwaypoint(mcrd wp){
 
 
 
-void get_path(mcrd a){
+void get_path(Mcrd a){
   clear_path();
   while(mp(a)->cost!=0){
     addwaypoint(a);

@@ -1,7 +1,7 @@
 
 
 // change tile type
-void change_tile(mcrd m){
+void change_tile(Mcrd m){
   if(mp(m)->type ++ == 4)
     mp(m)->type = 0;
   if(cw->selunit) fill_map(cw->selunit);
@@ -13,16 +13,16 @@ void change_tile(mcrd m){
 void select_next_unit(){
   do{
     if(cw->selunit && cw->selunit != l_last(cw->units->t->d)
-      cw->selunit = (unit*)l_next(cw->selunit);
+      cw->selunit = (Unit*)l_next(cw->selunit);
     else
-      cw->selunit = (unit*)l_first(cw->units);
+      cw->selunit = (Unit*)l_first(cw->units);
   }while(cw->selunit->player != player);
   fill_map(cw->selunit);
 }
 */
 
 
-void kill_unit(unit * u){
+void kill_unit(Unit * u){
   if(u == cw->selunit) cw->selunit = NULL;
 
   // нельзя так просто освобождать память юнита!
@@ -36,9 +36,9 @@ void kill_unit(unit * u){
 void move_logic(){
   if(cw->index == STEPS-1){
     // finish movement
-    unit * u = id2unit(cw->e[2]);
+    Unit * u = id2unit(cw->e[2]);
     u->mvp -= mp(u->mcrd)->cost;
-    u->mcrd = (mcrd){cw->e[3], cw->e[4]};
+    u->mcrd = (Mcrd){cw->e[3], cw->e[4]};
     if(cw->selunit==u) fill_map(u);
     u->scrd = map2scr(u->mcrd);
     cw->mode = MODE_SELECT;
@@ -54,7 +54,7 @@ void move_logic(){
 // при стрельбе каждый юнит перед со своей клетки
 
 // a - attacking unit, b - defender
-int melee_attack_damage (unit * a, unit * b){
+int melee_attack_damage (Unit * a, Unit * b){
   int terrain_attack  = a->type->ter_atk[mp(b->mcrd)->type];
   int terrain_defence = b->type->ter_def[mp(b->mcrd)->type];
 
@@ -70,7 +70,7 @@ int melee_attack_damage (unit * a, unit * b){
 
 
 // a - defender, a - attacking unit
-int melee_return_damage (unit * a, unit * b){
+int melee_return_damage (Unit * a, Unit * b){
   int terrain_attack  = a->type->ter_atk[mp(a->mcrd)->type];
   int terrain_defence = b->type->ter_def[mp(a->mcrd)->type];
 
@@ -85,7 +85,7 @@ int melee_return_damage (unit * a, unit * b){
 
 
 // a - shooting unit, a - target
-int range_damage (unit * a, unit * b){
+int range_damage (Unit * a, Unit * b){
   int terrain_attack  = a->type->ter_atk[mp(a->mcrd)->type];
   int terrain_defence = b->type->ter_def[mp(b->mcrd)->type];
 
@@ -105,8 +105,8 @@ int range_damage (unit * a, unit * b){
 void on_reach_enemy(){
   int damage = cw->e[4];
 
-  unit * u1 = id2unit(cw->e[2]);
-  unit * u2 = find_unit_at( neib(u1->mcrd, cw->e[3]) );
+  Unit * u1 = id2unit(cw->e[2]);
+  Unit * u2 = find_unit_at( neib(u1->mcrd, cw->e[3]) );
 
   u2->health -= damage;
   if(u2->health <= 0) {
@@ -120,10 +120,10 @@ void on_reach_enemy(){
 
 
 void shoot_attack(){
-  unit * u1 = id2unit(cw->e[2]);
-  unit * u2 = id2unit(cw->e[3]);
-  scrd a = u1->scrd;
-  scrd b = u2->scrd;
+  Unit * u1 = id2unit(cw->e[2]);
+  Unit * u2 = id2unit(cw->e[3]);
+  Scrd a = u1->scrd;
+  Scrd b = u2->scrd;
   int steps = sdist(a,b) / 6;
 
   //стрела долетела
@@ -155,12 +155,12 @@ void attack_logic() {
 
 
 void updatefog(int plr){
-  mcrd mc;
+  Mcrd mc;
   FOR_EACH_MCRD(mc){
     mp(mc)->fog=0;
-    l_node * node;
+    Node * node;
     FOR_EACH_NODE(cw->units, node){
-      unit * u = node->d;
+      Unit * u = node->d;
       if(u->player == plr
       && mdist(mc, u->mcrd) <= u->type->see)
         mp(mc)->fog++;

@@ -21,7 +21,7 @@ void bigpxl(Uint32 colr, int size, int x, int y){
   if(!steep) pxl32(x,y,clr); else pxl32(y,x,clr);
 #define swap(a,b) { int tmp;  tmp=a; a=b; b=tmp; }
 
-void bzline (scrd a, scrd b, Uint32 clr){
+void bzline (Scrd a, Scrd b, Uint32 clr){
   bool steep = abs(b.y-a.y) > abs(b.x-a.x);
   if(steep)   { swap(a.x,a.y); swap(b.x,b.y); }
   if(a.x>b.x) { swap(a.x,b.x); swap(a.y,b.y); }
@@ -45,14 +45,14 @@ void blit(SDL_Surface *src, int x, int y) {
 
 
 
-void mblit(SDL_Surface *src, mcrd crd) {
+void mblit(SDL_Surface *src, Mcrd crd) {
   blit(src, crd.x, crd.y);
 }
 
 
 
 void draw_map() {
-  mcrd mc;
+  Mcrd mc;
   FOR_EACH_MCRD(mc){
     mblit(terrsrf[ mp(mc)->type ], map2scr(mc));
     if(mp(mc)->fog<=0)  mblit(hl3, map2scr(mc));
@@ -63,8 +63,8 @@ void draw_map() {
 
 // TODO rename: mconnect? m2mline?
 // draw line between 2 tiles
-void mline(mcrd a, mcrd b){
-  scrd sa = map2scr(a), sb = map2scr(b);
+void mline(Mcrd a, Mcrd b){
+  Scrd sa = map2scr(a), sb = map2scr(b);
   sa.x+=36; sa.y+=54; sb.x+=36; sb.y+=54;
   //unit * u = cw->selunit ? cw->selunit : cw->move_unit;
   //if(!u)
@@ -80,10 +80,10 @@ void mline(mcrd a, mcrd b){
 // draw current path
 void draw_path() {
   if(cw->path->count>0){
-    l_node * node;
+    Node * node;
     for(node=cw->path->h; node->n; node=node->n){
-      mcrd * current = node->d;
-      mcrd * next    = node->n->d;
+      Mcrd * current = node->d;
+      Mcrd * next    = node->n->d;
       mline(*current, *next);
     }
   }
@@ -92,9 +92,9 @@ void draw_path() {
 
 
 // draw path to some point
-void draw_path_2_mcrd(mcrd a){
+void draw_path_2_mcrd(Mcrd a){
   if(mp(a)->cost==30000) return;
-  mcrd tmp = a;
+  Mcrd tmp = a;
   while( ! mcrdeq(tmp,cw->selunit->mcrd) ){
     mline(tmp, mp(tmp)->parent);
     tmp = mp(tmp)->parent;
@@ -107,7 +107,7 @@ void draw_bg(Uint32 clr){ SDL_FillRect(screen,NULL,clr); }
 
 
 
-void text(char * str, scrd crd, bool iscentred){
+void text(char * str, Scrd crd, bool iscentred){
   SDL_Color col = {0xFF, 0xFF, 0xFF, 0xFF};
   SDL_Surface * s = TTF_RenderText_Blended(font, str, col);
   
@@ -123,7 +123,7 @@ void text(char * str, scrd crd, bool iscentred){
 
 
 
-SDL_Surface * type2srf(unit_type * t){
+SDL_Surface * type2srf(Unit_type * t){
        if(t==&utypes[0]) return(sldr_wd);
   else if(t==&utypes[1]) return(sldr_wh);
   else if(t==&utypes[2]) return(sldr_wa);
@@ -132,8 +132,8 @@ SDL_Surface * type2srf(unit_type * t){
 
 
 
-void draw_unit(unit *u){
-  scrd s = map2scr(u->mcrd);
+void draw_unit(Unit *u){
+  Scrd s = map2scr(u->mcrd);
   if(u->player==0) mblit(hl5, s);
   if(u->player==1) mblit(hl6, s);
   mblit(type2srf(u->type), s);
@@ -141,16 +141,16 @@ void draw_unit(unit *u){
   if(1){
     char str[100];
     sprintf(str, "%i", u->health);
-    text(str, (scrd){s.x+10, s.y+60}, false);
+    text(str, (Scrd){s.x+10, s.y+60}, false);
   }
 }
 
 
 
 void draw_units(){
-  l_node * node;
+  Node * node;
   FOR_EACH_NODE(cw->units, node){
-    unit * u = node->d;
+    Unit * u = node->d;
 
     if(cw->mode==MODE_ATTACK
     && cw->e[1]==EVENT_MELEE
@@ -173,27 +173,27 @@ void draw_units(){
 
 
 void draw_moving_unit(){
-  unit * u = id2unit(cw->e[2]);
-  mcrd b = {cw->e[3], cw->e[4]};
-  scrd crd = mbetween(u->mcrd, b, cw->index);
+  Unit * u = id2unit(cw->e[2]);
+  Mcrd b = {cw->e[3], cw->e[4]};
+  Scrd crd = mbetween(u->mcrd, b, cw->index);
   mblit(type2srf(u->type), crd);
 }
 
 
 
 void draw_attacking_unit(){
-  mcrd a = id2unit(cw->e[2])->mcrd;
-  mcrd b = neib(a, cw->e[3]);
+  Mcrd a = id2unit(cw->e[2])->mcrd;
+  Mcrd b = neib(a, cw->e[3]);
   int i = (cw->index<STEPS/2) ? (cw->index) : (STEPS-cw->index);
-  scrd crd = mbetween(a, b, i);
+  Scrd crd = mbetween(a, b, i);
   mblit(type2srf(id2unit(cw->e[2])->type), crd);
 }
 
 
 void draw_possible_tiles(){
-  mcrd mc;
+  Mcrd mc;
   FOR_EACH_MCRD(mc){
-    mcrd p = mp(mc)->parent;
+    Mcrd p = mp(mc)->parent;
     if(!(p.x==0 && p.y==0)
     && mp(mc)->cost <= cw->selunit->mvp) {
       mblit(hl1, map2scr(mc));
@@ -205,10 +205,10 @@ void draw_possible_tiles(){
 
 
 void maptext(){
-  mcrd mc;
+  Mcrd mc;
   FOR_EACH_MCRD(mc){
     if(mp(mc)->cost!=30000 && mp(mc)->cost!=0){
-      scrd s = map2scr(mc);
+      Scrd s = map2scr(mc);
       s.x+=36; s.y+=54;
       char str[100];
       sprintf(str, "%i", mp(mc)->cost);
@@ -220,10 +220,10 @@ void maptext(){
 
 
 void draw_shoot_attack(){
-  unit * u1 = id2unit(cw->e[2]);
-  unit * u2 = id2unit(cw->e[3]);
-  scrd a = u1->scrd;
-  scrd b = u2->scrd;
+  Unit * u1 = id2unit(cw->e[2]);
+  Unit * u2 = id2unit(cw->e[3]);
+  Scrd a = u1->scrd;
+  Scrd b = u2->scrd;
   int steps = sdist(a,b)/6;
   float dx  = (float)(b.x-a.x)/steps;
   float dy  = (float)(b.y-a.y)/steps;
@@ -241,8 +241,8 @@ void draw_shoot_attack(){
     int d0 = 36 * sinf((float)(i  )/steps*3.14);
     int d1 = 36 * sinf((float)(i-1)/steps*3.14);
 
-    scrd n0 = u1->scrd;
-    scrd n1 = u1->scrd;
+    Scrd n0 = u1->scrd;
+    Scrd n1 = u1->scrd;
     n0.x += 36+ dx*(i  );  n0.y += 36+ dy*(i  )-d0;
     n1.x += 36+ dx*(i-1);  n1.y += 36+ dy*(i-1)-d1;
 
@@ -270,7 +270,7 @@ void draw(){
     if(cw->e[1]==EVENT_RANGE) draw_shoot_attack();
   }
   //maptext();
-  text( (player==0)?"[pl:0]":"[pl:1]", (scrd){0,0}, false);
+  text( (player==0)?"[pl:0]":"[pl:1]", (Scrd){0,0}, false);
   
   SDL_Flip(screen);
 }

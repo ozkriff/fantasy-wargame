@@ -56,7 +56,7 @@ void initmapcost(){
     for(int i=0; ini[i]; i++){
       if(ini[i]!=' '){
         //tile * t = cw->map + mi;
-        tile * t = worlds[wrld].map + mi;
+        Tile * t = worlds[wrld].map + mi;
         if(ini[i]=='.') t->type = 0;
         if(ini[i]=='t') t->type = 1;
         if(ini[i]=='*') t->type = 2;
@@ -69,8 +69,8 @@ void initmapcost(){
 }
 
 
-void add_feature(unit * u, int type, feature_data * data){
-  feature * f = malloc(sizeof(feature));
+void add_feature(Unit * u, int type, Feature_data * data){
+  Feature * f = malloc(sizeof(Feature));
   f->type = type;
   f->data = *data;
   l_push(u->features, f);
@@ -78,10 +78,10 @@ void add_feature(unit * u, int type, feature_data * data){
 
 
 
-void add_unit(mcrd crd, int plr, unit_type * type, int wrld) {
-  l_list * units = worlds[wrld].units;
+void add_unit(Mcrd crd, int plr, Unit_type * type, int wrld) {
+  List * units = worlds[wrld].units;
 
-  unit * u  = malloc(sizeof(unit));
+  Unit * u  = malloc(sizeof(Unit));
   u->player = plr;
   u->mvp    = type->mvp;
   u->can_attack = true;
@@ -90,22 +90,22 @@ void add_unit(mcrd crd, int plr, unit_type * type, int wrld) {
   u->scrd   = map2scr(crd);
   u->type   = type;
   // на всякий инициализировать список
-  *(u->features) = (l_list){0, 0, 0};
+  *(u->features) = (List){0, 0, 0};
   
   //mp(crd)->unit = u;
 
-  u->id = units->count>0 ? ((unit*)units->h)->id+1 : 0;
+  u->id = units->count>0 ? ((Unit*)units->h)->id+1 : 0;
   
   // инициализировать нужные особенности юнитов
   if(type == &utypes[2]){ // archer
-    feature_range fd = {5,4,999};
-    add_feature(u, FEATURE_RNG, (feature_data*)&fd );
+    Feature_range fd = {5,4,999};
+    add_feature(u, FEATURE_RNG, (Feature_data*)&fd );
   }
   if(type == &utypes[1]) { // hunter
     int btrue = 1;
-    add_feature(u, FEATURE_IGNR,     (feature_data*)&btrue);
-    add_feature(u, FEATURE_INVIS,    (feature_data*)&btrue);
-    add_feature(u, FEATURE_NORETURN, (feature_data*)&btrue);
+    add_feature(u, FEATURE_IGNR,     (Feature_data*)&btrue);
+    add_feature(u, FEATURE_INVIS,    (Feature_data*)&btrue);
+    add_feature(u, FEATURE_NORETURN, (Feature_data*)&btrue);
   }
 
   l_push(units, u);
@@ -115,12 +115,12 @@ void add_unit(mcrd crd, int plr, unit_type * type, int wrld) {
 
 void init_worlds() {
   for(int i=0; i<players_count; i++){
-    worlds[i].map   = calloc(MAP_W*MAP_H, sizeof(tile));
-    worlds[i].st    = calloc(1, sizeof(l_list));
-    worlds[i].path  = calloc(1, sizeof(l_list));
-    worlds[i].units = calloc(1, sizeof(l_list));
-    worlds[i].eq    = calloc(1, sizeof(l_list));
-    worlds[i].selhex = (mcrd){-1,-1};
+    worlds[i].map   = calloc(MAP_W*MAP_H, sizeof(Tile));
+    worlds[i].st    = calloc(1, sizeof(List));
+    worlds[i].path  = calloc(1, sizeof(List));
+    worlds[i].units = calloc(1, sizeof(List));
+    worlds[i].eq    = calloc(1, sizeof(List));
+    worlds[i].selhex = (Mcrd){-1,-1};
     worlds[i].mode = MODE_SELECT;
     worlds[i].selunit = NULL;
   }
@@ -130,20 +130,20 @@ void init_worlds() {
 
 void add_units(){
   for(int i=0; i<players_count; i++){
-    add_unit( (mcrd){1,2}, 0, &utypes[0], i );
-    add_unit( (mcrd){1,3}, 0, &utypes[0], i );
-    add_unit( (mcrd){1,4}, 0, &utypes[0], i );
-    add_unit( (mcrd){1,5}, 0, &utypes[1], i );
-    add_unit( (mcrd){2,5}, 0, &utypes[1], i );
-    add_unit( (mcrd){3,6}, 0, &utypes[1], i );
-    add_unit( (mcrd){1,6}, 0, &utypes[1], i );
+    add_unit( (Mcrd){1,2}, 0, &utypes[0], i );
+    add_unit( (Mcrd){1,3}, 0, &utypes[0], i );
+    add_unit( (Mcrd){1,4}, 0, &utypes[0], i );
+    add_unit( (Mcrd){1,5}, 0, &utypes[1], i );
+    add_unit( (Mcrd){2,5}, 0, &utypes[1], i );
+    add_unit( (Mcrd){3,6}, 0, &utypes[1], i );
+    add_unit( (Mcrd){1,6}, 0, &utypes[1], i );
               
-    add_unit( (mcrd){3,5}, 1, &utypes[0], i );
-    add_unit( (mcrd){3,1}, 1, &utypes[2], i );
-    add_unit( (mcrd){3,2}, 1, &utypes[2], i );
-    add_unit( (mcrd){3,3}, 1, &utypes[2], i );
+    add_unit( (Mcrd){3,5}, 1, &utypes[0], i );
+    add_unit( (Mcrd){3,1}, 1, &utypes[2], i );
+    add_unit( (Mcrd){3,2}, 1, &utypes[2], i );
+    add_unit( (Mcrd){3,3}, 1, &utypes[2], i );
 
-    add_unit( (mcrd){6,6}, 2, &utypes[1], i );
+    add_unit( (Mcrd){6,6}, 2, &utypes[1], i );
   }
 }
 

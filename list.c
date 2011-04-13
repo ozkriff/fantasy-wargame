@@ -3,17 +3,17 @@
 
 // TODO: пояснить реализацию + примеры использования
 
-typedef struct l_node l_node;
-struct l_node {
-  l_node * n; // pointer to [n]ext node or NULL
-  l_node * p; // pointer to [p]revious node or NULL
+typedef struct Node Node;
+struct Node {
+  Node * n; // pointer to [n]ext node or NULL
+  Node * p; // pointer to [p]revious node or NULL
   void * d;   // pointer to [d]ata
 };
 
-typedef struct l_list l_list;
-struct l_list {
-  l_node * h; // pointer to first ([h]ead) node
-  l_node * t; // pointer to last ([t]ail) node
+typedef struct List List;
+struct List {
+  Node * h; // pointer to first ([h]ead) node
+  Node * t; // pointer to last ([t]ail) node
   long count; // number of nodes in list
 };
 
@@ -25,11 +25,11 @@ struct l_list {
 // of the list, else it will be added following <after>.
 // Данные передаютя по указателю (не копируются!)
 
-l_node * l_insert_node (l_list * list, void * data, l_node * after){
-  l_node * new = malloc(sizeof(l_node));
+Node * l_insert_node (List * list, void * data, Node * after){
+  Node * new = malloc(sizeof(Node));
   new->d = data;
 
-  l_node * pnode = after ? after : (l_node*)list ;
+  Node * pnode = after ? after : (Node*)list ;
   new->n = pnode->n;
   new->p = after;
   pnode->n = new;
@@ -45,7 +45,7 @@ l_node * l_insert_node (l_list * list, void * data, l_node * after){
 // Не особожает память узла или данных,
 // нужно отдельно делать free для данных и узла.
 
-l_node * l_extruct_node (l_list * list, l_node * old){
+Node * l_extruct_node (List * list, Node * old){
   if(old){
     if(old->n)  old->n->p=old->p;  else  list->t=old->p;
     if(old->p)  old->p->n=old->n;  else  list->h=old->n;
@@ -58,8 +58,8 @@ l_node * l_extruct_node (l_list * list, l_node * old){
 
 // Удалить данные и сам узел.
 
-void l_delete_node (l_list * list, l_node * old){
-  l_node * node = l_extruct_node(list, old);
+void l_delete_node (List * list, Node * old){
+  Node * node = l_extruct_node(list, old);
   free(node->d);
   free(node);
 }
@@ -69,8 +69,8 @@ void l_delete_node (l_list * list, l_node * old){
 // вытаскивает узел из списка, удаляет узел, 
 // возвращает указатель на данные
 
-void * l_extruct_data (l_list * list, l_node * old){
-  l_node * node = l_extruct_node(list, old);
+void * l_extruct_data (List * list, Node * old){
+  Node * node = l_extruct_node(list, old);
   void * data = node->d;
   free(node);
   return(data);
@@ -82,11 +82,11 @@ void * l_extruct_data (l_list * list, l_node * old){
 #define l_addnext(list, node, after) l_insert_node(list, node, after)
 #define l_addtail(list, node)        l_insert_node(list, node, list->t)
 
-#define l_stack     l_list
+#define Stack       List
 #define l_push      l_addhead
 #define l_pop(list) l_extruct_data(list, list->t)
 
-#define l_queue         l_list
+#define Queue           List
 #define l_enqueue       l_addtail
 #define l_dequeue(list) l_extruct_data(list, list->h)
 

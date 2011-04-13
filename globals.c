@@ -1,5 +1,5 @@
 
-vec2i map_offset = {72,72/4};
+Vec2i map_offset = {72,72/4};
 
 
 SDL_Surface * sel; // selection
@@ -36,12 +36,12 @@ TTF_Font * font = NULL;
 #define GREEN SDL_MapRGBA(screen->format,   0,255,  0, 255)
 #define BLUE  SDL_MapRGBA(screen->format,   0,  0,255, 255)
 
-vec2i tile_center = {72*0.5, 72*0.75}; // 36 54
+Vec2i tile_center = {72*0.5, 72*0.75}; // 36 54
 
 
 // они вообще нужны?
-mcrd zmcrd = {0,0};   // zero
-mcrd nmcrd = {-1,-1}; // null
+Mcrd zmcrd = {0,0};   // zero
+Mcrd nmcrd = {-1,-1}; // null
 
 
 //grass forest water hills mount
@@ -62,7 +62,7 @@ int tatk2[] = {  0, 3,-4, 0, 0 };
 int tatk3[] = {  0, 1,-4, 0, 0 };
 
 
-unit_type utypes[] = {
+Unit_type utypes[] = {
   {1,5,10,5,6,3,"defc", tmvp1, tdef1, tatk1},
   {4,5,10,5,4,4,"hunt", tmvp2, tdef2, tatk1},
   {3,5,10,4,3,3,"arch", tmvp3, tdef3, tatk1},
@@ -80,6 +80,6 @@ unit_type utypes[] = {
 
 int player; // current player's index
 int players_count = 3;
-world worlds[3];
-world * cw = NULL; // current world
+World worlds[3];
+World * cw = NULL; // current world
 
