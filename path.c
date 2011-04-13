@@ -67,7 +67,7 @@ void fill_map(Unit * u) {
   Mcrd m;
   FOR_EACH_MCRD(m){
     mp(m)->cost   = 30000;
-    mp(m)->parent = nmcrd;
+    mp(m)->parent = mk_mcrd(0,0);
   }  
   push(u->mcrd, u->mcrd, 0); // push start point
   while(cw->st->count>0){

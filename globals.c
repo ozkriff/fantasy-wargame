@@ -39,10 +39,6 @@ TTF_Font * font = NULL;
 Vec2i tile_center = {72*0.5, 72*0.75}; // 36 54
 
 
-// они вообще нужны?
-Mcrd zmcrd = {0,0};   // zero
-Mcrd nmcrd = {-1,-1}; // null
-
 
 //grass forest water hills mount
 
