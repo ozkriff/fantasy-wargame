@@ -1,6 +1,16 @@
 
 // вспомогательные/служебные функции
 
+Mcrd mk_mcrd(int x, int y){
+  Mcrd m = {x, y};
+  return(m);
+}
+
+Scrd mk_scrd(int x, int y){
+  Scrd s = {x, y};
+  return(s);
+}
+
 void PrintFError (char * format, ...) {
   char buffer[256];
   va_list args;
@@ -172,7 +182,7 @@ Mcrd scr2map(Scrd m) {
 Scrd between(Scrd a, Scrd b, int i) {
   float dx = (float)(b.x-a.x)/STEPS;
   float dy = (float)(b.y-a.y)/STEPS;
-  return( (Scrd){a.x+dx*i, a.y+dy*i} );
+  return( mk_scrd(a.x+dx*i, a.y+dy*i) );
 }
 
 

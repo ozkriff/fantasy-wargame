@@ -141,7 +141,7 @@ void draw_unit(Unit *u){
   if(1){
     char str[100];
     sprintf(str, "%i", u->health);
-    text(str, (Scrd){s.x+10, s.y+60}, false);
+    text(str, mk_scrd(s.x+10, s.y+60), false);
   }
 }
 
@@ -270,7 +270,7 @@ void draw(){
     if(cw->e[1]==EVENT_RANGE) draw_shoot_attack();
   }
   //maptext();
-  text( (player==0)?"[pl:0]":"[pl:1]", (Scrd){0,0}, false);
+  text( (player==0)?"[pl:0]":"[pl:1]", mk_scrd(0,0), false);
   
   SDL_Flip(screen);
 }

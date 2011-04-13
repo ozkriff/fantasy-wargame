@@ -120,7 +120,7 @@ void init_worlds() {
     worlds[i].path  = calloc(1, sizeof(List));
     worlds[i].units = calloc(1, sizeof(List));
     worlds[i].eq    = calloc(1, sizeof(List));
-    worlds[i].selhex = (Mcrd){-1,-1};
+    worlds[i].selhex = mk_mcrd(-1,-1);
     worlds[i].mode = MODE_SELECT;
     worlds[i].selunit = NULL;
   }
@@ -130,20 +130,20 @@ void init_worlds() {
 
 void add_units(){
   for(int i=0; i<players_count; i++){
-    add_unit( (Mcrd){1,2}, 0, &utypes[0], i );
-    add_unit( (Mcrd){1,3}, 0, &utypes[0], i );
-    add_unit( (Mcrd){1,4}, 0, &utypes[0], i );
-    add_unit( (Mcrd){1,5}, 0, &utypes[1], i );
-    add_unit( (Mcrd){2,5}, 0, &utypes[1], i );
-    add_unit( (Mcrd){3,6}, 0, &utypes[1], i );
-    add_unit( (Mcrd){1,6}, 0, &utypes[1], i );
+    add_unit( mk_mcrd(1,2), 0, &utypes[0], i );
+    add_unit( mk_mcrd(1,3), 0, &utypes[0], i );
+    add_unit( mk_mcrd(1,4), 0, &utypes[0], i );
+    add_unit( mk_mcrd(1,5), 0, &utypes[1], i );
+    add_unit( mk_mcrd(2,5), 0, &utypes[1], i );
+    add_unit( mk_mcrd(3,6), 0, &utypes[1], i );
+    add_unit( mk_mcrd(1,6), 0, &utypes[1], i );
               
-    add_unit( (Mcrd){3,5}, 1, &utypes[0], i );
-    add_unit( (Mcrd){3,1}, 1, &utypes[2], i );
-    add_unit( (Mcrd){3,2}, 1, &utypes[2], i );
-    add_unit( (Mcrd){3,3}, 1, &utypes[2], i );
+    add_unit( mk_mcrd(3,5), 1, &utypes[0], i );
+    add_unit( mk_mcrd(3,1), 1, &utypes[2], i );
+    add_unit( mk_mcrd(3,2), 1, &utypes[2], i );
+    add_unit( mk_mcrd(3,3), 1, &utypes[2], i );
 
-    add_unit( (Mcrd){6,6}, 2, &utypes[1], i );
+    add_unit( mk_mcrd(6,6), 2, &utypes[1], i );
   }
 }
 

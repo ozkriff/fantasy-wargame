@@ -177,7 +177,7 @@ void attack(Unit * a, Unit * d){
 void mouseclick(SDL_Event E){
   if(cw->mode!=MODE_SELECT) return;
 
-  Mcrd m = scr2map((Scrd){E.button.x, E.button.y});
+  Mcrd m = scr2map(mk_scrd(E.button.x, E.button.y));
   Unit * u = find_unit_at(m);
 
   if(u && u->player == player){
@@ -200,7 +200,7 @@ void mouseclick(SDL_Event E){
 
 
 void mousemove(SDL_Event E){
-  cw->selhex = scr2map((Scrd){E.button.x, E.button.y});
+  cw->selhex = scr2map(mk_scrd(E.button.x, E.button.y));
 }
 
 

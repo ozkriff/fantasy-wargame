@@ -38,7 +38,7 @@ void move_logic(){
     // finish movement
     Unit * u = id2unit(cw->e[2]);
     u->mvp -= mp(u->mcrd)->cost;
-    u->mcrd = (Mcrd){cw->e[3], cw->e[4]};
+    u->mcrd = mk_mcrd(cw->e[3], cw->e[4]);
     if(cw->selunit==u) fill_map(u);
     u->scrd = map2scr(u->mcrd);
     cw->mode = MODE_SELECT;
