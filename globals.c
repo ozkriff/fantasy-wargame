@@ -93,6 +93,6 @@ Unit * selunit;
 Mcrd selhex;
 
 // переименовать, слишком простое название
-Event * e;    // current event
+Event e;    // current event
 int eindex;   // внутренний индекс визуализации события
 

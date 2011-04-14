@@ -44,9 +44,9 @@ void kill_unit(Unit * u){
 void move_logic(){
   if(eindex == STEPS-1){
     // finish movement
-    Unit * u = id2unit(e->move.u);
+    Unit * u = id2unit(e.move.u);
     u->mvp -= mp(u->mcrd)->cost;
-    u->mcrd = e->move.dest;
+    u->mcrd = e.move.dest;
     if(selunit==u) fill_map(u);
     u->scrd = map2scr(u->mcrd);
     mode = MODE_SELECT;
@@ -111,10 +111,10 @@ int range_damage (Unit * a, Unit * b){
 
 
 void on_reach_enemy(){
-  int damage = e->melee.dmg;
+  int damage = e.melee.dmg;
 
-  Unit * u1 = id2unit(e->melee.a);
-  Unit * u2 = id2unit(e->melee.d);
+  Unit * u1 = id2unit(e.melee.a);
+  Unit * u2 = id2unit(e.melee.d);
 
   u2->health -= damage;
   if(u2->health <= 0) {
@@ -128,8 +128,8 @@ void on_reach_enemy(){
 
 
 void shoot_attack(){
-  Unit * u1 = id2unit(e->range.a);
-  Unit * u2 = id2unit(e->range.d);
+  Unit * u1 = id2unit(e.range.a);
+  Unit * u2 = id2unit(e.range.d);
   Scrd a = u1->scrd;
   Scrd b = u2->scrd;
   int steps = sdist(a,b) / 6;
@@ -137,7 +137,7 @@ void shoot_attack(){
   //стрела долетела
   if(eindex >= steps){
     //int dmg = calc_damage(cw->attack_u1, cw->attack_u2);
-    int dmg = e->range.dmg;
+    int dmg = e.range.dmg;
     u2->health -= dmg;
     if(u2->health <= 0) {
       kill_unit(u2);
@@ -151,9 +151,9 @@ void shoot_attack(){
 
 
 void attack_logic() {
-  if(e->t==EVENT_RANGE)
+  if(e.t==EVENT_RANGE)
     shoot_attack();
-  if(e->t==EVENT_MELEE){
+  if(e.t==EVENT_MELEE){
     if(eindex==STEPS/2) on_reach_enemy();
     if(eindex==STEPS)   mode = MODE_SELECT;
   }
@@ -183,13 +183,15 @@ void logic(){
   if(mode==MODE_ATTACK) attack_logic();
 
   if(mode==MODE_SELECT && cw->eq->count>0){
-    e = l_dequeue(cw->eq);
+    Event * tmp = l_dequeue(cw->eq);
+    e = *tmp;
+    free(tmp);
 
     eindex = 0;
 
-    if(e->t == EVENT_MOVE)  mode = MODE_MOVE;
-    if(e->t == EVENT_MELEE) mode = MODE_ATTACK;
-    if(e->t == EVENT_RANGE) mode = MODE_ATTACK;
+    if(e.t == EVENT_MOVE)  mode = MODE_MOVE;
+    if(e.t == EVENT_MELEE) mode = MODE_ATTACK;
+    if(e.t == EVENT_RANGE) mode = MODE_ATTACK;
   }
 }
 

@@ -153,13 +153,13 @@ void draw_units(){
     Unit * u = node->d;
 
     if(mode==MODE_ATTACK
-    && e->t==EVENT_MELEE
-    && e->melee.a==u->id)
+    && e.t==EVENT_MELEE
+    && e.melee.a==u->id)
       continue;
 
     if(mode==MODE_MOVE
-    && e->t==EVENT_MOVE
-    && e->melee.a==u->id)
+    && e.t==EVENT_MOVE
+    && e.melee.a==u->id)
       continue;
 
     if( u->player!=player
@@ -173,8 +173,8 @@ void draw_units(){
 
 
 void draw_moving_unit(){
-  Unit * u = id2unit(e->move.u);
-  Mcrd b = e->move.dest;
+  Unit * u = id2unit(e.move.u);
+  Mcrd b = e.move.dest;
   Scrd crd = mbetween(u->mcrd, b, eindex);
   mblit(type2srf(u->type), crd);
 }
@@ -182,11 +182,11 @@ void draw_moving_unit(){
 
 
 void draw_attacking_unit(){
-  Mcrd a = id2unit(e->melee.a)->mcrd;
-  Mcrd b = id2unit(e->melee.d)->mcrd;
+  Mcrd a = id2unit(e.melee.a)->mcrd;
+  Mcrd b = id2unit(e.melee.d)->mcrd;
   int i = (eindex<STEPS/2) ? (eindex) : (STEPS-eindex);
   Scrd crd = mbetween(a, b, i);
-  mblit(type2srf(id2unit(e->melee.a)->type), crd);
+  mblit(type2srf(id2unit(e.melee.a)->type), crd);
 }
 
 
@@ -220,8 +220,8 @@ void maptext(){
 
 
 void draw_shoot_attack(){
-  Unit * u1 = id2unit(e->range.a);
-  Unit * u2 = id2unit(e->range.d);
+  Unit * u1 = id2unit(e.range.a);
+  Unit * u2 = id2unit(e.range.d);
   Scrd a = u1->scrd;
   Scrd b = u2->scrd;
   int steps = sdist(a,b)/6;
@@ -266,8 +266,8 @@ void draw(){
   draw_units();
   if(mode==MODE_MOVE){ draw_moving_unit(); /*draw_path();*/ }
   if(mode==MODE_ATTACK){
-    if(e->t==EVENT_MELEE) draw_attacking_unit();
-    if(e->t==EVENT_RANGE) draw_shoot_attack();
+    if(e.t==EVENT_MELEE) draw_attacking_unit();
+    if(e.t==EVENT_RANGE) draw_shoot_attack();
   }
   //maptext();
   text( (player==0)?"[pl:0]":"[pl:1]", mk_scrd(0,0), false);

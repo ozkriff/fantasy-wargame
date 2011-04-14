@@ -46,8 +46,8 @@ void print_event_queue(List * l){
     Node * node;
     FOR_EACH_NODE(l, node){
       event * e = node->d;
-      for(int j=0; j<e->data[0]; j++)
-        printf("%i ", e->data[i]);
+      for(int j=0; j<e.data[0]; j++)
+        printf("%i ", e.data[i]);
     }
     puts("");
   }
