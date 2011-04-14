@@ -94,7 +94,7 @@ void add_unit(Mcrd crd, int plr, Unit_type * type, int wrld) {
   
   //mp(crd)->unit = u;
 
-  u->id = units->count>0 ? ((Unit*)units->h)->id+1 : 0;
+  u->id = units->count>0 ? ((Unit*)units->h->d)->id+1 : 0;
   
   // инициализировать нужные особенности юнитов
   if(type == &utypes[2]){ // archer
