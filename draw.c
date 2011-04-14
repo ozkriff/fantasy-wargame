@@ -77,20 +77,6 @@ void mline(Mcrd a, Mcrd b){
 
 
 
-// draw current path
-void draw_path() {
-  if(path->count>0){
-    Node * node;
-    for(node=path->h; node->n; node=node->n){
-      Mcrd * current = node->d;
-      Mcrd * next    = node->n->d;
-      mline(*current, *next);
-    }
-  }
-}
-
-
-
 // draw path to some point
 void draw_path_2_mcrd(Mcrd a){
   if(mp(a)->cost==30000) return;
@@ -264,7 +250,7 @@ void draw(){
   mblit(sel, map2scr(selhex));
   if(selunit) mblit(sel, map2scr(selunit->mcrd));
   draw_units();
-  if(mode==MODE_MOVE){ draw_moving_unit(); /*draw_path();*/ }
+  if(mode==MODE_MOVE) draw_moving_unit();
   if(mode==MODE_ATTACK){
     if(e.t==EVENT_MELEE) draw_attacking_unit();
     if(e.t==EVENT_RANGE) draw_shoot_attack();
