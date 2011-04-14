@@ -4,7 +4,7 @@
 void change_tile(Mcrd m){
   if(mp(m)->type ++ == 4)
     mp(m)->type = 0;
-  if(cw->selunit) fill_map(cw->selunit);
+  if(selunit) fill_map(selunit);
 }
 
 
@@ -12,18 +12,18 @@ void change_tile(Mcrd m){
 /*
 void select_next_unit(){
   do{
-    if(cw->selunit && cw->selunit != l_last(cw->units->t->d)
-      cw->selunit = (Unit*)l_next(cw->selunit);
+    if(selunit && selunit != l_last(cw->units->t->d)
+      selunit = (Unit*)l_next(selunit);
     else
-      cw->selunit = (Unit*)l_first(cw->units);
-  }while(cw->selunit->player != player);
-  fill_map(cw->selunit);
+      selunit = (Unit*)l_first(units);
+  }while(selunit->player != player);
+  fill_map(selunit);
 }
 */
 
 
 void kill_unit(Unit * u){
-  if(u == cw->selunit) cw->selunit = NULL;
+  if(u == selunit) selunit = NULL;
 
   Node * nd;
   FOR_EACH_NODE(cw->units, nd){
@@ -42,16 +42,16 @@ void kill_unit(Unit * u){
 
 
 void move_logic(){
-  if(cw->index == STEPS-1){
+  if(eindex == STEPS-1){
     // finish movement
-    Unit * u = id2unit(cw->e->move.u);
+    Unit * u = id2unit(e->move.u);
     u->mvp -= mp(u->mcrd)->cost;
-    u->mcrd = cw->e->move.dest;
-    if(cw->selunit==u) fill_map(u);
+    u->mcrd = e->move.dest;
+    if(selunit==u) fill_map(u);
     u->scrd = map2scr(u->mcrd);
-    cw->mode = MODE_SELECT;
+    mode = MODE_SELECT;
   }
-  cw->index++;
+  eindex++;
 }
 
 
@@ -111,10 +111,10 @@ int range_damage (Unit * a, Unit * b){
 
 
 void on_reach_enemy(){
-  int damage = cw->e->melee.dmg;
+  int damage = e->melee.dmg;
 
-  Unit * u1 = id2unit(cw->e->melee.a);
-  Unit * u2 = id2unit(cw->e->melee.d);
+  Unit * u1 = id2unit(e->melee.a);
+  Unit * u2 = id2unit(e->melee.d);
 
   u2->health -= damage;
   if(u2->health <= 0) {
@@ -128,36 +128,36 @@ void on_reach_enemy(){
 
 
 void shoot_attack(){
-  Unit * u1 = id2unit(cw->e->range.a);
-  Unit * u2 = id2unit(cw->e->range.d);
+  Unit * u1 = id2unit(e->range.a);
+  Unit * u2 = id2unit(e->range.d);
   Scrd a = u1->scrd;
   Scrd b = u2->scrd;
   int steps = sdist(a,b) / 6;
 
   //стрела долетела
-  if(cw->index >= steps){
+  if(eindex >= steps){
     //int dmg = calc_damage(cw->attack_u1, cw->attack_u2);
-    int dmg = cw->e->range.dmg;
+    int dmg = e->range.dmg;
     u2->health -= dmg;
     if(u2->health <= 0) {
       kill_unit(u2);
       fill_map(u1);
     }
     u1->can_attack = false;
-    cw->mode = MODE_SELECT;
+    mode = MODE_SELECT;
   }
 }
 
 
 
 void attack_logic() {
-  if(cw->e->t==EVENT_RANGE)
+  if(e->t==EVENT_RANGE)
     shoot_attack();
-  if(cw->e->t==EVENT_MELEE){
-    if(cw->index==STEPS/2) on_reach_enemy();
-    if(cw->index==STEPS)   cw->mode = MODE_SELECT;
+  if(e->t==EVENT_MELEE){
+    if(eindex==STEPS/2) on_reach_enemy();
+    if(eindex==STEPS)   mode = MODE_SELECT;
   }
-  cw->index++;
+  eindex++;
 }
 
 
@@ -179,17 +179,17 @@ void updatefog(int plr){
 
 
 void logic(){
-  if(cw->mode==MODE_MOVE)   move_logic();
-  if(cw->mode==MODE_ATTACK) attack_logic();
+  if(mode==MODE_MOVE)   move_logic();
+  if(mode==MODE_ATTACK) attack_logic();
 
-  if(cw->mode==MODE_SELECT && cw->eq->count>0){
-    cw->e = l_dequeue(cw->eq);
+  if(mode==MODE_SELECT && cw->eq->count>0){
+    e = l_dequeue(cw->eq);
 
-    cw->index = 0;
+    eindex = 0;
 
-    if(cw->e->t == EVENT_MOVE)  cw->mode = MODE_MOVE;
-    if(cw->e->t == EVENT_MELEE) cw->mode = MODE_ATTACK;
-    if(cw->e->t == EVENT_RANGE) cw->mode = MODE_ATTACK;
+    if(e->t == EVENT_MOVE)  mode = MODE_MOVE;
+    if(e->t == EVENT_MELEE) mode = MODE_ATTACK;
+    if(e->t == EVENT_RANGE) mode = MODE_ATTACK;
   }
 }
 

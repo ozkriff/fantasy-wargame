@@ -86,17 +86,8 @@ typedef union {
 
 defstruct {
   Tile * map;
-  List * st;    // stack for filling map
-  List * path;  // stores path
   List * units; // stores units
   List * eq; // events queue
-  Event * e; // current event
-  //unit * su;
-  Unit * selunit;
-  Mcrd selhex;
-  int mode;
-  int index; // внутренний индекс события
-  //int i; // внутренний индекс события
 } World;
 
 

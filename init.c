@@ -116,13 +116,8 @@ void add_unit(Mcrd crd, int plr, Unit_type * type, int wrld) {
 void init_worlds() {
   for(int i=0; i<players_count; i++){
     worlds[i].map   = calloc(MAP_W*MAP_H, sizeof(Tile));
-    worlds[i].st    = calloc(1, sizeof(List));
-    worlds[i].path  = calloc(1, sizeof(List));
     worlds[i].units = calloc(1, sizeof(List));
     worlds[i].eq    = calloc(1, sizeof(List));
-    worlds[i].selhex = mk_mcrd(-1,-1);
-    worlds[i].mode = MODE_SELECT;
-    worlds[i].selunit = NULL;
   }
 }
 
@@ -165,6 +160,12 @@ void init(){
 
   player = 0;
   cw = &worlds[player];
+
+  st    = calloc(1, sizeof(List));
+  path  = calloc(1, sizeof(List));
+  selhex = mk_mcrd(-1,-1);
+  mode = MODE_SELECT;
+  selunit = NULL;
 
   init_worlds();
   load_sprites();

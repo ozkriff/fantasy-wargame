@@ -70,12 +70,29 @@ Unit_type utypes[] = {
 #define MAP_W  7
 #define MAP_H 14
 
-#define MODE_SELECT 0
-#define MODE_MOVE   1
-#define MODE_ATTACK 2
 
 int player; // current player's index
 int players_count = 3;
 World worlds[3];
 World * cw = NULL; // current world
+
+
+// TODO: 2 режима - МОД_ВЫБОР, МОД_ПОКАЗ_СОБЫТИЯ
+// а сам тип события уже будет храниться в.. событии)
+#define MODE_SELECT 0
+#define MODE_MOVE   1
+#define MODE_ATTACK 2
+int mode;
+
+// сделать локальными для путенахождения
+List * st;    // stack for filling map
+List * path;  // stores path
+
+// сделать локальными для events.c
+Unit * selunit;
+Mcrd selhex;
+
+// переименовать, слишком простое название
+Event * e;    // current event
+int eindex;   // внутренний индекс визуализации события
 

@@ -27,7 +27,7 @@ void onspace(){
   }
 #endif
 
-  cw->selunit = NULL;
+  selunit = NULL;
 
   Node * node;
   FOR_EACH_NODE(cw->units, node){
@@ -44,7 +44,7 @@ void onspace(){
 
 
 void keys(SDL_Event E){
-  if(cw->mode!=MODE_SELECT) return;
+  if(mode!=MODE_SELECT) return;
 
   switch(E.key.keysym.sym) {
     case SDLK_ESCAPE:
@@ -56,7 +56,7 @@ void keys(SDL_Event E){
     case SDLK_LEFT:  map_offset.x += 72; break;
     case SDLK_RIGHT: map_offset.x -= 72; break;
     case SDLK_SPACE: onspace();          break;
-    case SDLK_r:     change_tile(cw->selhex);break;
+    case SDLK_r:     change_tile(selhex);break;
     //case SDLK_n:     select_next_unit(); break;
     default: break;
   }
@@ -68,20 +68,20 @@ void mv(Mcrd m){
   get_path(m);
 
   Node * node;
-  for(node=cw->path->h; node->n; node=node->n){
+  for(node=path->h; node->n; node=node->n){
     //Mcrd * current = node->d;
     Mcrd * next    = node->n->d;
 
     Unit * u = find_unit_at( *next );
-    if(u && u->player!=cw->selunit->player){
+    if(u && u->player!=selunit->player){
       // AMBUSH
       Event_melee melee =
-          {EVENT_MELEE, u->id, cw->selunit->id, 1};
+          {EVENT_MELEE, u->id, selunit->id, 1};
       add_event((Event*)&melee);
       break;
     }
     
-    Event_move mv = {EVENT_MOVE, cw->selunit->id, *next};
+    Event_move mv = {EVENT_MOVE, selunit->id, *next};
     add_event((Event*)&mv);
   }
 }
@@ -169,24 +169,24 @@ void attack(Unit * a, Unit * d){
 
 
 void mouseclick(SDL_Event E){
-  if(cw->mode!=MODE_SELECT) return;
+  if(mode!=MODE_SELECT) return;
 
   Mcrd m = scr2map(mk_scrd(E.button.x, E.button.y));
   Unit * u = find_unit_at(m);
 
   if(u && u->player == player){
-    cw->selunit = u;
-    fill_map(cw->selunit);
-  }else if(cw->selunit){
+    selunit = u;
+    fill_map(selunit);
+  }else if(selunit){
     if( !u || (u && (is_invis(u)||!mp(m)->fog)) ){
-      if(mp(m)->cost <= cw->selunit->mvp)
+      if(mp(m)->cost <= selunit->mvp)
         mv(m);
       return;
     }
-    if(u && u->player!=player && cw->selunit 
-    && cw->selunit->can_attack
+    if(u && u->player!=player && selunit 
+    && selunit->can_attack
     && !is_invis(u) && mp(m)->fog > 0){
-      attack(cw->selunit, u);
+      attack(selunit, u);
     }
   }
 }
@@ -194,7 +194,7 @@ void mouseclick(SDL_Event E){
 
 
 void mousemove(SDL_Event E){
-  cw->selhex = scr2map(mk_scrd(E.button.x, E.button.y));
+  selhex = scr2map(mk_scrd(E.button.x, E.button.y));
 }
 
 

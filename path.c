@@ -7,13 +7,13 @@ void push(Mcrd tile, Mcrd parent, int newcost) {
   Mcrd * m = malloc(sizeof(Mcrd));
   m->x = tile.x;
   m->y = tile.y;
-  l_push(cw->st, m);
+  l_push(st, m);
 }
 
 
 
 Mcrd pop(){
-  Mcrd m = *(Mcrd*)l_pop(cw->st);
+  Mcrd m = *(Mcrd*)l_pop(st);
   return( m );
 }
 
@@ -70,7 +70,7 @@ void fill_map(Unit * u) {
     mp(m)->parent = mk_mcrd(0,0);
   }  
   push(u->mcrd, u->mcrd, 0); // push start point
-  while(cw->st->count>0){
+  while(st->count>0){
     Mcrd t = pop();
     for(int i=0; i<6; i++)
       process_nbh(u, t, neib(t, i));
@@ -80,8 +80,8 @@ void fill_map(Unit * u) {
 
 
 void clear_path(){
-  while(cw->path->count)
-    free(l_pop(cw->path));
+  while(path->count)
+    free(l_pop(path));
 }
 
 
@@ -89,7 +89,7 @@ void addwaypoint(Mcrd wp){
   Mcrd * m = malloc(sizeof(Mcrd));
   m->x = wp.x;
   m->y = wp.y;
-  l_push(cw->path, m);
+  l_push(path, m);
 }
 
 
