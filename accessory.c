@@ -55,11 +55,10 @@ void print_event_queue(List * l){
 */
 
 
-void add_event (int type, Event_data * data){
+void add_event (Event * data){
   for(int i=0; i<players_count; i++){
     Event * e = calloc(1, sizeof(Event));
-    e->type = type;
-    e->d = *data;
+    *e = *data; // copy
     l_addtail(worlds[i].eq, e);
   }
 }

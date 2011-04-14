@@ -75,13 +75,14 @@ void mv(Mcrd m){
     Unit * u = find_unit_at( *next );
     if(u && u->player!=cw->selunit->player){
       // AMBUSH
-      Event_melee melee = {u->id, cw->selunit->id, 1};
-      add_event(EVENT_MELEE, (Event_data*)&melee);
+      Event_melee melee =
+          {EVENT_MELEE, u->id, cw->selunit->id, 1};
+      add_event((Event*)&melee);
       break;
     }
     
-    Event_move mv = {cw->selunit->id, *next};
-    add_event(EVENT_MOVE, (Event_data*)&mv);
+    Event_move mv = {EVENT_MOVE, cw->selunit->id, *next};
+    add_event((Event*)&mv);
   }
 }
 
@@ -95,8 +96,8 @@ void support_range(Unit * a, Unit * d){
     Unit * sup = find_unit_at( neib(d->mcrd, i) );
     if( sup && sup->player == d->player ){
       if(find_feature(sup, FEATURE_RNG)){
-        Event_range range = {sup->id, a->id, 2};
-        add_event(EVENT_RANGE, (Event_data*)&range);
+        Event_range range = {EVENT_RANGE, sup->id, a->id, 2};
+        add_event((Event*)&range);
         if(a->health - range.dmg <= 0)
           return;
       }
@@ -115,16 +116,18 @@ void attack_melee(Unit * a, Unit * d){
   support_range(a, d);
 
   // собственно, это и есть заказанная атака
-  Event_melee melee = {a->id, d->id, melee_attack_damage(a, d)};
-  add_event(EVENT_MELEE, (Event_data*)&melee);
+  Event_melee melee =
+      {EVENT_MELEE, a->id, d->id, melee_attack_damage(a, d)};
+  add_event((Event*)&melee);
 
   /*проверка на то, что оппонент выживет*/
   if(d->health - melee.dmg <= 0)
     return;
 
   // а это уже контратака
-  Event_melee melee2 = {d->id, a->id, melee_return_damage(d, a)};
-  add_event(EVENT_MELEE, (Event_data*)&melee2);
+  Event_melee melee2 =
+      {EVENT_MELEE, d->id, a->id, melee_return_damage(d, a)};
+  add_event((Event*)&melee2);
 
   // проверка на необходимость отступления-бегства
   if(d->health - melee2.dmg > d->type->health / 2)
@@ -139,8 +142,8 @@ void attack_melee(Unit * a, Unit * d){
   if(dir3==6){
     attack_melee(d, a); // паника!
   }else{
-    Event_move mv = {d->id, neib(md, dir3)};
-    add_event(EVENT_MOVE, (Event_data*)&mv);
+    Event_move mv = {EVENT_MOVE, d->id, neib(md, dir3)};
+    add_event((Event*)&mv);
   }
 }
 
@@ -153,8 +156,9 @@ void attack(Unit * a, Unit * d){
   Feature * rng = find_feature(a, FEATURE_RNG);
   if(rng){
     if(mdist(ma, md) <= rng->data.rng.range){
-      Event_range range = {a->id, d->id, range_damage(a, d)};
-      add_event(EVENT_RANGE, (Event_data*)&range);
+      Event_range range = 
+          {EVENT_RANGE, a->id, d->id, range_damage(a, d)};
+      add_event((Event*)&range);
     }
   }else{
     if(mdist(ma, md) <= 1){

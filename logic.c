@@ -44,9 +44,9 @@ void kill_unit(Unit * u){
 void move_logic(){
   if(cw->index == STEPS-1){
     // finish movement
-    Unit * u = id2unit(cw->e->d.move.u);
+    Unit * u = id2unit(cw->e->move.u);
     u->mvp -= mp(u->mcrd)->cost;
-    u->mcrd = cw->e->d.move.dest;
+    u->mcrd = cw->e->move.dest;
     if(cw->selunit==u) fill_map(u);
     u->scrd = map2scr(u->mcrd);
     cw->mode = MODE_SELECT;
@@ -111,10 +111,10 @@ int range_damage (Unit * a, Unit * b){
 
 
 void on_reach_enemy(){
-  int damage = cw->e->d.melee.dmg;
+  int damage = cw->e->melee.dmg;
 
-  Unit * u1 = id2unit(cw->e->d.melee.a);
-  Unit * u2 = id2unit(cw->e->d.melee.d);
+  Unit * u1 = id2unit(cw->e->melee.a);
+  Unit * u2 = id2unit(cw->e->melee.d);
 
   u2->health -= damage;
   if(u2->health <= 0) {
@@ -128,8 +128,8 @@ void on_reach_enemy(){
 
 
 void shoot_attack(){
-  Unit * u1 = id2unit(cw->e->d.range.a);
-  Unit * u2 = id2unit(cw->e->d.range.d);
+  Unit * u1 = id2unit(cw->e->range.a);
+  Unit * u2 = id2unit(cw->e->range.d);
   Scrd a = u1->scrd;
   Scrd b = u2->scrd;
   int steps = sdist(a,b) / 6;
@@ -137,7 +137,7 @@ void shoot_attack(){
   //стрела долетела
   if(cw->index >= steps){
     //int dmg = calc_damage(cw->attack_u1, cw->attack_u2);
-    int dmg = cw->e->d.range.dmg;
+    int dmg = cw->e->range.dmg;
     u2->health -= dmg;
     if(u2->health <= 0) {
       kill_unit(u2);
@@ -151,9 +151,9 @@ void shoot_attack(){
 
 
 void attack_logic() {
-  if(cw->e->type==EVENT_RANGE)
+  if(cw->e->t==EVENT_RANGE)
     shoot_attack();
-  if(cw->e->type==EVENT_MELEE){
+  if(cw->e->t==EVENT_MELEE){
     if(cw->index==STEPS/2) on_reach_enemy();
     if(cw->index==STEPS)   cw->mode = MODE_SELECT;
   }
@@ -187,9 +187,9 @@ void logic(){
 
     cw->index = 0;
 
-    if(cw->e->type == EVENT_MOVE)  cw->mode = MODE_MOVE;
-    if(cw->e->type == EVENT_MELEE) cw->mode = MODE_ATTACK;
-    if(cw->e->type == EVENT_RANGE) cw->mode = MODE_ATTACK;
+    if(cw->e->t == EVENT_MOVE)  cw->mode = MODE_MOVE;
+    if(cw->e->t == EVENT_MELEE) cw->mode = MODE_ATTACK;
+    if(cw->e->t == EVENT_RANGE) cw->mode = MODE_ATTACK;
   }
 }
 

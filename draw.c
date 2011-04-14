@@ -153,13 +153,13 @@ void draw_units(){
     Unit * u = node->d;
 
     if(cw->mode==MODE_ATTACK
-    && cw->e->type==EVENT_MELEE
-    && cw->e->d.melee.a==u->id)
+    && cw->e->t==EVENT_MELEE
+    && cw->e->melee.a==u->id)
       continue;
 
     if(cw->mode==MODE_MOVE
-    && cw->e->type==EVENT_MOVE
-    && cw->e->d.melee.a==u->id)
+    && cw->e->t==EVENT_MOVE
+    && cw->e->melee.a==u->id)
       continue;
 
     if( u->player!=player
@@ -173,8 +173,8 @@ void draw_units(){
 
 
 void draw_moving_unit(){
-  Unit * u = id2unit(cw->e->d.move.u);
-  Mcrd b = cw->e->d.move.dest;
+  Unit * u = id2unit(cw->e->move.u);
+  Mcrd b = cw->e->move.dest;
   Scrd crd = mbetween(u->mcrd, b, cw->index);
   mblit(type2srf(u->type), crd);
 }
@@ -182,11 +182,11 @@ void draw_moving_unit(){
 
 
 void draw_attacking_unit(){
-  Mcrd a = id2unit(cw->e->d.melee.a)->mcrd;
-  Mcrd b = id2unit(cw->e->d.melee.d)->mcrd;
+  Mcrd a = id2unit(cw->e->melee.a)->mcrd;
+  Mcrd b = id2unit(cw->e->melee.d)->mcrd;
   int i = (cw->index<STEPS/2) ? (cw->index) : (STEPS-cw->index);
   Scrd crd = mbetween(a, b, i);
-  mblit(type2srf(id2unit(cw->e->d.melee.a)->type), crd);
+  mblit(type2srf(id2unit(cw->e->melee.a)->type), crd);
 }
 
 
@@ -220,8 +220,8 @@ void maptext(){
 
 
 void draw_shoot_attack(){
-  Unit * u1 = id2unit(cw->e->d.range.a);
-  Unit * u2 = id2unit(cw->e->d.range.d);
+  Unit * u1 = id2unit(cw->e->range.a);
+  Unit * u2 = id2unit(cw->e->range.d);
   Scrd a = u1->scrd;
   Scrd b = u2->scrd;
   int steps = sdist(a,b)/6;
@@ -266,8 +266,8 @@ void draw(){
   draw_units();
   if(cw->mode==MODE_MOVE){ draw_moving_unit(); /*draw_path();*/ }
   if(cw->mode==MODE_ATTACK){
-    if(cw->e->type==EVENT_MELEE) draw_attacking_unit();
-    if(cw->e->type==EVENT_RANGE) draw_shoot_attack();
+    if(cw->e->t==EVENT_MELEE) draw_attacking_unit();
+    if(cw->e->t==EVENT_RANGE) draw_shoot_attack();
   }
   //maptext();
   text( (player==0)?"[pl:0]":"[pl:1]", mk_scrd(0,0), false);
