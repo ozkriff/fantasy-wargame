@@ -40,17 +40,18 @@ void kill_unit(Unit * u){
 }
 
 
+void finish_movement(){
+  Unit * u = id2unit(e.move.u);
+  u->mvp -= mp(u->mcrd)->cost;
+  u->mcrd = e.move.dest;
+  if(selunit==u) fill_map(u);
+  u->scrd = map2scr(u->mcrd);
+  mode = MODE_SELECT;
+}
 
 void move_logic(){
-  if(eindex == STEPS-1){
-    // finish movement
-    Unit * u = id2unit(e.move.u);
-    u->mvp -= mp(u->mcrd)->cost;
-    u->mcrd = e.move.dest;
-    if(selunit==u) fill_map(u);
-    u->scrd = map2scr(u->mcrd);
-    mode = MODE_SELECT;
-  }
+  if(eindex == STEPS-1)
+    finish_movement();
   eindex++;
 }
 
@@ -126,6 +127,20 @@ void on_reach_enemy(){
 
 
 
+void on_arrow_hit(){
+  Unit * u1 = id2unit(e.range.a);
+  Unit * u2 = id2unit(e.range.d);
+  int dmg = e.range.dmg;
+  u2->health -= dmg;
+  if(u2->health <= 0) {
+    kill_unit(u2);
+    fill_map(u1);
+  }
+  u1->can_attack = false;
+}
+
+
+
 
 void shoot_attack(){
   Unit * u1 = id2unit(e.range.a);
@@ -136,14 +151,7 @@ void shoot_attack(){
 
   //стрела долетела
   if(eindex >= steps){
-    //int dmg = calc_damage(cw->attack_u1, cw->attack_u2);
-    int dmg = e.range.dmg;
-    u2->health -= dmg;
-    if(u2->health <= 0) {
-      kill_unit(u2);
-      fill_map(u1);
-    }
-    u1->can_attack = false;
+    on_arrow_hit();
     mode = MODE_SELECT;
   }
 }
@@ -177,6 +185,39 @@ void updatefog(int plr){
 }
 
 
+bool is_move_vsbl (Event e){
+  Unit * u = id2unit(e.move.u);
+  if( (mp(e.move.dest)->fog || mp(u->mcrd)->fog)
+  && ! ( is_invis(u) && u->player!=player ) )
+    return(true);
+
+  return(false);
+}
+
+
+bool is_melee_visible (Event e){
+  Unit * a = id2unit( e.melee.a );
+  Unit * d = id2unit( e.melee.d );
+
+  if( mp(a->mcrd)->fog ) return(true);
+  if( mp(d->mcrd)->fog ) return(true);
+
+  return(false);
+}
+
+
+
+bool is_range_visible (Event e){
+  Unit * a = id2unit( e.melee.a );
+  Unit * d = id2unit( e.melee.d );
+
+  if( mp(a->mcrd)->fog ) return(true);
+  if( mp(d->mcrd)->fog ) return(true);
+
+  return(false);
+}
+
+
 
 void logic(){
   if(mode==MODE_MOVE)   move_logic();
@@ -189,9 +230,27 @@ void logic(){
 
     eindex = 0;
 
-    if(e.t == EVENT_MOVE)  mode = MODE_MOVE;
-    if(e.t == EVENT_MELEE) mode = MODE_ATTACK;
-    if(e.t == EVENT_RANGE) mode = MODE_ATTACK;
+    if(e.t == EVENT_MOVE) {
+      if( is_move_vsbl(e) ){
+        mode = MODE_MOVE;
+      }else{
+        finish_movement(); logic();
+      }
+    }
+    if(e.t == EVENT_MELEE){
+      if( is_melee_visible(e) )
+        mode = MODE_ATTACK;
+      else{
+        on_reach_enemy(); logic();
+      }
+    }
+    if(e.t == EVENT_RANGE){
+      if( is_range_visible(e) )
+        mode = MODE_ATTACK;
+      else{
+        on_arrow_hit(); logic();
+      }
+    }
   }
 }
 
