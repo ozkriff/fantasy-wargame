@@ -44,9 +44,9 @@ void kill_unit(Unit * u){
 void move_logic(){
   if(cw->index == STEPS-1){
     // finish movement
-    Unit * u = id2unit(cw->e[2]);
+    Unit * u = id2unit(cw->e->d.move.u);
     u->mvp -= mp(u->mcrd)->cost;
-    u->mcrd = mk_mcrd(cw->e[3], cw->e[4]);
+    u->mcrd = cw->e->d.move.dest;
     if(cw->selunit==u) fill_map(u);
     u->scrd = map2scr(u->mcrd);
     cw->mode = MODE_SELECT;
@@ -111,10 +111,10 @@ int range_damage (Unit * a, Unit * b){
 
 
 void on_reach_enemy(){
-  int damage = cw->e[4];
+  int damage = cw->e->d.melee.dmg;
 
-  Unit * u1 = id2unit(cw->e[2]);
-  Unit * u2 = find_unit_at( neib(u1->mcrd, cw->e[3]) );
+  Unit * u1 = id2unit(cw->e->d.melee.a);
+  Unit * u2 = id2unit(cw->e->d.melee.d);
 
   u2->health -= damage;
   if(u2->health <= 0) {
@@ -128,8 +128,8 @@ void on_reach_enemy(){
 
 
 void shoot_attack(){
-  Unit * u1 = id2unit(cw->e[2]);
-  Unit * u2 = id2unit(cw->e[3]);
+  Unit * u1 = id2unit(cw->e->d.range.a);
+  Unit * u2 = id2unit(cw->e->d.range.d);
   Scrd a = u1->scrd;
   Scrd b = u2->scrd;
   int steps = sdist(a,b) / 6;
@@ -137,7 +137,7 @@ void shoot_attack(){
   //стрела долетела
   if(cw->index >= steps){
     //int dmg = calc_damage(cw->attack_u1, cw->attack_u2);
-    int dmg = cw->e[4];
+    int dmg = cw->e->d.range.dmg;
     u2->health -= dmg;
     if(u2->health <= 0) {
       kill_unit(u2);
@@ -151,9 +151,9 @@ void shoot_attack(){
 
 
 void attack_logic() {
-  if(cw->e[1]==EVENT_RANGE)
+  if(cw->e->type==EVENT_RANGE)
     shoot_attack();
-  if(cw->e[1]==EVENT_MELEE){
+  if(cw->e->type==EVENT_MELEE){
     if(cw->index==STEPS/2) on_reach_enemy();
     if(cw->index==STEPS)   cw->mode = MODE_SELECT;
   }
@@ -183,16 +183,13 @@ void logic(){
   if(cw->mode==MODE_ATTACK) attack_logic();
 
   if(cw->mode==MODE_SELECT && cw->eq->count>0){
-    event * e = l_dequeue(cw->eq);
-    cw->e = calloc(e->data[0], sizeof(int));
-    for(int i=0; i<e->data[0]; i++)
-      cw->e[i] = e->data[i];
+    cw->e = l_dequeue(cw->eq);
 
     cw->index = 0;
 
-    if(cw->e[1] == EVENT_MOVE)    cw->mode = MODE_MOVE;
-    if(e->data[1] == EVENT_MELEE) cw->mode = MODE_ATTACK;
-    if(e->data[1] == EVENT_RANGE) cw->mode = MODE_ATTACK;
+    if(cw->e->type == EVENT_MOVE)  cw->mode = MODE_MOVE;
+    if(cw->e->type == EVENT_MELEE) cw->mode = MODE_ATTACK;
+    if(cw->e->type == EVENT_RANGE) cw->mode = MODE_ATTACK;
   }
 }
 

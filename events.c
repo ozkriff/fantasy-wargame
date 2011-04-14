@@ -66,25 +66,22 @@ void keys(SDL_Event E){
 
 void mv(Mcrd m){
   get_path(m);
-  int d[5] = {5, EVENT_MOVE, cw->selunit->id};
 
   Node * node;
   for(node=cw->path->h; node->n; node=node->n){
-    Mcrd * current = node->d;
+    //Mcrd * current = node->d;
     Mcrd * next    = node->n->d;
 
     Unit * u = find_unit_at( *next );
     if(u && u->player!=cw->selunit->player){
       // AMBUSH
-      int dir = mcrd2index(*next, *current);
-      int data[5] = {5, EVENT_MELEE, u->id, dir, 1};
-      add_event(data);
+      Event_melee melee = {u->id, cw->selunit->id, 1};
+      add_event(EVENT_MELEE, (Event_data*)&melee);
       break;
     }
     
-    d[3] = next->x;
-    d[4] = next->y;
-    add_event(d);
+    Event_move mv = {cw->selunit->id, *next};
+    add_event(EVENT_MOVE, (Event_data*)&mv);
   }
 }
 
@@ -98,9 +95,9 @@ void support_range(Unit * a, Unit * d){
     Unit * sup = find_unit_at( neib(d->mcrd, i) );
     if( sup && sup->player == d->player ){
       if(find_feature(sup, FEATURE_RNG)){
-        int data[5] = {5, EVENT_RANGE, sup->id, a->id, 2};
-        add_event(data);
-        if(a->health - data[4] <= 0)
+        Event_range range = {sup->id, a->id, 2};
+        add_event(EVENT_RANGE, (Event_data*)&range);
+        if(a->health - range.dmg <= 0)
           return;
       }
     }
@@ -112,29 +109,25 @@ void support_range(Unit * a, Unit * d){
 // [a]ttacker, [d]efender
 void attack_melee(Unit * a, Unit * d){
   Mcrd md = d->mcrd;
-  Mcrd ma = a->mcrd;
+  //Mcrd ma = a->mcrd;
 
   //огонь поддержки
   support_range(a, d);
 
   // собственно, это и есть заказанная атака
-  int dir = mcrd2index(ma, md);
-  int data[5] = {5, EVENT_MELEE, a->id,
-      dir, melee_attack_damage(a, d)};
-  add_event(data);
+  Event_melee melee = {a->id, d->id, melee_attack_damage(a, d)};
+  add_event(EVENT_MELEE, (Event_data*)&melee);
 
   /*проверка на то, что оппонент выживет*/
-  if(d->health - data[4] <= 0)
+  if(d->health - melee.dmg <= 0)
     return;
 
   // а это уже контратака
-  int dir2 = mcrd2index(md, ma);
-  int data2[5] = {5, EVENT_MELEE, d->id, dir2,
-      melee_return_damage(d, a)};
-  add_event(data2);
+  Event_melee melee2 = {d->id, a->id, melee_return_damage(d, a)};
+  add_event(EVENT_MELEE, (Event_data*)&melee2);
 
   // проверка на необходимость отступления-бегства
-  if(d->health - data[4] > d->type->health / 2)
+  if(d->health - melee2.dmg > d->type->health / 2)
     return;
 
   // пытатья убежатьr в противоположном направлении или драться
@@ -146,9 +139,8 @@ void attack_melee(Unit * a, Unit * d){
   if(dir3==6){
     attack_melee(d, a); // паника!
   }else{
-    Mcrd dest = neib(md, dir3);
-    int data3[5] = {5, EVENT_MOVE, d->id, dest.x, dest.y};
-    add_event(data3);
+    Event_move mv = {d->id, neib(md, dir3)};
+    add_event(EVENT_MOVE, (Event_data*)&mv);
   }
 }
 
@@ -161,10 +153,8 @@ void attack(Unit * a, Unit * d){
   Feature * rng = find_feature(a, FEATURE_RNG);
   if(rng){
     if(mdist(ma, md) <= rng->data.rng.range){
-      int data[5] = {5, EVENT_RANGE,
-          a->id, d->id,
-          range_damage(a, d)};
-      add_event(data);
+      Event_range range = {a->id, d->id, range_damage(a, d)};
+      add_event(EVENT_RANGE, (Event_data*)&range);
     }
   }else{
     if(mdist(ma, md) <= 1){

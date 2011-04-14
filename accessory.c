@@ -40,6 +40,7 @@ Feature * find_feature(Unit * u, int type){
 
 
 
+/*
 void print_event_queue(List * l){
   for(int i=0; i<players_count; i++){
     Node * node;
@@ -51,14 +52,14 @@ void print_event_queue(List * l){
     puts("");
   }
 }
+*/
 
 
-void add_event(int * data){
+void add_event (int type, Event_data * data){
   for(int i=0; i<players_count; i++){
-    event * e = calloc(1, sizeof(event));
-    e->data   = calloc(data[0], sizeof(int));
-    for(int j=0; j<data[0]; j++)
-      e->data[j] = data[j];
+    Event * e = calloc(1, sizeof(Event));
+    e->type = type;
+    e->d = *data;
     l_addtail(worlds[i].eq, e);
   }
 }

@@ -71,11 +71,17 @@ defstruct {int type; Feature_data data;} Feature;
 #define EVENT_MELEE  1
 #define EVENT_RANGE  2
 
-// byte-count  event_move   unit-id     directon[0..5]
-// byte-count  event_melee  attacker-id direction   dead
-// byte-count  event_range  attacker-id defender-id dead
+defstruct { int u; Mcrd dest; }   Event_move;
+defstruct { int a, d; int dmg; }  Event_melee;
+defstruct { int a, d; int dmg; }  Event_range;
+typedef union {
+  Event_move   move;
+  Event_melee  melee;
+  Event_range  range;
+  /* ... */
+} Event_data;
 
-defstruct { Node n; int * data; } event ;
+defstruct { int type; Event_data d; } Event;
 
 
 
@@ -85,7 +91,7 @@ defstruct {
   List * path;  // stores path
   List * units; // stores units
   List * eq; // events queue
-  int * e; //event data
+  Event * e; // current event
   //unit * su;
   Unit * selunit;
   Mcrd selhex;
