@@ -187,11 +187,14 @@ void updatefog(int plr){
 
 bool is_move_vsbl (Event e){
   Unit * u = id2unit(e.move.u);
-  if( (mp(e.move.dest)->fog || mp(u->mcrd)->fog)
-  && ! ( is_invis(u) && u->player!=player ) )
+  // Не мешает ли нам туман войны?
+  bool fow = mp(e.move.dest)->fog || mp(u->mcrd)->fog;
+  // Юнит спрятался?
+  bool hidden = is_invis(u) && u->player!=player;
+  if(!hidden&&fow)
     return(true);
-
-  return(false);
+  else
+    return(false);
 }
 
 
