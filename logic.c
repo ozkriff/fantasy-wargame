@@ -35,6 +35,7 @@ void kill_unit(Unit * u){
         l_delete_node(u->features, feature_node);
 
       l_delete_node(cw->units, nd);
+      return;
     }
   }
 }
