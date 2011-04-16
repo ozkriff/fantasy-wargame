@@ -241,9 +241,6 @@ void draw_shoot_attack(){
 void draw(){
   draw_bg(BLACK);
 
-  // TODO нужно вызывать не отсюда. смотри NOTES
-  updatefog(player); 
-
   draw_map();
   if(mode==MODE_SELECT && selunit)
     draw_possible_tiles();

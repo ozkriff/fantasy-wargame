@@ -37,6 +37,8 @@ void onspace(){
       u->can_attack = true;
     }
   }
+
+  updatefog(player);
   
   //select_next_unit();
 }

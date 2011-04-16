@@ -40,12 +40,26 @@ void kill_unit(Unit * u){
 }
 
 
+
+// вызывается после перемещеня юнита
+void upd_fog_2 (Unit * u){
+  Mcrd mc;
+  FOR_EACH_MCRD(mc){
+    if(mdist(mc, u->mcrd) <= u->type->see)
+      mp(mc)->fog++;
+  }
+}
+
+
+
 void finish_movement(){
   Unit * u = id2unit(e.move.u);
   u->mvp -= mp(u->mcrd)->cost;
   u->mcrd = e.move.dest;
   if(selunit==u) fill_map(u);
   u->scrd = map2scr(u->mcrd);
+  if(u->player==player)
+    upd_fog_2(u);
   mode = MODE_SELECT;
 }
 

@@ -171,5 +171,7 @@ void init(){
   load_sprites();
   initmapcost();
   add_units();
+
+  updatefog(player);
 }
 
