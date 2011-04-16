@@ -152,8 +152,7 @@ void init(){
   atexit(SDL_Quit);
 
   Uint32 flags = SDL_SWSURFACE | SDL_RESIZABLE;
-  screen = SDL_SetVideoMode(320, 240, 32, flags);
-  //screen = SDL_SetVideoMode(640, 480, 32, flags);
+  screen = SDL_SetVideoMode(640, 480, 32, flags);
 
   //char * f = "LiberationMono-Regular.ttf";
   font = TTF_OpenFont("font.ttf", 12);
