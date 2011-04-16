@@ -55,7 +55,8 @@ void upd_fog_2 (Unit * u){
 
 void finish_movement(){
   Unit * u = id2unit(e.move.u);
-  u->mvp -= mp(u->mcrd)->cost;
+  //u->mvp -= mp(u->mcrd)->cost;
+  u->mvp -= u->type->ter_mvp[mp(u->mcrd)->type];
   u->mcrd = e.move.dest;
   if(selunit==u) fill_map(u);
   u->scrd = map2scr(u->mcrd);
