@@ -25,15 +25,15 @@ void select_next_unit(){
 void kill_unit(Unit * u){
   if(u == selunit) selunit = NULL;
 
+  // delete fatures list
+  while(u->features->count > 0)
+    l_delete_node(u->features, u->features->h);
+  free(u->features);
+
+  // find unit's node and free unit and node.
   Node * nd;
   FOR_EACH_NODE(cw->units, nd){
-    Unit * iter = nd->d;
-    if(iter==u){
-      // удаляем список свойств
-      Node * feature_node;
-      FOR_EACH_NODE(u->features, feature_node)
-        l_delete_node(u->features, feature_node);
-
+    if(nd->d==u){
       l_delete_node(cw->units, nd);
       return;
     }
