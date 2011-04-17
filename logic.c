@@ -226,11 +226,10 @@ bool is_melee_visible (Event e){
 
 
 bool is_range_visible (Event e){
-  Unit * a = id2unit( e.melee.a );
-  Unit * d = id2unit( e.melee.d );
+  Unit * a = id2unit( e.range.a );
 
-  if( mp(a->mcrd)->fog ) return(true);
-  if( mp(d->mcrd)->fog ) return(true);
+  if( mp(a->mcrd)->fog )    return(true);
+  if( mp(e.range.md)->fog ) return(true);
 
   return(false);
 }
