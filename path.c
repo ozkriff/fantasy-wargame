@@ -49,7 +49,7 @@ void process_nbh (Unit * u, Mcrd t, Mcrd nb){
 
   // что бы не проходить через видимых врагов
   Unit * u2 = find_unit_at(nb);
-  if(u2 // && u2->player!=u->player
+  if(u2 && u2->player!=u->player
   && mp(nb)->fog>0
   && !is_invis(u2) )
     return;
