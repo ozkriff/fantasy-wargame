@@ -78,7 +78,7 @@ void mv(Mcrd m){
     if(u && u->player!=selunit->player){
       // AMBUSH
       Event_melee melee =
-          {EVENT_MELEE, u->id, selunit->id, 1};
+          {EVENT_MELEE, u->id, selunit->id, selunit->mcrd, 1};
       add_event((Event*)&melee);
       break;
     }
@@ -98,7 +98,7 @@ void support_range(Unit * a, Unit * d){
     Unit * sup = find_unit_at( neib(d->mcrd, i) );
     if( sup && sup->player == d->player ){
       if(find_feature(sup, FEATURE_RNG)){
-        Event_range range = {EVENT_RANGE, sup->id, a->id, 2};
+        Event_range range = {EVENT_RANGE, sup->id, a->id, a->mcrd, 2};
         add_event((Event*)&range);
         if(a->health - range.dmg <= 0)
           return;
@@ -119,7 +119,7 @@ void attack_melee(Unit * a, Unit * d){
 
   // собственно, это и есть заказанная атака
   Event_melee melee =
-      {EVENT_MELEE, a->id, d->id, melee_attack_damage(a, d)};
+      {EVENT_MELEE, a->id, d->id, d->mcrd, melee_attack_damage(a, d)};
   add_event((Event*)&melee);
 
   /*проверка на то, что оппонент выживет*/
@@ -128,7 +128,7 @@ void attack_melee(Unit * a, Unit * d){
 
   // а это уже контратака
   Event_melee melee2 =
-      {EVENT_MELEE, d->id, a->id, melee_return_damage(d, a)};
+      {EVENT_MELEE, d->id, a->id, a->mcrd, melee_return_damage(d, a)};
   add_event((Event*)&melee2);
 
   // проверка на необходимость отступления-бегства
@@ -159,7 +159,7 @@ void attack(Unit * a, Unit * d){
   if(rng){
     if(mdist(ma, md) <= rng->data.rng.range){
       Event_range range = 
-          {EVENT_RANGE, a->id, d->id, range_damage(a, d)};
+          {EVENT_RANGE, a->id, d->id, d->mcrd, range_damage(a, d)};
       add_event((Event*)&range);
     }
   }else{

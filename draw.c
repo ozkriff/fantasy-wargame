@@ -169,7 +169,7 @@ void draw_moving_unit(){
 
 void draw_attacking_unit(){
   Mcrd a = id2unit(e.melee.a)->mcrd;
-  Mcrd b = id2unit(e.melee.d)->mcrd;
+  Mcrd b = e.melee.md;
   int i = (eindex<STEPS/2) ? (eindex) : (STEPS-eindex);
   Scrd crd = mbetween(a, b, i);
   mblit(type2srf(id2unit(e.melee.a)->type), crd);

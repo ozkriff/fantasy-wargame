@@ -72,9 +72,10 @@ defstruct {int type; Feature_data data;} Feature;
 #define EVENT_RANGE  2
 
 // 'int t;' means [t]ype
+// md - Mcrd defender
 defstruct { int t; int u; Mcrd dest; }   Event_move;
-defstruct { int t; int a, d; int dmg; }  Event_melee;
-defstruct { int t; int a, d; int dmg; }  Event_range;
+defstruct { int t; int a, d; Mcrd md; int dmg; }  Event_melee;
+defstruct { int t; int a, d; Mcrd md; int dmg; }  Event_range;
 typedef union {
   Event_move   move;
   Event_melee  melee;
