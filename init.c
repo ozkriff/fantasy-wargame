@@ -90,7 +90,7 @@ void add_unit(Mcrd crd, int plr, Unit_type * type, int wrld) {
   u->scrd   = map2scr(crd);
   u->type   = type;
   // на всякий инициализировать список
-  *(u->features) = (List){0, 0, 0};
+  u->features = calloc(1, sizeof(List));;
   
   //mp(crd)->unit = u;
 

@@ -30,7 +30,7 @@ defstruct {
   int   mvp;
   Mcrd  mcrd;
   Scrd  scrd;
-  List  features[1];
+  List * features;
 } Unit;
 
 
