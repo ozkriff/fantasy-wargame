@@ -216,10 +216,9 @@ bool is_move_vsbl (Event e){
 
 bool is_melee_visible (Event e){
   Unit * a = id2unit( e.melee.a );
-  Unit * d = id2unit( e.melee.d );
 
-  if( mp(a->mcrd)->fog ) return(true);
-  if( mp(d->mcrd)->fog ) return(true);
+  if( mp(a->mcrd)->fog )    return(true);
+  if( mp(e.melee.md)->fog ) return(true);
 
   return(false);
 }
