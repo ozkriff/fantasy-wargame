@@ -132,7 +132,7 @@ void attack_melee(Unit * a, Unit * d){
   add_event((Event*)&melee2);
 
   // проверка на необходимость отступления-бегства
-  if(d->health - melee2.dmg > d->type->health / 2)
+  if(d->health - melee.dmg > d->type->health / 2)
     return;
 
   // пытатья убежатьr в противоположном направлении или драться
