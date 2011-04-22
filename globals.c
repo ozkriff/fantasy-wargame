@@ -67,8 +67,8 @@ Unit_type utypes[] = {
 //количество промежуточных положений между клетками
 #define STEPS 6
 
-#define MAP_W  7
-#define MAP_H 14
+int MAP_W = 7;
+int MAP_H = 14;
 
 
 int player; // current player's index

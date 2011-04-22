@@ -33,42 +33,6 @@ void load_sprites(){
 
 
 
-void initmapcost(){
-  char * ini = 
-    "   . . * . . . *  "
-    "  * . . t . M .   "
-    "   . . . . . . .  "
-    "  . . h . M . .   "
-    "   . . . . . . .  "
-    "  . . . t M . .   "
-    "   . . . t . * .  "
-    "  t t . . . . .   "
-    "   . . . . . . *  "
-    "  . * . * * . *   "
-    "   . * . . . * .  "
-    "  . . * * * . .   "
-    "   . . . . . . .  "
-    "  . . . . . . .   "
-    "\0";
-      
-  for(int wrld=0; wrld<players_count; wrld++){
-    int mi = 0; // индекс в массиве 'map'
-    for(int i=0; ini[i]; i++){
-      if(ini[i]!=' '){
-        //tile * t = cw->map + mi;
-        Tile * t = worlds[wrld].map + mi;
-        if(ini[i]=='.') t->type = 0;
-        if(ini[i]=='t') t->type = 1;
-        if(ini[i]=='*') t->type = 2;
-        if(ini[i]=='h') t->type = 3;
-        if(ini[i]=='M') t->type = 4;
-        mi++;
-      }
-    }
-  }
-}
-
-
 void add_feature(Unit * u, int type, Feature_data * data){
   Feature * f = malloc(sizeof(Feature));
   f->type = type;
@@ -113,33 +77,58 @@ void add_unit(Mcrd crd, int plr, Unit_type * type, int wrld) {
 
 
 
-void init_worlds() {
-  for(int i=0; i<players_count; i++){
-    worlds[i].map   = calloc(MAP_W*MAP_H, sizeof(Tile));
-    worlds[i].units = calloc(1, sizeof(List));
-    worlds[i].eq    = calloc(1, sizeof(List));
+void read_config(){
+  FILE * cfg = fopen("scenario1", "r");
+  char s[100]; // buffer
+
+  while( fgets(s, 90, cfg) ){
+    if(s[0]=='#' || s[0]=='\n')
+      continue;
+    if(!strncmp("[NUM-OF-PLAYERS]", s, 15)){
+      sscanf(s, "[NUM-OF-PLAYERS] %i",
+          &players_count);
+      for(int i=0; i<players_count; i++){
+        worlds[i].units = calloc(1, sizeof(List));
+        worlds[i].eq    = calloc(1, sizeof(List));
+      }
+    }
+    if(!strncmp("[MAP-SIZE]", s, 10)){
+      sscanf(s, "[MAP-SIZE] %i %i",
+          &MAP_W, &MAP_H);
+
+      for(int i=0; i<players_count; i++)
+        worlds[i].map = calloc(MAP_W*MAP_H, sizeof(Tile));
+    }
+    if(!strncmp("[UNIT]", s, 6)){
+      int plr, x, y, type;
+      sscanf(s, "[UNIT] %i %i %i %i",
+          &plr, &x, &y, &type);
+
+      for(int i=0; i<players_count; i++)
+        add_unit(mk_mcrd(x,y), plr, &utypes[type], i);
+    }
+    if(!strncmp("[MAP]", s, 5)){
+      int mi = 0; // индекс в массиве 'map'
+      while( fgets(s, 90, cfg) && s[0]!='\n'){
+        for(int i=0; s[i]; i++){
+          char c = s[i];
+          if(c != ' ' && c != '\n'){
+            for(int w=0; w<players_count; w++){
+              Tile * t = worlds[w].map + mi;
+              if(c=='.') t->type = 0;
+              if(c=='t') t->type = 1;
+              if(c=='*') t->type = 2;
+              if(c=='h') t->type = 3;
+              if(c=='M') t->type = 4;
+            }
+            mi++;
+          }
+        }
+      }
+    }
   }
-}
-
-
-
-void add_units(){
-  for(int i=0; i<players_count; i++){
-    add_unit( mk_mcrd(1,2), 0, &utypes[0], i );
-    add_unit( mk_mcrd(1,3), 0, &utypes[0], i );
-    add_unit( mk_mcrd(1,4), 0, &utypes[0], i );
-    add_unit( mk_mcrd(1,5), 0, &utypes[1], i );
-    add_unit( mk_mcrd(2,5), 0, &utypes[1], i );
-    add_unit( mk_mcrd(3,6), 0, &utypes[1], i );
-    add_unit( mk_mcrd(1,6), 0, &utypes[1], i );
-              
-    add_unit( mk_mcrd(3,5), 1, &utypes[0], i );
-    add_unit( mk_mcrd(3,1), 1, &utypes[2], i );
-    add_unit( mk_mcrd(3,2), 1, &utypes[2], i );
-    add_unit( mk_mcrd(3,3), 1, &utypes[2], i );
-
-    add_unit( mk_mcrd(6,6), 2, &utypes[1], i );
-  }
+  
+  fclose(cfg);
 }
 
 
@@ -166,10 +155,8 @@ void init(){
   mode = MODE_SELECT;
   selunit = NULL;
 
-  init_worlds();
+  read_config();
   load_sprites();
-  initmapcost();
-  add_units();
 
   updatefog(player);
 }

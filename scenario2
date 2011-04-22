@@ -1,0 +1,43 @@
+
+# number of players
+[NUM-OF-PLAYERS] 2
+
+# map size (x,y)
+[MAP-SIZE] 7 14
+
+
+# map
+# . - grass
+# t - trees
+# * - water
+# h - hills
+# M - mounteens
+
+[MAP]
+ . . * . . . *
+. . . t . M . 
+ . . . . . . .
+. . . . . . . 
+ . . . . . . .
+. . . . . . . 
+ . . . . . * .
+. . * * * . . 
+ . * h h * . .
+. * h M h * . 
+ . * h h * . .
+. . * * * . . 
+ . . . . . . .
+. . . . . . . 
+
+# units
+# player x y type
+# types: {def, hunter, archer}
+[UNIT] 0 1 2 0
+[UNIT] 0 1 3 0
+[UNIT] 0 1 4 0
+[UNIT] 0 1 5 1
+
+[UNIT] 1 3 3 2
+[UNIT] 1 3 4 1
+[UNIT] 1 3 5 0
+
