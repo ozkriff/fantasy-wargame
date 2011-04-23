@@ -240,7 +240,7 @@ void logic(){
   if(mode==MODE_MOVE)   move_logic();
   if(mode==MODE_ATTACK) attack_logic();
 
-  if(mode==MODE_SELECT && cw->eq->count>0){
+  while(mode==MODE_SELECT && cw->eq->count>0){
     Event * tmp = l_dequeue(cw->eq);
     e = *tmp;
     free(tmp);
@@ -248,25 +248,22 @@ void logic(){
     eindex = 0;
 
     if(e.t == EVENT_MOVE) {
-      if( is_move_vsbl(e) ){
+      if( is_move_vsbl(e) )
         mode = MODE_MOVE;
-      }else{
-        finish_movement(); logic();
-      }
+      else
+        finish_movement();
     }
     if(e.t == EVENT_MELEE){
       if( is_melee_visible(e) )
         mode = MODE_ATTACK;
-      else{
-        on_reach_enemy(); logic();
-      }
+      else
+        on_reach_enemy();
     }
     if(e.t == EVENT_RANGE){
       if( is_range_visible(e) )
         mode = MODE_ATTACK;
-      else{
-        on_arrow_hit(); logic();
-      }
+      else
+        on_arrow_hit();
     }
   }
 }
