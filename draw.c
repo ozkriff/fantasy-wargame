@@ -1,6 +1,6 @@
 
 
-// просто рисует пиксель
+/* просто рисует пиксель */
 void pxl32(int x, int y, Uint32 pixel) {
   if( x<0 || y<0 || x >= screen->w || y >= screen->h )
     return;
@@ -9,7 +9,7 @@ void pxl32(int x, int y, Uint32 pixel) {
 }
 
 
-// рисует "большой"(size)  пиксель
+/* рисует "большой"(size)  пиксель */
 void bigpxl(Uint32 colr, int size, int x, int y){
   SDL_Rect rect = {x, y, size, size};
   SDL_FillRect(screen, &rect, colr);
@@ -29,7 +29,8 @@ void bzline (Scrd a, Scrd b, Uint32 clr){
   int deltay = abs(b.y-a.y);
   int error = deltax >> 1;
   int y = a.y, ystep = (a.y<b.y) ? 1 : -1;
-  for (int x = a.x; x <= b.x; x++) {
+  int x;
+  for (x = a.x; x <= b.x; x++) {
     bzpxl(x,y,clr);
     error -= deltay;
     if(error<0){ y+=ystep; error+=deltax; }
@@ -61,23 +62,23 @@ void draw_map() {
   
 
 
-// TODO rename: mconnect? m2mline?
-// draw line between 2 tiles
+/* TODO rename: mconnect? m2mline? */
+/* draw line between 2 tiles */
 void mline(Mcrd a, Mcrd b){
   Scrd sa = map2scr(a), sb = map2scr(b);
   sa.x+=36; sa.y+=54; sb.x+=36; sb.y+=54;
-  //unit * u = cw->selunit ? cw->selunit : cw->move_unit;
-  //if(!u)
-    //return;
-  //if(mp(a)->cost <= u->mvp)
-    //bzline(sa, sb, BLUE);
-  //else
+  /*unit * u = cw->selunit ? cw->selunit : cw->move_unit; */
+  /*if(!u) */
+    /*return; */
+  /*if(mp(a)->cost <= u->mvp) */
+    /*bzline(sa, sb, BLUE); */
+  /*else */
     bzline(sa, sb, RED);
 }
 
 
 
-// draw path to some point
+/* draw path to some point */
 void draw_path_2_mcrd(Mcrd a){
   if(mp(a)->cost==30000) return;
   Mcrd tmp = a;
@@ -217,13 +218,14 @@ void draw_shoot_attack(){
   a.x += dx * eindex;
   a.y += dy * eindex;
 
-  // вертикальная поправка
+  /* вертикальная поправка */
   int dh = 36 * sinf((float)eindex/steps*3.14);
   blit(arrow, a.x, a.y-dh);
 
-  // рисует "хвост" стрелы. через задницу!
-  for(int i=1; i<eindex; i++){
-    // вертикальная поправка
+  /* рисует "хвост" стрелы. через задницу! */
+  int i;
+  for(i=1; i<eindex; i++){
+    /* вертикальная поправка */
     int d0 = 36 * sinf((float)(i  )/steps*3.14);
     int d1 = 36 * sinf((float)(i-1)/steps*3.14);
 
@@ -252,7 +254,7 @@ void draw(){
     if(e.t==EVENT_MELEE) draw_attacking_unit();
     if(e.t==EVENT_RANGE) draw_shoot_attack();
   }
-  //maptext();
+  /*maptext(); */
   text( (player==0)?"[pl:0]":"[pl:1]", mk_scrd(0,0), false);
   
   SDL_Flip(screen);

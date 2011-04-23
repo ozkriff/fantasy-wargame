@@ -20,16 +20,17 @@ Mcrd pop(){
 
 
 
-// returns corrected newcost
-// сделать так, что б ход заканчивался на этой клетке
-// т.е. дополнить стоимость до ближайшего кратного 
-// в этом случае он и так закончится тут
+/* returns corrected newcost */
+/* сделать так, что б ход заканчивался на этой клетке */
+/* т.е. дополнить стоимость до ближайшего кратного  */
+/* в этом случае он и так закончится тут */
 int zoc(Mcrd a, Unit * u, int cost){
   if(find_feature(u, FEATURE_IGNR))
     return(cost);
 
   int mvp = u->type->mvp;
-  for(int i=0; i<6; i++){
+  int i;
+  for(i=0; i<6; i++){
     Mcrd n = neib(a, i);
     Unit * u2 = find_unit_at(n);
     if(inboard(n) && cost%mvp!=0
@@ -42,12 +43,12 @@ int zoc(Mcrd a, Unit * u, int cost){
 
 
 
-// process neiborhood
+/* process neiborhood */
 void process_nbh (Unit * u, Mcrd t, Mcrd nb){
   if( ! inboard(nb) )
     return;
 
-  // что бы не проходить через видимых врагов
+  /* что бы не проходить через видимых врагов */
   Unit * u2 = find_unit_at(nb);
   if(u2 && u2->player!=u->player
   && mp(nb)->fog>0
@@ -69,10 +70,11 @@ void fill_map(Unit * u) {
     mp(m)->cost   = 30000;
     mp(m)->parent = mk_mcrd(0,0);
   }  
-  push(u->mcrd, u->mcrd, 0); // push start point
+  push(u->mcrd, u->mcrd, 0); /* push start point */
   while(st->count>0){
     Mcrd t = pop();
-    for(int i=0; i<6; i++)
+    int i;
+    for(i=0; i<6; i++)
       process_nbh(u, t, neib(t, i));
   }
 }
@@ -100,7 +102,7 @@ void get_path(Mcrd a){
     addwaypoint(a);
     a = mp(a)->parent;
   }
-  // добавляем отправную точку(где стоит юнит)
+  /* добавляем отправную точку(где стоит юнит) */
   addwaypoint(a);
 }
 

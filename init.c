@@ -53,19 +53,19 @@ void add_unit(Mcrd crd, int plr, Unit_type * type, World * wrld) {
   u->mcrd   = crd;
   u->scrd   = map2scr(crd);
   u->type   = type;
-  // на всякий инициализировать список
+  /* на всякий инициализировать список */
   u->features = calloc(1, sizeof(List));;
   
-  //mp(crd)->unit = u;
+  /*mp(crd)->unit = u; */
 
   u->id = units->count>0 ? ((Unit*)units->h->d)->id+1 : 0;
   
-  // инициализировать нужные особенности юнитов
-  if(type == &utypes[2]){ // archer
+  /* инициализировать нужные особенности юнитов */
+  if(type == &utypes[2]){ /* archer */
     Feature_range fd = {5,4,999};
     add_feature(u, FEATURE_RNG, (Feature_data*)&fd );
   }
-  if(type == &utypes[1]) { // hunter
+  if(type == &utypes[1]) { /* hunter */
     int btrue = 1;
     add_feature(u, FEATURE_IGNR,     (Feature_data*)&btrue);
     add_feature(u, FEATURE_INVIS,    (Feature_data*)&btrue);
@@ -79,7 +79,7 @@ void add_unit(Mcrd crd, int plr, Unit_type * type, World * wrld) {
 
 void read_config(){
   FILE * cfg = fopen("scenario2", "r");
-  char s[100]; // buffer
+  char s[100]; /* buffer */
 
   while( fgets(s, 90, cfg) ){
     if(s[0]=='#' || s[0]=='\n')
@@ -117,9 +117,10 @@ void read_config(){
       }
     }
     if(!strncmp("[MAP]", s, 5)){
-      int mi = 0; // индекс в массиве 'map'
+      int mi = 0; /* индекс в массиве 'map' */
       while( fgets(s, 90, cfg) && s[0]!='\n'){
-        for(int i=0; s[i]; i++){
+        int i;
+        for(i=0; s[i]; i++){
           char c = s[i];
           if(c != ' ' && c != '\n'){
             Node * nd;
@@ -154,7 +155,7 @@ void init(){
   Uint32 flags = SDL_SWSURFACE | SDL_RESIZABLE;
   screen = SDL_SetVideoMode(640, 480, 32, flags);
 
-  //char * f = "LiberationMono-Regular.ttf";
+  /*char * f = "LiberationMono-Regular.ttf"; */
   font = TTF_OpenFont("font.ttf", 12);
 
   worlds = calloc(1, sizeof(List));

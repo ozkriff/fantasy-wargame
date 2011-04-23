@@ -1,5 +1,5 @@
 
-// вспомогательные/служебные функции
+/* вспомогательные/служебные функции */
 
 Mcrd mk_mcrd(int x, int y){
   Mcrd m = {x, y};
@@ -61,7 +61,7 @@ void add_event (Event * data){
   FOR_EACH_NODE(worlds, nd){
     World * world = nd->d;
     Event * e = calloc(1, sizeof(Event));
-    *e = *data; // copy
+    *e = *data; /* copy */
     l_addtail(world->eq, e);
   }
 }
@@ -69,17 +69,17 @@ void add_event (Event * data){
 
 
 
-// равны ли mcrd?
+/* равны ли mcrd? */
 bool mcrdeq(Mcrd a, Mcrd b){ return(a.x==b.x&&a.y==b.y); }
 
 
 
-// доступ к ячейке по mcrd
+/* доступ к ячейке по mcrd */
 Tile * mp(Mcrd c){ return(cw->map + MAP_W*c.y + c.x); }
 
 
 
-// дистанция между клетками
+/* дистанция между клетками */
 int mdist(Mcrd a, Mcrd b) {
   a.x += a.y/2;
   b.x += b.y/2;
@@ -92,8 +92,8 @@ int mdist(Mcrd a, Mcrd b) {
 
 
 
-// int i - neib index
-// получить соседа клетки
+/* int i - neib index */
+/* получить соседа клетки */
 Mcrd neib(Mcrd a, int i) {
   int d[2][6][2] = {
     { {1,-1}, {1,0}, {1,1}, { 0,1}, {-1,0}, { 0,-1}, },
@@ -105,10 +105,10 @@ Mcrd neib(Mcrd a, int i) {
 
 
 
-// TODO rename
-// возвращает противоположный индекс соседа
+/* TODO rename */
+/* возвращает противоположный индекс соседа */
 int neib2(int i){
-  //i+=3; if(i>=6) i-=6;
+  /*i+=3; if(i>=6) i-=6; */
   int d[] = {3, 4,2, 5,1, 0};
   return(i+d[i]);
 }
@@ -116,23 +116,24 @@ int neib2(int i){
 
 
 int mcrd2index(Mcrd a, Mcrd b){
-  for(int i=0; i<6; i++){
+  int i;
+  for(i=0; i<6; i++){
     if(mcrdeq(neib(a,i), b))
       return(i);
   }
-  exit(1); // ERROR
+  exit(1); /* ERROR */
 }
 
 
 
-// в пределах карты?
+/* в пределах карты? */
 bool inboard(Mcrd t){
   return( t.x>=0 && t.x<MAP_W && t.y>=0 && t.y<MAP_H );
 }
 
 
 
-// расстояние между двумя экранными точками
+/* расстояние между двумя экранными точками */
 int sdist(Scrd a, Scrd b) {
   int dx = abs(b.x - a.x);
   int dy = abs(b.y - a.y);
@@ -145,12 +146,12 @@ int sdist(Scrd a, Scrd b) {
 Scrd map2scr(Mcrd map) {
   Scrd scr;
 
-  // space bwetween tiles
+  /* space bwetween tiles */
   int space = 0;
   
   scr.y = map_offset.y  + map.y*(29+space);
   scr.x = map_offset.x  + map.x*(72+space);
-  //if(map.y%2) scr.x += 36;
+  /*if(map.y%2) scr.x += 36; */
   if(map.y%2) scr.x -= 36;
   
   return(scr);
@@ -158,9 +159,9 @@ Scrd map2scr(Mcrd map) {
 
 
 
-// find tile with nearest coords
-// деление надва нужно потому,
-// что клетки `сплющены` по вертикали
+/* find tile with nearest coords */
+/* деление надва нужно потому, */
+/* что клетки `сплющены` по вертикали */
 Mcrd scr2map(Scrd m) {
   Mcrd min;            
   int min_dist = 9000;
@@ -181,8 +182,8 @@ Mcrd scr2map(Scrd m) {
 
 
 
-// назвать понятнее
-// возвращает промежуточные координаты между клетками
+/* назвать понятнее */
+/* возвращает промежуточные координаты между клетками */
 Scrd between(Scrd a, Scrd b, int i) {
   float dx = (float)(b.x-a.x)/STEPS;
   float dy = (float)(b.y-a.y)/STEPS;
@@ -225,7 +226,8 @@ bool is_invis (Unit * u){
   if(!find_feature(u, FEATURE_INVIS))
     return(false);
 
-  for(int i=0; i<6; i++){
+  int i;
+  for(i=0; i<6; i++){
     Mcrd nb = neib(u->mcrd, i);
     Unit * u2 = find_unit_at(nb);
     if(u2 && u2->player != u->player)

@@ -16,7 +16,7 @@ void onspace(){
   if(player==players_count)
     player=0;
 
-  // change |c|urrent |w|orld
+  /* change |c|urrent |w|orld */
   Node * nd;
   FOR_EACH_NODE(worlds, nd){
     if(cw == (World*)nd->d){
@@ -45,7 +45,7 @@ void onspace(){
 
   updatefog(player);
   
-  //select_next_unit();
+  /*select_next_unit(); */
 }
 
 
@@ -64,7 +64,7 @@ void keys(SDL_Event E){
     case SDLK_RIGHT: map_offset.x -= 72; break;
     case SDLK_SPACE: onspace();          break;
     case SDLK_r:     change_tile(selhex);break;
-    //case SDLK_n:     select_next_unit(); break;
+    /*case SDLK_n:     select_next_unit(); break; */
     default: break;
   }
 }
@@ -76,12 +76,12 @@ void mv(Mcrd m){
 
   Node * node;
   for(node=path->h; node->n; node=node->n){
-    //Mcrd * current = node->d;
+    /*Mcrd * current = node->d; */
     Mcrd * next    = node->n->d;
 
     Unit * u = find_unit_at( *next );
     if(u && u->player!=selunit->player){
-      // AMBUSH
+      /* AMBUSH */
       Event_melee melee =
           {EVENT_MELEE, u->id, selunit->id, selunit->mcrd, 1};
       add_event((Event*)&melee);
@@ -96,10 +96,11 @@ void mv(Mcrd m){
 
 
 
-// [a]ttacker, [d]efender
+/* [a]ttacker, [d]efender */
 void support_range(Unit * a, Unit * d){
-  for(int i=0; i<6; i++){
-    // [sup]porter
+  int i;
+  for(i=0; i<6; i++){
+    /* [sup]porter */
     Unit * sup = find_unit_at( neib(d->mcrd, i) );
     if( sup && sup->player == d->player ){
       if(find_feature(sup, FEATURE_RNG)){
@@ -114,15 +115,15 @@ void support_range(Unit * a, Unit * d){
 
 
 
-// [a]ttacker, [d]efender
+/* [a]ttacker, [d]efender */
 void attack_melee(Unit * a, Unit * d){
   Mcrd md = d->mcrd;
-  //Mcrd ma = a->mcrd;
+  /*Mcrd ma = a->mcrd; */
 
-  //огонь поддержки
+  /*огонь поддержки */
   support_range(a, d);
 
-  // собственно, это и есть заказанная атака
+  /* собственно, это и есть заказанная атака */
   Event_melee melee =
       {EVENT_MELEE, a->id, d->id, d->mcrd, melee_attack_damage(a, d)};
   add_event((Event*)&melee);
@@ -131,23 +132,23 @@ void attack_melee(Unit * a, Unit * d){
   if(d->health - melee.dmg <= 0)
     return;
 
-  // а это уже контратака
+  /* а это уже контратака */
   Event_melee melee2 =
       {EVENT_MELEE, d->id, a->id, a->mcrd, melee_return_damage(d, a)};
   add_event((Event*)&melee2);
 
-  // проверка на необходимость отступления-бегства
+  /* проверка на необходимость отступления-бегства */
   if(d->health - melee.dmg > d->type->health / 2)
     return;
 
-  // пытатья убежатьr в противоположном направлении или драться
-  int dir3; // direction
+  /* пытатья убежатьr в противоположном направлении или драться */
+  int dir3; /* direction */
   for(dir3=0; dir3<6; dir3++){
     if( ! find_unit_at(neib(md, dir3)) )
       break;
   }
   if(dir3==6){
-    attack_melee(d, a); // паника!
+    attack_melee(d, a); /* паника! */
   }else{
     Event_move mv = {EVENT_MOVE, d->id, neib(md, dir3)};
     add_event((Event*)&mv);
@@ -156,7 +157,7 @@ void attack_melee(Unit * a, Unit * d){
 
 
 
-// [a]ttacker, [d]efender
+/* [a]ttacker, [d]efender */
 void attack(Unit * a, Unit * d){
   Mcrd md = d->mcrd;
   Mcrd ma = a->mcrd;

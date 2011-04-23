@@ -1,6 +1,6 @@
 
 
-// change tile type
+/* change tile type */
 void change_tile(Mcrd m){
   if(mp(m)->type ++ == 4)
     mp(m)->type = 0;
@@ -25,12 +25,12 @@ void select_next_unit(){
 void kill_unit(Unit * u){
   if(u == selunit) selunit = NULL;
 
-  // delete fatures list
+  /* delete fatures list */
   while(u->features->count > 0)
     l_delete_node(u->features, u->features->h);
   free(u->features);
 
-  // find unit's node and free unit and node.
+  /* find unit's node and free unit and node. */
   Node * nd;
   FOR_EACH_NODE(cw->units, nd){
     if(nd->d==u){
@@ -42,7 +42,7 @@ void kill_unit(Unit * u){
 
 
 
-// вызывается после перемещеня юнита
+/* вызывается после перемещеня юнита */
 void upd_fog_2 (Unit * u){
   Mcrd mc;
   FOR_EACH_MCRD(mc){
@@ -55,7 +55,7 @@ void upd_fog_2 (Unit * u){
 
 void finish_movement(){
   Unit * u = id2unit(e.move.u);
-  //u->mvp -= mp(u->mcrd)->cost;
+  /*u->mvp -= mp(u->mcrd)->cost; */
   u->mvp -= u->type->ter_mvp[mp(u->mcrd)->type];
   u->mcrd = e.move.dest;
   if(selunit==u) fill_map(u);
@@ -73,12 +73,12 @@ void move_logic(){
 
 
 
-// dmg = E(attack_skill) / E(defence_skill) * HPi/HPo * K
-// основная разница в коеффициентах и бонусах поверхности:
-// при рукопашной бонусы берутся с клетки защищающегося
-// при стрельбе каждый юнит перед со своей клетки
+/* dmg = E(attack_skill) / E(defence_skill) * HPi/HPo * K */
+/* основная разница в коеффициентах и бонусах поверхности: */
+/* при рукопашной бонусы берутся с клетки защищающегося */
+/* при стрельбе каждый юнит перед со своей клетки */
 
-// a - attacking unit, b - defender
+/* a - attacking unit, b - defender */
 int melee_attack_damage (Unit * a, Unit * b){
   int terrain_attack  = a->type->ter_atk[mp(b->mcrd)->type];
   int terrain_defence = b->type->ter_def[mp(b->mcrd)->type];
@@ -94,7 +94,7 @@ int melee_attack_damage (Unit * a, Unit * b){
 
 
 
-// a - defender, a - attacking unit
+/* a - defender, a - attacking unit */
 int melee_return_damage (Unit * a, Unit * b){
   int terrain_attack  = a->type->ter_atk[mp(a->mcrd)->type];
   int terrain_defence = b->type->ter_def[mp(a->mcrd)->type];
@@ -109,7 +109,7 @@ int melee_return_damage (Unit * a, Unit * b){
 }
 
 
-// a - shooting unit, a - target
+/* a - shooting unit, a - target */
 int range_damage (Unit * a, Unit * b){
   int terrain_attack  = a->type->ter_atk[mp(a->mcrd)->type];
   int terrain_defence = b->type->ter_def[mp(b->mcrd)->type];
@@ -165,7 +165,7 @@ void shoot_attack(){
   Scrd b = u2->scrd;
   int steps = sdist(a,b) / 6;
 
-  //стрела долетела
+  /*стрела долетела */
   if(eindex >= steps){
     on_arrow_hit();
     mode = MODE_SELECT;
@@ -203,9 +203,9 @@ void updatefog(int plr){
 
 bool is_move_vsbl (Event e){
   Unit * u = id2unit(e.move.u);
-  // Не мешает ли нам туман войны?
+  /* Не мешает ли нам туман войны? */
   bool fow = mp(e.move.dest)->fog || mp(u->mcrd)->fog;
-  // Юнит спрятался?
+  /* Юнит спрятался? */
   bool hidden = is_invis(u) && u->player!=player;
   if(!hidden&&fow)
     return(true);

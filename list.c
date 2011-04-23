@@ -1,29 +1,29 @@
 
-// реализация двусвязного списка. + очереди и стеки.
+/* реализация двусвязного списка. + очереди и стеки. */
 
-// TODO: пояснить реализацию + примеры использования
+/* TODO: пояснить реализацию + примеры использования */
 
 typedef struct Node Node;
 struct Node {
-  Node * n; // pointer to [n]ext node or NULL
-  Node * p; // pointer to [p]revious node or NULL
-  void * d;   // pointer to [d]ata
+  Node * n; /* pointer to [n]ext node or NULL */
+  Node * p; /* pointer to [p]revious node or NULL */
+  void * d;   /* pointer to [d]ata */
 };
 
 typedef struct List List;
 struct List {
-  Node * h; // pointer to first ([h]ead) node
-  Node * t; // pointer to last ([t]ail) node
-  long count; // number of nodes in list
+  Node * h; /* pointer to first ([h]ead) node */
+  Node * t; /* pointer to last ([t]ail) node */
+  long count; /* number of nodes in list */
 };
 
 
 
-// Создает новый узел, указывающий на переданные данные,
-// и вставляет его в список.
-// If after == NULL, then <new> will be added at the head 
-// of the list, else it will be added following <after>.
-// Данные передаютя по указателю (не копируются!)
+/* Создает новый узел, указывающий на переданные данные, */
+/* и вставляет его в список. */
+/* If after == NULL, then <new> will be added at the head  */
+/* of the list, else it will be added following <after>. */
+/* Данные передаютя по указателю (не копируются!) */
 
 Node * l_insert_node (List * list, void * data, Node * after){
   Node * new = malloc(sizeof(Node));
@@ -40,10 +40,10 @@ Node * l_insert_node (List * list, void * data, Node * after){
 
 
 
-// Вытаскивает узел из списка. 
-// Возвращает указатель на узел.
-// Не особожает память узла или данных,
-// нужно отдельно делать free для данных и узла.
+/* Вытаскивает узел из списка.  */
+/* Возвращает указатель на узел. */
+/* Не особожает память узла или данных, */
+/* нужно отдельно делать free для данных и узла. */
 
 Node * l_extruct_node (List * list, Node * old){
   if(old){
@@ -56,7 +56,7 @@ Node * l_extruct_node (List * list, Node * old){
 
 
 
-// Удалить данные и сам узел.
+/* Удалить данные и сам узел. */
 
 void l_delete_node (List * list, Node * old){
   Node * node = l_extruct_node(list, old);
@@ -66,8 +66,8 @@ void l_delete_node (List * list, Node * old){
 
 
 
-// вытаскивает узел из списка, удаляет узел, 
-// возвращает указатель на данные
+/* вытаскивает узел из списка, удаляет узел,  */
+/* возвращает указатель на данные */
 
 void * l_extruct_data (List * list, Node * old){
   Node * node = l_extruct_node(list, old);
