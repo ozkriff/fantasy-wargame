@@ -78,7 +78,7 @@ void add_unit(Mcrd crd, int plr, Unit_type * type, int wrld) {
 
 
 void read_config(){
-  FILE * cfg = fopen("scenario1", "r");
+  FILE * cfg = fopen("scenario2", "r");
   char s[100]; // buffer
 
   while( fgets(s, 90, cfg) ){
