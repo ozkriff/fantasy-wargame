@@ -219,15 +219,15 @@ void draw_shoot_attack(){
   a.y += dy * eindex;
 
   /* вертикальная поправка */
-  int dh = 36 * sinf((float)eindex/steps*3.14);
+  int dh = 36 * sin((float)eindex/steps*3.14);
   blit(arrow, a.x, a.y-dh);
 
   /* рисует "хвост" стрелы. через задницу! */
   int i;
   for(i=1; i<eindex; i++){
     /* вертикальная поправка */
-    int d0 = 36 * sinf((float)(i  )/steps*3.14);
-    int d1 = 36 * sinf((float)(i-1)/steps*3.14);
+    int d0 = 36 * sin((float)(i  )/steps*3.14);
+    int d1 = 36 * sin((float)(i-1)/steps*3.14);
 
     Scrd n0 = u1->scrd;
     Scrd n1 = u1->scrd;
