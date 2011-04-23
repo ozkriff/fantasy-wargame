@@ -55,13 +55,17 @@ void print_event_queue(List * l){
 */
 
 
+
 void add_event (Event * data){
-  for(int i=0; i<players_count; i++){
+  Node * nd;
+  FOR_EACH_NODE(worlds, nd){
+    World * world = nd->d;
     Event * e = calloc(1, sizeof(Event));
     *e = *data; // copy
-    l_addtail(worlds[i].eq, e);
+    l_addtail(world->eq, e);
   }
 }
+
 
 
 

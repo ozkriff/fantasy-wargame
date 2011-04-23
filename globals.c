@@ -73,7 +73,7 @@ int MAP_H = 14;
 
 int player; // current player's index
 int players_count = 3;
-World worlds[3];
+List * worlds;
 World * cw = NULL; // current world
 
 

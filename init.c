@@ -42,8 +42,8 @@ void add_feature(Unit * u, int type, Feature_data * data){
 
 
 
-void add_unit(Mcrd crd, int plr, Unit_type * type, int wrld) {
-  List * units = worlds[wrld].units;
+void add_unit(Mcrd crd, int plr, Unit_type * type, World * wrld) {
+  List * units = wrld->units;
 
   Unit * u  = malloc(sizeof(Unit));
   u->player = plr;
@@ -87,25 +87,34 @@ void read_config(){
     if(!strncmp("[NUM-OF-PLAYERS]", s, 15)){
       sscanf(s, "[NUM-OF-PLAYERS] %i",
           &players_count);
-      for(int i=0; i<players_count; i++){
-        worlds[i].units = calloc(1, sizeof(List));
-        worlds[i].eq    = calloc(1, sizeof(List));
+
+      int i;
+      for(i=0; i<players_count; i++){
+        World * w = calloc(1, sizeof(World));
+        w->units = calloc(1, sizeof(List));
+        w->eq    = calloc(1, sizeof(List));
+        l_addtail(worlds, w);
       }
     }
     if(!strncmp("[MAP-SIZE]", s, 10)){
       sscanf(s, "[MAP-SIZE] %i %i",
           &MAP_W, &MAP_H);
 
-      for(int i=0; i<players_count; i++)
-        worlds[i].map = calloc(MAP_W*MAP_H, sizeof(Tile));
+      Node * nd;
+      FOR_EACH_NODE(worlds, nd){
+        World * w = nd->d;
+        w->map = calloc(MAP_W*MAP_H, sizeof(Tile));
+      }
     }
     if(!strncmp("[UNIT]", s, 6)){
       int plr, x, y, type;
       sscanf(s, "[UNIT] %i %i %i %i",
           &plr, &x, &y, &type);
 
-      for(int i=0; i<players_count; i++)
-        add_unit(mk_mcrd(x,y), plr, &utypes[type], i);
+      Node * nd;
+      FOR_EACH_NODE(worlds, nd){
+        add_unit(mk_mcrd(x,y), plr, &utypes[type], nd->d);
+      }
     }
     if(!strncmp("[MAP]", s, 5)){
       int mi = 0; // индекс в массиве 'map'
@@ -113,8 +122,10 @@ void read_config(){
         for(int i=0; s[i]; i++){
           char c = s[i];
           if(c != ' ' && c != '\n'){
-            for(int w=0; w<players_count; w++){
-              Tile * t = worlds[w].map + mi;
+            Node * nd;
+            FOR_EACH_NODE(worlds, nd){
+              World * w = nd->d;
+              Tile * t = w->map + mi;
               if(c=='.') t->type = 0;
               if(c=='t') t->type = 1;
               if(c=='*') t->type = 2;
@@ -146,8 +157,7 @@ void init(){
   //char * f = "LiberationMono-Regular.ttf";
   font = TTF_OpenFont("font.ttf", 12);
 
-  player = 0;
-  cw = &worlds[player];
+  worlds = calloc(1, sizeof(List));
 
   st    = calloc(1, sizeof(List));
   path  = calloc(1, sizeof(List));
@@ -156,6 +166,10 @@ void init(){
   selunit = NULL;
 
   read_config();
+
+  player = 0;
+  cw = worlds->h->d;
+
   load_sprites();
 
   updatefog(player);

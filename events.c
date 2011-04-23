@@ -12,12 +12,17 @@ bool checkunitsleft(){
 
 
 void onspace(){
-  player++; if(player==3) player=0;
+  player++;
+  if(player==players_count)
+    player=0;
 
-  {
-    cw++;
-    if(cw == &worlds[players_count])
-      cw = &worlds[0];
+  // change |c|urrent |w|orld
+  Node * nd;
+  FOR_EACH_NODE(worlds, nd){
+    if(cw == (World*)nd->d){
+      if(nd->n)  cw = nd->n->d;  else  cw = worlds->h->d;
+      break;
+    }
   }
 
 #if 0
