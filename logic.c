@@ -236,14 +236,20 @@ bool is_range_visible (Event e){
 
 
 
+void get_next_event_from_event_queue(){
+  Event * tmp = l_dequeue(cw->eq);
+  e = *tmp;
+  free(tmp);
+}
+
+
+
 void logic(){
   if(mode==MODE_MOVE)   move_logic();
   if(mode==MODE_ATTACK) attack_logic();
 
   while(mode==MODE_SELECT && cw->eq->count>0){
-    Event * tmp = l_dequeue(cw->eq);
-    e = *tmp;
-    free(tmp);
+    get_next_event_from_event_queue();
 
     eindex = 0;
 
@@ -272,9 +278,7 @@ void logic(){
 
 void apply_events_to_world(){
   while(cw->eq->count > 0){
-    Event * tmp = l_dequeue(cw->eq);
-    e = *tmp;
-    free(tmp);
+    get_next_event_from_event_queue();
 
     if(e.t == EVENT_MOVE)  finish_movement();
     if(e.t == EVENT_MELEE) on_reach_enemy();
