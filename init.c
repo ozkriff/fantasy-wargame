@@ -77,8 +77,8 @@ void add_unit(Mcrd crd, int plr, Unit_type * type, World * wrld) {
 
 
 
-void read_config(){
-  FILE * cfg = fopen("scenario2", "r");
+void read_config(char * filename){
+  FILE * cfg = fopen(filename, "r");
   char s[100]; /* buffer */
 
   while( fgets(s, 90, cfg) ){
@@ -93,6 +93,7 @@ void read_config(){
         World * w = calloc(1, sizeof(World));
         w->units = calloc(1, sizeof(List));
         w->eq    = calloc(1, sizeof(List));
+        w->is_ai = 0;
         l_addtail(worlds, w);
       }
     }
@@ -145,7 +146,23 @@ void read_config(){
 
 
 
-void init(){
+void markPlayerAsAi(int id){
+  int i = 0;
+  Node * nd = worlds->h;
+
+  while(i<=id && nd){
+    if(i == id){
+      World * w = nd->d;
+      w->is_ai = 1;
+      return;
+    }
+    nd=nd->d, i++;
+  }
+}
+
+
+
+void init(int ac, char ** av){
   srand(time(NULL));
   SDL_Init(SDL_INIT_VIDEO);
   IMG_Init(IMG_INIT_PNG);
@@ -166,7 +183,27 @@ void init(){
   mode = MODE_SELECT;
   selunit = NULL;
 
-  read_config();
+
+  /* command line arguments processing */
+  if(ac<3){
+    puts("./hex2d -local [map] [-ai 1]");
+    exit(EXIT_FAILURE);
+  }
+  if(!strcmp(av[1], "-local")){
+    /* set some global variable, 
+      indicating that this is local game */
+    read_config(av[2]);
+  }
+  if(!strcmp(av[1], "-net")){ /* TODO */ }
+
+  int i = 2;
+  for(i=2; i<ac; i++){
+    if(!strcmp(av[i], "-ai")){
+      int id;
+      sscanf(av[i+1], "%i", &id);
+      markPlayerAsAi(id);
+    }
+  }
 
   player = 0;
   cw = worlds->h->d;

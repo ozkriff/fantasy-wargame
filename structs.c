@@ -89,6 +89,7 @@ defstruct {
   Tile * map;
   List * units; /* stores units */
   List * eq; /* events queue */
+  bool   is_ai;
 } World;
 
 

@@ -19,29 +19,30 @@
 #include "events.c"
 #include "draw.c"
 #include "init.c"
+#include "ai.c"
 
 
 void mainloop(){
   while(!done){
+    if(cw->is_ai){
+      while(cw->eq->count>0)
+        apply_events_to_world();
+      ai();
+    }
+
     events();
     logic();
     draw();
+
     SDL_Delay(1.0*33);
   }
-}
-
-
-void args(int ac, char **av){
-  if(ac!=1 || av==NULL)
-    exit(EXIT_FAILURE);
 }
 
 
 
 #undef main
 int main(int ac, char **av){
-  args(ac,av);
-  init();
+  init(ac, av);
   mainloop();
   return(EXIT_SUCCESS);
 }
