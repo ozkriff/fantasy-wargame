@@ -270,3 +270,15 @@ void logic(){
 
 
 
+void apply_events_to_world(){
+  while(cw->eq->count > 0){
+    Event * tmp = l_dequeue(cw->eq);
+    e = *tmp;
+    free(tmp);
+
+    if(e.t == EVENT_MOVE)  finish_movement();
+    if(e.t == EVENT_MELEE) on_reach_enemy();
+    if(e.t == EVENT_RANGE) on_arrow_hit();
+  }
+}
+
