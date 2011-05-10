@@ -71,7 +71,7 @@ void keys(SDL_Event E){
 
 
 
-void mv(Mcrd m){
+void mv(Unit * moving_unit, Mcrd m){
   get_path(m);
 
   Node * node;
@@ -80,15 +80,15 @@ void mv(Mcrd m){
     Mcrd * next    = node->n->d;
 
     Unit * u = find_unit_at( *next );
-    if(u && u->player!=selunit->player){
+    if(u && u->player!=moving_unit->player){
       /* AMBUSH */
-      Event_melee melee =
-          {EVENT_MELEE, u->id, selunit->id, selunit->mcrd, 1};
+      Event_melee melee = {EVENT_MELEE, u->id,
+          moving_unit->id, moving_unit->mcrd, 1};
       add_event((Event*)&melee);
       break;
     }
     
-    Event_move mv = {EVENT_MOVE, selunit->id, *next};
+    Event_move mv = {EVENT_MOVE, moving_unit->id, *next};
     add_event((Event*)&mv);
   }
 }
@@ -188,7 +188,7 @@ void mouseclick(SDL_Event E){
   }else if(selunit){
     if( !u || (u && (is_invis(u)||!mp(m)->fog)) ){
       if(mp(m)->cost <= selunit->mvp)
-        mv(m);
+        mv(selunit, m);
       return;
     }
     if(u && u->player!=player && selunit 
