@@ -1,38 +1,5 @@
 
 
-SDL_Surface * loadimg(char * str){
-  SDL_Surface * surf = IMG_Load(str);
-  if(!surf){ puts("img load error!"); exit(1); }
-  SDL_Surface * optsurf = SDL_DisplayFormatAlpha(surf);
-  free(surf);
-  return(optsurf);
-}
-
-
-
-void load_sprites(){
-  terrsrf[0] = loadimg("img/grass.xpm");
-  terrsrf[1] = loadimg("img/tree.xpm");
-  terrsrf[2] = loadimg("img/water.xpm");
-  terrsrf[3] = loadimg("img/hills.xpm");
-  terrsrf[4] = loadimg("img/mounteen.xpm");
-
-  arrow = loadimg("img/w/arrow.xpm");
-
-  sel = loadimg("img/sel.xpm");
-  hl1 = loadimg("img/hl1.png");
-  hl3 = loadimg("img/hl3.png");
-  hl5 = loadimg("img/hl5.png");
-  hl6 = loadimg("img/hl6.png");
-
-  sldr_wa = loadimg("img/w/b.png");
-  sldr_wd = loadimg("img/w/d.png");
-  sldr_wb = loadimg("img/w/b.png");
-  sldr_wh = loadimg("img/w/h.png");
-}
-
-
-
 void add_feature(Unit * u, int type, Feature_data * data){
   Feature * f = malloc(sizeof(Feature));
   f->type = type;
