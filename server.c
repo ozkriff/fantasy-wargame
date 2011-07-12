@@ -1,0 +1,220 @@
+
+#include <stdbool.h>
+#include <stdio.h>
+#include <stdarg.h>
+#include <stdlib.h>
+#include <math.h>
+#include <time.h>
+
+#include "SDL/SDL_net.h"
+
+#include "list.c"
+
+typedef struct Client {
+  TCPsocket sock;
+  List * players;
+} Client;
+
+
+
+List * clients = NULL;
+
+TCPsocket listening_socket;
+SDLNet_SocketSet sockets;
+
+
+
+/* read through scenario to get players_count */
+
+int get_players_count_from_scenario (char * filename){
+  int players_count;
+  char line[100];
+
+  FILE * cfg = fopen(filename, "r");
+  if(!cfg){
+    puts("Can't open scenario.");
+    exit(EXIT_FAILURE);
+  }
+
+  while( fgets(line, 90, cfg) ){
+    /* Skip comments and empty lines. */
+    if(line[0]=='#' || line[0]=='\n')
+      continue;
+    if(!strncmp("[NUM-OF-PLAYERS]", line, 15))
+      sscanf(line, "[NUM-OF-PLAYERS] %i", &players_count);
+  }
+
+  fclose(cfg);
+
+  return(players_count);
+}
+
+
+
+bool is_id_free (int id){
+  Node * client_node;
+  FOR_EACH_NODE(clients, client_node){
+    Client * c = client_node->d;
+    Node * id_node;
+    FOR_EACH_NODE(c->players, id_node)
+      if(id == *(int*)id_node->d)
+        return(false);
+  }
+  return(true);
+}
+
+
+
+void wait_for_all_players (int players_count){
+  while(clients->count < players_count) {
+    if( SDLNet_CheckSockets(sockets, 100)
+    && SDLNet_SocketReady(listening_socket) ){
+      TCPsocket sock = SDLNet_TCP_Accept(listening_socket);
+      SDLNet_TCP_AddSocket(sockets, sock);
+
+      Client * c = calloc(1, sizeof(Client));
+      c->sock = sock;
+      c->players = calloc(1, sizeof(List));
+
+      while(1){
+        int data = 0;
+        SDLNet_TCP_Recv(sock, &data, 1);
+
+        /*mark that all players are already sent*/
+        if(data == 0xff)
+          break;
+        
+        if(!is_id_free(data)){
+          printf("id [%i] is not free!", data);
+          continue;
+        }
+
+        int * player_id = calloc(1, sizeof(int));
+        *player_id = data;
+        l_push(c->players, player_id);
+
+        printf("added player to client...\n");
+      }
+
+      l_push(clients, c);
+      printf("added client...\n");
+    }
+  }
+}
+
+
+
+void send_scenario_name_to_clients (char * scenario_name){
+  uint8_t size = strlen(scenario_name) + 1;
+  Node * n;
+  FOR_EACH_NODE(clients, n){
+    Client * c = n->d;
+    SDLNet_TCP_Send(c->sock, &size, 1);
+    SDLNet_TCP_Send(c->sock, scenario_name, size);
+  }
+}
+
+
+
+void init (int ac, char **av){
+  if(ac != 3){
+    puts("usage: ./server [port] [scenario]");
+    exit(EXIT_FAILURE);
+  }
+
+  /* get port */
+  int port;
+  sscanf(av[1], "%i", &port);
+
+  int players_count = get_players_count_from_scenario(av[2]);
+
+  SDLNet_Init();
+  clients = calloc(1, sizeof(List));
+
+  /* allocate memory for each client + for server */
+  sockets = SDLNet_AllocSocketSet(players_count+1);
+  
+  IPaddress ip;
+  SDLNet_ResolveHost(&ip, NULL, port);
+  listening_socket = SDLNet_TCP_Open(&ip);
+  SDLNet_TCP_AddSocket(sockets, listening_socket);
+
+  wait_for_all_players(players_count);
+  send_scenario_name_to_clients(av[2]);
+}
+
+
+
+void cleanup (){
+  SDLNet_Quit();
+  SDL_Quit();
+}
+
+
+
+void receive_data (Client *c, uint8_t *data, uint8_t *size)
+{
+  /* receive size of data, then data */
+  SDLNet_TCP_Recv(c->sock, size, 1);
+  SDLNet_TCP_Recv(c->sock, data, *size);
+}
+
+
+
+void print_data (uint8_t * data, uint8_t size){
+  int i;
+  for(i=0; i<size; i++)
+    printf("%u ", (unsigned int)(data[i]));
+  puts("");
+}
+
+
+
+/* Resend data to all clients, except <Client * exception> 
+  who has sent that data to us.
+  Send data size (in bytes), then data. */
+
+void resend_data (Client * exception, uint8_t * data, uint8_t size){
+  Node * n;
+  FOR_EACH_NODE(clients, n){
+    Client * c = n->d;
+    if(c != exception){
+      SDLNet_TCP_Send(c->sock, &size, 1);
+      SDLNet_TCP_Send(c->sock, data, size);
+    }
+  }
+}
+
+
+
+void mainloop (){
+  uint8_t data_size;
+  uint8_t data[32];
+  int active_sockets_count;
+        
+  while(1){
+    active_sockets_count = SDLNet_CheckSockets(sockets, 1000);
+    Node * n = clients->h;
+    while(active_sockets_count > 0 && n) {
+      Client * c = n->d;
+      if(SDLNet_SocketReady(c->sock)){
+        receive_data(c, data, &data_size);
+        /*print_data(data, data_size);*/
+        resend_data(c, data, data_size);
+        active_sockets_count--;
+      }
+      n = n->n;
+    }
+  }
+}
+
+
+
+#undef main
+int main (int ac, char **av){
+  init(ac, av);
+  mainloop();
+  cleanup();
+  return(EXIT_SUCCESS);
+}
+
