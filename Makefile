@@ -1,4 +1,4 @@
-libs=-lSDL -lSDL_image -lSDL_ttf 
+libs=-lSDL -lSDL_image -lSDL_ttf -lSDL_net
 #flags=-ansi -std=c89 -Wall -Wextra --pedantic -g
 flags=-ansi -std=c89 -Wall -Wextra -g
 all:

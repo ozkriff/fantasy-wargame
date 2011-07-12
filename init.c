@@ -153,6 +153,60 @@ void local_arguments (int ac, char ** av)
 }
 
 
+
+void send_int_as_uint8 (int n){
+  uint8_t x = n;
+  SDLNet_TCP_Send(socket, &x, 1);
+}
+
+
+
+void net_arguments (int ac, char ** av){
+  is_local = false;
+
+  int port = str2int(av[3]);
+  init_network(av[2], port);
+
+  /* 0-имя программы, 1-"-net", 2-"server", 3-port */
+  int i;
+  for(i=4; i<ac; i++){
+    if(!strcmp(av[i], "-ai")){
+      int id = str2int(av[i+1]);
+      create_local_ai(id);
+      send_int_as_uint8(id);
+    }
+    if(!strcmp(av[i], "-human")){
+      int id = str2int(av[i+1]);
+      create_local_human(id);
+      send_int_as_uint8(id);
+    }
+  }
+
+  /*сказать серверу, что больше игроков у клинта нет*/
+  /*0xff-специальная метка. игрока с таким id не бывает.*/
+  send_int_as_uint8(0xff);
+  
+  /*тут мы получаем имя сценария от сервера!*/
+  while(1){
+    if(SDLNet_CheckSockets(sockets, 100)==0)
+      continue;
+    
+    if(SDLNet_SocketReady(socket)){
+      /*incoming data size in bytes*/
+      uint8_t size;
+      char scenarioname[255];
+      SDLNet_TCP_Recv(socket, &size, 1);
+      SDLNet_TCP_Recv(socket, scenarioname, size);
+      printf("scenario: '%s'\n", scenarioname); /* <-- */
+      read_config(scenarioname);
+      return;
+    }
+  }
+}
+
+
+
+
 void init(int ac, char ** av){
   srand(time(NULL));
   SDL_Init(SDL_INIT_VIDEO);
@@ -177,7 +231,7 @@ void init(int ac, char ** av){
   if(!strcmp(av[1], "-local"))
     local_arguments(ac, av);
   if(!strcmp(av[1], "-net")){
-    /*TODO: net_arguments(ac, av);*/
+    net_arguments(ac, av);
   }
 
   cw = worlds->h->d;

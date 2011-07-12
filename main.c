@@ -9,11 +9,13 @@
 #include "SDL/SDL.h"
 #include "SDL/SDL_image.h"
 #include "SDL/SDL_ttf.h"
+#include "SDL/SDL_net.h"
 
 #include "list.c"
 #include "structs.c"
 #include "globals.c"
 #include "accessory.c"
+#include "network.c"
 #include "path.c"
 #include "logic.c"
 #include "events.c"
@@ -29,6 +31,9 @@ void mainloop(){
         apply_events_to_world();
       ai();
     }
+
+    if(!is_local)
+      do_network();
 
     events();
     logic();

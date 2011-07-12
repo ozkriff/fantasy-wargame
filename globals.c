@@ -94,3 +94,8 @@ Mcrd selhex;
 Event e;    /* current event */
 int eindex;   /* внутренний индекс визуализации события */
 
+TCPsocket socket;
+SDLNet_SocketSet sockets;
+
+bool is_local = true;
+

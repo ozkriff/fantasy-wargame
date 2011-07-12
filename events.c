@@ -81,11 +81,15 @@ void mv(Unit * moving_unit, Mcrd m){
       Event_melee melee = {EVENT_MELEE, u->id,
           moving_unit->id, *current, 1};
       add_event((Event*)&melee);
+      if(!is_local)
+        send_melee(melee);
       break;
     }
     
     Event_move mv = {EVENT_MOVE, moving_unit->id, *next};
     add_event((Event*)&mv);
+    if(!is_local)
+      send_move(mv);
   }
 }
 
@@ -102,6 +106,8 @@ void support_range(Unit * a, Unit * d){
       if(find_feature(sup, FEATURE_RNG)){
         Event_range range = {EVENT_RANGE, sup->id, a->id, a->mcrd, 2};
         add_event((Event*)&range);
+        if(!is_local)
+          send_range(range);
         if(a->health - range.dmg <= 0)
           return;
       }
@@ -123,6 +129,8 @@ void attack_melee(Unit * a, Unit * d){
   Event_melee melee =
       {EVENT_MELEE, a->id, d->id, d->mcrd, melee_attack_damage(a, d)};
   add_event((Event*)&melee);
+  if(!is_local)
+    send_melee(melee);
 
   /*проверка на то, что оппонент выживет*/
   if(d->health - melee.dmg <= 0)
@@ -132,6 +140,8 @@ void attack_melee(Unit * a, Unit * d){
   Event_melee melee2 =
       {EVENT_MELEE, d->id, a->id, a->mcrd, melee_return_damage(d, a)};
   add_event((Event*)&melee2);
+  if(!is_local)
+    send_melee(melee2);
 
   /* проверка на необходимость отступления-бегства */
   if(d->health - melee.dmg > d->type->health / 2)
@@ -148,6 +158,8 @@ void attack_melee(Unit * a, Unit * d){
   }else{
     Event_move mv = {EVENT_MOVE, d->id, neib(md, dir3)};
     add_event((Event*)&mv);
+    if(!is_local)
+      send_move(mv);
   }
 }
 
@@ -163,6 +175,8 @@ void attack(Unit * a, Unit * d){
       Event_range range = 
           {EVENT_RANGE, a->id, d->id, d->mcrd, range_damage(a, d)};
       add_event((Event*)&range);
+      if(!is_local)
+        send_range(range);
     }
   }else{
     if(mdist(ma, md) <= 1){
