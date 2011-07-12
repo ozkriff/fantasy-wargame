@@ -223,14 +223,14 @@ Unit * find_unit_at(Mcrd crd){
 
 
 bool is_invis (Unit * u){
-  if(!find_feature(u, FEATURE_INVIS))
+  if(!find_feature(u, FEATURE_INVIS)
+  || u->player == cw->id)
     return(false);
-
   int i;
   for(i=0; i<6; i++){
     Mcrd nb = neib(u->mcrd, i);
     Unit * u2 = find_unit_at(nb);
-    if(u2 && u2->player != u->player)
+    if(u2 && u2->player == cw->id)
       return(false);
   }
   return(true);
