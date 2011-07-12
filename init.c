@@ -30,11 +30,8 @@ void add_unit(Mcrd crd, int plr, Unit_type * type, World * wrld) {
   u->mcrd   = crd;
   u->scrd   = map2scr(crd);
   u->type   = type;
-  /* на всякий инициализировать список */
   u->features = calloc(1, sizeof(List));;
   
-  /*mp(crd)->unit = u; */
-
   u->id = units->count>0 ? ((Unit*)units->h->d)->id+1 : 0;
   
   /* инициализировать нужные особенности юнитов */
