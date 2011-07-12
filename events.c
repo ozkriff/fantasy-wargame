@@ -76,14 +76,14 @@ void mv(Unit * moving_unit, Mcrd m){
 
   Node * node;
   for(node=path->h; node->n; node=node->n){
-    /*Mcrd * current = node->d; */
+    Mcrd * current = node->d;
     Mcrd * next    = node->n->d;
 
     Unit * u = find_unit_at( *next );
     if(u && u->player!=moving_unit->player){
       /* AMBUSH */
       Event_melee melee = {EVENT_MELEE, u->id,
-          moving_unit->id, moving_unit->mcrd, 1};
+          moving_unit->id, *current, 1};
       add_event((Event*)&melee);
       break;
     }
