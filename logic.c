@@ -60,7 +60,7 @@ void finish_movement(){
   u->mcrd = e.move.dest;
   if(selunit==u) fill_map(u);
   u->scrd = map2scr(u->mcrd);
-  if(u->player==player)
+  if(u->player==cw->id)
     upd_fog_2(u);
   mode = MODE_SELECT;
 }
@@ -206,7 +206,7 @@ bool is_move_vsbl (Event e){
   /* Не мешает ли нам туман войны? */
   bool fow = mp(e.move.dest)->fog || mp(u->mcrd)->fog;
   /* Юнит спрятался? */
-  bool hidden = is_invis(u) && u->player!=player;
+  bool hidden = is_invis(u) && u->player!=cw->id;
   if(!hidden&&fow)
     return(true);
   else

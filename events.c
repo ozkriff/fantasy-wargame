@@ -3,7 +3,7 @@ bool checkunitsleft(){
   Node * node;
   FOR_EACH_NODE(cw->units, node){
     Unit * u = node->d;
-    if(u->player == player)
+    if(u->player == cw->id)
       return(true);
   }
   return(false);
@@ -12,10 +12,6 @@ bool checkunitsleft(){
 
 
 void onspace(){
-  player++;
-  if(player==players_count)
-    player=0;
-
   /* change |c|urrent |w|orld */
   Node * nd;
   FOR_EACH_NODE(worlds, nd){
@@ -37,13 +33,13 @@ void onspace(){
   Node * node;
   FOR_EACH_NODE(cw->units, node){
     Unit * u = node->d;
-    if(u->player == player){
+    if(u->player == cw->id){
       u->mvp = u->type->mvp;
       u->can_attack = true;
     }
   }
 
-  updatefog(player);
+  updatefog(cw->id);
   
   /*select_next_unit(); */
 }
@@ -182,7 +178,7 @@ void mouseclick(SDL_Event E){
   Mcrd m = scr2map(mk_scrd(E.button.x, E.button.y));
   Unit * u = find_unit_at(m);
 
-  if(u && u->player == player){
+  if(u && u->player == cw->id){
     selunit = u;
     fill_map(selunit);
   }else if(selunit){
@@ -191,7 +187,7 @@ void mouseclick(SDL_Event E){
         mv(selunit, m);
       return;
     }
-    if(u && u->player!=player && selunit 
+    if(u && u->player!=cw->id && selunit 
     && selunit->can_attack
     && !is_invis(u) && mp(m)->fog > 0){
       attack(selunit, u);

@@ -1,4 +1,14 @@
 
+int str2int (char * str) {
+  int n;
+  if(sscanf(str, "%i", &n) != 1){
+    puts("str2int error.");
+    exit(1);
+  }
+  return(n);
+}
+
+
 
 void add_feature(Unit * u, int type, Feature_data * data){
   Feature * f = malloc(sizeof(Feature));
@@ -51,19 +61,6 @@ void read_config(char * filename){
   while( fgets(s, 90, cfg) ){
     if(s[0]=='#' || s[0]=='\n')
       continue;
-    if(!strncmp("[NUM-OF-PLAYERS]", s, 15)){
-      sscanf(s, "[NUM-OF-PLAYERS] %i",
-          &players_count);
-
-      int i;
-      for(i=0; i<players_count; i++){
-        World * w = calloc(1, sizeof(World));
-        w->units = calloc(1, sizeof(List));
-        w->eq    = calloc(1, sizeof(List));
-        w->is_ai = 0;
-        l_addtail(worlds, w);
-      }
-    }
     if(!strncmp("[MAP-SIZE]", s, 10)){
       sscanf(s, "[MAP-SIZE] %i %i",
           &MAP_W, &MAP_H);
@@ -113,20 +110,47 @@ void read_config(char * filename){
 
 
 
-void markPlayerAsAi(int id){
-  int i = 0;
-  Node * nd = worlds->h;
-
-  while(i<=id && nd){
-    if(i == id){
-      World * w = nd->d;
-      w->is_ai = 1;
-      return;
-    }
-    nd=nd->d, i++;
-  }
+void create_local_world (int id, bool is_ai) {
+  World * w = calloc(1, sizeof(World));
+  w->units  = calloc(1, sizeof(List));
+  w->eq     = calloc(1, sizeof(List));
+  w->id     = id;
+  w->is_ai  = is_ai;
+  l_push(worlds, w);
 }
 
+
+
+void create_local_human (int id) {
+  create_local_world(id, false);
+}
+
+
+
+void create_local_ai (int id) {
+  create_local_world(id, true);
+}
+
+
+
+void local_arguments (int ac, char ** av)
+{
+  /*is_local = true;*/
+
+  /*av[0]-program name, av[1]-"-local", av[2]-scenario*/
+  int i;
+  for(i=3; i<ac; i++){
+    if(!strcmp(av[i], "-ai")){
+      int id = str2int(av[i+1]);
+      create_local_ai(id);
+    }
+    if(!strcmp(av[i], "-human")){
+      int id = str2int(av[i+1]);
+      create_local_human(id);
+    }
+  }
+  read_config(av[2]);
+}
 
 
 void init(int ac, char ** av){
@@ -150,33 +174,16 @@ void init(int ac, char ** av){
   mode = MODE_SELECT;
   selunit = NULL;
 
-
-  /* command line arguments processing */
-  if(ac<3){
-    puts("./hex2d -local [map] [-ai 1]");
-    exit(EXIT_FAILURE);
-  }
-  if(!strcmp(av[1], "-local")){
-    /* set some global variable, 
-      indicating that this is local game */
-    read_config(av[2]);
-  }
-  if(!strcmp(av[1], "-net")){ /* TODO */ }
-
-  int i = 2;
-  for(i=2; i<ac; i++){
-    if(!strcmp(av[i], "-ai")){
-      int id;
-      sscanf(av[i+1], "%i", &id);
-      markPlayerAsAi(id);
-    }
+  if(!strcmp(av[1], "-local"))
+    local_arguments(ac, av);
+  if(!strcmp(av[1], "-net")){
+    /*TODO: net_arguments(ac, av);*/
   }
 
-  player = 0;
   cw = worlds->h->d;
 
   load_sprites();
 
-  updatefog(player);
+  updatefog(cw->id);
 }
 

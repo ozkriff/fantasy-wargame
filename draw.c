@@ -176,7 +176,7 @@ void draw_units(){
     && e.melee.a==u->id)
       continue;
 
-    if( u->player!=player
+    if( u->player!=cw->id
     && (mp(u->mcrd)->fog==0 || is_invis(u)) )
       continue;
 
@@ -282,7 +282,9 @@ void draw(){
     if(e.t==EVENT_RANGE) draw_shoot_attack();
   }
   /*maptext(); */
-  text( (player==0)?"[pl:0]":"[pl:1]", mk_scrd(0,0), false);
+  char str[100];
+  sprintf(str, "[pl:%i]", cw->id);
+  text(str , mk_scrd(0,0), false);
   
   SDL_Flip(screen);
 }

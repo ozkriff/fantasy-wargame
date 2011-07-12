@@ -5,7 +5,7 @@ void ai_attack(Unit * u){
   int i;
   for(i=0; i<6; i++){
     Unit * enm = find_unit_at( neib(u->mcrd, i) );
-    if(!enm || enm->player==player)
+    if(!enm || enm->player==cw->id)
       continue;
     attack(u, enm);
   }
@@ -39,7 +39,7 @@ void ai(){
   Node * n;
   FOR_EACH_NODE(cw->units, n){
     Unit * u = n->d;
-    if(u->player != player)
+    if(u->player != cw->id)
       continue;
 
     ai_attack(u);

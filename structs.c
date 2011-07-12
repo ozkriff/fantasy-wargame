@@ -90,6 +90,7 @@ defstruct {
   List * units; /* stores units */
   List * eq; /* events queue */
   bool   is_ai;
+  int    id;
 } World;
 
 
