@@ -100,7 +100,7 @@ Mcrd neib(Mcrd a, int i) {
     { {0,-1}, {1,0}, {0,1}, {-1,1}, {-1,0}, {-1,-1}, } };
   int dx = d[a.y%2][i][0];
   int dy = d[a.y%2][i][1];
-  return( (Mcrd){a.x+dx, a.y+dy} );
+  return( mk_mcrd(a.x+dx, a.y+dy) );
 }
 
 
