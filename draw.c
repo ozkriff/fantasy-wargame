@@ -67,13 +67,7 @@ void draw_map() {
 void mline(Mcrd a, Mcrd b){
   Scrd sa = map2scr(a), sb = map2scr(b);
   sa.x+=36; sa.y+=54; sb.x+=36; sb.y+=54;
-  /*unit * u = cw->selunit ? cw->selunit : cw->move_unit; */
-  /*if(!u) */
-    /*return; */
-  /*if(mp(a)->cost <= u->mvp) */
-    /*bzline(sa, sb, BLUE); */
-  /*else */
-    bzline(sa, sb, RED);
+  bzline(sa, sb, RED);
 }
 
 
