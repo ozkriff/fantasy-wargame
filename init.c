@@ -19,6 +19,21 @@ void add_feature(Unit * u, int type, Feature_data * data){
 
 
 
+void add_default_features_to_unit (Unit * u){
+  if(u->type == &utypes[2]){ /* archer */
+    Feature_range fd = {5,4,999};
+    add_feature(u, FEATURE_RNG, (Feature_data*)&fd );
+  }
+  if(u->type == &utypes[1]) { /* hunter */
+    int btrue = 1;
+    add_feature(u, FEATURE_IGNR,     (Feature_data*)&btrue);
+    add_feature(u, FEATURE_INVIS,    (Feature_data*)&btrue);
+    add_feature(u, FEATURE_NORETURN, (Feature_data*)&btrue);
+  }
+}
+
+
+
 void add_unit(Mcrd crd, int plr, Unit_type * type, World * wrld) {
   List * units = wrld->units;
 
@@ -34,17 +49,7 @@ void add_unit(Mcrd crd, int plr, Unit_type * type, World * wrld) {
   
   u->id = units->count>0 ? ((Unit*)units->h->d)->id+1 : 0;
   
-  /* инициализировать нужные особенности юнитов */
-  if(type == &utypes[2]){ /* archer */
-    Feature_range fd = {5,4,999};
-    add_feature(u, FEATURE_RNG, (Feature_data*)&fd );
-  }
-  if(type == &utypes[1]) { /* hunter */
-    int btrue = 1;
-    add_feature(u, FEATURE_IGNR,     (Feature_data*)&btrue);
-    add_feature(u, FEATURE_INVIS,    (Feature_data*)&btrue);
-    add_feature(u, FEATURE_NORETURN, (Feature_data*)&btrue);
-  }
+  add_default_features_to_unit(u);
 
   l_push(units, u);
 }
