@@ -9,6 +9,17 @@ void change_tile(Mcrd m){
 
 
 
+/* Find unit's node in cw->units list */
+
+Node * unit2node (Unit * u){
+  Node * n = cw->units->h;
+  while(u != (Unit*)n->d)
+    n = n->n;
+  return n;
+}                                                                                   
+
+
+
 /*
 void select_next_unit(){
   do{
