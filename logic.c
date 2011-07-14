@@ -20,17 +20,18 @@ Node * unit2node (Unit * u){
 
 
 
-/*
 void select_next_unit(){
+  Node * node = selunit ? unit2node(selunit) : cw->units->h;
+  Unit * u = node->d;
+
   do{
-    if(selunit && selunit != l_last(cw->units->t->d)
-      selunit = (Unit*)l_next(selunit);
-    else
-      selunit = (Unit*)l_first(units);
-  }while(selunit->player != player);
-  fill_map(selunit);
+    node = node->n ? node->n : cw->units->h;
+    u = node->d;
+  }while(u->player != cw->id);
+
+  fill_map(selunit = u);
 }
-*/
+
 
 
 void kill_unit(Unit * u){

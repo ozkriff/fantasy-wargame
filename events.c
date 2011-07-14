@@ -41,7 +41,7 @@ void onspace(){
 
   updatefog(cw->id);
   
-  /*select_next_unit(); */
+  select_next_unit();
 }
 
 
@@ -60,7 +60,7 @@ void keys(SDL_Event E){
     case SDLK_RIGHT: map_offset.x -= 72; break;
     case SDLK_SPACE: onspace();          break;
     case SDLK_r:     change_tile(selhex);break;
-    /*case SDLK_n:     select_next_unit(); break; */
+    case SDLK_n:     select_next_unit(); break;
     default: break;
   }
 }
