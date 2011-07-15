@@ -43,13 +43,7 @@ void kill_unit(Unit * u){
   free(u->features);
 
   /* find unit's node and free unit and node. */
-  Node * nd;
-  FOR_EACH_NODE(cw->units, nd){
-    if(nd->d==u){
-      l_delete_node(cw->units, nd);
-      return;
-    }
-  }
+  l_delete_node(cw->units, unit2node(u));
 }
 
 
