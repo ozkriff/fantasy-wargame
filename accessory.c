@@ -56,7 +56,7 @@ void print_event_queue(List * l){
 
 
 
-void add_event (Event * data){
+void add_event_local (Event * data){
   Node * nd;
   FOR_EACH_NODE(worlds, nd){
     World * world = nd->d;

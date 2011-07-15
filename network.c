@@ -114,6 +114,23 @@ void init_network (char * hostname, int port){
 }
 
 
+
+void send_event (Event * e) {
+  if(e->t == EVENT_MELEE) send_melee(*(Event_melee*)e);
+  if(e->t == EVENT_MOVE)  send_move (*(Event_move* )e);
+  if(e->t == EVENT_RANGE) send_range(*(Event_range*)e);
+}
+
+
+
+void add_event (Event * e){
+  add_event_local(e);
+  if(!is_local)
+    send_event(e);
+}
+
+
+
 void construct_event (uint8_t * d){
   if(d[0]==EVENT_MOVE){
     Event_move e = mk_event_move(d);
