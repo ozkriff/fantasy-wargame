@@ -92,6 +92,7 @@ World * cw = NULL; /* current world */
 bool    is_local;
 Unit *  selunit = NULL; /* selected unit */
 
+static FILE * logfile;
 
 
 /* Find unit's node in cw->units list. */
@@ -718,6 +719,7 @@ init (int ac, char ** av){
   cw = worlds.h->d;
   updatefog(cw->id);
   update_units_visibility();
+  logfile = fopen("log", "w");
 }
 
 
@@ -833,10 +835,42 @@ add_event_local (Event data){
 
 
 
+static void
+event2log (Event e){
+  if(e.t == EVENT_MOVE){
+    fprintf(logfile,
+        "MOVE  u=%i, dest={%i,%i}, cost=%i\n",
+        e.move.u,
+        e.move.dest.x,
+        e.move.dest.y,
+        e.move.cost );
+  }
+  if(e.t == EVENT_MELEE) {
+    fprintf(logfile,
+        "MELEE a=%i, d=%i, md= {%i,%i}, dmg=%i\n",
+        e.melee.a,
+        e.melee.d,
+        e.melee.md.x,
+        e.melee.md.y,
+        e.melee.dmg );
+  }
+  if(e.t == EVENT_RANGE) {
+    fprintf(logfile,
+        "RANGE a=%i, d=%i, md= {%i,%i}, dmg=%i\n",
+        e.range.a,
+        e.range.d,
+        e.range.md.x,
+        e.range.md.y,
+        e.range.dmg );
+  }
+}
+
+
+
 void
 add_event (Event e){
   add_event_local(e);
+  event2log(e);
   if(!is_local)
     send_event(e);
 }
-
