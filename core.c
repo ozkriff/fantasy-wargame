@@ -9,6 +9,7 @@
 #include "path.h"
 #include "misc.h"
 #include "core.h"
+#include "core_private.h"
 #include "net.h"
 
 static bool checkunitsleft ();

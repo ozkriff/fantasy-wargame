@@ -16,7 +16,3 @@ void  apply_event (Event e);
 
 void  select_next_unit ();
 
-
-/* REMOVE THIS! */
-void  add_event (Event e);
-

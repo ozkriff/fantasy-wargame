@@ -6,6 +6,7 @@
 #include "structs.h"
 #include "misc.h"
 #include "core.h"
+#include "core_private.h"
 #include "net.h"
 
 #define Byte uint8_t

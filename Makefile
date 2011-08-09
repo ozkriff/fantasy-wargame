@@ -24,8 +24,8 @@ server: server.o list.o
 list.o:   list.c          list.h structs.h
 path.o:   path.c   path.h list.h structs.h
 misc.o:   misc.c   misc.h list.h structs.h
-core.o:   core.c   core.h list.h structs.h
-net.o:    net.c    net.h  list.h structs.h
+core.o:   core.c   core.h list.h structs.h core_private.h
+net.o:    net.c    net.h  list.h structs.h core_private.h 
 ai.o:     ai.c     ai.h   list.h structs.h
 ui_cli.o: ui_cli.c core.h list.h structs.h misc.h
 ui_sdl.o: ui_sdl.c core.h list.h structs.h misc.h
