@@ -83,7 +83,7 @@ neib (Mcrd a, int neib_index) {
 /* TODO rename:  opposite neiborhood index */
 /* Get tile's opposite neiborhood. */
 int
-neib2 (int i){
+opposite_neib_index (int i){
   int d[] = {3, 4,2, 5,1, 0};
   return(i + d[i]);
 }
