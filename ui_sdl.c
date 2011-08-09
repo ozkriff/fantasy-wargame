@@ -653,6 +653,7 @@ logic (){
       }
     }
   }else{
+    update_eq();
     while(cw->eq.count > 0){
       Event e = get_next_event();
       apply_event(e);
