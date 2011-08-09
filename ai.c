@@ -1,7 +1,22 @@
 
-/* if there is enemy at adjustment cell then attack it */
+#include <stdio.h>
+#include <string.h>
+#include <stdbool.h>
+#include <stdlib.h>
+#include <stdarg.h>
+#include "list.h"
+#include "structs.h"
+#include "core.h"
+#include "path.h"
+#include "misc.h"
+#include "ai.h"
 
-void ai_attack(Unit * u){
+static void ai_attack(Unit * u);
+static void ai_movement(Unit * u);
+
+/* if there is enemy at adjustment cell then attack it */
+static void
+ai_attack(Unit * u){
   int i;
   for(i=0; i<6; i++){
     Unit * enm = find_unit_at( neib(u->mcrd, i) );
@@ -14,20 +29,18 @@ void ai_attack(Unit * u){
 
 
 /* random movement */
-
-void ai_movement(Unit * u){
-  fill_map(u);
+static void
+ai_movement(Unit * u){
   int i;
+  fill_map(u);
   for(i=0; i<6; i++){
     Mcrd m = neib(u->mcrd, i);
     Unit * u2 = find_unit_at(m);
-
     /*if( is_invis(u2) || !mp(m)->fog ){
       mv(u, m);
     }*/
-
     if(!u2){
-      mv(u, m);
+      move(u, m);
       break;
     }
   }
@@ -35,19 +48,21 @@ void ai_movement(Unit * u){
 
 
 
-void ai(){
+void
+ai (){
   Node * n;
+  while(cw->eq.count > 0){
+    apply_event(get_next_event());
+  }
   FOR_EACH_NODE(cw->units, n){
     Unit * u = n->d;
     if(u->player != cw->id)
       continue;
-
     ai_attack(u);
     ai_movement(u);
-    apply_events_to_world();
+    while(cw->eq.count > 0){
+      apply_event(get_next_event());
+    }
   }
-
-  /* end turn */
-  onspace();
+  endturn();
 }
-
