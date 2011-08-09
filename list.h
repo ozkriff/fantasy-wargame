@@ -16,7 +16,7 @@ struct List {
 };
 
 
-Node * l_insert_node (List * list_p, void * data, Node * after);
+void   l_insert_node (List * list_p, void * data, Node * after);
 Node * l_extruct_node(List * list_p, Node * old);
 void   l_delete_node (List * list_p, Node * old);
 void * l_extruct_data(List * list_p, Node * old);

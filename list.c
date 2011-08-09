@@ -10,7 +10,7 @@
   If <after>==NULL, then <new> will be added at the head
   of the list, else it will be added following <after>.
   Only pointer to data is stored, no copying! */
-Node *
+void
 l_insert_node (List * list, void * data, Node * after){
   Node * pnode;
   Node * new = malloc(sizeof(Node));
@@ -22,7 +22,6 @@ l_insert_node (List * list, void * data, Node * after){
   pnode->n = new;
   if(new->n)  new->n->p=new;  else  list->t=new;
   list->count++;
-  return(new);
 }
 
 
