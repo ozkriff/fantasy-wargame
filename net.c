@@ -24,7 +24,7 @@ static void        send_range(Event_range e);
 
 static void        get_data (Byte * data, Byte * size);
 static void        print_data (Byte * data, Byte size);
-static void        construct_event (Byte * d);
+static void        mk_event (Byte * d);
 
 
 static Event_move
@@ -153,7 +153,7 @@ send_int_as_uint8 (int n){
 
 
 static void
-construct_event (Byte * d){
+mk_event (Byte * d){
   Event e;
   if(d[0]==EVENT_MOVE ) e.move  = mk_event_move (d);
   if(d[0]==EVENT_MELEE) e.melee = mk_event_melee(d);
@@ -171,7 +171,7 @@ do_network (){
     return;
   get_data(data, &size);
   /*print_data(data, size);*/
-  construct_event(data);
+  mk_event(data);
 }
 
 
