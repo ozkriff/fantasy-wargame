@@ -167,13 +167,13 @@ void
 do_network (){
   Event e;
   Byte size, data[10];
-  if(!SDLNet_CheckSockets(sockets, 0)
-  || !SDLNet_SocketReady(socket))
-    return;
-  get_data(data, &size);
-  /*print_data(data, size);*/
-  e = mk_event(data);
-  add_event(e);
+  if(SDLNet_CheckSockets(sockets, 0)
+  && SDLNet_SocketReady(socket)){
+    get_data(data, &size);
+    /*print_data(data, size);*/
+    e = mk_event(data);
+    add_event(e);
+  }
 }
 
 
