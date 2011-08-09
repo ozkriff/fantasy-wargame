@@ -32,4 +32,4 @@ ui_sdl.o: ui_sdl.c core.h list.h structs.h misc.h
 server.o: server.c        list.h
 
 clean:
-	rm -f *.o ui-cli ui-sdl server
+	rm -f *.o ui_cli ui_sdl server
