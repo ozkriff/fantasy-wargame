@@ -59,3 +59,5 @@ l_extruct_data (List * list, Node * old){
   void * data = node->d;
   free(node);
   return(data);
+}
+
