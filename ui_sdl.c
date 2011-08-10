@@ -610,6 +610,7 @@ main(int ac, char **av){
   init_draw();
   mainloop();
   free_sprites();
+  cleanup();
   return(EXIT_SUCCESS);
 }
 

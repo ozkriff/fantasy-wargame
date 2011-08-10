@@ -6,6 +6,7 @@ extern World * cw; /*current world*/
 extern bool    is_local;
 
 void  init (int ac, char ** av);
+void  cleanup();
 void  move (Unit * moving_unit, Mcrd destination);
 void  attack (Unit * a, Unit * d);
 void  endturn ();

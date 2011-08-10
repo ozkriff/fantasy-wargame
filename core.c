@@ -874,3 +874,24 @@ add_event (Event e){
   if(!is_local)
     send_event(e);
 }
+
+
+
+void
+cleanup(){
+  fclose(logfile);
+  while(worlds.count > 0){
+    World * w = worlds.h->d;
+    while(w->eq.count > 0)
+      l_delete_node(&w->eq, w->eq.h);
+    while(w->units.count > 0){
+      Unit * u = w->units.h->d;
+      while(u->features.count > 0)
+        l_delete_node(&u->features, u->features.h);
+			l_delete_node(&w->units, w->units.h);
+    }
+    free(w->map);
+    l_delete_node(&worlds, worlds.h);
+  }
+}
+
