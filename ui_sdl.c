@@ -90,6 +90,7 @@ static void init_colors ();
 static void init_draw ();
 static void sdl_events ();
 
+static bool is_eq_empty();
 static void logic ();
 
 
@@ -614,6 +615,14 @@ main(int ac, char **av){
 
 
 
+static bool
+is_eq_empty(){
+	update_eq();
+  return(cw->eq.count == 0);
+}
+
+
+
 static void
 logic (){
   if(animation){
@@ -645,19 +654,15 @@ logic (){
         }
       }
     }else{
-      update_eq();
-      if(cw->eq.count > 0){
+      if(!is_eq_empty()){
         e = get_next_event();
         mode = MODE_SHOW_EVENT;
         eindex = 0;
       }
     }
   }else{
-    update_eq();
-    while(cw->eq.count > 0){
-      Event e = get_next_event();
-      apply_event(e);
-    }
+    while(!is_eq_empty())
+      apply_event(get_next_event());
   }
 }
 
