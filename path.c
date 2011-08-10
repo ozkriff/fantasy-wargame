@@ -119,7 +119,7 @@ addwaypoint (List * path, Mcrd wp){
 
 
 List
-get_path (Mcrd a){
+get_path (Mcrd destination){
   List path = {0, 0, 0};
   while(tile(a)->cost != 0){
     addwaypoint(&path, a);
