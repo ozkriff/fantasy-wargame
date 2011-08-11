@@ -637,9 +637,8 @@ logic (){
         }
       }
       else if(e.t == EVENT_MELEE){
-        if(eindex == steps/2)
-          apply_event(e);
         if(eindex == steps-1){
+          apply_event(e);
           mode = MODE_SELECT;
           logic();
         }
