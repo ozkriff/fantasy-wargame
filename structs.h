@@ -66,10 +66,9 @@ typedef union {
 #define EVENT_MELEE  1
 #define EVENT_RANGE  2
 
-/* md - defender's crd */
 defstruct { int t; int u; Mcrd dest; int cost; }  Event_move;
-defstruct { int t; int a, d; Mcrd md; int dmg; }  Event_melee;
-defstruct { int t; int a, d; Mcrd md; int dmg; }  Event_range;
+defstruct { int t; int a, d; int dmg; }  Event_melee;
+defstruct { int t; int a, d; int dmg; }  Event_range;
 
 typedef union {
   int t; /*type*/

@@ -680,7 +680,7 @@ draw_move_event (){
 static void
 draw_melee_event (){
   Mcrd a = id2unit(e.melee.a)->mcrd;
-  Mcrd b = e.melee.md;
+  Mcrd b = id2unit(e.melee.d)->mcrd;
   int i = (eindex<steps/2) ? (eindex) : (steps-eindex);
   Scrd crd = mbetween(a, b, i);
   draw_img(type2img(id2unit(e.melee.a)->type), crd);

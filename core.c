@@ -253,16 +253,18 @@ is_move_visible (Event e){
 
 static bool
 is_melee_visible (Event e){
-  Unit * u = id2unit( e.melee.a );
-  return(tile(u->mcrd)->fog || tile(e.melee.md)->fog);
+  Unit * a = id2unit( e.melee.a );
+  Unit * d = id2unit( e.melee.d );
+  return(tile(a->mcrd)->fog || tile(d->mcrd)->fog);
 }
 
 
 
 static bool
 is_range_visible (Event e){
-  Unit * u = id2unit( e.range.a );
-  return(tile(u->mcrd)->fog || tile(e.range.md)->fog);
+  Unit * a = id2unit( e.range.a );
+  Unit * d = id2unit( e.range.d );
+  return(tile(a->mcrd)->fog || tile(d->mcrd)->fog);
 }
 
 
@@ -380,7 +382,6 @@ mk_event_melee (Unit * a, Unit * d, int dmg){
   e.melee.t   = EVENT_MELEE;
   e.melee.a   = a->id;
   e.melee.d   = d->id;
-  e.melee.md  = d->mcrd;
   e.melee.dmg = dmg;
   return(e);
 }
@@ -393,7 +394,6 @@ mk_event_range (Unit * a, Unit * d, int dmg){
   e.range.t   = EVENT_RANGE;
   e.range.a   = a->id;
   e.range.d   = d->id;
-  e.range.md  = d->mcrd;
   e.range.dmg = dmg;
   return(e);
 }
@@ -401,17 +401,10 @@ mk_event_range (Unit * a, Unit * d, int dmg){
 
 
 static bool
-ambush(Mcrd next, Mcrd current, Unit * moving_unit){
+ambush(Mcrd next, Unit * moving_unit){
   Unit * u = find_unit_at(next);
   if(u && u->player != moving_unit->player){
-#if 1
-    Event e;
-    e = mk_event_melee(u, moving_unit, 1);
-    e.melee.md = current;
-    add_event(e);
-#else
-    add_event( mk_event_melee(u, moving_unit, current, 1) );
-#endif
+    add_event( mk_event_melee(u, moving_unit, 1) );
     return(true);
   }else{
     return(false);
@@ -425,9 +418,8 @@ move (Unit * moving_unit, Mcrd destination){
   List path = get_path(destination);
   Node * node;
   for(node=path.h; node->n; node=node->n){
-    Mcrd * current = node->d;
     Mcrd * next    = node->n->d;
-    if(ambush(*next, *current, moving_unit))
+    if(ambush(*next, moving_unit))
       break;
     add_event( mk_event_move(moving_unit, (*next)) );
   }
@@ -842,20 +834,16 @@ event2log (Event e){
   }
   if(e.t == EVENT_MELEE) {
     fprintf(logfile,
-        "MELEE a=%i, d=%i, md= {%i,%i}, dmg=%i\n",
+        "MELEE a=%i, d=%i, dmg=%i\n",
         e.melee.a,
         e.melee.d,
-        e.melee.md.x,
-        e.melee.md.y,
         e.melee.dmg );
   }
   if(e.t == EVENT_RANGE) {
     fprintf(logfile,
-        "RANGE a=%i, d=%i, md= {%i,%i}, dmg=%i\n",
+        "RANGE a=%i, d=%i, dmg=%i\n",
         e.range.a,
         e.range.d,
-        e.range.md.x,
-        e.range.md.y,
         e.range.dmg );
   }
 }
