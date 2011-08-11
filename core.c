@@ -117,6 +117,7 @@ kill_unit (Unit * u){
 
   /* Find unit's node, free unit and node. */
   l_delete_node(&cw->units, unit2node(u));
+  fill_map(selunit);
 }
 
 
@@ -137,9 +138,7 @@ apply_move (Event e){
   Unit * u = id2unit(e.move.u);
   u->mvp -= e.move.cost;
   u->mcrd = e.move.dest;
-  if(selunit==u){
-    fill_map(selunit);
-  }
+  fill_map(selunit);
   if(u->player==cw->id)
     update_fog_after_move(u);
 }
@@ -204,10 +203,8 @@ apply_melee(Event e){
   Unit * u1 = id2unit(e.melee.a);
   Unit * u2 = id2unit(e.melee.d);
   u2->health -= damage;
-  if(u2->health <= 0) {
+  if(u2->health <= 0)
     kill_unit(u2);
-    fill_map(u1);
-  }
   u1->can_attack = false;
 }
 
@@ -219,10 +216,8 @@ apply_range (Event e){
   Unit * ud = id2unit(e.range.d);
   int dmg = e.range.dmg;
   ud->health -= dmg;
-  if(ud->health <= 0){
+  if(ud->health <= 0)
     kill_unit(ud);
-    fill_map(ua);
-  }
   ua->can_attack = false;
 }
 
