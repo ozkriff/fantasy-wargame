@@ -696,7 +696,8 @@ draw_range_event (){
   Unit * u2 = id2unit(e.range.d);
   Scrd a = map2scr(u1->mcrd);
   Scrd b = map2scr(u2->mcrd);
-  int st = mdist(u1->mcrd, u2->mcrd)*steps; /* local [st]eps */
+  int dist = mdist(u1->mcrd, u2->mcrd);
+  int st = dist * steps; /* local [st]eps */
   float dx  = (float)(b.x-a.x)/st;
   float dy  = (float)(b.y-a.y)/st;
 
@@ -704,14 +705,14 @@ draw_range_event (){
   a.y += dy * eindex;
 
   /* Arrow's vertical correction. */
-  vertical_correction = 36 * sin((float)eindex/st*3.14);
+  vertical_correction = dist*14 * sin((float)eindex/st*3.14);
   draw_img(img_arrow, mk_scrd(a.x, a.y-vertical_correction));
 
   /* Draw arrow's 'tail' */
   for(i=1; i<eindex; i++){
     /* Tail's part vertical correction. */
-    int d0 = 36 * sin((float)(i  )/st*3.14);
-    int d1 = 36 * sin((float)(i-1)/st*3.14);
+    int d0 = dist*14 * sin((float)(i  )/st*3.14);
+    int d1 = dist*14 * sin((float)(i-1)/st*3.14);
 
     Scrd n0, n1;
     n0 = n1 = map2scr(u1->mcrd);
