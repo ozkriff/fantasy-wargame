@@ -646,8 +646,7 @@ logic (){
       else if(e.t == EVENT_RANGE){
         Mcrd a = id2unit(e.range.a)->mcrd;
         Mcrd b = id2unit(e.range.d)->mcrd;
-        int st = sdist(map2scr(a), map2scr(b))/steps;
-        if(eindex == st){
+        if(eindex == mdist(a, b)*steps){
           apply_event(e);
           mode = MODE_SELECT;
           logic();
@@ -697,7 +696,7 @@ draw_range_event (){
   Unit * u2 = id2unit(e.range.d);
   Scrd a = map2scr(u1->mcrd);
   Scrd b = map2scr(u2->mcrd);
-  int st = sdist(a,b)/steps; /* local [st]eps */
+  int st = mdist(u1->mcrd, u2->mcrd)*steps; /* local [st]eps */
   float dx  = (float)(b.x-a.x)/st;
   float dy  = (float)(b.y-a.y)/st;
 
