@@ -1,8 +1,8 @@
 
 all: ui_sdl ui_cli server
 
-#CFLAGS=-g -ansi -std=c89 -Wall -Wextra --pedantic
-CFLAGS=-O3
+CFLAGS=-g -ansi -std=c89 -Wall -Wextra --pedantic
+#CFLAGS=-O3
 #CFLAGS=-g -O0
 
 CC=gcc
