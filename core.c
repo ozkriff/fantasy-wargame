@@ -38,7 +38,7 @@ static bool is_event_visible (Event e);
 static void update_units_visibility();
 
 /* initialization */
-static Scenario read_config(char * filename);
+static Scenario parse_scenario_file(char * filename);
 static void create_local_world (int id, bool is_ai);
 static void create_local_human (int id);
 static void create_local_ai    (int id);
@@ -610,7 +610,7 @@ read_map (char *fname, Mcrd *size){
 
 
 static Scenario
-read_config (char * filename){
+parse_scenario_file (char * filename){
   FILE * f = fopen(filename, "r");
   char s[100];
   Scenario sc = {NULL, {0, 0}, {NULL, NULL, 0}};
@@ -699,7 +699,7 @@ local_arguments (int ac, char ** av)
       create_local_human(id);
     }
   }
-  apply_scenario_to_all_worlds(read_config(av[2]));
+  apply_scenario_to_all_worlds(parse_scenario_file(av[2]));
   is_local = true;
 }
 
@@ -731,7 +731,7 @@ net_arguments (int ac, char ** av){
   send_int_as_uint8(no_players_left_mark);
 
   get_scenario_name_from_server(scenarioname);
-  apply_scenario_to_all_worlds(read_config(scenarioname));
+  apply_scenario_to_all_worlds(parse_scenario_file(scenarioname));
   is_local = false;
 }
 
