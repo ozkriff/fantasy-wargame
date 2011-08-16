@@ -86,3 +86,17 @@ defstruct {
   int    id;
 } World;
 
+
+defstruct {
+  Mcrd m; /*map position*/
+  int  player;
+  int  type;
+} Initial_unit_info;
+
+
+defstruct {
+  Tile *map;
+  Mcrd map_size;
+  List units;
+} Scenario;
+

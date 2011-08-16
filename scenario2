@@ -2,32 +2,7 @@
 # number of players
 [NUM-OF-PLAYERS] 2
 
-# map size (x,y)
-[MAP-SIZE] 7 14
-
-
-# map
-# . - grass
-# t - trees
-# * - water
-# h - hills
-# M - mounteens
-
-[MAP]
- . . * . . . *
-. . . t . M . 
- . . . . . . .
-. . . . . . . 
- . . . . . . .
-. . . . . . . 
- . . . . . * .
-. . * * * . . 
- . * h h * . .
-. * h M h * . 
- . * h h * . .
-. . * * * . . 
- . . . . . . .
-. . . . . . . 
+[MAP] map1
 
 # units
 # player x y type

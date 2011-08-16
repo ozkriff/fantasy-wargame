@@ -38,7 +38,7 @@ static bool is_event_visible (Event e);
 static void update_units_visibility();
 
 /* initialization */
-static void read_config(char * filename);
+static Scenario read_config(char * filename);
 static void create_local_world (int id, bool is_ai);
 static void create_local_human (int id);
 static void create_local_ai    (int id);
@@ -565,58 +565,99 @@ add_default_features_to_unit (Unit * u){
 }
 
 
-
-static void
-read_config(char * filename){
-  FILE * cfg = fopen(filename, "r");
-  char s[100]; /* buffer */
-  Node * node;
-
-  while( fgets(s, 90, cfg) ){
-    if(s[0]=='#' || s[0]=='\n')
-      continue;
-    if(!strncmp("[MAP-SIZE]", s, 10)){
-      sscanf(s, "[MAP-SIZE] %i %i",
-          &map_size.x, &map_size.y);
-      FOR_EACH_NODE(worlds, node){
-        World * w = node->d;
-        w->map = calloc(map_size.x*map_size.y, sizeof(Tile));
-      }
-    }
-    if(!strncmp("[UNIT]", s, 6)){
-      int plr, x, y, type;
-      sscanf(s, "[UNIT] %i %i %i %i",
-          &plr, &x, &y, &type);
-      FOR_EACH_NODE(worlds, node){
-        add_unit(mk_mcrd(x,y), plr, &utypes[type], node->d);
-      }
-    }
-    if(!strncmp("[MAP]", s, 5)){
-      int mi = 0; /* Index in 'map' array. */
-      while( fgets(s, 90, cfg) && s[0]!='\n'){
-        int i;
-        for(i=0; s[i]; i++){
-          char c = s[i];
-          if(c != ' ' && c != '\n'){
-            FOR_EACH_NODE(worlds, node){
-              World * w = node->d;
-              Tile * t = w->map + mi;
-              if(c=='.') t->type = 0;
-              if(c=='t') t->type = 1;
-              if(c=='*') t->type = 2;
-              if(c=='h') t->type = 3;
-              if(c=='M') t->type = 4;
-            }
-            mi++;
-          }
-        }
-      }
-    }
-  }
-
-  fclose(cfg);
+/*get tile type corresponding to character*/
+/*used in 'read_map'*/
+/*TODO defines*/
+static int
+char2tiletype (char c){
+  if(c=='.') return(0); /*grass    */
+  if(c=='t') return(1); /*forest   */
+  if(c=='*') return(2); /*water    */
+  if(c=='h') return(3); /*hills    */
+  if(c=='M') return(4); /*mounteens*/
+  puts("ERROR in char2tiletype");
+  exit(1);
 }
 
+
+static Tile *
+read_map (char *fname, Mcrd *size){
+  char  s[100];
+  FILE *f;
+  Tile *map;
+	Tile *i; /*used for iteration through 'map'*/
+  f = fopen(fname, "r");
+  fgets(s, 99, f);
+  sscanf(s, "%i %i", &size->x, &size->y);
+  map = malloc(sizeof(Tile) * size->x * size->y);
+  i = map;
+  while(fgets(s, 99, f)){
+    char *c = s;
+    /*skip comments*/
+    if(*c=='#')
+      continue;
+    while(*c!='\0'){
+      if(*c!=' ' && *c!='\n'){
+        i->type = char2tiletype(*c);
+        i++;
+      }
+      c++;
+    }
+  }
+  fclose(f);
+  return(map);
+}
+
+
+static Scenario
+read_config (char * filename){
+  FILE * f = fopen(filename, "r");
+  char s[100];
+  Scenario sc = {NULL, {0, 0}, {NULL, NULL, 0}};
+  while(fgets(s, 99, f)){
+    /*skip comments and empty lines*/
+    if(s[0]=='#' || s[0]=='\n')
+      continue;
+    if(!strncmp("[UNIT]", s, 6)){
+      Initial_unit_info *u =
+          calloc(1, sizeof(Initial_unit_info));
+      sscanf(s, "[UNIT] %i %i %i %i",
+          &u->player, &u->m.x, &u->m.y, &u->type);
+      l_push(&sc.units, u);
+    }
+    if(!strncmp("[MAP]", s, 5)){
+      char map_name[100];
+      sscanf(s, "[MAP] %s", map_name);
+      sc.map = read_map(map_name, &sc.map_size);
+    }
+  }
+  fclose(f);
+  return(sc);
+}
+
+
+static void
+apply_scenario(Scenario sc, World *w){
+  Node * nd;
+  int map_size = sizeof(Tile) * sc.map_size.x * sc.map_size.y;
+  w->map = malloc(map_size);
+  memcpy(w->map, sc.map, map_size);
+  FOR_EACH_NODE(sc.units, nd){
+    Initial_unit_info *u = nd->d;
+    add_unit(u->m, u->player, &utypes[u->type], w);
+  }
+}
+
+
+static void
+apply_scenario_to_all_worlds(Scenario sc){
+  Node * nd;
+  map_size = sc.map_size;
+  FOR_EACH_NODE(worlds, nd){
+    World *w = nd->d;
+    apply_scenario(sc, w);
+  }
+}
 
 
 static void
@@ -658,7 +699,7 @@ local_arguments (int ac, char ** av)
       create_local_human(id);
     }
   }
-  read_config(av[2]);
+  apply_scenario_to_all_worlds(read_config(av[2]));
   is_local = true;
 }
 
@@ -690,7 +731,7 @@ net_arguments (int ac, char ** av){
   send_int_as_uint8(no_players_left_mark);
 
   get_scenario_name_from_server(scenarioname);
-  read_config(scenarioname);
+  apply_scenario_to_all_worlds(read_config(scenarioname));
   is_local = false;
 }
 
