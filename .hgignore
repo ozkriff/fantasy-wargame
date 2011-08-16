@@ -1,0 +1,7 @@
+log
+tags
+ui_sdl
+ui_cli
+server
+\.o
+
