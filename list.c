@@ -20,7 +20,7 @@ l_insert_node (List * list, void * data, Node * after){
     after->n = new;
   }else{
     new->n = list->h;
-    new->p = after;
+    new->p = NULL;
     list->h = new;
   }
   if(new->n)  new->n->p=new;  else  list->t=new;
