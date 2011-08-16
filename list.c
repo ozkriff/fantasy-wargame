@@ -12,14 +12,17 @@
   Only pointer to data is stored, no copying! */
 void
 l_insert_node (List * list, void * data, Node * after){
-  Node * pnode;
   Node * new = malloc(sizeof(Node));
   new->d = data;
-
-  pnode = after ? after : list->h ;
-  new->n = pnode->n;
-  new->p = after;
-  pnode->n = new;
+  if(after){
+    new->n = after->n;
+    new->p = after;
+    after->n = new;
+  }else{
+    new->n = list->h;
+    new->p = after;
+    list->h = new;
+  }
   if(new->n)  new->n->p=new;  else  list->t=new;
   list->count++;
 }
