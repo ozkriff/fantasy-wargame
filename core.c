@@ -850,7 +850,7 @@ select_next_unit (){
 
 
 
-static void
+void
 add_event_local (Event data){
   Node * nd;
   FOR_EACH_NODE(worlds, nd){
@@ -863,7 +863,7 @@ add_event_local (Event data){
 
 
 
-static void
+void
 event2log (Event e){
   if(e.t == EVENT_MOVE){
     fprintf(logfile,

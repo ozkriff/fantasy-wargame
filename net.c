@@ -166,7 +166,8 @@ do_network (){
     get_data(data, &size);
     /*print_data(data, size);*/
     e = mk_event(data);
-    add_event(e);
+    add_event_local(e);
+    event2log(e);
   }
 }
 
