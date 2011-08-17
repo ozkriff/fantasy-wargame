@@ -46,7 +46,8 @@ static void local_arguments (int ac, char ** av);
 static void   net_arguments (int ac, char ** av);
 
 static Event mk_event_move  (Unit * u, Mcrd dest);
-static Event mk_event_melee (Unit * a, Unit * d, int dmg);
+static Event mk_event_melee (Unit * a, Unit * d,
+    int attackers_killed, int defenders_killed);
 static Event mk_event_range (Unit * a, Unit * d, int dmg);
 
 Feature mk_feature_range (int power, int range);
@@ -199,13 +200,15 @@ range_damage (Unit * a, Unit * b){
 
 static void
 apply_melee(Event e){
-  int damage = e.melee.dmg;
-  Unit * u1 = id2unit(e.melee.a);
-  Unit * u2 = id2unit(e.melee.d);
-  u2->health -= damage;
-  if(u2->health <= 0)
-    kill_unit(u2);
-  u1->can_attack = false;
+  Unit * a = id2unit(e.melee.a);
+  Unit * d = id2unit(e.melee.d);
+  a->health -= e.melee.attackers_killed;
+  d->health -= e.melee.defenders_killed;
+  if(a->health <= 0)
+    kill_unit(a);
+  if(d->health <= 0)
+    kill_unit(d);
+  a->can_attack = false;
 }
 
 
@@ -377,12 +380,18 @@ mk_event_move (Unit * u, Mcrd dest){
 
 
 static Event
-mk_event_melee (Unit * a, Unit * d, int dmg){
+mk_event_melee (
+    Unit * a,
+    Unit * d, 
+    int attackers_killed,
+    int defenders_killed)
+{
   Event e;
   e.melee.t   = EVENT_MELEE;
   e.melee.a   = a->id;
   e.melee.d   = d->id;
-  e.melee.dmg = dmg;
+  e.melee.attackers_killed = attackers_killed;
+  e.melee.defenders_killed = defenders_killed;
   return(e);
 }
 
@@ -404,7 +413,7 @@ static bool
 ambush(Mcrd next, Unit * moving_unit){
   Unit * u = find_unit_at(next);
   if(u && u->player != moving_unit->player){
-    add_event( mk_event_melee(u, moving_unit, 1) );
+    add_event( mk_event_melee(u, moving_unit, 1, 3) );
     return(true);
   }else{
     return(false);
@@ -454,19 +463,25 @@ support_range (Unit * a, Unit * d){
 static void
 attack_melee (Unit * a, Unit * d){
   Event melee;
-  Mcrd md = d->mcrd;
+  int attackers_killed, defenders_killed;
 
   support_range(a, d);
 
-  melee = mk_event_melee(a, d, melee_attack_damage(a, d));
+  /* Calculate how many attackers
+    and defenders were killed. */
+  {
+    /* TODO */
+    attackers_killed = 1;
+    defenders_killed = 3;
+  }
+  melee = mk_event_melee(a, d,
+      attackers_killed, defenders_killed);
   add_event( melee );
 
+#if 0
   /* check if opponent is still alive */
   if(d->health - melee.melee.dmg <= 0)
     return;
-
-  /* counterattack */
-  add_event( mk_event_melee(d, a, melee_return_damage(d, a)) );
 
   /* CHeck if unit will flee or panic */
   if(d->health - melee.melee.dmg > d->type->health / 2)
@@ -485,6 +500,7 @@ attack_melee (Unit * a, Unit * d){
       add_event( mk_event_move(d, neib(md, dir3)) );
     }
   }
+#endif
 }
 
 
@@ -875,10 +891,11 @@ event2log (Event e){
   }
   if(e.t == EVENT_MELEE) {
     fprintf(logfile,
-        "MELEE a=%i, d=%i, dmg=%i\n",
+        "MELEE a=%i, d=%i, ak=%i, dk=%i\n",
         e.melee.a,
         e.melee.d,
-        e.melee.dmg );
+        e.melee.attackers_killed,
+        e.melee.defenders_killed );
   }
   if(e.t == EVENT_RANGE) {
     fprintf(logfile,

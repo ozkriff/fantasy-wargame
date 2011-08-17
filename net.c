@@ -56,7 +56,8 @@ mk_event_melee (Byte * d){
   e.t    = EVENT_MELEE;
   e.a    = d[1];
   e.d    = d[2];
-  e.dmg  = d[3];
+  e.attackers_killed = d[3];
+  e.defenders_killed = d[4];
   return(e);
 }
 
@@ -78,13 +79,14 @@ send_move (Event_move e){
 
 static void
 send_melee (Event_melee e){
-  Byte size = 4;
-  Byte d[4];
+  Byte size = 5;
+  Byte d[5];
   SDLNet_TCP_Send(socket, &size, 1);
   d[0] = e.t;
   d[1] = e.a;
   d[2] = e.d;
-  d[3] = e.dmg;
+  d[3] = e.attackers_killed;
+  d[4] = e.defenders_killed;
   SDLNet_TCP_Send(socket, d, size);
 }
 

@@ -67,7 +67,12 @@ typedef union {
 #define EVENT_RANGE  2
 
 defstruct { int t; int u; Mcrd dest; int cost; }  Event_move;
-defstruct { int t; int a, d; int dmg; }  Event_melee;
+defstruct {
+  int t;
+  int a, d;               /* attacker, defender */
+  int attackers_killed;
+  int defenders_killed;
+} Event_melee;
 defstruct { int t; int a, d; int dmg; }  Event_range;
 
 typedef union {
