@@ -55,9 +55,9 @@ mk_event_range (Byte * d){
 static Event_melee
 mk_event_melee (Byte * d){
   Event_melee e;
-  e.t    = EVENT_MELEE;
-  e.a    = d[1];
-  e.d    = d[2];
+  e.t                = EVENT_MELEE;
+  e.a                = d[1];
+  e.d                = d[2];
   e.attackers_killed = d[3];
   e.defenders_killed = d[4];
   return(e);
