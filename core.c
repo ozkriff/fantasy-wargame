@@ -99,6 +99,7 @@ bool    is_active; /* TODO rename! */
 Unit *  selunit = NULL; /* selected unit */
 
 static FILE * logfile;
+static Scenario scenario;
 
 
 /* Find unit's node in cw->units list. */
@@ -739,7 +740,8 @@ local_arguments (int ac, char ** av)
       create_local_human(id);
     }
   }
-  apply_scenario_to_all_worlds(parse_scenario_file(av[2]));
+  scenario = parse_scenario_file(av[2]);
+  apply_scenario_to_all_worlds(scenario);
   is_local = true;
 }
 
@@ -771,7 +773,8 @@ net_arguments (int ac, char ** av){
   send_int_as_uint8(no_players_left_mark);
 
   get_scenario_name_from_server(scenarioname);
-  apply_scenario_to_all_worlds(parse_scenario_file(scenarioname));
+  scenario = parse_scenario_file(scenarioname);
+  apply_scenario_to_all_worlds(scenario);
   is_local = false;
 }
 
