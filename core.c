@@ -664,7 +664,6 @@ parse_scenario_file (char * filename){
     }
     if(!strncmp("[NUM-OF-PLAYERS]", s, 15)){
       sscanf(s, "[NUM-OF-PLAYERS] %i", &sc.players_count);
-      printf("PLAYER COUNT: %i\n", sc.players_count);
     }
     if(!strncmp("[MAP]", s, 5)){
       char map_name[100];
