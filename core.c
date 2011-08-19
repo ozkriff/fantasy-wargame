@@ -143,7 +143,10 @@ update_fog_after_move (Unit * u){
 static void
 apply_move (Event e){
   Unit * u = id2unit(e.move.u);
-  u->mvp -= e.move.cost;
+  if(find_feature(u, FEATURE_IGNR))
+    u->mvp -= e.move.cost;
+  else
+    u->mvp = 0;
   u->mcrd = e.move.dest;
   fill_map(selunit);
   if(u->player==cw->id)
