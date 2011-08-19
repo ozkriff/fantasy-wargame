@@ -106,5 +106,6 @@ defstruct {
   Tile *map;
   Mcrd map_size;
   List units;
+  int  players_count;
 } Scenario;
 
