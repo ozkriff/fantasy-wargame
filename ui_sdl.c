@@ -398,7 +398,7 @@ static void
 mouseclick (SDL_Event e){
   Unit * u;
   Mcrd m;
-  if(mode != MODE_SELECT)
+  if(!is_active || mode != MODE_SELECT)
     return;
   m = scr2map(mk_scrd(e.button.x, e.button.y));
   u = find_unit_at(m);
@@ -495,6 +495,8 @@ select_keys (SDL_Event e){
 static void
 keys (SDL_Event e){
   common_keys(e);
+  if(!is_active)
+    return;
   if(mode == MODE_SELECT)
     select_keys(e);
   else
@@ -651,6 +653,10 @@ logic (){
           mode = MODE_SELECT;
           logic();
         }
+      }else if(e.t == EVENT_ENDTURN){
+        apply_event(e);
+        mode = MODE_SELECT;
+        logic();
       }
     }else{
       if(!is_eq_empty()){

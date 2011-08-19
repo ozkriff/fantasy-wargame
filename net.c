@@ -17,10 +17,12 @@ static SDLNet_SocketSet sockets;
 static Event_move  mk_event_move (Byte * d);
 static Event_range mk_event_range(Byte * d);
 static Event_melee mk_event_melee(Byte * d);
+static Event_endturn mk_event_endturn(Byte * d);
 
 static void        send_move (Event_move e);
 static void        send_melee(Event_melee e);
 static void        send_range(Event_range e);
+static void        send_endturn(Event_endturn e);
 
 static void        get_data (Byte * data, Byte * size);
 static void        print_data (Byte * data, Byte size);
@@ -58,6 +60,17 @@ mk_event_melee (Byte * d){
   e.d    = d[2];
   e.attackers_killed = d[3];
   e.defenders_killed = d[4];
+  return(e);
+}
+
+
+
+static Event_endturn
+mk_event_endturn (Byte * d){
+  Event_endturn e;
+  e.t          = EVENT_ENDTURN;
+  e.old_player = d[1];
+  e.new_player = d[2];
   return(e);
 }
 
@@ -106,6 +119,20 @@ send_range (Event_range e){
 
 
 
+/*  */
+static void
+send_endturn (Event_endturn e){
+  Byte size = 3;
+  Byte d[3];
+  SDLNet_TCP_Send(socket, &size, 1);
+  d[0] = e.t;
+  d[1] = e.old_player;
+  d[2] = e.new_player;
+  SDLNet_TCP_Send(socket, d, size);
+}
+
+
+
 static void
 get_data (Byte * data, Byte * size){
   int bytes_recieved;
@@ -135,6 +162,7 @@ send_event (Event e) {
     case EVENT_MELEE: send_melee(e.melee); break;
     case EVENT_MOVE : send_move (e.move ); break;
     case EVENT_RANGE: send_range(e.range); break;
+    case EVENT_ENDTURN: send_endturn(e.endturn); break;
   }
 }
 
@@ -154,6 +182,7 @@ mk_event (Byte * d){
   if(d[0]==EVENT_MOVE ) e.move  = mk_event_move (d);
   if(d[0]==EVENT_MELEE) e.melee = mk_event_melee(d);
   if(d[0]==EVENT_RANGE) e.range = mk_event_range(d);
+  if(d[0]==EVENT_ENDTURN) e.endturn = mk_event_endturn(d);
   return(e);
 }
 

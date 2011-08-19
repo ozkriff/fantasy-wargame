@@ -26,6 +26,7 @@ static int         range_damage (Unit * a, Unit * b);
 static void apply_move  (Event e);
 static void apply_melee (Event e);
 static void apply_range (Event e);
+static void apply_endturn(Event e);
 
 static void support_range (Unit * a, Unit * d);
 static void attack_melee (Unit * a, Unit * d);
@@ -49,6 +50,7 @@ static Event mk_event_move  (Unit * u, Mcrd dest);
 static Event mk_event_melee (Unit * a, Unit * d,
     int attackers_killed, int defenders_killed);
 static Event mk_event_range (Unit * a, Unit * d, int dmg);
+static Event mk_event_endturn (int old_id, int new_id);
 
 Feature mk_feature_range (int power, int range);
 Feature mk_feature_berserk (int power);
@@ -61,6 +63,8 @@ static void  add_feature (Unit * u, Feature f);
 static void  add_default_features_to_unit (Unit * u);
 static void  add_unit (Mcrd crd, int plr, Unit_type * type, World * wrld);
 
+static void refresh_units ();
+static void check_win ();
 
 
 
@@ -91,6 +95,7 @@ Mcrd    map_size;
 List    worlds;
 World * cw = NULL; /* current world */
 bool    is_local;
+bool    is_active; /* TODO rename! */
 Unit *  selunit = NULL; /* selected unit */
 
 static FILE * logfile;
@@ -142,6 +147,25 @@ apply_move (Event e){
   fill_map(selunit);
   if(u->player==cw->id)
     update_fog_after_move(u);
+}
+
+
+static void
+apply_endturn(Event e){
+  Node *nd;
+  FOR_EACH_NODE(worlds, nd){
+    World *w = nd->d;
+    if(w->id == e.endturn.new_player){
+      cw = w;
+      is_active = true;
+      check_win();
+      refresh_units();
+      updatefog(cw->id);
+      update_units_visibility();
+      return;
+    }
+  }
+  is_active = false;
 }
 
 
@@ -314,23 +338,6 @@ checkunitsleft(){
 
 
 
-/* change |c|urrent |w|orld */
-static void
-change_cw (){
-  Node * nd;
-  FOR_EACH_NODE(worlds, nd){
-    if(cw == (World*)nd->d){
-      if(nd->n)
-        cw = nd->n->d;
-      else
-        cw = worlds.h->d;
-      return;
-    }
-  }
-}
-
-
-
 static void
 refresh_units (){
   Node * node;
@@ -358,12 +365,25 @@ check_win (){
 
 void
 endturn (){
-  change_cw();
-  check_win();
-  refresh_units();
-  updatefog(cw->id);
-  update_units_visibility();
+  int id = cw->id + 1;
+  if(id == worlds.count)
+    id = 0;
+  add_event(mk_event_endturn(cw->id, id));
 }
+
+
+
+
+/*old player's id, new player's id*/
+static Event
+mk_event_endturn (int old_id, int new_id){
+  Event e;
+  e.endturn.t = EVENT_ENDTURN;
+  e.endturn.old_player = old_id;
+  e.endturn.new_player = new_id;
+  return(e);
+}
+
 
 
 
@@ -764,6 +784,7 @@ init (int ac, char ** av){
   updatefog(cw->id);
   update_units_visibility();
   logfile = fopen("log", "w");
+  is_active = true;
 }
 
 
@@ -774,6 +795,7 @@ apply_event (Event e){
     case EVENT_MOVE : apply_move(e);  break;
     case EVENT_MELEE: apply_melee(e); break;
     case EVENT_RANGE: apply_range(e); break;
+    case EVENT_ENDTURN:apply_endturn(e); break;
   }
   update_units_visibility();
 }

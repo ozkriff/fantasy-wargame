@@ -4,6 +4,7 @@ extern Unit *  selunit; /* selected unit */
 extern Unit_type utypes[3];
 extern World * cw; /*current world*/
 extern bool    is_local;
+extern bool    is_active; /* TODO: describe */
 
 void  init (int ac, char ** av);
 void  cleanup();

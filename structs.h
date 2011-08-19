@@ -65,6 +65,7 @@ typedef union {
 #define EVENT_MOVE   0
 #define EVENT_MELEE  1
 #define EVENT_RANGE  2
+#define EVENT_ENDTURN 3
 
 defstruct { int t; int u; Mcrd dest; int cost; }  Event_move;
 defstruct {
@@ -74,12 +75,14 @@ defstruct {
   int defenders_killed;
 } Event_melee;
 defstruct { int t; int a, d; int dmg; }  Event_range;
+defstruct { int t; int old_player, new_player; } Event_endturn;
 
 typedef union {
   int t; /*type*/
   Event_move   move;
   Event_melee  melee;
   Event_range  range;
+  Event_endturn endturn;
 } Event;
 
 
