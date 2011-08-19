@@ -367,7 +367,7 @@ check_win (){
 void
 endturn (){
   int id = cw->id + 1;
-  if(id == worlds.count)
+  if(id == scenario.players_count)
     id = 0;
   add_event(mk_event_endturn(cw->id, id));
 }
