@@ -933,6 +933,12 @@ event2log (Event e){
         e.range.d,
         e.range.dmg );
   }
+  if(e.t == EVENT_ENDTURN) {
+    fprintf(logfile,
+        "TURN %i --> %i\n",
+        e.endturn.old_player,
+        e.endturn.new_player );
+  }
 }
 
 
