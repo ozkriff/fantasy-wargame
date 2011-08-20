@@ -778,7 +778,7 @@ net_arguments (int ac, char ** av){
   scenario = parse_scenario_file(scenarioname);
   apply_scenario_to_all_worlds(scenario);
   is_local = false;
-  add_event(mk_event_endturn(-1, 0));
+  add_event_local(mk_event_endturn(0, 0));
 }
 
 
