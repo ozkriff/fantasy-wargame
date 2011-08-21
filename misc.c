@@ -158,3 +158,10 @@ fixnum (int min, int max, int *n){
     *n = max;
 }
 
+
+
+int
+rnd (int min, int max){
+  return(rand()%(max-min)+min);
+}
+

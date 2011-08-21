@@ -11,6 +11,7 @@ Mcrd   neib (Mcrd a, int i);
 int    opposite_neib_index (int i);
 int    mcrd2index (Mcrd a, Mcrd b);
 void   fixnum (int min, int max, int *n);
+int    rnd (int min, int max);
 
 Feature * find_feature (Unit * u, int type);
 
