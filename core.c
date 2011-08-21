@@ -444,6 +444,7 @@ get_wounds (Unit *a, Unit *d){
   int wounds   = 0; /*possible wounds(may be blocked by armour)*/
   int final    = 0; /*final wounds(not blocked by armour)*/
   int attacks  = a->type->attacks * a->health;
+  /*chances to hit, to wound and to ignore armour. percents.*/
   int to_hit   = 5 + (a->type->melee_skill - d->type->melee_skill);
   int to_wound = 5 + (a->type->strength    - d->type->toughness  );
   int to_as    = 10- d->type->armor;
