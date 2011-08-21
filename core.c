@@ -791,6 +791,19 @@ apply_event (Event e){
 
 
 
+/*called fron add_unit*/
+static int
+new_unit_id (World *w){
+  if(w->units.count > 0){
+    Unit *u = w->units.h->d;
+    return(u->id + 1);
+  }else{
+    return(0);
+  }
+}
+
+
+
 void
 add_unit (
     Mcrd crd,
@@ -805,12 +818,7 @@ add_unit (
   u->can_attack = true;
   u->mcrd       = crd;
   u->type       = type;
-  if(world->units.count > 0){
-    Unit * last_unit = world->units.h->d;
-    u->id = last_unit->id + 1;
-  }else{
-    u->id = 0;
-  }
+  u->id         = new_unit_id(world);
   add_default_features_to_unit(u);
   l_push(&world->units, u);
 }
