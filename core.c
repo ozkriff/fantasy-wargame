@@ -175,16 +175,8 @@ apply_endturn(Event e){
 /* a - shooting unit, a - target */
 static int
 range_damage (Unit * a, Unit * b){
-  int terrain_attack  = a->type->ter_atk[tile(a->mcrd)->type];
-  int terrain_defence = b->type->ter_def[tile(b->mcrd)->type];
-
-  float hp_a = (float)a->health / a->type->health;
-  float hp_b = (float)a->health / a->type->health;
-
-  int attack  = a->type->attack  + terrain_attack  * hp_a;
-  int defence = b->type->defence + terrain_defence * hp_b;
-
-  return(3 * attack/defence);
+  Feature *f = find_feature(a, FEATURE_RNG);
+  return(f->rng.skill);
 }
 
 
