@@ -420,19 +420,20 @@ move (Unit * moving_unit, Mcrd destination){
 /* [a]ttacker, [d]efender */
 static void
 support_range (Unit * a, Unit * d){
+  Event range;
+  Unit * sup;  /* [sup]porter */
   int i;
   for(i=0; i<6; i++){
-    /* [sup]porter */
-    Unit * sup = find_unit_at( neib(d->mcrd, i) );
-    if( sup && sup->player == d->player ){
-      if(find_feature(sup, FEATURE_RNG)){
-        Event range = mk_event_range(sup, a, 2);
-        add_event( range );
-        if(a->health - range.range.dmg <= 0)
-          return;
-      }
+    sup = find_unit_at( neib(d->mcrd, i) );
+    if(sup && sup->player == d->player 
+    && find_feature(sup, FEATURE_RNG)){
+      break;
     }
   }
+  if(i==6)
+    return;
+  range = mk_event_range(sup, a, 2);
+  add_event(range);
 }
 
 
