@@ -11,8 +11,11 @@ defstruct {
   int   see;
   int   morale;
   int   health;
-  int   attack; /* meele damage */
-  int   defence;
+  int   melee_skill;
+  int   strength;
+  int   toughness;
+  int   attacks;
+  int   armor;
   int   mvp;
   char * name;
   int * ter_mvp; /* terrain move cost */

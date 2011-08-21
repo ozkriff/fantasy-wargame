@@ -86,9 +86,9 @@ static int tatk3[5] = {  0, 1,-4, 0, 0 };
 
 /* GLOBAL VARIABLES */
 Unit_type utypes[3] = {
-  {1,5,10,5,6,3,"defc", tmvp1, tdef1, tatk1},
-  {4,5,10,5,4,4,"hunt", tmvp2, tdef2, tatk2},
-  {3,5,10,4,3,3,"arch", tmvp3, tdef3, tatk3} };
+  {1,5,10,  3,3,4,1,3,  3,"defc", tmvp1, tdef1, tatk1},
+  {4,5,10,  3,3,3,2,1,  4,"hunt", tmvp2, tdef2, tatk2},
+  {3,5,10,  2,3,2,1,1,  3,"arch", tmvp3, tdef3, tatk3} };
 Mcrd    map_size;
 List    worlds;
 World * cw = NULL; /* current world */
