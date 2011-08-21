@@ -74,22 +74,17 @@ static int tmvp1[5] = {  1, 4, 8, 4, 9 };
 static int tmvp2[5] = {  1, 2, 4, 3, 6 };
 static int tmvp3[5] = {  1, 3, 8, 4, 9 };
 
-/*terrain defence bonus */
-static int tdef1[5] = {  0, 3,-4, 4, 3 };
-static int tdef2[5] = {  0, 5, 0, 4, 4 };
-static int tdef3[5] = {  0, 5, 0, 4, 4 };
-
-/*terrain attack bonus */
-static int tatk1[5] = {  0, 0,-4, 0, 0 };
-static int tatk2[5] = {  0, 3,-4, 0, 0 };
-static int tatk3[5] = {  0, 1,-4, 0, 0 };
+/*terrain melee_skill bonus */
+static int tms1[5] = {  0, 0,-4, 0, 0 };
+static int tms2[5] = {  0, 3,-4, 0, 0 };
+static int tms3[5] = {  0, 1,-4, 0, 0 };
 
 
 /* GLOBAL VARIABLES */
 Unit_type utypes[3] = {
-  {1,5,10,  3,3,4,1,3,  3,"defc", tmvp1, tdef1, tatk1},
-  {4,5,10,  3,3,3,2,1,  4,"hunt", tmvp2, tdef2, tatk2},
-  {3,5,10,  2,3,2,1,1,  3,"arch", tmvp3, tdef3, tatk3} };
+  {1,5,10,  3,3,4,1,3,  3,"defc", tmvp1, tms1},
+  {4,5,10,  3,3,3,2,1,  4,"hunt", tmvp2, tms2},
+  {3,5,10,  2,3,2,1,1,  3,"arch", tmvp3, tms3} };
 Mcrd    map_size;
 List    worlds;
 World * cw = NULL; /* current world */

@@ -19,8 +19,7 @@ defstruct {
   int   mvp;
   char * name;
   int * ter_mvp; /* terrain move cost */
-  int * ter_def; /* terrain defence bonus */
-  int * ter_atk; /* terrain attack bonus */
+  int * ter_ms; /* melee_skill bonuses at different terrains */
 } Unit_type;
 
 
