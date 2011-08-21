@@ -153,6 +153,7 @@ apply_move (Event e){
 }
 
 
+
 static void
 apply_endturn(Event e){
   Node *nd;
@@ -333,7 +334,6 @@ endturn (){
 
 
 
-
 /*old player's id, new player's id*/
 static Event
 mk_event_endturn (int old_id, int new_id){
@@ -343,7 +343,6 @@ mk_event_endturn (int old_id, int new_id){
   e.endturn.new_player = new_id;
   return(e);
 }
-
 
 
 
