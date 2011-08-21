@@ -150,3 +150,11 @@ find_unit_at (Mcrd crd){
 
 
 
+void
+fixnum (int min, int max, int *n){
+  if(*n < min)
+    *n = min;
+  if(*n > max)
+    *n = max;
+}
+
