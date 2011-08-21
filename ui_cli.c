@@ -134,9 +134,6 @@ void ui_cmd(char * b){
 
 int main(int ac, char **av){
 #if 0
-  init(ac, av);
-#else
-  /* debugging */
   char *s[7] = {
     "./ui-cli",
     "-local",
@@ -145,10 +142,10 @@ int main(int ac, char **av){
     "0",
     "-human",
     "1" };
-  int s_size = 7;
-  init(s_size, s);
-  printf("cw->h->units->count: %d\n", cw->units.count);
+  ac = 7;
+  av = s;
 #endif
+  init(ac, av);
   while(!ui_done){
     printf(">> ");
     fgets(b, 200, stdin);
