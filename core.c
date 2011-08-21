@@ -172,7 +172,7 @@ apply_endturn(Event e){
 
 
 
-/* a - shooting unit, a - target */
+/* a - shooting unit, b - target */
 static int
 range_damage (Unit * a, Unit * b){
   Feature *f = find_feature(a, FEATURE_RNG);
