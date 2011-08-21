@@ -473,19 +473,9 @@ get_wounds (Unit *a, Unit *d){
 static void
 attack_melee (Unit * a, Unit * d){
   Event melee;
-  int attackers_killed, defenders_killed;
-
   support_range(a, d);
-
-  /* Calculate how many attackers
-    and defenders were killed. */
-  {
-    /* TODO */
-    attackers_killed = 1;
-    defenders_killed = 3;
-  }
   melee = mk_event_melee(a, d,
-      attackers_killed, defenders_killed);
+      get_wounds(d,a), get_wounds(a,d));
   add_event( melee );
 
 #if 0
