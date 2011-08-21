@@ -19,8 +19,6 @@ static void kill_unit (Unit * u);
 static void update_fog_after_move (Unit * u);
 static void updatefog (int player);
 
-static int  melee_attack_damage (Unit * a, Unit * b);
-static int  melee_return_damage (Unit * a, Unit * b);
 static int         range_damage (Unit * a, Unit * b);
 
 static void apply_move  (Event e);
@@ -170,41 +168,6 @@ apply_endturn(Event e){
     }
   }
   is_active = false;
-}
-
-
-/* dmg = E(attack_skill) / E(defence_skill) * HPi/HPo * K */
-
-/* a - attacking unit, b - defender */
-static int
-melee_attack_damage (Unit * a, Unit * b){
-  int terrain_attack  = a->type->ter_atk[tile(b->mcrd)->type];
-  int terrain_defence = b->type->ter_def[tile(b->mcrd)->type];
-
-  float hp_a = (float)a->health / a->type->health;
-  float hp_b = (float)a->health / a->type->health;
-
-  int attack  = a->type->attack  + terrain_attack  * hp_a;
-  int defence = b->type->defence + terrain_defence * hp_b;
-
-  return(4 * attack/defence);
-}
-
-
-
-/* a - defender, a - attacking unit */
-static int
-melee_return_damage (Unit * a, Unit * b){
-  int terrain_attack  = a->type->ter_atk[tile(a->mcrd)->type];
-  int terrain_defence = b->type->ter_def[tile(a->mcrd)->type];
-
-  float hp_a = (float)a->health / a->type->health;
-  float hp_b = (float)a->health / a->type->health;
-
-  int attack  = a->type->attack  + terrain_attack  * hp_a;
-  int defence = b->type->defence + terrain_defence * hp_b;
-
-  return(3 * attack/defence);
 }
 
 
