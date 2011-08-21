@@ -177,8 +177,31 @@ apply_endturn(Event e){
 /* a - shooting unit, b - target */
 static int
 range_damage (Unit * a, Unit * b){
-  Feature *f = find_feature(a, FEATURE_RNG);
-  return(f->rng.skill);
+  Feature_range f = find_feature(a, FEATURE_RNG)->rng;
+  int hits        = 0;
+  int wounds      = 0; /*possible wounds(may be blocked by armour)*/
+  int final       = 0; /*final wounds(not blocked by armour)*/
+  int attacks     = a->health;
+  /*chances to hit, to wound and to ignore armour. percents.*/
+  int to_hit      = 2 + f.skill;
+  int to_wound    = 5 + (f.power - b->type->toughness);
+  int to_as       = 10- b->type->armor;
+#if 1
+  int r = rnd(0, 2);
+  to_hit   += rnd(-r, r);
+  to_wound += rnd(-r, r);
+  to_as    += rnd(-r, r);
+#endif
+  fixnum(0, 9, &to_hit);
+  fixnum(0, 9, &to_wound);
+  hits   = attacks * to_hit   / 10;
+  wounds = hits    * to_wound / 10;
+  final  = wounds  * to_as    / 10;
+#if 1
+  printf("hit %i, wound %i, ignoreAS %i ---> [%i -> %i -> %i -> %i]\n",
+      to_hit, to_wound, to_as, attacks, hits, wounds, final);
+#endif
+  return(final);
 }
 
 
