@@ -531,10 +531,7 @@ update_units_visibility (){
     if(u->player == cw->id){
       u->visible = true;
     }else{
-      if(tile(u->mcrd)->fog > 0 && !is_invis(u))
-        u->visible = true;
-      else
-        u->visible = false;
+      u->visible = tile(u->mcrd)->fog>0 && !is_invis(u);
     }
   }
 }
