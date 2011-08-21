@@ -53,7 +53,7 @@ defstruct {
 #define FEATURE_NORETURN  7
 
 defstruct { int t; int power;        } Feature_berserk;
-defstruct { int t; int power, range; } Feature_range;
+defstruct { int t; int skill, power, range; } Feature_range;
 
 typedef union {
   int t; /*type*/

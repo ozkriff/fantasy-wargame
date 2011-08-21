@@ -50,7 +50,7 @@ static Event mk_event_melee (Unit * a, Unit * d,
 static Event mk_event_range (Unit * a, Unit * d, int dmg);
 static Event mk_event_endturn (int old_id, int new_id);
 
-Feature mk_feature_range (int power, int range);
+Feature mk_feature_range (int skill, int power, int range);
 Feature mk_feature_berserk (int power);
 Feature mk_feature_bool (int type);
 
@@ -558,7 +558,7 @@ add_feature (Unit * u, Feature f){
 static void
 add_default_features_to_unit (Unit * u){
   if(u->type == &utypes[2]){ /* archer */
-    add_feature(u, mk_feature_range(5, 4));
+    add_feature(u, mk_feature_range(3, 5, 4));
   }
   if(u->type == &utypes[1]) { /* hunter */
     add_feature(u, mk_feature_bool(FEATURE_IGNR    ));
@@ -802,9 +802,10 @@ add_unit (
 
 
 Feature
-mk_feature_range (int power, int range){
+mk_feature_range (int skill, int power, int range){
   Feature f;
   f.rng.t = FEATURE_RNG;
+  f.rng.skill = skill;
   f.rng.power = power;
   f.rng.range = range;
   return(f);
