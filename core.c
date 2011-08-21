@@ -580,6 +580,7 @@ add_default_features_to_unit (Unit * u){
 }
 
 
+
 /*get tile type corresponding to character*/
 /*used in 'read_map'*/
 /*TODO defines*/
@@ -654,6 +655,7 @@ parse_scenario_file (char * filename){
 }
 
 
+
 static void
 apply_scenario(Scenario sc, World *w){
   Node * nd;
@@ -667,6 +669,7 @@ apply_scenario(Scenario sc, World *w){
 }
 
 
+
 static void
 apply_scenario_to_all_worlds(Scenario sc){
   Node * nd;
@@ -676,6 +679,7 @@ apply_scenario_to_all_worlds(Scenario sc){
     apply_scenario(sc, w);
   }
 }
+
 
 
 static void
