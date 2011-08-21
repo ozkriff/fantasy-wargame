@@ -781,10 +781,10 @@ init (int ac, char ** av){
 void
 apply_event (Event e){
   switch(e.t){
-    case EVENT_MOVE : apply_move(e);  break;
-    case EVENT_MELEE: apply_melee(e); break;
-    case EVENT_RANGE: apply_range(e); break;
-    case EVENT_ENDTURN:apply_endturn(e); break;
+    case EVENT_MOVE:    apply_move(e);    break;
+    case EVENT_MELEE:   apply_melee(e);   break;
+    case EVENT_RANGE:   apply_range(e);   break;
+    case EVENT_ENDTURN: apply_endturn(e); break;
   }
   update_units_visibility();
 }
