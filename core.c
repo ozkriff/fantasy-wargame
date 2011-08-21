@@ -20,7 +20,7 @@ static void update_fog_after_move (Unit * u);
 static void updatefog (int player);
 
 static int  get_wounds (Unit *a, Unit *d);
-static int         range_damage (Unit * a, Unit * b);
+static int  range_damage (Unit * a, Unit * b);
 
 static void apply_move  (Event e);
 static void apply_melee (Event e);
