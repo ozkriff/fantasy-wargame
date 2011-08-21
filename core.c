@@ -19,6 +19,7 @@ static void kill_unit (Unit * u);
 static void update_fog_after_move (Unit * u);
 static void updatefog (int player);
 
+static int  get_wounds (Unit *a, Unit *d);
 static int         range_damage (Unit * a, Unit * b);
 
 static void apply_move  (Event e);
@@ -436,6 +437,35 @@ support_range (Unit * a, Unit * d){
   add_event(range);
 }
 
+
+
+static int
+get_wounds (Unit *a, Unit *d){
+  int hits     = 0;
+  int wounds   = 0; /*possible wounds(may be blocked by armour)*/
+  int final    = 0; /*final wounds(not blocked by armour)*/
+  int attacks  = a->type->attacks * a->health;
+  int to_hit   = 5 + (a->type->melee_skill - d->type->melee_skill);
+  int to_wound = 5 + (a->type->strength    - d->type->toughness  );
+  int to_as    = 10- d->type->armor;
+#if 1
+  int r = 1;
+  to_hit   += rnd(-r, r);
+  to_wound += rnd(-r, r);
+  to_as    += rnd(-r, r);
+#endif
+  fixnum(0, 9, &to_hit);
+  fixnum(0, 9, &to_wound);
+  hits   = attacks * to_hit   / 10;
+  wounds = hits    * to_wound / 10;
+  final  = wounds  * to_as    / 10;
+#if 1
+  printf("hit %i, wound %i, ignoreAS %i ---> [%i -> %i -> %i -> %i]\n",
+      to_hit, to_wound, to_as, attacks, hits, wounds, final);
+#endif
+  return(final);
+}
+ 
 
 
 /* [a]ttacker, [d]efender */
