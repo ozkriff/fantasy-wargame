@@ -29,7 +29,7 @@ push (Mcrd crd, Mcrd parent, int newcost) {
 
 static Mcrd
 pop (){
-  Mcrd * tmp = (Mcrd*)l_pop(&stack);
+  Mcrd * tmp = l_pop(&stack);
   Mcrd m = *tmp;
   free(tmp);
   return( m );
