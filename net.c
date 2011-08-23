@@ -25,7 +25,7 @@ static void        send_range(Event_range e);
 static void        send_endturn(Event_endturn e);
 
 static void        get_data (Byte * data, Byte * size);
-static void        print_data (Byte * data, Byte size);
+/*static void        print_data (Byte * data, Byte size);*/
 static Event       mk_event (Byte * d);
 
 
@@ -146,6 +146,8 @@ get_data (Byte * data, Byte * size){
 
 
 
+/* debugging */
+/*
 static void
 print_data (Byte * data, Byte size){
   int i;
@@ -153,6 +155,7 @@ print_data (Byte * data, Byte size){
     printf("%u ", (unsigned int)(data[i]));
   puts("");
 }
+*/
 
 
 
