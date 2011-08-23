@@ -14,15 +14,15 @@ static Stack stack;
 
 
 
+/* Push this coordinates to stack,
+update cost and parent of this tile */
 static void
 push (Mcrd crd, Mcrd parent, int newcost) {
-  Mcrd * m;
-  tile(crd)->cost   = newcost;
-  tile(crd)->parent = parent;
-  
-  m = malloc(sizeof(Mcrd));
+  Mcrd * m = malloc(sizeof(Mcrd));
   *m = crd;
   l_push(&stack, m);
+  tile(crd)->cost   = newcost;
+  tile(crd)->parent = parent;
 }
 
 
