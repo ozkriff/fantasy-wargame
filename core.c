@@ -646,9 +646,9 @@ parse_scenario_file (char * filename){
   FILE * f = fopen(filename, "r");
   char s[100];
   /*player_id x y type_id*/
-  char *s_unit    = "[UNIT] %i %i %i %i";
-  char *s_players = "[NUM-OF-PLAYERS] %i";
-  char *s_map     = "[MAP] %s";
+  char *s_unit    = "unit %i %i %i %i";
+  char *s_players = "players_count %i";
+  char *s_map     = "map_file %s";
   Scenario sc = {NULL, {0, 0}, {NULL, NULL, 0}, 0};
   while(fgets(s, 99, f)){
     /*skip comments and empty lines*/
