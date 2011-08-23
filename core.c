@@ -645,24 +645,27 @@ static Scenario
 parse_scenario_file (char * filename){
   FILE * f = fopen(filename, "r");
   char s[100];
+  /*player_id x y type_id*/
+  char *s_unit    = "[UNIT] %i %i %i %i";
+  char *s_players = "[NUM-OF-PLAYERS] %i";
+  char *s_map     = "[MAP] %s";
   Scenario sc = {NULL, {0, 0}, {NULL, NULL, 0}, 0};
   while(fgets(s, 99, f)){
     /*skip comments and empty lines*/
     if(s[0]=='#' || s[0]=='\n')
       continue;
-    if(!strncmp("[UNIT]", s, 6)){
+    if(strcmp_sp(s, s_unit)){
       Initial_unit_info *u =
           calloc(1, sizeof(Initial_unit_info));
-      sscanf(s, "[UNIT] %i %i %i %i",
+      sscanf(s, s_unit,
           &u->player, &u->m.x, &u->m.y, &u->type);
       l_push(&sc.units, u);
     }
-    if(!strncmp("[NUM-OF-PLAYERS]", s, 15)){
-      sscanf(s, "[NUM-OF-PLAYERS] %i", &sc.players_count);
-    }
-    if(!strncmp("[MAP]", s, 5)){
+    if(strcmp_sp(s, s_players))
+      sscanf(s, s_players, &sc.players_count);
+    if(strcmp_sp(s, s_map)){
       char map_name[100];
-      sscanf(s, "[MAP] %s", map_name);
+      sscanf(s, s_map, map_name);
       sc.map = read_map(map_name, &sc.map_size);
     }
   }
