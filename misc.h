@@ -12,6 +12,7 @@ int    opposite_neib_index (int i);
 int    mcrd2index (Mcrd a, Mcrd b);
 void   fixnum (int min, int max, int *n);
 int    rnd (int min, int max);
+bool   strcmp_sp (char *s1, char *s2);
 
 Feature * find_feature (Unit * u, int type);
 

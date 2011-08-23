@@ -168,3 +168,20 @@ rnd (int min, int max){
     return(max);
 }
 
+
+
+/*Compare strings till first space or tab.
+  strcmp_sp("lo 2 3", "lo %i %i") -> true
+  strcmp_sp("no 2 3", "lo %i %i") -> false */
+bool
+strcmp_sp (char *s1, char *s2){
+  while(s2 && s1){
+    if(*s1 != *s2)
+      return(false);
+    if(*s1==' ' || *s1=='\t')
+      return(true);
+    s1++, s2++;
+  }
+  return(true);
+}
+
