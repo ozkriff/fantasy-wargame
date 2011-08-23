@@ -1,0 +1,19 @@
+name hunter
+see 3
+move 4
+morale 5
+health 10
+melee_skill 2
+strength 3
+toughness 3
+attacks 2
+armor 1
+
+# grass forest water hills mount
+mv 1 2 4 3 6
+ms 0 2 -2 1 1
+
+feature_ignore_zoc
+feature_invisible
+feature_noreturn
+

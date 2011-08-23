@@ -17,9 +17,9 @@ defstruct {
   int   attacks;
   int   armor;
   int   mvp;
-  char * name;
-  int * ter_mvp; /* terrain move cost */
-  int * ter_ms; /* melee_skill bonuses at different terrains */
+  char  name[20];
+  int   ter_mvp[10]; /* terrain move cost */
+  int   ter_ms[10]; /* melee_skill bonuses at different terrains */
 } Unit_type;
 
 

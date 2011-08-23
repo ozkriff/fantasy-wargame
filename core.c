@@ -65,26 +65,15 @@ static void  add_unit (Mcrd crd, int plr, Unit_type * type, World * wrld);
 static void refresh_units ();
 static void check_win ();
 
+Unit_type * parse_type_file (char *fname, Unit_type *t);
 
-
-/* grass forest water hills mount */
-
-/*terrain movepoints */
-static int tmvp1[5] = {  1, 4, 8, 4, 9 };
-static int tmvp2[5] = {  1, 2, 4, 3, 6 };
-static int tmvp3[5] = {  1, 3, 8, 4, 9 };
-
-/*terrain melee_skill bonus */
-static int tms1[5] = {  0, 1,-2, 0, 0 };
-static int tms2[5] = {  0, 2,-2, 1, 1 };
-static int tms3[5] = {  0, 1,-2, 0, 0 };
 
 
 /* GLOBAL VARIABLES */
 Unit_type utypes[3] = {
-  {1,5,10,  3,3,4,1,3,  3,"defc", tmvp1, tms1},
-  {4,5,10,  3,3,3,2,1,  4,"hunt", tmvp2, tms2},
-  {3,5,10,  2,3,2,1,1,  3,"arch", tmvp3, tms3} };
+  {0,0,00,  0,0,0,0,0,  0,"", {0}, {0}},
+  {0,0,00,  0,0,0,0,0,  0,"", {0}, {0}},
+  {0,0,00,  0,0,0,0,0,  0,"", {0}, {0}} };
 Mcrd    map_size;
 List    worlds;
 World * cw = NULL; /* current world */
@@ -784,6 +773,11 @@ net_arguments (int ac, char ** av){
 void
 init (int ac, char ** av){
   srand(time(NULL));
+#if 1
+  parse_type_file("defender", &utypes[0]);
+  parse_type_file("hunter",   &utypes[1]);
+  parse_type_file("archer",   &utypes[2]);
+#endif
   if(!strcmp(av[1], "-local"))
     local_arguments(ac, av);
   if(!strcmp(av[1], "-net"))
@@ -980,4 +974,64 @@ cleanup(){
     l_delete_node(&worlds, worlds.h);
   }
 }
+
+
+/*
+ static Unit_type *
+*/
+Unit_type *
+parse_type_file (char *fname, Unit_type *t){
+  char s[100];
+  char *s_name       = "name %s";
+  char *s_see        = "see %i\n";
+  char *s_move       = "move %i";
+  char *s_morale     = "morale %i";
+  char *s_health     = "health %i";
+  char *s_ms         = "melee_skill %i";
+  char *s_strength   = "strength %i";
+  char *s_toughtness = "toughness %i";
+  char *s_attacks    = "attacks %i";
+  char *s_armor      = "armor %i";
+  char *s_ter_mv     = "mv %i %i %i %i %i";
+  char *s_ter_ms     = "ms %i %i %i %i %i";
+#if 0
+  char *s_f_ignore   = "feature_ignore_zoc";
+  char *s_f_invis    = "feature_invisible";
+  char *s_f_noreturn = "feature_noreturn";
+  char *s_f_range    = "feature_range %i %i %i";
+  Unit_type *t = malloc(sizeof(Unit_type));
+#endif
+  FILE *f = fopen(fname, "r");
+  while(fgets(s, 99, f)){
+    if(strcmp_sp(s,s_name))       sscanf(s,s_name,      &t->name);
+    if(strcmp_sp(s,s_see ))       sscanf(s,s_see,       &t->see);
+    if(strcmp_sp(s,s_move))       sscanf(s,s_move,      &t->mvp);
+    if(strcmp_sp(s,s_morale))     sscanf(s,s_morale,    &t->morale);
+    if(strcmp_sp(s,s_health))     sscanf(s,s_health,    &t->health);
+    if(strcmp_sp(s,s_ms))         sscanf(s,s_ms,        &t->melee_skill);
+    if(strcmp_sp(s,s_strength))   sscanf(s,s_strength,  &t->strength);
+    if(strcmp_sp(s,s_toughtness)) sscanf(s,s_toughtness,&t->toughness);
+    if(strcmp_sp(s,s_attacks))    sscanf(s,s_attacks,   &t->attacks);
+    if(strcmp_sp(s,s_armor))      sscanf(s,s_armor,     &t->armor);
+    if(strcmp_sp(s,s_ter_mv)){
+      sscanf(s, s_ter_mv,
+         &t->ter_mvp[0],
+         &t->ter_mvp[1],
+         &t->ter_mvp[2],
+         &t->ter_mvp[3],
+         &t->ter_mvp[4] );
+    }
+    if(strcmp_sp(s,s_ter_ms)){
+      sscanf(s, s_ter_ms,
+         &t->ter_ms[0],
+         &t->ter_ms[1],
+         &t->ter_ms[2],
+         &t->ter_ms[3],
+         &t->ter_ms[4] );
+    }
+  }
+  fclose(f);
+  return(t);
+}
+
 

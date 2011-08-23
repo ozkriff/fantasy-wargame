@@ -1,0 +1,15 @@
+name defender
+see 1
+move 3
+morale 5
+health 10
+melee_skill 3
+strength 3
+toughness 4
+attacks 1
+armor 3
+
+# grass forest water hills mount
+mv 1 4 8 4 9
+ms 0 1 -2 0 0
+
