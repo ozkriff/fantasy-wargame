@@ -63,10 +63,6 @@ static void
 process_nbh (Unit * u, Mcrd t, Mcrd nb){
   Unit * u2;
   int n, newcost;
-  
-  if( ! inboard(nb) )
-    return;
-
   /* For not to pass through visible enemy. */
   u2 = find_unit_at(nb);
   if(u2 && u2->player!=u->player
@@ -99,8 +95,11 @@ fill_map (Unit * u) {
   while(stack.count>0){
     Mcrd t = pop();
     int i;
-    for(i=0; i<6; i++)
-      process_nbh(u, t, neib(t, i));
+    for(i=0; i<6; i++){
+      Mcrd nb = neib(t, i);
+      if(inboard(nb))
+        process_nbh(u, t, nb);
+    }
   }
 	while(stack.count > 0)
 		l_delete_node(&stack, stack.h);
