@@ -162,6 +162,9 @@ fixnum (int min, int max, int *n){
 
 int
 rnd (int min, int max){
-  return(rand()%(max-min)+min);
+  if(max != min)
+    return(rand()%(max-min)+min);
+  else
+    return(max);
 }
 
