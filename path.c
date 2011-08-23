@@ -40,12 +40,8 @@ pop (){
 /* zone of control */
 static int
 zoc (Mcrd a, Unit * u, int cost){
-  int mvp;
   int i;
-  if(find_feature(u, FEATURE_IGNR))
-    return(cost);
-
-  mvp = u->type->mvp;
+  int mvp = u->type->mvp;
   for(i=0; i<6; i++){
     Mcrd n = neib(a, i);
     Unit * u2 = find_unit_at(n);
@@ -78,8 +74,11 @@ process_nbh (Unit * u, Mcrd t, Mcrd nb){
   && u2->visible)
     return;
 
-  n       = u->type->ter_mvp[tile(nb)->type];
-  newcost = zoc(nb, u, tile(t)->cost + n);
+  n = u->type->ter_mvp[tile(nb)->type];
+  if(find_feature(u, FEATURE_IGNR))
+    newcost = zoc(nb, u, tile(t)->cost + n);
+  else
+    newcost = tile(t)->cost;
 
   if(tile(nb)->cost>newcost && newcost<=u->type->mvp)
     push(nb, t, newcost);
