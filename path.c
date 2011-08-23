@@ -69,13 +69,11 @@ process_nbh (Unit * u, Mcrd t, Mcrd nb){
   && tile(nb)->fog>0
   && u2->visible)
     return;
-
   n = u->type->ter_mvp[tile(nb)->type];
   if(find_feature(u, FEATURE_IGNR))
     newcost = tile(t)->cost + n;
   else
     newcost = zoc(nb, u, tile(t)->cost + n);
-
   if(tile(nb)->cost>newcost && newcost<=u->type->mvp)
     push(nb, t, newcost);
 }
