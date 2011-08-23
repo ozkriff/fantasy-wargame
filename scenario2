@@ -1,10 +1,8 @@
 
-# number of players
 players_count 2
 
 map_file map1
 
-# units
 # player x y type
 # types: {def, hunter, archer}
 unit 0 1 2 0
