@@ -72,7 +72,7 @@ static void draw_units ();
 static void draw_move_event ();
 static void draw_melee_event ();
 static void draw_possible_tiles ();
-static void maptext ();
+/*static void maptext ();*/
 static void draw_range_event ();
 static void keys (SDL_Event e);
 static void mouseclick (SDL_Event e);
@@ -307,6 +307,8 @@ draw_possible_tiles(){
 
 
 
+/*debugging*/
+/*
 static void
 maptext (){
   char str[40];
@@ -322,6 +324,7 @@ maptext (){
     }
   }
 }
+*/
 
 
 
