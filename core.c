@@ -441,14 +441,13 @@ add_feature (Unit * u, Feature f){
 
 /*get tile type corresponding to character*/
 /*used in 'read_map'*/
-/*TODO defines*/
 static int
 char2tiletype (char c){
-  if(c=='.') return(0); /*grass    */
-  if(c=='t') return(1); /*forest   */
-  if(c=='*') return(2); /*water    */
-  if(c=='h') return(3); /*hills    */
-  if(c=='M') return(4); /*mounteens*/
+  if(c=='.') return(TILE_GRASS);
+  if(c=='t') return(TILE_FOREST);
+  if(c=='*') return(TILE_WATER);
+  if(c=='h') return(TILE_HILLS);
+  if(c=='M') return(TILE_MOUNTEENS);
   puts("ERROR in char2tiletype");
   exit(1);
 }

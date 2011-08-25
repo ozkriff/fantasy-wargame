@@ -37,6 +37,12 @@ defstruct {
 } Unit;
 
 
+/*Tile.type*/
+#define TILE_GRASS 0
+#define TILE_FOREST 1
+#define TILE_WATER 2
+#define TILE_HILLS 3
+#define TILE_MOUNTEENS 4
 
 defstruct {
   int  fog;  /* fog of war. how many units see this tile. */
