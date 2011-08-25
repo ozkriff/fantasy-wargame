@@ -11,8 +11,6 @@
 #include "misc.h"
 #include "ai.h"
 
-static void ai_attack(Unit * u);
-static void ai_movement(Unit * u);
 
 /* if there is enemy at adjustment cell then attack it */
 static void
