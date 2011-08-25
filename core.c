@@ -51,9 +51,9 @@ static Event mk_event_melee (Unit * a, Unit * d,
 static Event mk_event_range (Unit * a, Unit * d, int dmg);
 static Event mk_event_endturn (int old_id, int new_id);
 
-Feature mk_feature_range (int skill, int power, int range);
-Feature mk_feature_berserk (int power);
-Feature mk_feature_bool (int type);
+static Feature mk_feature_range (int skill, int power, int range);
+static Feature mk_feature_berserk (int power);
+static Feature mk_feature_bool (int type);
 
 static bool   is_invis (Unit * u);
 static Node * unit2node (Unit * u);
@@ -721,7 +721,7 @@ new_unit_id (World *w){
 
 
 
-Feature
+static Feature
 mk_feature_range (int skill, int power, int range){
   Feature f;
   f.rng.t = FEATURE_RNG;
@@ -733,7 +733,7 @@ mk_feature_range (int skill, int power, int range){
 
 
 
-Feature
+static Feature
 mk_feature_berserk (int power){
   Feature f;
   f.brsk.t = FEATURE_BRSK;
@@ -743,7 +743,7 @@ mk_feature_berserk (int power){
 
 
 
-Feature
+static Feature
 mk_feature_bool (int type){
   Feature f;
   f.t = type;
