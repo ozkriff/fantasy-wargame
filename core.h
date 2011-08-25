@@ -15,6 +15,7 @@ void  select_next_unit ();
 void  endturn ();
 
 void  update_eq ();
+bool  is_eq_empty ();
 Event get_next_event ();
 void  apply_event (Event e);
 

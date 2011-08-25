@@ -582,14 +582,6 @@ sdl_events (){
 
 
 
-static bool
-is_eq_empty(){
-	update_eq();
-  return(cw->eq.count == 0);
-}
-
-
-
 static int
 get_last_event_index (Event e){
   if(e.t == EVENT_ENDTURN)

@@ -936,3 +936,11 @@ add_unit (
   l_push(&world->units, u);
 }
 
+
+
+bool
+is_eq_empty (){
+  update_eq();
+  return(cw->eq.count == 0);
+}
+
