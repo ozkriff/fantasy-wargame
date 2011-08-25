@@ -91,7 +91,7 @@ static void init_draw ();
 static void sdl_events ();
 
 static bool is_eq_empty();
-static void logic ();
+static void events ();
 
 
 
@@ -588,7 +588,7 @@ mainloop(){
     if(!is_local)
       do_network();
     sdl_events();
-    logic();
+    events();
     draw();
     SDL_Delay(1*33);
   }
@@ -646,7 +646,7 @@ is_event_shown (int progress, Event e){
 
 
 static void
-logic (){
+events (){
   if(mode == MODE_SHOW_EVENT)
     eindex++;
   if(mode==MODE_SHOW_EVENT && is_event_shown(eindex, e)){
