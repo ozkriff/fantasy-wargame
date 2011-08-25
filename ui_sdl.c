@@ -386,40 +386,18 @@ draw_melee_event (){
 
 
 
-/* TODO: rewrite. */
 static void
 draw_range_event (){
-  int i;
-  int vertical_correction;
-  Unit * u1 = id2unit(e.range.a);
-  Unit * u2 = id2unit(e.range.d);
-  Scrd a = map2scr(u1->mcrd);
-  Scrd b = map2scr(u2->mcrd);
+  Unit *u1 = id2unit(e.range.a);
+  Unit *u2 = id2unit(e.range.d);
   int dist = mdist(u1->mcrd, u2->mcrd);
-  int st = dist * steps; /* local [st]eps */
-  float dx  = (float)(b.x-a.x)/st;
-  float dy  = (float)(b.y-a.y)/st;
-
-  a.x += dx * eindex;
-  a.y += dy * eindex;
-
-  /* Arrow's vertical correction. */
-  vertical_correction = dist*14 * sin((float)eindex/st*3.14);
-  draw_img(img_arrow, mk_scrd(a.x, a.y-vertical_correction));
-
-  /* Draw arrow's 'tail' */
-  for(i=1; i<eindex; i++){
-    /* Tail's part vertical correction. */
-    int d0 = dist*14 * sin((float)(i  )/st*3.14);
-    int d1 = dist*14 * sin((float)(i-1)/st*3.14);
-
-    Scrd n0, n1;
-    n0 = n1 = map2scr(u1->mcrd);
-    n0.x += 36+ dx*(i  );  n0.y += 36+ dy*(i  )-d0;
-    n1.x += 36+ dx*(i-1);  n1.y += 36+ dy*(i-1)-d1;
-
-    bzline(n0, n1, red);
-  }
+  /*[v]ertical [c]orrection*/
+  int vc   = dist*14 * sin((eindex*3.14)/eindex_last);
+  Scrd a   = map2scr(u1->mcrd);
+  Scrd b   = map2scr(u2->mcrd);
+  a.x     += ((b.x-a.x)*eindex)/eindex_last;
+  a.y     += ((b.y-a.y)*eindex)/eindex_last;
+  draw_img(img_arrow, mk_scrd(a.x, a.y-vc));
 }
 
 
