@@ -51,6 +51,9 @@ static Event e;    /* current [e]vent */
 /* event progress? */
 /* Internal index of event visualisation. */
 static int eindex;
+
+/*If eindex==eindex=last, then event is shown.*/
+static int eindex_last; 
 int steps = 6;
 
 static bool done;
@@ -609,18 +612,18 @@ is_eq_empty(){
 
 
 
-static bool
-is_event_shown (int progress, Event e){
+static int
+get_last_event_index (Event e){
   if(e.t == EVENT_ENDTURN)
-    return(true);
+    return(0);
   else if(e.t == EVENT_MOVE || e.t == EVENT_MELEE)
-    return(progress == steps-1);
+    return(steps-1);
   else if(e.t == EVENT_RANGE){
     Mcrd a = id2unit(e.range.a)->mcrd;
     Mcrd b = id2unit(e.range.d)->mcrd;
-    return(progress == mdist(a, b)*steps);
+    return(mdist(a, b)*steps);
   }else
-    return(false);
+    return(0);
 }
 
 
@@ -629,7 +632,7 @@ static void
 events (){
   if(ui_mode == MODE_SHOW_EVENT)
     eindex++;
-  if(ui_mode==MODE_SHOW_EVENT && is_event_shown(eindex, e)){
+  if(ui_mode==MODE_SHOW_EVENT && eindex >= eindex_last){
     apply_event(e);
     ui_mode = MODE_SELECT;
   }
@@ -637,6 +640,7 @@ events (){
     e = get_next_event();
     ui_mode = MODE_SHOW_EVENT;
     eindex = 0;
+    eindex_last = get_last_event_index(e);
   }
 }
 
