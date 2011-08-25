@@ -14,19 +14,6 @@
 static TCPsocket socket;
 static SDLNet_SocketSet sockets;
 
-static Event_move  mk_event_move (Byte * d);
-static Event_range mk_event_range(Byte * d);
-static Event_melee mk_event_melee(Byte * d);
-static Event_endturn mk_event_endturn(Byte * d);
-
-static void        send_move (Event_move e);
-static void        send_melee(Event_melee e);
-static void        send_range(Event_range e);
-static void        send_endturn(Event_endturn e);
-
-static void        get_data (Byte * data, Byte * size);
-/*static void        print_data (Byte * data, Byte size);*/
-static Event       mk_event (Byte * d);
 
 
 static Event_move
