@@ -35,11 +35,10 @@ mk_mcrd (int x, int y){
 
 Feature *
 find_feature(Unit * u, int type){
-  Node * node;
-  FOR_EACH_NODE(u->features, node){
-    Feature * f = node->d;
-    if(f->t == type)
-      return(f);
+  int i;
+  for(i=0; i<u->features_n; i++){
+    if(u->features[i].t == type)
+      return(&u->features[i]);
   }
   return(NULL);
 }

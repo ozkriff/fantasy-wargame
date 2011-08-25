@@ -24,34 +24,6 @@ defstruct {
 
 
 
-defstruct {
-  Unit_type *t;
-  int   id;
-  int   count;
-  int   player;
-  bool  can_attack;
-  int   mvp;
-  Mcrd  m;
-  List  features;
-  bool  visible;
-} Unit;
-
-
-/*Tile.type*/
-#define TILE_GRASS 0
-#define TILE_FOREST 1
-#define TILE_WATER 2
-#define TILE_HILLS 3
-#define TILE_MOUNTEENS 4
-
-defstruct {
-  int  fog;  /* fog of war. how many units see this tile. */
-  int  cost; /* cost of path for selunit to this tile */
-  int  t; /*type*/
-  Mcrd parent; /* used in pathfinding */
-} Tile;
-
-
 #define FEATURE_RNG       1
 #define FEATURE_BRSK      2
 #define FEATURE_INVIS     3
@@ -69,6 +41,35 @@ typedef union {
   Feature_berserk  brsk;
 } Feature;
 
+
+
+defstruct {
+  Unit_type *t;
+  int   id;
+  int   count;
+  int   player;
+  bool  can_attack;
+  int   mvp;
+  Mcrd  m;
+  Feature features[10];
+  int     features_n;
+  bool  visible;
+} Unit;
+
+
+/*Tile.type*/
+#define TILE_GRASS 0
+#define TILE_FOREST 1
+#define TILE_WATER 2
+#define TILE_HILLS 3
+#define TILE_MOUNTEENS 4
+
+defstruct {
+  int  fog;  /* fog of war. how many units see this tile. */
+  int  cost; /* cost of path for selunit to this tile */
+  int  t; /*type*/
+  Mcrd parent; /* used in pathfinding */
+} Tile;
 
 #define EVENT_MOVE   0
 #define EVENT_MELEE  1

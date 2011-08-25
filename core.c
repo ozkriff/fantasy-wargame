@@ -59,10 +59,6 @@ kill_unit (Unit * u){
   if(u == selunit)
     selunit = NULL;
 
-  /* Delete fatures list. */
-  while(u->features.count > 0)
-    l_delete_node(&u->features, u->features.h);
-
   /* Find unit's node, free unit and node. */
   l_delete_node(&cw->units, unit2node(u));
   fill_map(selunit);
@@ -433,9 +429,8 @@ update_units_visibility (){
 
 static void
 add_feature (Unit * u, Feature f){
-  Feature * new_f = malloc(sizeof(Feature));
-  *new_f = f;
-  l_push(&u->features, new_f);
+  u->features_n++;
+  u->features[u->features_n-1] = f;
 }
 
 
@@ -803,12 +798,8 @@ cleanup(){
     World * w = worlds.h->d;
     while(w->eq.count > 0)
       l_delete_node(&w->eq, w->eq.h);
-    while(w->units.count > 0){
-      Unit * u = w->units.h->d;
-      while(u->features.count > 0)
-        l_delete_node(&u->features, u->features.h);
+    while(w->units.count > 0)
 			l_delete_node(&w->units, w->units.h);
-    }
     free(w->map);
     l_delete_node(&worlds, worlds.h);
   }
@@ -934,6 +925,7 @@ add_unit (
   u->m          = crd;
   u->t          = type;
   u->id         = new_unit_id(world);
+  u->features_n = 0;
   add_default_features_to_unit(u);
   l_push(&world->units, u);
 }
