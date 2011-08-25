@@ -35,8 +35,6 @@ static Img img_rings[10];
 
 static TTF_Font * font = NULL;
 
-static bool animation = true;
-
 static Vec2i map_offset = {72, 72/4};
 
 Uint32 red, black, green, blue, white;
