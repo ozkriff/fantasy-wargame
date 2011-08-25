@@ -629,48 +629,34 @@ is_eq_empty(){
 
 
 
+static bool
+is_event_shown (int progress, Event e){
+  if(e.t == EVENT_ENDTURN)
+    return(true);
+  else if(e.t == EVENT_MOVE || e.t == EVENT_MELEE)
+    return(progress == steps-1);
+  else if(e.t == EVENT_RANGE){
+    Mcrd a = id2unit(e.range.a)->mcrd;
+    Mcrd b = id2unit(e.range.d)->mcrd;
+    return(progress == mdist(a, b)*steps);
+  }else
+    return(false);
+}
+
+
+
 static void
 logic (){
-  if(animation){
-    if(mode == MODE_SHOW_EVENT){
-      eindex++;
-      if(e.t == EVENT_MOVE){
-        if(eindex == steps-1){
-          apply_event(e);
-          mode = MODE_SELECT;
-          logic();
-        }
-      }
-      else if(e.t == EVENT_MELEE){
-        if(eindex == steps-1){
-          apply_event(e);
-          mode = MODE_SELECT;
-          logic();
-        }
-      }
-      else if(e.t == EVENT_RANGE){
-        Mcrd a = id2unit(e.range.a)->mcrd;
-        Mcrd b = id2unit(e.range.d)->mcrd;
-        if(eindex == mdist(a, b)*steps){
-          apply_event(e);
-          mode = MODE_SELECT;
-          logic();
-        }
-      }else if(e.t == EVENT_ENDTURN){
-        apply_event(e);
-        mode = MODE_SELECT;
-        logic();
-      }
-    }else{
-      if(!is_eq_empty()){
-        e = get_next_event();
-        mode = MODE_SHOW_EVENT;
-        eindex = 0;
-      }
-    }
-  }else{
-    while(!is_eq_empty())
-      apply_event(get_next_event());
+  if(mode == MODE_SHOW_EVENT)
+    eindex++;
+  if(mode==MODE_SHOW_EVENT && is_event_shown(eindex, e)){
+    apply_event(e);
+    mode = MODE_SELECT;
+  }
+  if(mode == MODE_SELECT && !is_eq_empty()){
+    e = get_next_event();
+    mode = MODE_SHOW_EVENT;
+    eindex = 0;
   }
 }
 
