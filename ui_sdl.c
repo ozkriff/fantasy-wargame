@@ -40,7 +40,7 @@ static Vec2i map_offset = {72, 72/4};
 Uint32 red, black, green, blue, white;
 
 /* mouse points to this hex */
-static Mcrd selhex; /* selected hex */
+static Mcrd selected_tile; /* selected hex */
 
 #define MODE_SELECT     0
 #define MODE_SHOW_EVENT 1
@@ -431,7 +431,7 @@ draw (){
     draw_possible_tiles();
   if(selunit)
     draw_img(img_selected_hex, map2scr(selunit->mcrd));
-  draw_img(img_selected_hex, map2scr(selhex));
+  draw_img(img_selected_hex, map2scr(selected_tile));
   draw_units();
   if(ui_mode==MODE_SHOW_EVENT)
     draw_event();
@@ -466,7 +466,7 @@ init_draw (){
   font = TTF_OpenFont("font.ttf", 12);
   load_sprites();
   init_colors();
-  selhex = mk_mcrd(-1,-1);
+  selected_tile = mk_mcrd(-1,-1);
 }
 
 
@@ -500,7 +500,7 @@ mouseclick (SDL_Event e){
 
 static void
 mousemove (SDL_Event e){
-  selhex = scr2map(mk_scrd(e.button.x, e.button.y));
+  selected_tile = scr2map(mk_scrd(e.button.x, e.button.y));
 }
 
 
@@ -542,7 +542,7 @@ select_keys (SDL_Event e){
       endturn();
       selunit=0;
       break;
-    /*case SDLK_r:     change_tile(selhex);break;*/
+    /*case SDLK_r:     change_tile(selected_tile);break;*/
     case SDLK_n:     select_next_unit(); break;
     default: break;
   }
