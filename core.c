@@ -12,59 +12,6 @@
 #include "core_private.h"
 #include "net.h"
 
-static bool checkunitsleft ();
-
-static void kill_unit (Unit * u);
-
-static void update_fog_after_move (Unit * u);
-static void updatefog (int player);
-
-static int  get_wounds (Unit *a, Unit *d);
-static int  range_damage (Unit * a, Unit * b);
-
-static void apply_move  (Event e);
-static void apply_melee (Event e);
-static void apply_range (Event e);
-static void apply_endturn(Event e);
-
-static void support_range (Unit * a, Unit * d);
-static void attack_melee (Unit * a, Unit * d);
-
-static bool  is_move_visible (Event e);
-static bool is_melee_visible (Event e);
-static bool is_range_visible (Event e);
-static bool is_event_visible (Event e);
-
-static void update_units_visibility();
-
-/* initialization */
-static Scenario parse_scenario_file(char * filename);
-static void create_local_world (int id, bool is_ai);
-static void create_local_human (int id);
-static void create_local_ai    (int id);
-static void local_arguments (int ac, char ** av);
-static void   net_arguments (int ac, char ** av);
-
-static Event mk_event_move  (Unit * u, Mcrd dest);
-static Event mk_event_melee (Unit * a, Unit * d,
-    int attackers_killed, int defenders_killed);
-static Event mk_event_range (Unit * a, Unit * d, int dmg);
-static Event mk_event_endturn (int old_id, int new_id);
-
-static Feature mk_feature_range (int skill, int power, int range);
-static Feature mk_feature_berserk (int power);
-static Feature mk_feature_bool (int type);
-
-static bool   is_invis (Unit * u);
-static Node * unit2node (Unit * u);
-
-static void  add_feature (Unit * u, Feature f);
-static void  add_default_features_to_unit (Unit * u);
-static void  add_unit (Mcrd crd, int plr, Unit_type * type, World * wrld);
-
-static void refresh_units ();
-static void check_win ();
-
 
 
 /* grass forest water hills mount */
@@ -149,26 +96,6 @@ apply_move (Event e){
 
 
 
-static void
-apply_endturn(Event e){
-  Node *nd;
-  FOR_EACH_NODE(worlds, nd){
-    World *w = nd->d;
-    if(w->id == e.endturn.new_player){
-      cw = w;
-      is_active = true;
-      check_win();
-      refresh_units();
-      updatefog(cw->id);
-      update_units_visibility();
-      return;
-    }
-  }
-  is_active = false;
-}
-
-
-
 /* a - shooting unit, b - target */
 static int
 range_damage (Unit * a, Unit * b){
@@ -243,6 +170,23 @@ updatefog (int player){
       }
     }
   }
+}
+
+
+
+static bool
+is_invis (Unit * u){
+  int i;
+  if(!find_feature(u, FEATURE_INVIS)
+  || u->player == cw->id)
+    return(false);
+  for(i=0; i<6; i++){
+    Mcrd nb = neib(u->mcrd, i);
+    Unit * u2 = find_unit_at(nb);
+    if(u2 && u2->player == cw->id)
+      return(false);
+  }
+  return(true);
 }
 
 
@@ -484,23 +428,6 @@ update_units_visibility (){
 
 
 
-static bool
-is_invis (Unit * u){
-  int i;
-  if(!find_feature(u, FEATURE_INVIS)
-  || u->player == cw->id)
-    return(false);
-  for(i=0; i<6; i++){
-    Mcrd nb = neib(u->mcrd, i);
-    Unit * u2 = find_unit_at(nb);
-    if(u2 && u2->player == cw->id)
-      return(false);
-  }
-  return(true);
-}
-
-
-
 static void
 add_feature (Unit * u, Feature f){
   Feature * new_f = malloc(sizeof(Feature));
@@ -508,19 +435,6 @@ add_feature (Unit * u, Feature f){
   l_push(&u->features, new_f);
 }
 
-
-
-static void
-add_default_features_to_unit (Unit * u){
-  if(u->type == &utypes[2]){ /* archer */
-    add_feature(u, mk_feature_range(3, 5, 4));
-  }
-  if(u->type == &utypes[1]) { /* hunter */
-    add_feature(u, mk_feature_bool(FEATURE_IGNR    ));
-    add_feature(u, mk_feature_bool(FEATURE_INVIS   ));
-    add_feature(u, mk_feature_bool(FEATURE_NORETURN));
-  }
-}
 
 
 
@@ -752,6 +666,20 @@ mk_feature_bool (int type){
 
 
 
+static void
+add_default_features_to_unit (Unit * u){
+  if(u->type == &utypes[2]){ /* archer */
+    add_feature(u, mk_feature_range(3, 5, 4));
+  }
+  if(u->type == &utypes[1]) { /* hunter */
+    add_feature(u, mk_feature_bool(FEATURE_IGNR    ));
+    add_feature(u, mk_feature_bool(FEATURE_INVIS   ));
+    add_feature(u, mk_feature_bool(FEATURE_NORETURN));
+  }
+}
+
+
+
 static bool
 is_event_visible (Event e){
   switch(e.t){
@@ -761,6 +689,26 @@ is_event_visible (Event e){
     default: return(true);
   }
 }
+
+
+static void
+apply_endturn(Event e){
+  Node *nd;
+  FOR_EACH_NODE(worlds, nd){
+    World *w = nd->d;
+    if(w->id == e.endturn.new_player){
+      cw = w;
+      is_active = true;
+      check_win();
+      refresh_units();
+      updatefog(cw->id);
+      update_units_visibility();
+      return;
+    }
+  }
+  is_active = false;
+}
+
 
 
 
