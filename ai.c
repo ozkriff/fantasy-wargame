@@ -17,7 +17,7 @@ static void
 ai_attack(Unit * u){
   int i;
   for(i=0; i<6; i++){
-    Unit * enm = find_unit_at( neib(u->mcrd, i) );
+    Unit * enm = find_unit_at( neib(u->m, i) );
     if(!enm || enm->player==cw->id)
       continue;
     attack(u, enm);
@@ -32,7 +32,7 @@ ai_movement(Unit * u){
   int i;
   fill_map(u);
   for(i=0; i<6; i++){
-    Mcrd m = neib(u->mcrd, i);
+    Mcrd m = neib(u->m, i);
     Unit * u2 = find_unit_at(m);
     /*if( is_invis(u2) || !mp(m)->fog ){
       mv(u, m);

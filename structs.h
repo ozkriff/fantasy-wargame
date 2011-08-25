@@ -31,7 +31,7 @@ defstruct {
   int   player;
   bool  can_attack;
   int   mvp;
-  Mcrd  mcrd;
+  Mcrd  m;
   List  features;
   bool  visible;
 } Unit;

@@ -299,7 +299,7 @@ type2img (Unit_type * t){
 
 static void
 draw_unit (Unit *u){
-  Scrd s = map2scr(u->mcrd);
+  Scrd s = map2scr(u->m);
   draw_img(img_rings[u->player], s);
   draw_img(type2img(u->type), s);
   if(1){
@@ -369,7 +369,7 @@ maptext (){
 static void
 draw_move_event (){
   Unit * u = id2unit(e.move.u);
-  Scrd crd = mbetween(u->mcrd, e.move.dest, eindex);
+  Scrd crd = mbetween(u->m, e.move.dest, eindex);
   draw_img(type2img(u->type), crd);
 }
 
@@ -377,8 +377,8 @@ draw_move_event (){
 
 static void
 draw_melee_event (){
-  Mcrd a = id2unit(e.melee.a)->mcrd;
-  Mcrd b = id2unit(e.melee.d)->mcrd;
+  Mcrd a = id2unit(e.melee.a)->m;
+  Mcrd b = id2unit(e.melee.d)->m;
   int i = (eindex<steps/2) ? (eindex) : (steps-eindex);
   Scrd crd = mbetween(a, b, i);
   draw_img(type2img(id2unit(e.melee.a)->type), crd);
@@ -390,11 +390,11 @@ static void
 draw_range_event (){
   Unit *u1 = id2unit(e.range.a);
   Unit *u2 = id2unit(e.range.d);
-  int dist = mdist(u1->mcrd, u2->mcrd);
+  int dist = mdist(u1->m, u2->m);
   /*[v]ertical [c]orrection*/
   int vc   = dist*14 * sin((eindex*3.14)/eindex_last);
-  Scrd a   = map2scr(u1->mcrd);
-  Scrd b   = map2scr(u2->mcrd);
+  Scrd a   = map2scr(u1->m);
+  Scrd b   = map2scr(u2->m);
   a.x     += ((b.x-a.x)*eindex)/eindex_last;
   a.y     += ((b.y-a.y)*eindex)/eindex_last;
   draw_img(img_arrow, mk_scrd(a.x, a.y-vc));
@@ -430,7 +430,7 @@ draw (){
   if(ui_mode==MODE_SELECT && selunit)
     draw_possible_tiles();
   if(selunit)
-    draw_img(img_selected_hex, map2scr(selunit->mcrd));
+    draw_img(img_selected_hex, map2scr(selunit->m));
   draw_img(img_selected_hex, map2scr(selected_tile));
   draw_units();
   if(ui_mode==MODE_SHOW_EVENT)
@@ -589,8 +589,8 @@ get_last_event_index (Event e){
   else if(e.t == EVENT_MOVE || e.t == EVENT_MELEE)
     return(steps-1);
   else if(e.t == EVENT_RANGE){
-    Mcrd a = id2unit(e.range.a)->mcrd;
-    Mcrd b = id2unit(e.range.d)->mcrd;
+    Mcrd a = id2unit(e.range.a)->m;
+    Mcrd b = id2unit(e.range.d)->m;
     return(mdist(a, b)*steps);
   }else
     return(0);

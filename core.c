@@ -74,7 +74,7 @@ static void
 update_fog_after_move (Unit * u){
   Mcrd m;
   FOR_EACH_MCRD(m){
-    if(mdist(m, u->mcrd) <= u->type->range_of_vision)
+    if(mdist(m, u->m) <= u->type->range_of_vision)
       tile(m)->fog++;
   }
 }
@@ -88,7 +88,7 @@ apply_move (Event e){
     u->mvp -= e.move.cost;
   else
     u->mvp = 0;
-  u->mcrd = e.move.dest;
+  u->m = e.move.dest;
   fill_map(selunit);
   if(u->player==cw->id)
     update_fog_after_move(u);
@@ -165,7 +165,7 @@ updatefog (int player){
     FOR_EACH_NODE(cw->units, node){
       Unit * u = node->d;
       if(u->player == player
-      && mdist(m, u->mcrd) <= u->type->range_of_vision){
+      && mdist(m, u->m) <= u->type->range_of_vision){
         tile(m)->fog++;
       }
     }
@@ -181,7 +181,7 @@ is_invis (Unit * u){
   || u->player == cw->id)
     return(false);
   for(i=0; i<6; i++){
-    Mcrd nb = neib(u->mcrd, i);
+    Mcrd nb = neib(u->m, i);
     Unit * u2 = find_unit_at(nb);
     if(u2 && u2->player == cw->id)
       return(false);
@@ -194,7 +194,7 @@ is_invis (Unit * u){
 static bool
 is_move_visible (Event e){
   Unit * u = id2unit(e.move.u);
-  bool fow = tile(e.move.dest)->fog || tile(u->mcrd)->fog;
+  bool fow = tile(e.move.dest)->fog || tile(u->m)->fog;
   bool hidden = is_invis(u) && u->player!=cw->id;
   return(!hidden && fow);
 }
@@ -205,7 +205,7 @@ static bool
 is_melee_visible (Event e){
   Unit * a = id2unit( e.melee.a );
   Unit * d = id2unit( e.melee.d );
-  return(tile(a->mcrd)->fog || tile(d->mcrd)->fog);
+  return(tile(a->m)->fog || tile(d->m)->fog);
 }
 
 
@@ -214,7 +214,7 @@ static bool
 is_range_visible (Event e){
   Unit * a = id2unit( e.range.a );
   Unit * d = id2unit( e.range.d );
-  return(tile(a->mcrd)->fog || tile(d->mcrd)->fog);
+  return(tile(a->m)->fog || tile(d->m)->fog);
 }
 
 
@@ -331,7 +331,7 @@ support_range (Unit * a, Unit * d){
   Unit * sup;  /* [sup]porter */
   int i;
   for(i=0; i<6; i++){
-    sup = find_unit_at( neib(d->mcrd, i) );
+    sup = find_unit_at( neib(d->m, i) );
     if(sup && sup->player == d->player 
     && find_feature(sup, FEATURE_RNG)){
       break;
@@ -351,8 +351,8 @@ get_wounds (Unit *a, Unit *d){
   int wounds   = 0; /*possible wounds(may be blocked by armour)*/
   int final    = 0; /*final wounds(not blocked by armour)*/
   int attacks  = a->type->attacks * a->count;
-  int a_ms     = a->type->ms + a->type->ter_ms[tile(d->mcrd)->type];
-  int d_ms     = a->type->ms + a->type->ter_ms[tile(d->mcrd)->type];
+  int a_ms     = a->type->ms + a->type->ter_ms[tile(d->m)->type];
+  int d_ms     = a->type->ms + a->type->ter_ms[tile(d->m)->type];
   /*chances to hit, to wound and to ignore armour. percents.*/
   int to_hit   = 5 + (a_ms - d_ms);
   int to_wound = 5 + (a->type->strength    - d->type->toughness  );
@@ -423,7 +423,7 @@ update_units_visibility (){
     if(u->player == cw->id){
       u->visible = true;
     }else{
-      u->visible = tile(u->mcrd)->fog>0 && !is_invis(u);
+      u->visible = tile(u->m)->fog>0 && !is_invis(u);
     }
   }
 }
@@ -873,8 +873,8 @@ move (Unit * moving_unit, Mcrd destination){
 /* [a]ttacker, [d]efender */
 void
 attack (Unit * a, Unit * d){
-  Mcrd md = d->mcrd;
-  Mcrd ma = a->mcrd;
+  Mcrd md = d->m;
+  Mcrd ma = a->m;
   Feature * rng = find_feature(a, FEATURE_RNG);
   if(rng){
     if(mdist(ma, md) <= rng->rng.range){
@@ -929,7 +929,7 @@ add_unit (
   u->mvp        = type->mvp;
   u->count      = type->count;
   u->can_attack = true;
-  u->mcrd       = crd;
+  u->m          = crd;
   u->type       = type;
   u->id         = new_unit_id(world);
   add_default_features_to_unit(u);

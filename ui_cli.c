@@ -19,7 +19,7 @@ void ui_list_units(){
     Unit * u = n->d;
     char * s = 
         "id=%i mcrd={%i,%i} plr=%i\n";
-    printf(s, u->id, u->mcrd.x, u->mcrd.y, u->player);
+    printf(s, u->id, u->m.x, u->m.y, u->player);
   }
   printf("\n");
 }

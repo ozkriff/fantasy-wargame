@@ -142,7 +142,7 @@ find_unit_at (Mcrd crd){
   Node * node;
   FOR_EACH_NODE(cw->units, node){
     Unit * u = node->d;
-    if(mcrdeq(u->mcrd, crd))
+    if(mcrdeq(u->m, crd))
       return(u);
   }
   return(NULL);

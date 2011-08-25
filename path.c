@@ -89,7 +89,7 @@ fill_map (Unit * u) {
     tile(m)->cost   = 30000;
     tile(m)->parent = mk_mcrd(0,0);
   }  
-  push(u->mcrd, u->mcrd, 0); /* push start point */
+  push(u->m, u->m, 0); /* push start point */
   while(stack.count>0){
     Mcrd t = pop();
     int i;
