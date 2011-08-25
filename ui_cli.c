@@ -104,7 +104,7 @@ void ui_unit_info(){
         "id: %i\n"
         "health: %i\n"
         "player: %i\n";
-    printf(s, u->id, u->health, u->player);
+    printf(s, u->id, u->count, u->player);
   }
 }
 

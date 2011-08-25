@@ -301,7 +301,7 @@ draw_unit (Unit *u){
   draw_img(type2img(u->type), s);
   if(1){
     char str[100];
-    sprintf(str, "%i", u->health);
+    sprintf(str, "%i", u->count);
     text(str, mk_scrd(s.x+10, s.y+60), false);
   }
 }

@@ -10,7 +10,7 @@ typedef Vec2i Mcrd;
 defstruct {
   int   see;
   int   morale;
-  int   health;
+  int   count;
   int   melee_skill;
   int   strength;
   int   toughness;
@@ -27,7 +27,7 @@ defstruct {
 defstruct {
   Unit_type * type;
   int   id;
-  int   health;
+  int   count;
   int   player;
   bool  can_attack;
   int   mvp;

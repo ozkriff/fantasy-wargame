@@ -103,7 +103,7 @@ range_damage (Unit * a, Unit * b){
   int hits        = 0;
   int wounds      = 0; /*possible wounds(may be blocked by armour)*/
   int final       = 0; /*final wounds(not blocked by armour)*/
-  int attacks     = a->health;
+  int attacks     = a->count;
   /*chances to hit, to wound and to ignore armour. percents.*/
   int to_hit      = 2 + f.skill;
   int to_wound    = 5 + (f.power - b->type->toughness);
@@ -132,11 +132,11 @@ static void
 apply_melee(Event e){
   Unit * a = id2unit(e.melee.a);
   Unit * d = id2unit(e.melee.d);
-  a->health -= e.melee.attackers_killed;
-  d->health -= e.melee.defenders_killed;
-  if(a->health <= 0)
+  a->count -= e.melee.attackers_killed;
+  d->count -= e.melee.defenders_killed;
+  if(a->count <= 0)
     kill_unit(a);
-  if(d->health <= 0)
+  if(d->count <= 0)
     kill_unit(d);
   a->can_attack = false;
 }
@@ -148,8 +148,8 @@ apply_range (Event e){
   Unit * ua = id2unit(e.range.a);
   Unit * ud = id2unit(e.range.d);
   int dmg = e.range.dmg;
-  ud->health -= dmg;
-  if(ud->health <= 0)
+  ud->count -= dmg;
+  if(ud->count <= 0)
     kill_unit(ud);
   ua->can_attack = false;
 }
@@ -350,7 +350,7 @@ get_wounds (Unit *a, Unit *d){
   int hits     = 0;
   int wounds   = 0; /*possible wounds(may be blocked by armour)*/
   int final    = 0; /*final wounds(not blocked by armour)*/
-  int attacks  = a->type->attacks * a->health;
+  int attacks  = a->type->attacks * a->count;
   int a_ms     = a->type->melee_skill + a->type->ter_ms[tile(d->mcrd)->type];
   int d_ms     = a->type->melee_skill + a->type->ter_ms[tile(d->mcrd)->type];
   /*chances to hit, to wound and to ignore armour. percents.*/
@@ -927,7 +927,7 @@ add_unit (
   Unit * u      = calloc(1, sizeof(Unit));
   u->player     = player;
   u->mvp        = type->mvp;
-  u->health     = type->health;
+  u->count      = type->count;
   u->can_attack = true;
   u->mcrd       = crd;
   u->type       = type;
