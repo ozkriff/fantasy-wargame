@@ -55,42 +55,6 @@ int steps = 6;
 
 static bool done;
 
-static Img loadimg (char * str);
-static Img type2img (Unit_type * t);
-static void load_sprites ();
-static void pixel (int x, int y, Uint32 pixel);
-static void bzline (Scrd a, Scrd b, Uint32 clr);
-static void draw_img (Img src, Scrd crd);
-static void draw_map ();
-static void m2m_bzline (Mcrd a, Mcrd b);
-static void draw_bg (Uint32 clr);
-static void text (char * str, Scrd crd, bool iscentred);
-static void draw_unit (Unit *u);
-static void draw_units ();
-static void draw_move_event ();
-static void draw_melee_event ();
-static void draw_possible_tiles ();
-/*static void maptext ();*/
-static void draw_range_event ();
-static void keys (SDL_Event e);
-static void mouseclick (SDL_Event e);
-static void mousemove (SDL_Event e);
-
-static Scrd mk_scrd (int x, int y);
-static int  sdist (Scrd a, Scrd b);
-static Scrd map2scr (Mcrd map);
-static Mcrd scr2map (Scrd m);
-static Scrd get_midpoint (Scrd a, Scrd b, int i);
-static Scrd mbetween (Mcrd a, Mcrd b, int i);
-
-static void draw ();
-static void init_colors ();
-static void init_draw ();
-static void sdl_events ();
-
-static bool is_eq_empty();
-static void events ();
-
 
 
 static Img
@@ -128,6 +92,7 @@ free_sprites (){
 }
 
 
+
 static void
 load_sprites (){
   terrain_tiles[0]   = loadimg("img/grass.png");
@@ -145,6 +110,78 @@ load_sprites (){
   img_defence_unit   = loadimg("img/defence.png");
   img_range_unit     = loadimg("img/range.png");
   img_hunter_unit    = loadimg("img/hunter.png");
+}
+
+
+
+static Scrd
+mk_scrd (int x, int y){
+  Scrd s;
+  s.x = x;
+  s.y = y;
+  return(s);
+}
+
+
+
+/* Get distanse between two screen points. */
+static int
+sdist (Scrd a, Scrd b) {
+  int dx = abs(b.x - a.x);
+  int dy = abs(b.y - a.y);
+  return( sqrt(pow(dx, 2)+pow(dy, 2)) );
+}
+
+
+
+static Scrd
+map2scr (Mcrd map) {
+  int space = 0; /* space between tiles */
+  Scrd scr;
+  scr.y = map_offset.y  + map.y*(29+space);
+  scr.x = map_offset.x  + map.x*(72+space);
+  if(map.y%2) scr.x -= 36;
+  return(scr);
+}
+
+
+
+/* find tile with nearest coords */
+static Mcrd
+scr2map (Scrd m) {
+  Mcrd min;
+  Mcrd mcrd;
+  int min_dist = 9000;
+
+  m.x /= 2;
+
+  FOR_EACH_MCRD(mcrd){
+    Scrd wp = map2scr(mcrd);
+    wp.x += 36; wp.y += 54;
+    wp.x /= 2;
+    if(sdist(m, wp) < min_dist){
+      min_dist = sdist(m, wp);
+      min = mcrd;
+    }
+  }
+  return(min);
+}
+
+
+
+/* Find point between two points. */
+static Scrd
+get_midpoint (Scrd a, Scrd b, int i) {
+  float dx = (float)(b.x-a.x)/steps;
+  float dy = (float)(b.y-a.y)/steps;
+  return( mk_scrd(a.x+dx*i, a.y+dy*i) );
+}
+
+
+
+static Scrd
+mbetween(Mcrd a, Mcrd b, int i){
+  return(  get_midpoint(map2scr(a), map2scr(b), i)  );
 }
 
 
@@ -327,6 +364,64 @@ maptext (){
 
 
 static void
+draw_move_event (){
+  Unit * u = id2unit(e.move.u);
+  Scrd crd = mbetween(u->mcrd, e.move.dest, eindex);
+  draw_img(type2img(u->type), crd);
+}
+
+
+
+static void
+draw_melee_event (){
+  Mcrd a = id2unit(e.melee.a)->mcrd;
+  Mcrd b = id2unit(e.melee.d)->mcrd;
+  int i = (eindex<steps/2) ? (eindex) : (steps-eindex);
+  Scrd crd = mbetween(a, b, i);
+  draw_img(type2img(id2unit(e.melee.a)->type), crd);
+}
+
+
+
+/* TODO: rewrite. */
+static void
+draw_range_event (){
+  int i;
+  int vertical_correction;
+  Unit * u1 = id2unit(e.range.a);
+  Unit * u2 = id2unit(e.range.d);
+  Scrd a = map2scr(u1->mcrd);
+  Scrd b = map2scr(u2->mcrd);
+  int dist = mdist(u1->mcrd, u2->mcrd);
+  int st = dist * steps; /* local [st]eps */
+  float dx  = (float)(b.x-a.x)/st;
+  float dy  = (float)(b.y-a.y)/st;
+
+  a.x += dx * eindex;
+  a.y += dy * eindex;
+
+  /* Arrow's vertical correction. */
+  vertical_correction = dist*14 * sin((float)eindex/st*3.14);
+  draw_img(img_arrow, mk_scrd(a.x, a.y-vertical_correction));
+
+  /* Draw arrow's 'tail' */
+  for(i=1; i<eindex; i++){
+    /* Tail's part vertical correction. */
+    int d0 = dist*14 * sin((float)(i  )/st*3.14);
+    int d1 = dist*14 * sin((float)(i-1)/st*3.14);
+
+    Scrd n0, n1;
+    n0 = n1 = map2scr(u1->mcrd);
+    n0.x += 36+ dx*(i  );  n0.y += 36+ dy*(i  )-d0;
+    n1.x += 36+ dx*(i-1);  n1.y += 36+ dy*(i-1)-d1;
+
+    bzline(n0, n1, red);
+  }
+}
+
+
+
+static void
 draw_event (){
   if(e.t==EVENT_MOVE ) 
     draw_move_event ();
@@ -429,25 +524,6 @@ mousemove (SDL_Event e){
 
 
 
-static void
-sdl_events (){
-  SDL_Event e;
-  while(SDL_PollEvent(&e)){
-    switch(e.type){
-      case SDL_QUIT:            done = true;   break;
-      case SDL_KEYUP:           keys(e);       break;
-      case SDL_MOUSEBUTTONDOWN: mouseclick(e); break;
-      case SDL_MOUSEMOTION:     mousemove(e);  break;
-      case SDL_VIDEORESIZE:
-        screen = SDL_SetVideoMode(e.resize.w, e.resize.h,
-            32, SDL_SWSURFACE | SDL_RESIZABLE);
-        break;
-    }
-  }
-}
-
-
-
 /* Only in MODE_SHOW_EVENT */
 static void
 event_keys (SDL_Event e){
@@ -506,89 +582,20 @@ keys (SDL_Event e){
 
 
 
-static Scrd
-mk_scrd (int x, int y){
-  Scrd s;
-  s.x = x;
-  s.y = y;
-  return(s);
-}
-
-
-
-/* Get distanse between two screen points. */
-static int
-sdist (Scrd a, Scrd b) {
-  int dx = abs(b.x - a.x);
-  int dy = abs(b.y - a.y);
-  return( sqrt(pow(dx, 2)+pow(dy, 2)) );
-}
-
-
-
-static Scrd
-map2scr (Mcrd map) {
-  int space = 0; /* space between tiles */
-  Scrd scr;
-  scr.y = map_offset.y  + map.y*(29+space);
-  scr.x = map_offset.x  + map.x*(72+space);
-  if(map.y%2) scr.x -= 36;
-  return(scr);
-}
-
-
-
-/* find tile with nearest coords */
-static Mcrd
-scr2map (Scrd m) {
-  Mcrd min;
-  Mcrd mcrd;
-  int min_dist = 9000;
-
-  m.x /= 2;
-
-  FOR_EACH_MCRD(mcrd){
-    Scrd wp = map2scr(mcrd);
-    wp.x += 36; wp.y += 54;
-    wp.x /= 2;
-    if(sdist(m, wp) < min_dist){
-      min_dist = sdist(m, wp);
-      min = mcrd;
-    }
-  }
-  return(min);
-}
-
-
-
-/* Find point between two points. */
-static Scrd
-get_midpoint (Scrd a, Scrd b, int i) {
-  float dx = (float)(b.x-a.x)/steps;
-  float dy = (float)(b.y-a.y)/steps;
-  return( mk_scrd(a.x+dx*i, a.y+dy*i) );
-}
-
-
-
-static Scrd
-mbetween(Mcrd a, Mcrd b, int i){
-  return(  get_midpoint(map2scr(a), map2scr(b), i)  );
-}
-
-
-
 static void
-mainloop(){
-  while(!done){
-    if(cw->is_ai)
-      ai();
-    if(!is_local)
-      do_network();
-    sdl_events();
-    events();
-    draw();
-    SDL_Delay(1*33);
+sdl_events (){
+  SDL_Event e;
+  while(SDL_PollEvent(&e)){
+    switch(e.type){
+      case SDL_QUIT:            done = true;   break;
+      case SDL_KEYUP:           keys(e);       break;
+      case SDL_MOUSEBUTTONDOWN: mouseclick(e); break;
+      case SDL_MOUSEMOTION:     mousemove(e);  break;
+      case SDL_VIDEORESIZE:
+        screen = SDL_SetVideoMode(e.resize.w, e.resize.h,
+            32, SDL_SWSURFACE | SDL_RESIZABLE);
+        break;
+    }
   }
 }
 
@@ -636,58 +643,16 @@ events (){
 
 
 static void
-draw_move_event (){
-  Unit * u = id2unit(e.move.u);
-  Scrd crd = mbetween(u->mcrd, e.move.dest, eindex);
-  draw_img(type2img(u->type), crd);
-}
-
-
-
-static void
-draw_melee_event (){
-  Mcrd a = id2unit(e.melee.a)->mcrd;
-  Mcrd b = id2unit(e.melee.d)->mcrd;
-  int i = (eindex<steps/2) ? (eindex) : (steps-eindex);
-  Scrd crd = mbetween(a, b, i);
-  draw_img(type2img(id2unit(e.melee.a)->type), crd);
-}
-
-
-
-/* TODO: rewrite. */
-static void
-draw_range_event (){
-  int i;
-  int vertical_correction;
-  Unit * u1 = id2unit(e.range.a);
-  Unit * u2 = id2unit(e.range.d);
-  Scrd a = map2scr(u1->mcrd);
-  Scrd b = map2scr(u2->mcrd);
-  int dist = mdist(u1->mcrd, u2->mcrd);
-  int st = dist * steps; /* local [st]eps */
-  float dx  = (float)(b.x-a.x)/st;
-  float dy  = (float)(b.y-a.y)/st;
-
-  a.x += dx * eindex;
-  a.y += dy * eindex;
-
-  /* Arrow's vertical correction. */
-  vertical_correction = dist*14 * sin((float)eindex/st*3.14);
-  draw_img(img_arrow, mk_scrd(a.x, a.y-vertical_correction));
-
-  /* Draw arrow's 'tail' */
-  for(i=1; i<eindex; i++){
-    /* Tail's part vertical correction. */
-    int d0 = dist*14 * sin((float)(i  )/st*3.14);
-    int d1 = dist*14 * sin((float)(i-1)/st*3.14);
-
-    Scrd n0, n1;
-    n0 = n1 = map2scr(u1->mcrd);
-    n0.x += 36+ dx*(i  );  n0.y += 36+ dy*(i  )-d0;
-    n1.x += 36+ dx*(i-1);  n1.y += 36+ dy*(i-1)-d1;
-
-    bzline(n0, n1, red);
+mainloop(){
+  while(!done){
+    if(cw->is_ai)
+      ai();
+    if(!is_local)
+      do_network();
+    sdl_events();
+    events();
+    draw();
+    SDL_Delay(1*33);
   }
 }
 
