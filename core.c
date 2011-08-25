@@ -501,7 +501,7 @@ parse_scenario_file (char * filename){
       Initial_unit_info *u =
           calloc(1, sizeof(Initial_unit_info));
       sscanf(s, s_unit,
-          &u->player, &u->m.x, &u->m.y, &u->type);
+          &u->player, &u->m.x, &u->m.y, &u->t);
       l_push(&sc.units, u);
     }
     if(strcmp_sp(s, s_players))
@@ -526,7 +526,7 @@ apply_scenario(Scenario sc, World *w){
   memcpy(w->map, sc.map, map_size);
   FOR_EACH_NODE(sc.units, nd){
     Initial_unit_info *u = nd->d;
-    add_unit(u->m, u->player, &utypes[u->type], w);
+    add_unit(u->m, u->player, &utypes[u->t], w);
   }
 }
 

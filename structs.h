@@ -106,7 +106,7 @@ defstruct {
 defstruct {
   Mcrd m; /*map position*/
   int  player;
-  int  type;
+  int  t; /*type*/
 } Initial_unit_info;
 
 
