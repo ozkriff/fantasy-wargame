@@ -8,7 +8,7 @@ typedef Vec2i Mcrd;
 
 
 defstruct {
-  int   see;
+  int   range_of_vision;
   int   morale;
   int   count;
   int   melee_skill;

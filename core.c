@@ -74,7 +74,7 @@ static void
 update_fog_after_move (Unit * u){
   Mcrd m;
   FOR_EACH_MCRD(m){
-    if(mdist(m, u->mcrd) <= u->type->see)
+    if(mdist(m, u->mcrd) <= u->type->range_of_vision)
       tile(m)->fog++;
   }
 }
@@ -165,7 +165,7 @@ updatefog (int player){
     FOR_EACH_NODE(cw->units, node){
       Unit * u = node->d;
       if(u->player == player
-      && mdist(m, u->mcrd) <= u->type->see){
+      && mdist(m, u->mcrd) <= u->type->range_of_vision){
         tile(m)->fog++;
       }
     }
