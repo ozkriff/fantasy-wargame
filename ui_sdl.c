@@ -335,8 +335,7 @@ draw_possible_tiles(){
   Mcrd m;
   FOR_EACH_MCRD(m){
     Mcrd p = tile(m)->parent;
-    if(!(p.x==0 && p.y==0)
-    && tile(m)->cost <= selunit->mvp) {
+    if(tile(m)->cost <= selunit->mvp) {
       draw_img(img_reacheble_tile, map2scr(m));
       m2m_bzline(m, p);
     }
