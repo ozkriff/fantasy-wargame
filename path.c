@@ -41,7 +41,7 @@ pop (){
 static int
 zoc (Mcrd a, Unit * u, int cost){
   int i;
-  int mvp = u->type->mvp;
+  int mvp = u->t->mvp;
   for(i=0; i<6; i++){
     Mcrd n = neib(a, i);
     Unit * u2 = find_unit_at(n);
@@ -69,12 +69,12 @@ process_nbh (Unit * u, Mcrd t, Mcrd nb){
   && tile(nb)->fog>0
   && u2->visible)
     return;
-  n = u->type->ter_mvp[tile(nb)->type];
+  n = u->t->ter_mvp[tile(nb)->type];
   if(find_feature(u, FEATURE_IGNR))
     newcost = tile(t)->cost + n;
   else
     newcost = zoc(nb, u, tile(t)->cost + n);
-  if(tile(nb)->cost>newcost && newcost<=u->type->mvp)
+  if(tile(nb)->cost>newcost && newcost<=u->t->mvp)
     push(nb, t, newcost);
 }
 

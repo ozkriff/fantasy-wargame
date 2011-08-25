@@ -25,7 +25,7 @@ defstruct {
 
 
 defstruct {
-  Unit_type * type;
+  Unit_type *t;
   int   id;
   int   count;
   int   player;

@@ -301,7 +301,7 @@ static void
 draw_unit (Unit *u){
   Scrd s = map2scr(u->m);
   draw_img(img_rings[u->player], s);
-  draw_img(type2img(u->type), s);
+  draw_img(type2img(u->t), s);
   if(1){
     char str[100];
     sprintf(str, "%i", u->count);
@@ -370,7 +370,7 @@ static void
 draw_move_event (){
   Unit * u = id2unit(e.move.u);
   Scrd crd = mbetween(u->m, e.move.dest, eindex);
-  draw_img(type2img(u->type), crd);
+  draw_img(type2img(u->t), crd);
 }
 
 
@@ -381,7 +381,7 @@ draw_melee_event (){
   Mcrd b = id2unit(e.melee.d)->m;
   int i = (eindex<steps/2) ? (eindex) : (steps-eindex);
   Scrd crd = mbetween(a, b, i);
-  draw_img(type2img(id2unit(e.melee.a)->type), crd);
+  draw_img(type2img(id2unit(e.melee.a)->t), crd);
 }
 
 

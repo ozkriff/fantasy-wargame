@@ -74,7 +74,7 @@ static void
 update_fog_after_move (Unit * u){
   Mcrd m;
   FOR_EACH_MCRD(m){
-    if(mdist(m, u->m) <= u->type->range_of_vision)
+    if(mdist(m, u->m) <= u->t->range_of_vision)
       tile(m)->fog++;
   }
 }
@@ -106,8 +106,8 @@ range_damage (Unit * a, Unit * b){
   int attacks     = a->count;
   /*chances to hit, to wound and to ignore armour. percents.*/
   int to_hit      = 2 + f.skill;
-  int to_wound    = 5 + (f.power - b->type->toughness);
-  int to_as       = 10- b->type->armor;
+  int to_wound    = 5 + (f.power - b->t->toughness);
+  int to_as       = 10- b->t->armor;
 #if 1
   int r = rnd(0, 2);
   to_hit   += rnd(-r, r);
@@ -165,7 +165,7 @@ updatefog (int player){
     FOR_EACH_NODE(cw->units, node){
       Unit * u = node->d;
       if(u->player == player
-      && mdist(m, u->m) <= u->type->range_of_vision){
+      && mdist(m, u->m) <= u->t->range_of_vision){
         tile(m)->fog++;
       }
     }
@@ -238,7 +238,7 @@ refresh_units (){
   FOR_EACH_NODE(cw->units, node){
     Unit * u = node->d;
     if(u->player == cw->id){
-      u->mvp = u->type->mvp;
+      u->mvp = u->t->mvp;
       u->can_attack = true;
     }
   }
@@ -275,7 +275,7 @@ mk_event_move (Unit * u, Mcrd dest){
   e.move.t    = EVENT_MOVE;
   e.move.u    = u->id;
   e.move.dest = dest;
-  e.move.cost = u->type->ter_mvp[tile(dest)->type];
+  e.move.cost = u->t->ter_mvp[tile(dest)->type];
   return(e);
 }
 
@@ -350,13 +350,13 @@ get_wounds (Unit *a, Unit *d){
   int hits     = 0;
   int wounds   = 0; /*possible wounds(may be blocked by armour)*/
   int final    = 0; /*final wounds(not blocked by armour)*/
-  int attacks  = a->type->attacks * a->count;
-  int a_ms     = a->type->ms + a->type->ter_ms[tile(d->m)->type];
-  int d_ms     = a->type->ms + a->type->ter_ms[tile(d->m)->type];
+  int attacks  = a->t->attacks * a->count;
+  int a_ms     = a->t->ms + a->t->ter_ms[tile(d->m)->type];
+  int d_ms     = a->t->ms + a->t->ter_ms[tile(d->m)->type];
   /*chances to hit, to wound and to ignore armour. percents.*/
   int to_hit   = 5 + (a_ms - d_ms);
-  int to_wound = 5 + (a->type->strength    - d->type->toughness  );
-  int to_as    = 10- d->type->armor;
+  int to_wound = 5 + (a->t->strength    - d->t->toughness  );
+  int to_as    = 10- d->t->armor;
 #if 1
   int r = 1;
   to_hit   += rnd(-r, r);
@@ -393,7 +393,7 @@ attack_melee (Unit * a, Unit * d){
     return;
 
   /* CHeck if unit will flee or panic */
-  if(d->health - melee.melee.dmg > d->type->health / 2)
+  if(d->health - melee.melee.dmg > d->t->health / 2)
     return;
 
   /* try to flee in opposite direction or fight(panic) */
@@ -670,10 +670,10 @@ mk_feature_bool (int type){
 
 static void
 add_default_features_to_unit (Unit * u){
-  if(u->type == &utypes[2]){ /* archer */
+  if(u->t == &utypes[2]){ /* archer */
     add_feature(u, mk_feature_range(3, 5, 4));
   }
-  if(u->type == &utypes[1]) { /* hunter */
+  if(u->t == &utypes[1]) { /* hunter */
     add_feature(u, mk_feature_bool(FEATURE_IGNR    ));
     add_feature(u, mk_feature_bool(FEATURE_INVIS   ));
     add_feature(u, mk_feature_bool(FEATURE_NORETURN));
@@ -930,7 +930,7 @@ add_unit (
   u->count      = type->count;
   u->can_attack = true;
   u->m          = crd;
-  u->type       = type;
+  u->t          = type;
   u->id         = new_unit_id(world);
   add_default_features_to_unit(u);
   l_push(&world->units, u);
