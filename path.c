@@ -69,7 +69,7 @@ process_nbh (Unit * u, Mcrd t, Mcrd nb){
   && tile(nb)->fog>0
   && u2->visible)
     return;
-  n = u->t->ter_mvp[tile(nb)->type];
+  n = u->t->ter_mvp[tile(nb)->t];
   if(find_feature(u, FEATURE_IGNR))
     newcost = tile(t)->cost + n;
   else

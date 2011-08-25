@@ -241,7 +241,7 @@ static void
 draw_map (){
   Mcrd m;
   FOR_EACH_MCRD(m){
-    Img s = terrain_tiles[tile(m)->type];
+    Img s = terrain_tiles[tile(m)->t];
     draw_img(s, map2scr(m));
     if(tile(m)->fog <= 0)
       draw_img(img_fow, map2scr(m));

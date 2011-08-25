@@ -275,7 +275,7 @@ mk_event_move (Unit * u, Mcrd dest){
   e.move.t    = EVENT_MOVE;
   e.move.u    = u->id;
   e.move.dest = dest;
-  e.move.cost = u->t->ter_mvp[tile(dest)->type];
+  e.move.cost = u->t->ter_mvp[tile(dest)->t];
   return(e);
 }
 
@@ -351,8 +351,8 @@ get_wounds (Unit *a, Unit *d){
   int wounds   = 0; /*possible wounds(may be blocked by armour)*/
   int final    = 0; /*final wounds(not blocked by armour)*/
   int attacks  = a->t->attacks * a->count;
-  int a_ms     = a->t->ms + a->t->ter_ms[tile(d->m)->type];
-  int d_ms     = a->t->ms + a->t->ter_ms[tile(d->m)->type];
+  int a_ms     = a->t->ms + a->t->ter_ms[tile(d->m)->t];
+  int d_ms     = a->t->ms + a->t->ter_ms[tile(d->m)->t];
   /*chances to hit, to wound and to ignore armour. percents.*/
   int to_hit   = 5 + (a_ms - d_ms);
   int to_wound = 5 + (a->t->strength    - d->t->toughness  );
@@ -472,7 +472,7 @@ read_map (char *fname, Mcrd *size){
       continue;
     while(*c!='\0'){
       if(*c!=' ' && *c!='\n'){
-        i->type = char2tiletype(*c);
+        i->t = char2tiletype(*c);
         i++;
       }
       c++;

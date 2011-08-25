@@ -47,7 +47,7 @@ defstruct {
 defstruct {
   int  fog;  /* fog of war. how many units see this tile. */
   int  cost; /* cost of path for selunit to this tile */
-  int  type;
+  int  t; /*type*/
   Mcrd parent; /* used in pathfinding */
 } Tile;
 
