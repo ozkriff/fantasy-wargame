@@ -594,31 +594,6 @@ mainloop(){
 
 
 
-#undef main
-int
-main(int ac, char **av){
-#if 1
-  char * s[7] = {
-      "./ui_sdl[.exe]",
-      "-local",
-      "scenario2",
-      "-human",
-      "0",
-      "-human",
-      "1" };
-  av = s;
-  ac = 7;
-#endif
-  init(ac, av);
-  init_draw();
-  mainloop();
-  free_sprites();
-  cleanup();
-  return(EXIT_SUCCESS);
-}
-
-
-
 static bool
 is_eq_empty(){
 	update_eq();
@@ -714,5 +689,30 @@ draw_range_event (){
 
     bzline(n0, n1, red);
   }
+}
+
+
+
+#undef main
+int
+main(int ac, char **av){
+#if 1
+  char * s[7] = {
+      "./ui_sdl[.exe]",
+      "-local",
+      "scenario2",
+      "-human",
+      "0",
+      "-human",
+      "1" };
+  av = s;
+  ac = 7;
+#endif
+  init(ac, av);
+  init_draw();
+  mainloop();
+  free_sprites();
+  cleanup();
+  return(EXIT_SUCCESS);
 }
 
