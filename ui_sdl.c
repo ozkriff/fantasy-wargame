@@ -330,6 +330,7 @@ draw_units (){
 
 
 
+/*Mark tiles that sulunit can reach during this turn.*/
 static void
 draw_reachable_tiles(){
   Mcrd m;
