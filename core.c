@@ -275,35 +275,6 @@ is_range_visible (Event e){
 
 
 
-/* called before get_next_event */
-void
-update_eq (){
-  Event * e;
-  while(cw->eq.count > 0){
-    e = cw->eq.h->d;
-    if(!is_event_visible(*e)){
-      e = l_dequeue(&cw->eq);
-      apply_event(*e);
-      free(e);
-    }else{
-      return;
-    }
-  }
-}
-
-
-
-/* always called after update_eq */
-Event
-get_next_event (){
-  Event * tmp = l_dequeue(&cw->eq);
-  Event e = *tmp;
-  free(tmp);
-  return(e);
-}
-
-
-
 static bool
 checkunitsleft(){
   Node * node;
@@ -338,16 +309,6 @@ check_win (){
     puts("WINNER!");
     exit(EXIT_SUCCESS);
   }
-}
-
-
-
-void
-endturn (){
-  int id = cw->id + 1;
-  if(id == scenario.players_count)
-    id = 0;
-  add_event(mk_event_endturn(cw->id, id));
 }
 
 
@@ -415,22 +376,6 @@ ambush(Mcrd next, Unit * moving_unit){
   }else{
     return(false);
   }
-}
-
-
-
-void
-move (Unit * moving_unit, Mcrd destination){
-  List path = get_path(destination);
-  Node * node;
-  for(node=path.h; node->n; node=node->n){
-    Mcrd * next    = node->n->d;
-    if(ambush(*next, moving_unit))
-      break;
-    add_event( mk_event_move(moving_unit, (*next)) );
-  }
-  while(path.count > 0)
-    l_delete_node(&path, path.h);
 }
 
 
@@ -519,24 +464,6 @@ attack_melee (Unit * a, Unit * d){
     }
   }
 #endif
-}
-
-
-
-/* [a]ttacker, [d]efender */
-void attack (Unit * a, Unit * d){
-  Mcrd md = d->mcrd;
-  Mcrd ma = a->mcrd;
-  Feature * rng = find_feature(a, FEATURE_RNG);
-  if(rng){
-    if(mdist(ma, md) <= rng->rng.range){
-      add_event( mk_event_range(a, d, range_damage(a, d)) );
-    }
-  }else{
-    if(mdist(ma, md) <= 1){
-      attack_melee(a, d);
-    }
-  }
 }
 
 
@@ -781,35 +708,6 @@ net_arguments (int ac, char ** av){
 
 
 
-void
-init (int ac, char ** av){
-  srand(time(NULL));
-  if(!strcmp(av[1], "-local"))
-    local_arguments(ac, av);
-  if(!strcmp(av[1], "-net"))
-    net_arguments(ac, av);
-  cw = worlds.h->d;
-  updatefog(cw->id);
-  update_units_visibility();
-  logfile = fopen("log", "w");
-  is_active = true;
-}
-
-
-
-void
-apply_event (Event e){
-  switch(e.t){
-    case EVENT_MOVE:    apply_move(e);    break;
-    case EVENT_MELEE:   apply_melee(e);   break;
-    case EVENT_RANGE:   apply_range(e);   break;
-    case EVENT_ENDTURN: apply_endturn(e); break;
-  }
-  update_units_visibility();
-}
-
-
-
 /*called fron add_unit*/
 static int
 new_unit_id (World *w){
@@ -819,27 +717,6 @@ new_unit_id (World *w){
   }else{
     return(0);
   }
-}
-
-
-
-void
-add_unit (
-    Mcrd crd,
-    int player,
-    Unit_type * type,
-    World * world)
-{
-  Unit * u      = calloc(1, sizeof(Unit));
-  u->player     = player;
-  u->mvp        = type->mvp;
-  u->health     = type->health;
-  u->can_attack = true;
-  u->mcrd       = crd;
-  u->type       = type;
-  u->id         = new_unit_id(world);
-  add_default_features_to_unit(u);
-  l_push(&world->units, u);
 }
 
 
@@ -980,4 +857,126 @@ cleanup(){
     l_delete_node(&worlds, worlds.h);
   }
 }
+
+
+/* called before get_next_event */
+void
+update_eq (){
+  Event * e;
+  while(cw->eq.count > 0){
+    e = cw->eq.h->d;
+    if(!is_event_visible(*e)){
+      e = l_dequeue(&cw->eq);
+      apply_event(*e);
+      free(e);
+    }else{
+      return;
+    }
+  }
+}
+
+
+
+/* always called after update_eq */
+Event
+get_next_event (){
+  Event * tmp = l_dequeue(&cw->eq);
+  Event e = *tmp;
+  free(tmp);
+  return(e);
+}
+
+
+void
+endturn (){
+  int id = cw->id + 1;
+  if(id == scenario.players_count)
+    id = 0;
+  add_event(mk_event_endturn(cw->id, id));
+}
+
+
+void
+move (Unit * moving_unit, Mcrd destination){
+  List path = get_path(destination);
+  Node * node;
+  for(node=path.h; node->n; node=node->n){
+    Mcrd * next    = node->n->d;
+    if(ambush(*next, moving_unit))
+      break;
+    add_event( mk_event_move(moving_unit, (*next)) );
+  }
+  while(path.count > 0)
+    l_delete_node(&path, path.h);
+}
+
+
+
+/* [a]ttacker, [d]efender */
+void
+attack (Unit * a, Unit * d){
+  Mcrd md = d->mcrd;
+  Mcrd ma = a->mcrd;
+  Feature * rng = find_feature(a, FEATURE_RNG);
+  if(rng){
+    if(mdist(ma, md) <= rng->rng.range){
+      add_event( mk_event_range(a, d, range_damage(a, d)) );
+    }
+  }else{
+    if(mdist(ma, md) <= 1){
+      attack_melee(a, d);
+    }
+  }
+}
+
+
+void
+init (int ac, char ** av){
+  srand(time(NULL));
+  if(!strcmp(av[1], "-local"))
+    local_arguments(ac, av);
+  if(!strcmp(av[1], "-net"))
+    net_arguments(ac, av);
+  cw = worlds.h->d;
+  updatefog(cw->id);
+  update_units_visibility();
+  logfile = fopen("log", "w");
+  is_active = true;
+}
+
+
+
+void
+apply_event (Event e){
+  switch(e.t){
+    case EVENT_MOVE:    apply_move(e);    break;
+    case EVENT_MELEE:   apply_melee(e);   break;
+    case EVENT_RANGE:   apply_range(e);   break;
+    case EVENT_ENDTURN: apply_endturn(e); break;
+  }
+  update_units_visibility();
+}
+
+
+
+void
+add_unit (
+    Mcrd crd,
+    int player,
+    Unit_type * type,
+    World * world)
+{
+  Unit * u      = calloc(1, sizeof(Unit));
+  u->player     = player;
+  u->mvp        = type->mvp;
+  u->health     = type->health;
+  u->can_attack = true;
+  u->mcrd       = crd;
+  u->type       = type;
+  u->id         = new_unit_id(world);
+  add_default_features_to_unit(u);
+  l_push(&world->units, u);
+}
+
+
 
