@@ -11,7 +11,7 @@ defstruct {
   int   range_of_vision;
   int   morale;
   int   count;
-  int   melee_skill;
+  int   ms; /*melee_skill*/
   int   strength;
   int   toughness;
   int   attacks;
