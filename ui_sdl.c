@@ -331,7 +331,7 @@ draw_units (){
 
 
 static void
-draw_possible_tiles(){
+draw_reachable_tiles(){
   Mcrd m;
   FOR_EACH_MCRD(m){
     Mcrd p = tile(m)->parent;
@@ -427,7 +427,7 @@ draw (){
   draw_bg(black);
   draw_map();
   if(ui_mode==MODE_SELECT && selunit)
-    draw_possible_tiles();
+    draw_reachable_tiles();
   if(selunit)
     draw_img(img_selected_hex, map2scr(selunit->m));
   draw_img(img_selected_hex, map2scr(selected_tile));
