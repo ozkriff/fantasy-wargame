@@ -379,7 +379,7 @@ init_colors (){
 
 
 
-void
+static void
 init_draw (){
   SDL_Init(SDL_INIT_VIDEO);
   IMG_Init(IMG_INIT_PNG);
