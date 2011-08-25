@@ -437,7 +437,6 @@ add_feature (Unit * u, Feature f){
 
 
 
-
 /*get tile type corresponding to character*/
 /*used in 'read_map'*/
 /*TODO defines*/
@@ -451,6 +450,7 @@ char2tiletype (char c){
   puts("ERROR in char2tiletype");
   exit(1);
 }
+
 
 
 static Tile *
@@ -480,6 +480,7 @@ read_map (char *fname, Mcrd *size){
   fclose(f);
   return(map);
 }
+
 
 
 static Scenario
@@ -691,6 +692,7 @@ is_event_visible (Event e){
 }
 
 
+
 static void
 apply_endturn(Event e){
   Node *nd;
@@ -811,6 +813,7 @@ cleanup(){
 }
 
 
+
 /* called before get_next_event */
 void
 update_eq (){
@@ -839,6 +842,7 @@ get_next_event (){
 }
 
 
+
 void
 endturn (){
   int id = cw->id + 1;
@@ -846,6 +850,7 @@ endturn (){
     id = 0;
   add_event(mk_event_endturn(cw->id, id));
 }
+
 
 
 void
@@ -929,6 +934,4 @@ add_unit (
   add_default_features_to_unit(u);
   l_push(&world->units, u);
 }
-
-
 
