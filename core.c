@@ -764,6 +764,10 @@ is_event_visible (Event e){
 
 
 
+/*------------------NON-STATIC FUNCTION------------------*/
+
+
+
 void
 select_next_unit (){
   Node * node;
