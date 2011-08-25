@@ -120,7 +120,7 @@ range_damage (Unit * a, Unit * b){
   wounds = hits    * to_wound / 10;
   final  = wounds  * to_as    / 10;
 #if 1
-  printf("hit %i, wound %i, ignoreAS %i ---> [%i -> %i -> %i -> %i]\n",
+  printf("%i %i %i -> %i %i %i [%i]\n",
       to_hit, to_wound, to_as, attacks, hits, wounds, final);
 #endif
   return(final);
@@ -369,7 +369,7 @@ get_wounds (Unit *a, Unit *d){
   wounds = hits    * to_wound / 10;
   final  = wounds  * to_as    / 10;
 #if 1
-  printf("hit %i, wound %i, ignoreAS %i ---> [%i -> %i -> %i -> %i]\n",
+  printf("%i %i %i -> %i %i %i [%i]\n",
       to_hit, to_wound, to_as, attacks, hits, wounds, final);
 #endif
   return(final);
@@ -386,6 +386,7 @@ attack_melee (Unit * a, Unit * d){
   melee = mk_event_melee(a, d,
       get_wounds(d,a), get_wounds(a,d));
   add_event( melee );
+  puts("");
 
 #if 0
   /* check if opponent is still alive */
@@ -879,6 +880,7 @@ attack (Unit * a, Unit * d){
   if(rng){
     if(mdist(ma, md) <= rng->rng.range){
       add_event( mk_event_range(a, d, range_damage(a, d)) );
+      puts("");
     }
   }else{
     if(mdist(ma, md) <= 1){
