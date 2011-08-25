@@ -106,10 +106,10 @@ fill_map (Unit * u) {
 
 
 static void
-addwaypoint (List * path, Mcrd wp){
-  Mcrd * m = malloc(sizeof(Mcrd));
-  *m = wp;
-  l_push(path, m);
+addwaypoint (List * path, Mcrd m){
+  Mcrd * tmp = malloc(sizeof(Mcrd));
+  *tmp = m;
+  l_push(path, tmp);
 }
 
 
