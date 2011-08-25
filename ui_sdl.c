@@ -44,7 +44,7 @@ static Mcrd selhex; /* selected hex */
 
 #define MODE_SELECT     0
 #define MODE_SHOW_EVENT 1
-static int mode = MODE_SELECT;
+static int ui_mode = MODE_SELECT;
 
 static Event e;    /* current [e]vent */
 
@@ -313,7 +313,7 @@ draw_units (){
   Node * node;
   FOR_EACH_NODE(cw->units, node){
     Unit * u = node->d;
-    if(mode == MODE_SHOW_EVENT){
+    if(ui_mode == MODE_SHOW_EVENT){
       if(e.t==EVENT_MOVE  && u->id == e.move.u)
         continue;
       if(e.t==EVENT_MELEE && u->id == e.melee.a)
@@ -446,13 +446,13 @@ static void
 draw (){
   draw_bg(black);
   draw_map();
-  if(mode==MODE_SELECT && selunit)
+  if(ui_mode==MODE_SELECT && selunit)
     draw_possible_tiles();
   if(selunit)
     draw_img(img_selected_hex, map2scr(selunit->mcrd));
   draw_img(img_selected_hex, map2scr(selhex));
   draw_units();
-  if(mode==MODE_SHOW_EVENT)
+  if(ui_mode==MODE_SHOW_EVENT)
     draw_event();
   /*maptext();*/
   draw_labels();
@@ -494,7 +494,7 @@ static void
 mouseclick (SDL_Event e){
   Unit * u;
   Mcrd m;
-  if(!is_active || mode != MODE_SELECT)
+  if(!is_active || ui_mode != MODE_SELECT)
     return;
   m = scr2map(mk_scrd(e.button.x, e.button.y));
   u = find_unit_at(m);
@@ -535,7 +535,7 @@ event_keys (SDL_Event e){
 
 
 
-/* In both modes. */
+/* In both ui_modes. */
 static void
 common_keys (SDL_Event e){
   switch(e.key.keysym.sym) {
@@ -574,7 +574,7 @@ keys (SDL_Event e){
   common_keys(e);
   if(!is_active)
     return;
-  if(mode == MODE_SELECT)
+  if(ui_mode == MODE_SELECT)
     select_keys(e);
   else
     event_keys(e);
@@ -627,15 +627,15 @@ is_event_shown (int progress, Event e){
 
 static void
 events (){
-  if(mode == MODE_SHOW_EVENT)
+  if(ui_mode == MODE_SHOW_EVENT)
     eindex++;
-  if(mode==MODE_SHOW_EVENT && is_event_shown(eindex, e)){
+  if(ui_mode==MODE_SHOW_EVENT && is_event_shown(eindex, e)){
     apply_event(e);
-    mode = MODE_SELECT;
+    ui_mode = MODE_SELECT;
   }
-  if(mode == MODE_SELECT && !is_eq_empty()){
+  if(ui_mode == MODE_SELECT && !is_eq_empty()){
     e = get_next_event();
-    mode = MODE_SHOW_EVENT;
+    ui_mode = MODE_SHOW_EVENT;
     eindex = 0;
   }
 }
