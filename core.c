@@ -630,31 +630,31 @@ new_unit_id (World *w){
 
 static Skill
 mk_skill_range (int skill, int power, int range){
-  Skill f;
-  f.rng.t = SKILL_RNG;
-  f.rng.skill = skill;
-  f.rng.power = power;
-  f.rng.range = range;
-  return(f);
+  Skill s;
+  s.rng.t = SKILL_RNG;
+  s.rng.skill = skill;
+  s.rng.power = power;
+  s.rng.range = range;
+  return(s);
 }
 
 
 
 static Skill
 mk_skill_berserk (int power){
-  Skill f;
-  f.brsk.t = SKILL_BRSK;
-  f.brsk.power = power;
-  return(f);
+  Skill s;
+  s.brsk.t = SKILL_BRSK;
+  s.brsk.power = power;
+  return(s);
 }
 
 
 
 static Skill
 mk_skill_bool (int type){
-  Skill f;
-  f.t = type;
-  return(f);
+  Skill s;
+  s.t = type;
+  return(s);
 }
 
 
