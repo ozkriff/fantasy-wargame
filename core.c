@@ -40,7 +40,7 @@ bool    is_active; /* TODO rename! */
 Unit *  selunit = NULL; /* selected unit */
 
 static FILE * logfile;
-static Scenario scenario;
+static int scenario_players_count;
 
 
 /* Find unit's node in cw->units list. */
@@ -436,7 +436,6 @@ add_feature (Unit * u, Feature f){
 
 
 /*get tile type corresponding to character*/
-/*used in 'read_map'*/
 static int
 char2tiletype (char c){
   if(c=='.') return(TILE_GRASS);
@@ -446,96 +445,6 @@ char2tiletype (char c){
   if(c=='M') return(TILE_MOUNTEENS);
   puts("ERROR in char2tiletype");
   exit(1);
-}
-
-
-
-static Tile *
-read_map (char *fname, Mcrd *size){
-  char  s[100];
-  FILE *f;
-  Tile *map;
-  Tile *i; /*used for iteration through 'map'*/
-  f = fopen(fname, "r");
-  fgets(s, 99, f);
-  sscanf(s, "%i %i", &size->x, &size->y);
-  map = malloc(sizeof(Tile) * size->x * size->y);
-  i = map;
-  while(fgets(s, 99, f)){
-    char *c = s;
-    /*skip comments*/
-    if(*c=='#')
-      continue;
-    while(*c!='\0'){
-      if(*c!=' ' && *c!='\n'){
-        i->t = char2tiletype(*c);
-        i++;
-      }
-      c++;
-    }
-  }
-  fclose(f);
-  return(map);
-}
-
-
-
-static Scenario
-parse_scenario_file (char * filename){
-  FILE * f = fopen(filename, "r");
-  char s[100];
-  /*player_id x y type_id*/
-  char *s_unit    = "unit %i %i %i %i";
-  char *s_players = "players_count %i";
-  char *s_map     = "map_file %s";
-  Scenario sc = {NULL, {0, 0}, {NULL, NULL, 0}, 0};
-  while(fgets(s, 99, f)){
-    /*skip comments and empty lines*/
-    if(s[0]=='#' || s[0]=='\n')
-      continue;
-    if(strcmp_sp(s, s_unit)){
-      Initial_unit_info *u =
-          calloc(1, sizeof(Initial_unit_info));
-      sscanf(s, s_unit,
-          &u->player, &u->m.x, &u->m.y, &u->t);
-      l_push(&sc.units, u);
-    }
-    if(strcmp_sp(s, s_players))
-      sscanf(s, s_players, &sc.players_count);
-    if(strcmp_sp(s, s_map)){
-      char map_name[100];
-      sscanf(s, s_map, map_name);
-      sc.map = read_map(map_name, &sc.map_size);
-    }
-  }
-  fclose(f);
-  return(sc);
-}
-
-
-
-static void
-apply_scenario(Scenario sc, World *w){
-  Node * nd;
-  int map_size = sizeof(Tile) * sc.map_size.x * sc.map_size.y;
-  w->map = malloc(map_size);
-  memcpy(w->map, sc.map, map_size);
-  FOR_EACH_NODE(sc.units, nd){
-    Initial_unit_info *u = nd->d;
-    add_unit(u->m, u->player, u->t, w);
-  }
-}
-
-
-
-static void
-apply_scenario_to_all_worlds(Scenario sc){
-  Node * nd;
-  map_size = sc.map_size;
-  FOR_EACH_NODE(worlds, nd){
-    World *w = nd->d;
-    apply_scenario(sc, w);
-  }
 }
 
 
@@ -564,6 +473,59 @@ create_local_ai (int id) {
 
 
 
+
+static Tile *
+str2map (char *s){
+	Tile *i; /*used for iteration through 'map'*/
+  Tile *map = malloc(sizeof(Tile)
+      * map_size.x * map_size.y);
+  i = map;
+  while(s && *s!=0){
+    if(*s!=' ' && *s!='\n' && *s!='\0'){
+      i->t = char2tiletype(*s);
+      i++;
+    }
+    s++;
+  }
+  return(map);
+}
+ 
+
+
+void
+load_sc_1 (World *w){
+  char *map =
+      " . . * . . . *"
+      ". . . t . M . "
+      " . . . . . . ."
+      ". . . . . . . "
+      " . . . . . . ."
+      ". . . . . . . "
+      " . . . . . * ."
+      ". . * * * . . "
+      " . * h h * . ."
+      ". * h M h * . "
+      " . * h h * . ."
+      ". . * * * . . "
+      " . . . . . . ."
+      ". . . . . . . ";
+  map_size.x = 7;
+  map_size.y = 14;
+  scenario_players_count = 2;
+  w->map = str2map(map);
+
+  add_unit(mk_mcrd(1,2), 0, UNIT_TYPE_DEFENDER, w);
+  add_unit(mk_mcrd(1,3), 0, UNIT_TYPE_DEFENDER, w);
+  add_unit(mk_mcrd(1,4), 0, UNIT_TYPE_DEFENDER, w);
+  add_unit(mk_mcrd(1,5), 0, UNIT_TYPE_HUNTER,   w);
+
+  add_unit(mk_mcrd(3,4), 1, UNIT_TYPE_HUNTER,   w);
+  add_unit(mk_mcrd(3,5), 1, UNIT_TYPE_DEFENDER, w);
+  add_unit(mk_mcrd(3,3), 1, UNIT_TYPE_ARCHER,   w);
+}
+
+
+
 static void
 local_arguments (int ac, char ** av)
 {
@@ -579,8 +541,18 @@ local_arguments (int ac, char ** av)
       create_local_human(id);
     }
   }
+#if 0
   scenario = parse_scenario_file(av[2]);
   apply_scenario_to_all_worlds(scenario);
+#else
+  {
+    Node *nd;
+    FOR_EACH_NODE(worlds, nd){
+      World *w = nd->d;
+      load_sc_1(w);
+    }
+  }
+#endif
   is_local = true;
 }
 
@@ -589,7 +561,6 @@ local_arguments (int ac, char ** av)
 static void
 net_arguments (int ac, char ** av){
   int no_players_left_mark = 0xff;
-  char scenarioname[100];
   int i;
 
   int port = str2int(av[3]);
@@ -611,9 +582,13 @@ net_arguments (int ac, char ** av){
 
   send_int_as_uint8(no_players_left_mark);
 
+#if 0
   get_scenario_name_from_server(scenarioname);
   scenario = parse_scenario_file(scenarioname);
   apply_scenario_to_all_worlds(scenario);
+#else
+  /*TODO load hardcoded scenario*/
+#endif
   is_local = false;
   add_event_local(mk_event_endturn(0, 0));
 }
@@ -839,7 +814,7 @@ get_next_event (){
 void
 endturn (){
   int id = cw->id + 1;
-  if(id == scenario.players_count)
+  if(id == scenario_players_count)
     id = 0;
   add_event(mk_event_endturn(cw->id, id));
 }
@@ -937,4 +912,5 @@ is_eq_empty (){
   update_eq();
   return(cw->eq.count == 0);
 }
+
 
