@@ -59,7 +59,6 @@ defstruct {
 } Unit;
 
 
-/*Tile.type*/
 #define TILE_GRASS 0
 #define TILE_FOREST 1
 #define TILE_WATER 2
@@ -69,7 +68,7 @@ defstruct {
 defstruct {
   int  fog;  /* fog of war. how many units see this tile. */
   int  cost; /* cost of path for selunit to this tile */
-  int  t; /*type*/
+  int  t; /* TILE_* */
   Mcrd parent; /* used in pathfinding */
 } Tile;
 
@@ -91,7 +90,7 @@ defstruct { int t; int old_player, new_player; } Event_endturn;
 defstruct { int t; Unit u; } Event_death;
 
 typedef union {
-  int t; /*type*/
+  int t; /* EVENT_* */
   Event_move   move;
   Event_melee  melee;
   Event_range  range;
