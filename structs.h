@@ -59,10 +59,10 @@ defstruct {
 } Unit;
 
 
-#define TILE_GRASS 0
-#define TILE_FOREST 1
-#define TILE_WATER 2
-#define TILE_HILLS 3
+#define TILE_GRASS     0
+#define TILE_FOREST    1
+#define TILE_WATER     2
+#define TILE_HILLS     3
 #define TILE_MOUNTEENS 4
 
 defstruct {
@@ -72,11 +72,11 @@ defstruct {
   Mcrd parent; /* used in pathfinding */
 } Tile;
 
-#define EVENT_MOVE   0
-#define EVENT_MELEE  1
-#define EVENT_RANGE  2
+#define EVENT_MOVE    0
+#define EVENT_MELEE   1
+#define EVENT_RANGE   2
 #define EVENT_ENDTURN 3
-#define EVENT_DEATH  4
+#define EVENT_DEATH   4
 
 defstruct { int t; int u; Mcrd dest; int cost; }  Event_move;
 defstruct {
