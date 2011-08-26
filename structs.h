@@ -1,13 +1,11 @@
 
-#define defstruct  typedef struct 
-
-defstruct { int x, y; } Vec2i;
+typedef struct { int x, y; } Vec2i;
 
 /* map coordinates */
 typedef Vec2i Mcrd; 
 
 
-defstruct {
+typedef struct {
   int   range_of_vision;
   int   morale;
   int   count;
@@ -31,8 +29,8 @@ defstruct {
 #define SKILL_ARMPIERC  6
 #define SKILL_NORETURN  7
 
-defstruct { int t; int power; } Skill_berserk;
-defstruct { int t; int skill, power, range; } Skill_range;
+typedef struct { int t; int power; } Skill_berserk;
+typedef struct { int t; int skill, power, range; } Skill_range;
 
 typedef union {
   int t; /* type: SKILL_* */
@@ -45,7 +43,7 @@ typedef union {
 #define UNIT_TYPE_HUNTER   1
 #define UNIT_TYPE_ARCHER   2
 
-defstruct {
+typedef struct {
   int   t; /*UNIT_TYPE_**/
   int   id;
   int   count;
@@ -65,7 +63,7 @@ defstruct {
 #define TILE_HILLS     3
 #define TILE_MOUNTEENS 4
 
-defstruct {
+typedef struct {
   int  fog;  /* fog of war. how many units see this tile. */
   int  cost; /* cost of path for selunit to this tile */
   int  t; /* TILE_* */
@@ -78,16 +76,16 @@ defstruct {
 #define EVENT_ENDTURN 3
 #define EVENT_DEATH   4
 
-defstruct { int t; int u; int dir; int cost; }  Event_move;
-defstruct {
+typedef struct { int t; int u; int dir; int cost; }  Event_move;
+typedef struct {
   int t;
   int a, d; /* attacker, defender */
   int attackers_killed;
   int defenders_killed;
 } Event_melee;
-defstruct { int t; int a, d; int dmg; }  Event_range;
-defstruct { int t; int old_player, new_player; } Event_endturn;
-defstruct { int t; Unit u; } Event_death;
+typedef struct { int t; int a, d; int dmg; }  Event_range;
+typedef struct { int t; int old_player, new_player; } Event_endturn;
+typedef struct { int t; Unit u; } Event_death;
 
 typedef union {
   int t; /* EVENT_* */
@@ -99,7 +97,7 @@ typedef union {
 } Event;
 
 
-defstruct {
+typedef struct {
   Tile * map;
   List   units;
   List   eq; /* events queue */
