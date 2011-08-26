@@ -30,7 +30,7 @@ typedef struct {
 #define SKILL_NORETURN  7
 
 typedef struct { int t; int power; } Skill_berserk;
-typedef struct { int t; int skill, power, range; } Skill_range;
+typedef struct { int t; int skill, strength, range; } Skill_range;
 
 typedef union {
   int t; /* type: SKILL_* */

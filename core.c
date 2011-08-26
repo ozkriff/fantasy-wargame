@@ -102,7 +102,7 @@ range_damage (Unit * a, Unit * b){
   int attacks     = a->count;
   /*chances to hit, to wound and to ignore armour. percents.*/
   int to_hit      = 2 + s.skill;
-  int to_wound    = 5 + (s.power - utypes[b->t].toughness);
+  int to_wound    = 5 + (s.strength - utypes[b->t].toughness);
   int to_as       = 10- utypes[b->t].armor;
 #if 1
   int r = rnd(0, 2);
@@ -629,11 +629,11 @@ new_unit_id (World *w){
 
 
 static Skill
-mk_skill_range (int skill, int power, int range){
+mk_skill_range (int skill, int strength, int range){
   Skill s;
   s.range.t = SKILL_RANGE;
   s.range.skill = skill;
-  s.range.power = power;
+  s.range.strength = strength;
   s.range.range = range;
   return(s);
 }
