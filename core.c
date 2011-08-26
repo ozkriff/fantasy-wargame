@@ -95,14 +95,14 @@ apply_move (Event e){
 /* a - shooting unit, b - target */
 static int
 range_damage (Unit * a, Unit * b){
-  Skill_range f   = find_skill(a, SKILL_RNG)->rng;
+  Skill_range s   = find_skill(a, SKILL_RNG)->rng;
   int hits        = 0;
   int wounds      = 0; /*possible wounds(may be blocked by armour)*/
   int final       = 0; /*final wounds(not blocked by armour)*/
   int attacks     = a->count;
   /*chances to hit, to wound and to ignore armour. percents.*/
-  int to_hit      = 2 + f.skill;
-  int to_wound    = 5 + (f.power - utypes[b->t].toughness);
+  int to_hit      = 2 + s.skill;
+  int to_wound    = 5 + (s.power - utypes[b->t].toughness);
   int to_as       = 10- utypes[b->t].armor;
 #if 1
   int r = rnd(0, 2);
