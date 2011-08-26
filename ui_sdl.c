@@ -530,7 +530,7 @@ common_keys (SDL_Event e){
 
 
 
-/* Only in SELCET_MODE. */
+/* Only in SELECT_MODE. */
 static void
 select_keys (SDL_Event e){
   switch(e.key.keysym.sym) {
