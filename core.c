@@ -80,7 +80,7 @@ update_fog_after_move (Unit * u){
 static void
 apply_move (Event e){
   Unit * u = id2unit(e.move.u);
-  if(find_feature(u, FEATURE_IGNR))
+  if(find_skill(u, SKILL_IGNR))
     u->mvp -= e.move.cost;
   else
     u->mvp = 0;
@@ -95,7 +95,7 @@ apply_move (Event e){
 /* a - shooting unit, b - target */
 static int
 range_damage (Unit * a, Unit * b){
-  Feature_range f = find_feature(a, FEATURE_RNG)->rng;
+  Skill_range f   = find_skill(a, SKILL_RNG)->rng;
   int hits        = 0;
   int wounds      = 0; /*possible wounds(may be blocked by armour)*/
   int final       = 0; /*final wounds(not blocked by armour)*/
@@ -175,7 +175,7 @@ updatefog (int player){
 static bool
 is_invis (Unit * u){
   int i;
-  if(!find_feature(u, FEATURE_INVIS)
+  if(!find_skill(u, SKILL_INVIS)
   || u->player == cw->id)
     return(false);
   for(i=0; i<6; i++){
@@ -331,7 +331,7 @@ support_range (Unit * a, Unit * d){
   for(i=0; i<6; i++){
     sup = find_unit_at( neib(d->m, i) );
     if(sup && sup->player == d->player 
-    && find_feature(sup, FEATURE_RNG)){
+    && find_skill(sup, SKILL_RNG)){
       break;
     }
   }
@@ -448,9 +448,9 @@ update_units_visibility (){
 
 
 static void
-add_feature (Unit * u, Feature f){
-  u->features_n++;
-  u->features[u->features_n-1] = f;
+add_skill (Unit * u, Skill f){
+  u->skills_n++;
+  u->skills[u->skills_n-1] = f;
 }
 
 
@@ -628,10 +628,10 @@ new_unit_id (World *w){
 
 
 
-static Feature
-mk_feature_range (int skill, int power, int range){
-  Feature f;
-  f.rng.t = FEATURE_RNG;
+static Skill
+mk_skill_range (int skill, int power, int range){
+  Skill f;
+  f.rng.t = SKILL_RNG;
   f.rng.skill = skill;
   f.rng.power = power;
   f.rng.range = range;
@@ -640,19 +640,19 @@ mk_feature_range (int skill, int power, int range){
 
 
 
-static Feature
-mk_feature_berserk (int power){
-  Feature f;
-  f.brsk.t = FEATURE_BRSK;
+static Skill
+mk_skill_berserk (int power){
+  Skill f;
+  f.brsk.t = SKILL_BRSK;
   f.brsk.power = power;
   return(f);
 }
 
 
 
-static Feature
-mk_feature_bool (int type){
-  Feature f;
+static Skill
+mk_skill_bool (int type){
+  Skill f;
   f.t = type;
   return(f);
 }
@@ -660,14 +660,14 @@ mk_feature_bool (int type){
 
 
 static void
-add_default_features_to_unit (Unit * u){
+add_default_skills_to_unit (Unit * u){
   if(u->t == UNIT_TYPE_ARCHER){
-    add_feature(u, mk_feature_range(3, 5, 4));
+    add_skill(u, mk_skill_range(3, 5, 4));
   }
   if(u->t == UNIT_TYPE_HUNTER) {
-    add_feature(u, mk_feature_bool(FEATURE_IGNR    ));
-    add_feature(u, mk_feature_bool(FEATURE_INVIS   ));
-    add_feature(u, mk_feature_bool(FEATURE_NORETURN));
+    add_skill(u, mk_skill_bool(SKILL_IGNR    ));
+    add_skill(u, mk_skill_bool(SKILL_INVIS   ));
+    add_skill(u, mk_skill_bool(SKILL_NORETURN));
   }
 }
 
@@ -865,7 +865,7 @@ void
 attack (Unit * a, Unit * d){
   Mcrd md = d->m;
   Mcrd ma = a->m;
-  Feature * rng = find_feature(a, FEATURE_RNG);
+  Skill * rng = find_skill(a, SKILL_RNG);
   if(rng){
     if(mdist(ma, md) <= rng->rng.range){
       int targets_killed = range_damage(a, d);
@@ -927,8 +927,8 @@ add_unit (
   u->m          = crd;
   u->t          = type;
   u->id         = new_unit_id(world);
-  u->features_n = 0;
-  add_default_features_to_unit(u);
+  u->skills_n   = 0;
+  add_default_skills_to_unit(u);
   l_push(&world->units, u);
 }
 

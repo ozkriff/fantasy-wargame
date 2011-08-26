@@ -23,22 +23,22 @@ defstruct {
 
 
 
-#define FEATURE_RNG       1
-#define FEATURE_BRSK      2
-#define FEATURE_INVIS     3
-#define FEATURE_IGNR      4
-#define FEATURE_ARMORED   5
-#define FEATURE_ARMPIERC  6
-#define FEATURE_NORETURN  7
+#define SKILL_RNG       1
+#define SKILL_BRSK      2
+#define SKILL_INVIS     3
+#define SKILL_IGNR      4
+#define SKILL_ARMORED   5
+#define SKILL_ARMPIERC  6
+#define SKILL_NORETURN  7
 
-defstruct { int t; int power;        } Feature_berserk;
-defstruct { int t; int skill, power, range; } Feature_range;
+defstruct { int t; int power;        } Skill_berserk;
+defstruct { int t; int skill, power, range; } Skill_range;
 
 typedef union {
-  int t; /* type: FEATURE_* */
-  Feature_range    rng;
-  Feature_berserk  brsk;
-} Feature;
+  int t; /* type: SKILL_* */
+  Skill_range    rng;
+  Skill_berserk  brsk;
+} Skill;
 
 
 #define UNIT_TYPE_DEFENDER 0
@@ -53,8 +53,8 @@ defstruct {
   bool  can_attack;
   int   mvp;
   Mcrd  m;
-  Feature features[10];
-  int     features_n;
+  Skill skills[10];
+  int   skills_n;
   bool  visible;
 } Unit;
 

@@ -14,7 +14,7 @@ void   fixnum (int min, int max, int *n);
 int    rnd (int min, int max);
 bool   strcmp_sp (char *s1, char *s2);
 
-Feature * find_feature (Unit * u, int type);
+Skill * find_skill (Unit * u, int type);
 
 /* ----------------------------------------------------- */
 

@@ -33,12 +33,12 @@ mk_mcrd (int x, int y){
 
 
 
-Feature *
-find_feature(Unit * u, int type){
+Skill *
+find_skill(Unit * u, int type){
   int i;
-  for(i=0; i<u->features_n; i++){
-    if(u->features[i].t == type)
-      return(&u->features[i]);
+  for(i=0; i<u->skills_n; i++){
+    if(u->skills[i].t == type)
+      return(&u->skills[i]);
   }
   return(NULL);
 }
