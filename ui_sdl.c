@@ -369,7 +369,7 @@ maptext (){
 static void
 draw_move_event (){
   Unit * u = id2unit(e.move.u);
-  Scrd crd = mbetween(u->m, e.move.dest, eindex);
+  Scrd crd = mbetween(u->m, neib(u->m, e.move.dir), eindex);
   draw_img(type2img(u->t), crd);
 }
 

@@ -78,7 +78,7 @@ defstruct {
 #define EVENT_ENDTURN 3
 #define EVENT_DEATH   4
 
-defstruct { int t; int u; Mcrd dest; int cost; }  Event_move;
+defstruct { int t; int u; int dir; int cost; }  Event_move;
 defstruct {
   int t;
   int a, d; /* attacker, defender */

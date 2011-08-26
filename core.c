@@ -84,7 +84,7 @@ apply_move (Event e){
     u->mvp -= e.move.cost;
   else
     u->mvp = 0;
-  u->m = e.move.dest;
+  u->m = neib(u->m, e.move.dir);
   fill_map(selunit);
   if(u->player==cw->id)
     update_fog_after_move(u);
@@ -192,7 +192,7 @@ is_invis (Unit * u){
 static bool
 is_move_visible (Event e){
   Unit * u = id2unit(e.move.u);
-  bool fow = tile(e.move.dest)->fog || tile(u->m)->fog;
+  bool fow = tile(neib(u->m, e.move.dir))->fog || tile(u->m)->fog;
   bool hidden = is_invis(u) && u->player!=cw->id;
   return(!hidden && fow);
 }
@@ -268,12 +268,12 @@ mk_event_endturn (int old_id, int new_id){
 
 
 static Event
-mk_event_move (Unit * u, Mcrd dest){
+mk_event_move (Unit * u, int dir){
   Event e;
   e.move.t    = EVENT_MOVE;
   e.move.u    = u->id;
-  e.move.dest = dest;
-  e.move.cost = utypes[u->t].ter_mvp[tile(dest)->t];
+  e.move.dir  = dir;
+  e.move.cost = utypes[u->t].ter_mvp[tile(neib(u->m, dir))->t];
   return(e);
 }
 
@@ -745,10 +745,9 @@ void
 event2log (Event e){
   if(e.t == EVENT_MOVE){
     fprintf(logfile,
-        "MOVE  u=%i, dest={%i,%i}, cost=%i\n",
+        "MOVE  u=%i, dir=%i, cost=%i\n",
         e.move.u,
-        e.move.dest.x,
-        e.move.dest.y,
+        e.move.dir,
         e.move.cost );
   }
   if(e.t == EVENT_MELEE) {
@@ -850,9 +849,10 @@ move (Unit * moving_unit, Mcrd destination){
   Node * node;
   for(node=path.h; node->n; node=node->n){
     Mcrd * next    = node->n->d;
+    Mcrd * current = node->d;
     if(ambush(*next, moving_unit))
       break;
-    add_event( mk_event_move(moving_unit, (*next)) );
+    add_event( mk_event_move(moving_unit, mcrd2index(*current, *next)) );
   }
   while(path.count > 0)
     l_delete_node(&path, path.h);
