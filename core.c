@@ -269,11 +269,12 @@ mk_event_endturn (int old_id, int new_id){
 
 static Event
 mk_event_move (Unit * u, int dir){
+  int tile_type = tile(neib(u->m, dir))->t;
   Event e;
   e.move.t    = EVENT_MOVE;
   e.move.u    = u->id;
   e.move.dir  = dir;
-  e.move.cost = utypes[u->t].ter_mvp[tile(neib(u->m, dir))->t];
+  e.move.cost = utypes[u->t].ter_mvp[tile_type];
   return(e);
 }
 
