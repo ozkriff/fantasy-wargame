@@ -136,8 +136,8 @@ apply_melee(Event e){
 
 
 static void
-apply_remove_unit (Event e){
-  Unit *u = id2unit(e.remunit.u.id);
+apply_death (Event e){
+  Unit *u = id2unit(e.death.u.id);
   kill_unit(u);
 }
 
@@ -376,10 +376,10 @@ get_wounds (Unit *a, Unit *d){
 
 
 static Event
-mk_event_remove_unit (Unit *u){
+mk_event_death (Unit *u){
   Event e;
-  e.t = EVENT_REMOVE_UNIT;
-  e.remunit.u = *u;
+  e.t = EVENT_DEATH;
+  e.death.u = *u;
   return(e);
 }
 
@@ -399,9 +399,9 @@ attack_melee (Unit * a, Unit * d){
       attackers_killed, defenders_killed);
   add_event( melee );
   if(a->count - attackers_killed <= 0)
-    add_event(mk_event_remove_unit(a));
+    add_event(mk_event_death(a));
   if(d->count - defenders_killed <= 0)
-    add_event(mk_event_remove_unit(d));
+    add_event(mk_event_death(d));
   puts("");
 
 #if 0
@@ -772,8 +772,8 @@ event2log (Event e){
         e.endturn.old_player,
         e.endturn.new_player );
   }
-  if(e.t == EVENT_REMOVE_UNIT) {
-    fprintf(logfile, "KILLED %i\n", e.remunit.u.id);
+  if(e.t == EVENT_DEATH) {
+    fprintf(logfile, "KILLED %i\n", e.death.u.id);
   }
 }
 
@@ -871,7 +871,7 @@ attack (Unit * a, Unit * d){
       int targets_killed = range_damage(a, d);
       add_event( mk_event_range(a, d, targets_killed) );
       if(d->count - targets_killed <= 0)
-        add_event(mk_event_remove_unit(d));
+        add_event(mk_event_death(d));
       puts("");
     }
   }else{
@@ -905,7 +905,7 @@ apply_event (Event e){
     case EVENT_MELEE:   apply_melee(e);   break;
     case EVENT_RANGE:   apply_range(e);   break;
     case EVENT_ENDTURN: apply_endturn(e); break;
-    case EVENT_REMOVE_UNIT: apply_remove_unit(e); break;
+    case EVENT_DEATH:   apply_death(e);   break;
   }
   update_units_visibility();
 }
