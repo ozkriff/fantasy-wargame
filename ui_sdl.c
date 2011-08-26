@@ -37,7 +37,7 @@ static TTF_Font * font = NULL;
 
 static Vec2i map_offset = {72, 72/4};
 
-Uint32 red, black, green, blue, white;
+static Uint32 red, black, green, blue, white;
 
 /* mouse points to this hex */
 static Mcrd selected_tile; /* selected hex */
@@ -54,7 +54,7 @@ static int eindex;
 
 /*If eindex==eindex=last, then event is shown.*/
 static int eindex_last; 
-int steps = 6;
+static int steps = 6;
 
 static bool done;
 
