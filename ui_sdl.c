@@ -473,12 +473,8 @@ init_draw (){
 
 static void
 mouseclick (SDL_Event e){
-  Unit * u;
-  Mcrd m;
-  if(!is_active || ui_mode != MODE_SELECT)
-    return;
-  m = scr2map(mk_scrd(e.button.x, e.button.y));
-  u = find_unit_at(m);
+  Mcrd m = scr2map(mk_scrd(e.button.x, e.button.y));
+  Unit *u = find_unit_at(m);
   if(u && u->player == cw->id){
     selunit = u;
     fill_map(selunit);
@@ -570,7 +566,10 @@ sdl_events (){
     switch(e.type){
       case SDL_QUIT:            done = true;   break;
       case SDL_KEYUP:           keys(e);       break;
-      case SDL_MOUSEBUTTONDOWN: mouseclick(e); break;
+      case SDL_MOUSEBUTTONDOWN:
+        if(is_active && ui_mode == MODE_SELECT)
+          mouseclick(e);
+        break;
       case SDL_MOUSEMOTION:     mousemove(e);  break;
       case SDL_VIDEORESIZE:
         screen = SDL_SetVideoMode(e.resize.w, e.resize.h,
