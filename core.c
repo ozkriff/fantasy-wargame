@@ -130,11 +130,15 @@ apply_melee(Event e){
   Unit * d = id2unit(e.melee.d);
   a->count -= e.melee.attackers_killed;
   d->count -= e.melee.defenders_killed;
-  if(a->count <= 0)
-    kill_unit(a);
-  if(d->count <= 0)
-    kill_unit(d);
   a->can_attack = false;
+}
+
+
+
+static void
+apply_remove_unit (Event e){
+  Unit *u = id2unit(e.remunit.u.id);
+  kill_unit(u);
 }
 
 
@@ -145,8 +149,6 @@ apply_range (Event e){
   Unit * ud = id2unit(e.range.d);
   int dmg = e.range.dmg;
   ud->count -= dmg;
-  if(ud->count <= 0)
-    kill_unit(ud);
   ua->can_attack = false;
 }
 
@@ -373,15 +375,33 @@ get_wounds (Unit *a, Unit *d){
  
 
 
+static Event
+mk_event_remove_unit (Unit *u){
+  Event e;
+  e.t = EVENT_REMOVE_UNIT;
+  e.remunit.u = *u;
+  return(e);
+}
+
+
+
 /* [a]ttacker, [d]efender */
 /* TODO rewrite */
 static void
 attack_melee (Unit * a, Unit * d){
   Event melee;
+  int attackers_killed;
+  int defenders_killed;
   support_range(a, d);
+  defenders_killed = get_wounds(a, d);
+  attackers_killed = get_wounds(d, a);
   melee = mk_event_melee(a, d,
-      get_wounds(d,a), get_wounds(a,d));
+      attackers_killed, defenders_killed);
   add_event( melee );
+  if(a->count - attackers_killed <= 0)
+    add_event(mk_event_remove_unit(a));
+  if(d->count - defenders_killed <= 0)
+    add_event(mk_event_remove_unit(d));
   puts("");
 
 #if 0
@@ -752,6 +772,9 @@ event2log (Event e){
         e.endturn.old_player,
         e.endturn.new_player );
   }
+  if(e.t == EVENT_REMOVE_UNIT) {
+    fprintf(logfile, "KILLED %i\n", e.remunit.u.id);
+  }
 }
 
 
@@ -845,7 +868,10 @@ attack (Unit * a, Unit * d){
   Feature * rng = find_feature(a, FEATURE_RNG);
   if(rng){
     if(mdist(ma, md) <= rng->rng.range){
-      add_event( mk_event_range(a, d, range_damage(a, d)) );
+      int targets_killed = range_damage(a, d);
+      add_event( mk_event_range(a, d, targets_killed) );
+      if(d->count - targets_killed <= 0)
+        add_event(mk_event_remove_unit(d));
       puts("");
     }
   }else{
@@ -879,6 +905,7 @@ apply_event (Event e){
     case EVENT_MELEE:   apply_melee(e);   break;
     case EVENT_RANGE:   apply_range(e);   break;
     case EVENT_ENDTURN: apply_endturn(e); break;
+    case EVENT_REMOVE_UNIT: apply_remove_unit(e); break;
   }
   update_units_visibility();
 }

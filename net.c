@@ -63,6 +63,16 @@ mk_event_endturn (Byte * d){
 
 
 
+static Event_remove_unit
+mk_event_remove_unit (Byte *d){
+  Event_remove_unit e;
+  e.t = EVENT_REMOVE_UNIT;
+  e.u = *id2unit(d[1]);
+  return(e);
+}
+
+
+
 static void
 send_move (Event_move e){
   Byte size = 4;
@@ -121,6 +131,18 @@ send_endturn (Event_endturn e){
 
 
 static void
+send_remove_unit (Event_remove_unit e){
+  Byte size = 2;
+  Byte d[2];
+  SDLNet_TCP_Send(socket, &size, 1);
+  d[0] = e.t;
+  d[1] = e.u.id;
+  SDLNet_TCP_Send(socket, d, size);
+}
+
+
+
+static void
 get_data (Byte * data, Byte * size){
   int bytes_recieved;
   SDLNet_TCP_Recv(socket, size, 1);
@@ -153,6 +175,7 @@ send_event (Event e) {
     case EVENT_MOVE : send_move (e.move ); break;
     case EVENT_RANGE: send_range(e.range); break;
     case EVENT_ENDTURN: send_endturn(e.endturn); break;
+    case EVENT_REMOVE_UNIT: send_remove_unit(e.remunit); break;
   }
 }
 
@@ -173,6 +196,7 @@ mk_event (Byte * d){
   if(d[0]==EVENT_MELEE) e.melee = mk_event_melee(d);
   if(d[0]==EVENT_RANGE) e.range = mk_event_range(d);
   if(d[0]==EVENT_ENDTURN) e.endturn = mk_event_endturn(d);
+  if(d[0]==EVENT_REMOVE_UNIT) e.remunit = mk_event_remove_unit(d);
   return(e);
 }
 
