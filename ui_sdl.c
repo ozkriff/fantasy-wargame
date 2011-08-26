@@ -155,9 +155,7 @@ scr2map (Scrd m) {
   Mcrd min;
   Mcrd mcrd;
   int min_dist = 9000;
-
   m.x /= 2;
-
   FOR_EACH_MCRD(mcrd){
     Scrd wp = map2scr(mcrd);
     wp.x += 36; wp.y += 54;
