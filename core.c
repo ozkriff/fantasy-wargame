@@ -95,7 +95,7 @@ apply_move (Event e){
 /* a - shooting unit, b - target */
 static int
 range_damage (Unit * a, Unit * b){
-  Skill_range s   = find_skill(a, SKILL_RNG)->rng;
+  Skill_range s   = find_skill(a, SKILL_RANGE)->range;
   int hits        = 0;
   int wounds      = 0; /*possible wounds(may be blocked by armour)*/
   int final       = 0; /*final wounds(not blocked by armour)*/
@@ -331,7 +331,7 @@ support_range (Unit * a, Unit * d){
   for(i=0; i<6; i++){
     sup = find_unit_at( neib(d->m, i) );
     if(sup && sup->player == d->player 
-    && find_skill(sup, SKILL_RNG)){
+    && find_skill(sup, SKILL_RANGE)){
       break;
     }
   }
@@ -631,10 +631,10 @@ new_unit_id (World *w){
 static Skill
 mk_skill_range (int skill, int power, int range){
   Skill s;
-  s.rng.t = SKILL_RNG;
-  s.rng.skill = skill;
-  s.rng.power = power;
-  s.rng.range = range;
+  s.range.t = SKILL_RANGE;
+  s.range.skill = skill;
+  s.range.power = power;
+  s.range.range = range;
   return(s);
 }
 
@@ -865,9 +865,9 @@ void
 attack (Unit * a, Unit * d){
   Mcrd md = d->m;
   Mcrd ma = a->m;
-  Skill * rng = find_skill(a, SKILL_RNG);
-  if(rng){
-    if(mdist(ma, md) <= rng->rng.range){
+  Skill * range = find_skill(a, SKILL_RANGE);
+  if(range){
+    if(mdist(ma, md) <= range->range.range){
       int targets_killed = range_damage(a, d);
       add_event( mk_event_range(a, d, targets_killed) );
       if(d->count - targets_killed <= 0)

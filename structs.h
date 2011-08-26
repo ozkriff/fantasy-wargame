@@ -21,7 +21,7 @@ typedef struct {
 
 
 
-#define SKILL_RNG       1
+#define SKILL_RANGE     1
 #define SKILL_BRSK      2
 #define SKILL_INVIS     3
 #define SKILL_IGNR      4
@@ -34,7 +34,7 @@ typedef struct { int t; int skill, power, range; } Skill_range;
 
 typedef union {
   int t; /* type: SKILL_* */
-  Skill_range    rng;
+  Skill_range    range;
   Skill_berserk  brsk;
 } Skill;
 
