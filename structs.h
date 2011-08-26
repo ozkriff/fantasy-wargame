@@ -76,7 +76,13 @@ typedef struct {
 #define EVENT_ENDTURN 3
 #define EVENT_DEATH   4
 
-typedef struct { int t; int u; int dir; int cost; }  Event_move;
+typedef struct {
+  int t;
+  int u; /*unit's id*/
+  int dir; /*direction index*/
+  int cost;
+}  Event_move;
+
 typedef struct {
   int t;
   int a, d; /* attacker, defender */
