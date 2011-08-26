@@ -30,7 +30,7 @@ l_insert_node (List * list, void * data, Node * after){
 
 
 /* Extructs node from list, returns pointer to this node.
-	No memory is freed */
+  No memory is freed */
 Node *
 l_extruct_node (List * list, Node * old){
   if(old){

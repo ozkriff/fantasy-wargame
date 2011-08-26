@@ -455,7 +455,7 @@ read_map (char *fname, Mcrd *size){
   char  s[100];
   FILE *f;
   Tile *map;
-	Tile *i; /*used for iteration through 'map'*/
+  Tile *i; /*used for iteration through 'map'*/
   f = fopen(fname, "r");
   fgets(s, 99, f);
   sscanf(s, "%i %i", &size->x, &size->y);
@@ -799,7 +799,7 @@ cleanup(){
     while(w->eq.count > 0)
       l_delete_node(&w->eq, w->eq.h);
     while(w->units.count > 0)
-			l_delete_node(&w->units, w->units.h);
+      l_delete_node(&w->units, w->units.h);
     free(w->map);
     l_delete_node(&worlds, worlds.h);
   }

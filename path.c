@@ -99,8 +99,8 @@ fill_map (Unit * u) {
         process_nbh(u, t, nb);
     }
   }
-	while(stack.count > 0)
-		l_delete_node(&stack, stack.h);
+  while(stack.count > 0)
+    l_delete_node(&stack, stack.h);
 }
 
 
