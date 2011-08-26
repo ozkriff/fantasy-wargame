@@ -53,7 +53,7 @@ static Event e;    /* current [e]vent */
 static int eindex;
 
 /*If eindex==eindex=last, then event is shown.*/
-static int eindex_last; 
+static int final_eindex;
 static int steps = 6;
 
 static bool done;
@@ -392,11 +392,11 @@ draw_range_event (){
   Unit *u2 = id2unit(e.range.d);
   int dist = mdist(u1->m, u2->m);
   /*[v]ertical [c]orrection*/
-  int vc   = dist*14 * sin((eindex*3.14)/eindex_last);
+  int vc   = dist*14 * sin((eindex*3.14)/final_eindex);
   Scrd a   = map2scr(u1->m);
   Scrd b   = map2scr(u2->m);
-  a.x     += ((b.x-a.x)*eindex)/eindex_last;
-  a.y     += ((b.y-a.y)*eindex)/eindex_last;
+  a.x     += ((b.x-a.x)*eindex)/final_eindex;
+  a.y     += ((b.y-a.y)*eindex)/final_eindex;
   draw_img(img_arrow, mk_scrd(a.x, a.y-vc));
 }
 
@@ -601,7 +601,7 @@ static void
 events (){
   if(ui_mode == MODE_SHOW_EVENT)
     eindex++;
-  if(ui_mode==MODE_SHOW_EVENT && eindex >= eindex_last){
+  if(ui_mode==MODE_SHOW_EVENT && eindex >= final_eindex){
     apply_event(e);
     ui_mode = MODE_SELECT;
   }
@@ -609,7 +609,7 @@ events (){
     e = get_next_event();
     ui_mode = MODE_SHOW_EVENT;
     eindex = 0;
-    eindex_last = get_last_event_index(e);
+    final_eindex = get_last_event_index(e);
   }
 }
 
