@@ -81,7 +81,7 @@ defstruct {
 defstruct { int t; int u; Mcrd dest; int cost; }  Event_move;
 defstruct {
   int t;
-  int a, d;               /* attacker, defender */
+  int a, d; /* attacker, defender */
   int attackers_killed;
   int defenders_killed;
 } Event_melee;
