@@ -448,9 +448,9 @@ update_units_visibility (){
 
 
 static void
-add_skill (Unit * u, Skill f){
+add_skill (Unit * u, Skill s){
   u->skills_n++;
-  u->skills[u->skills_n-1] = f;
+  u->skills[u->skills_n-1] = s;
 }
 
 
