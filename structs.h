@@ -31,7 +31,7 @@ defstruct {
 #define SKILL_ARMPIERC  6
 #define SKILL_NORETURN  7
 
-defstruct { int t; int power;        } Skill_berserk;
+defstruct { int t; int power; } Skill_berserk;
 defstruct { int t; int skill, power, range; } Skill_range;
 
 typedef union {
