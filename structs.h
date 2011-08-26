@@ -42,9 +42,12 @@ typedef union {
 } Feature;
 
 
+#define UNIT_TYPE_DEFENDER 0
+#define UNIT_TYPE_HUNTER   1
+#define UNIT_TYPE_ARCHER   2
 
 defstruct {
-  Unit_type *t;
+  int   t; /*UNIT_TYPE_**/
   int   id;
   int   count;
   int   player;

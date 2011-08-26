@@ -288,10 +288,10 @@ text (char * str, Scrd crd, bool is_centred){
 
 
 static Img
-type2img (Unit_type * t){
-       if(t==&utypes[0]) return(img_defence_unit);
-  else if(t==&utypes[1]) return(img_hunter_unit);
-  else if(t==&utypes[2]) return(img_range_unit);
+type2img (int t){
+       if(t==UNIT_TYPE_DEFENDER) return(img_defence_unit);
+  else if(t==UNIT_TYPE_HUNTER)   return(img_hunter_unit);
+  else if(t==UNIT_TYPE_ARCHER)   return(img_range_unit);
   else exit(1);
 }
 
