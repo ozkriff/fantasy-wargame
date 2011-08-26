@@ -29,9 +29,9 @@ static int tms3[5] = {  0, 1,-2, 0, 0 };
 
 /* GLOBAL VARIABLES */
 Unit_type utypes[3] = {
-  {1,5,10,  3,3,4,1,3,  3,"defc", tmvp1, tms1},
-  {4,5,10,  3,3,3,2,1,  4,"hunt", tmvp2, tms2},
-  {3,5,10,  2,3,2,1,1,  3,"arch", tmvp3, tms3} };
+  {1,5,10,  3,3,4,1,3,  3, tmvp1, tms1},
+  {4,5,10,  3,3,3,2,1,  4, tmvp2, tms2},
+  {3,5,10,  2,3,2,1,1,  3, tmvp3, tms3} };
 Mcrd    map_size;
 List    worlds;
 World * cw = NULL; /* current world */
