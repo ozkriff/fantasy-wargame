@@ -36,7 +36,7 @@ defstruct { int t; int power;        } Feature_berserk;
 defstruct { int t; int skill, power, range; } Feature_range;
 
 typedef union {
-  int t; /*type*/
+  int t; /* type: FEATURE_* */
   Feature_range    rng;
   Feature_berserk  brsk;
 } Feature;
