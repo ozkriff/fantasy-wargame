@@ -13,6 +13,8 @@ int    mcrd2index (Mcrd a, Mcrd b);
 void   fixnum (int min, int max, int *n);
 int    rnd (int min, int max);
 bool   strcmp_sp (char *s1, char *s2);
+int    char2tiletype(char c);
+Tile*  str2map(char *s);
 
 Skill * find_skill (Unit * u, int type);
 

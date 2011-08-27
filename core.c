@@ -452,20 +452,6 @@ add_skill (Unit * u, Skill s){
 
 
 
-/*get tile type corresponding to character*/
-static int
-char2tiletype (char c){
-  if(c=='.') return(TILE_GRASS);
-  if(c=='t') return(TILE_FOREST);
-  if(c=='*') return(TILE_WATER);
-  if(c=='h') return(TILE_HILLS);
-  if(c=='M') return(TILE_MOUNTEENS);
-  puts("ERROR in char2tiletype");
-  exit(1);
-}
-
-
-
 static void
 create_local_world (int id, bool is_ai) {
   World * w = calloc(1, sizeof(World));
@@ -488,25 +474,6 @@ create_local_ai (int id) {
   create_local_world(id, true);
 }
 
-
-
-
-static Tile *
-str2map (char *s){
-	Tile *i; /*used for iteration through 'map'*/
-  Tile *map = malloc(sizeof(Tile)
-      * map_size.x * map_size.y);
-  i = map;
-  while(s && *s!=0){
-    if(*s!=' ' && *s!='\n' && *s!='\0'){
-      i->t = char2tiletype(*s);
-      i++;
-    }
-    s++;
-  }
-  return(map);
-}
- 
 
 
 void
