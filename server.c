@@ -23,7 +23,7 @@ SDLNet_SocketSet sockets;
 
 
 /* read through scenario to get players_count */
-int
+static int
 get_players_count_from_scenario (char * filename){
   int players_count;
   char line[100];
@@ -45,7 +45,7 @@ get_players_count_from_scenario (char * filename){
 
 
 
-bool
+static bool
 is_id_free (int id){
   Node * client_node;
   FOR_EACH_NODE(clients, client_node){
@@ -60,7 +60,7 @@ is_id_free (int id){
 
 
 
-void
+static void
 wait_for_all_players (int players_count){
   Client * c;
   while(clients.count < players_count) {
@@ -94,7 +94,7 @@ wait_for_all_players (int players_count){
 
 
 
-void
+static void
 send_scenario_name_to_clients (char * scenario_name){
   uint8_t size = strlen(scenario_name) + 1;
   Node * n;
@@ -107,7 +107,7 @@ send_scenario_name_to_clients (char * scenario_name){
 
 
 
-void
+static void
 init (int ac, char **av){
   int port;
   int players_count;
@@ -131,7 +131,7 @@ init (int ac, char **av){
 
 
 
-void
+static void
 cleanup (){
   SDLNet_Quit();
   SDL_Quit();
@@ -139,7 +139,7 @@ cleanup (){
 
 
 
-void
+static void
 receive_data (Client *c, uint8_t *data, uint8_t *size)
 {
   /* receive size of data, then data */
@@ -149,7 +149,7 @@ receive_data (Client *c, uint8_t *data, uint8_t *size)
 
 
 
-void
+static void
 print_data (uint8_t * data, uint8_t size){
   int i;
   for(i=0; i<size; i++)
@@ -163,7 +163,7 @@ print_data (uint8_t * data, uint8_t size){
   who has sent that data to us.
   Send data size (in bytes), then data. */
 
-void
+static void
 resend_data (Client * exception, uint8_t * data, uint8_t size){
   Node * n;
   FOR_EACH_NODE(clients, n){
@@ -177,7 +177,7 @@ resend_data (Client * exception, uint8_t * data, uint8_t size){
 
 
 
-void
+static void
 mainloop (){
   uint8_t data_size;
   uint8_t data[32];
