@@ -384,8 +384,25 @@ mk_event_death (Unit *u){
 
 
 
+static void
+flee (Unit *u){
+  int dir = 0;
+  while(find_unit_at((neib(u->m, dir))) && dir < 6)
+    dir++;
+  if(dir==6){
+#if 0
+    /*TODO if no place to run away,
+      then attack random unit.*/
+    attack(d, a);
+#endif
+  }else{
+    add_event(mk_event_move(u, dir));
+  }
+}
+
+
+
 /* [a]ttacker, [d]efender */
-/* TODO rewrite */
 static void
 attack_melee (Unit * a, Unit * d){
   Event melee;
@@ -399,33 +416,14 @@ attack_melee (Unit * a, Unit * d){
   add_event( melee );
   if(a->count - attackers_killed <= 0)
     add_event(mk_event_death(a));
-  if(d->count - defenders_killed <= 0)
+  if(d->count - defenders_killed <= 0){
     add_event(mk_event_death(d));
-  puts("");
-
-#if 0
-  /* check if opponent is still alive */
-  if(d->health - melee.melee.dmg <= 0)
-    return;
-
-  /* CHeck if unit will flee or panic */
-  if(d->health - melee.melee.dmg > d->t->health / 2)
-    return;
-
-  /* try to flee in opposite direction or fight(panic) */
-  {
-    int dir3; /* direction */
-    for(dir3=0; dir3<6; dir3++){
-      if( ! find_unit_at(neib(md, dir3)) )
-        break;
-    }
-    if(dir3==6){
-      attack_melee(d, a); /* panic! */
-    }else{
-      add_event( mk_event_move(d, neib(md, dir3)) );
-    }
+  }else{
+    /*TODO check unit's morale*/
+    if(rand()%2)
+      flee(d);
   }
-#endif
+  puts("");
 }
 
 
