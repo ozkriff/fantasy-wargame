@@ -8,6 +8,8 @@
 #include "SDL/SDL_net.h"
 #include "list.h"
 
+#define PRINT_DATA false
+
 typedef struct Client {
   TCPsocket sock;
   List players;
@@ -149,6 +151,7 @@ receive_data (Client *c, uint8_t *data, uint8_t *size)
 
 
 
+#if PRINT_DATA
 static void
 print_data (uint8_t * data, uint8_t size){
   int i;
@@ -156,6 +159,7 @@ print_data (uint8_t * data, uint8_t size){
     printf("%u ", (unsigned int)(data[i]));
   puts("");
 }
+#endif
 
 
 
@@ -190,7 +194,9 @@ mainloop (){
       Client * c = n->d;
       if(SDLNet_SocketReady(c->sock)){
         receive_data(c, data, &data_size);
-        /*print_data(data, data_size);*/
+#if PRINT_DATA
+        print_data(data, data_size);
+#endif
         resend_data(c, data, data_size);
         active_sockets_count--;
       }
