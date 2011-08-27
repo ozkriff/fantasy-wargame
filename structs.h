@@ -111,3 +111,13 @@ typedef struct {
   int    id;
 } World;
 
+ 
+
+typedef struct {
+  int   players_count;
+  Mcrd  map_size;
+  char *map;
+  void (*init)(World *w);
+  void (*logic)();
+} Scenario;
+

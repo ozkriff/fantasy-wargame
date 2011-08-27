@@ -6,7 +6,8 @@ CFLAGS=-g -ansi -std=c89 -Wall -Wextra --pedantic
 #CFLAGS=-g -O0
 
 CC=gcc
-common_obj=list.o path.o misc.o core.o net.o ai.o
+scenarios=scenario_01.o scenario_02.o
+common_obj=list.o path.o misc.o core.o net.o ai.o $(scenarios)
 
 cli_obj=ui_cli.o $(common_obj)
 cli_lib=-lSDL_net
@@ -30,6 +31,9 @@ ai.o:     ai.c     ai.h   list.h structs.h
 ui_cli.o: ui_cli.c core.h list.h structs.h misc.h
 ui_sdl.o: ui_sdl.c core.h list.h structs.h misc.h
 server.o: server.c        list.h
+
+scenario_01.o: scenario_01.c scenarios.h structs.h
+scenario_02.o: scenario_02.c scenarios.h structs.h
 
 clean:
 	rm -f *.o ui_cli ui_sdl server

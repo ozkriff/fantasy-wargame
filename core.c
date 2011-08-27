@@ -11,6 +11,7 @@
 #include "core.h"
 #include "core_private.h"
 #include "net.h"
+#include "scenarios.h"
 
 
 
@@ -476,40 +477,6 @@ create_local_ai (int id) {
 
 
 
-void
-load_sc_1 (World *w){
-  char *map =
-      " . . * . . . *"
-      ". . . t . M . "
-      " . . . . . . ."
-      ". . . . . . . "
-      " . . . . . . ."
-      ". . . . . . . "
-      " . . . . . * ."
-      ". . * * * . . "
-      " . * h h * . ."
-      ". * h M h * . "
-      " . * h h * . ."
-      ". . * * * . . "
-      " . . . . . . ."
-      ". . . . . . . ";
-  map_size.x = 7;
-  map_size.y = 14;
-  scenario_players_count = 2;
-  w->map = str2map(map);
-
-  add_unit(mk_mcrd(1,2), 0, UNIT_TYPE_DEFENDER, w);
-  add_unit(mk_mcrd(1,3), 0, UNIT_TYPE_DEFENDER, w);
-  add_unit(mk_mcrd(1,4), 0, UNIT_TYPE_DEFENDER, w);
-  add_unit(mk_mcrd(1,5), 0, UNIT_TYPE_HUNTER,   w);
-
-  add_unit(mk_mcrd(3,4), 1, UNIT_TYPE_HUNTER,   w);
-  add_unit(mk_mcrd(3,5), 1, UNIT_TYPE_DEFENDER, w);
-  add_unit(mk_mcrd(3,3), 1, UNIT_TYPE_ARCHER,   w);
-}
-
-
-
 static void
 local_arguments (int ac, char ** av)
 {
@@ -531,9 +498,11 @@ local_arguments (int ac, char ** av)
 #else
   {
     Node *nd;
+    scenario_players_count = scenario_02.players_count;
+    map_size = scenario_02.map_size;
     FOR_EACH_NODE(worlds, nd){
       World *w = nd->d;
-      load_sc_1(w);
+      scenario_02.init(w);
     }
   }
 #endif
