@@ -5,9 +5,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include <time.h>
-
 #include "SDL/SDL_net.h"
-
 #include "list.h"
 
 typedef struct Client {
@@ -29,13 +27,11 @@ int
 get_players_count_from_scenario (char * filename){
   int players_count;
   char line[100];
-
   FILE * cfg = fopen(filename, "r");
   if(!cfg){
     puts("Can't open scenario.");
     exit(EXIT_FAILURE);
   }
-
   while( fgets(line, 90, cfg) ){
     /* Skip comments and empty lines. */
     if(line[0]=='#' || line[0]=='\n')
@@ -43,9 +39,7 @@ get_players_count_from_scenario (char * filename){
     if(!strncmp("[NUM-OF-PLAYERS]", line, 15))
       sscanf(line, "[NUM-OF-PLAYERS] %i", &players_count);
   }
-
   fclose(cfg);
-
   return(players_count);
 }
 
@@ -72,34 +66,26 @@ wait_for_all_players (int players_count){
   while(clients.count < players_count) {
     if( SDLNet_CheckSockets(sockets, 100)
     && SDLNet_SocketReady(listening_socket) ){
-    
       TCPsocket sock = SDLNet_TCP_Accept(listening_socket);
       SDLNet_TCP_AddSocket(sockets, sock);
-
       c = calloc(1, sizeof(Client));
       c->sock = sock;
-
       while(1){
         int data = 0;
         int * player_id;
         SDLNet_TCP_Recv(sock, &data, 1);
-
         /*mark that all players are already sent*/
         if(data == 0xff)
           break;
-        
         if(!is_id_free(data)){
           printf("id [%i] is not free!", data);
           continue;
         }
-
         player_id = calloc(1, sizeof(int));
         *player_id = data;
         l_push(&c->players, player_id);
-
         printf("added player to client...\n");
       }
-
       l_push(&clients, c);
       printf("added client...\n");
     }
@@ -126,26 +112,19 @@ init (int ac, char **av){
   int port;
   int players_count;
   IPaddress ip;
-  
   if(ac != 3){
     puts("usage: ./server [port] [scenario]");
     exit(EXIT_FAILURE);
   }
-
   /* get port */
   sscanf(av[1], "%i", &port);
-
   players_count = get_players_count_from_scenario(av[2]);
-
   SDLNet_Init();
-
   /* allocate memory for each client + for server */
   sockets = SDLNet_AllocSocketSet(players_count+1);
-  
   SDLNet_ResolveHost(&ip, NULL, port);
   listening_socket = SDLNet_TCP_Open(&ip);
   SDLNet_TCP_AddSocket(sockets, listening_socket);
-
   wait_for_all_players(players_count);
   send_scenario_name_to_clients(av[2]);
 }
@@ -203,7 +182,6 @@ mainloop (){
   uint8_t data_size;
   uint8_t data[32];
   int active_sockets_count;
-        
   while(1){
     Node * n;
     active_sockets_count = SDLNet_CheckSockets(sockets, 1000);
