@@ -58,7 +58,6 @@ static void
 kill_unit (Unit * u){
   if(u == selunit)
     selunit = NULL;
-
   /* Find unit's node, free unit and node. */
   l_delete_node(&cw->units, unit2node(u));
   fill_map(selunit);
