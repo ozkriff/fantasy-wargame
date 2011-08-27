@@ -639,6 +639,7 @@ mk_skill_range (int skill, int strength, int range){
 
 
 
+#if 0
 static Skill
 mk_skill_berserk (int power){
   Skill s;
@@ -646,6 +647,7 @@ mk_skill_berserk (int power){
   s.brsk.power = power;
   return(s);
 }
+#endif
 
 
 
