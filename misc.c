@@ -203,7 +203,7 @@ char2tiletype (char c){
 
 Tile *
 str2map (char *s){
-	Tile *i; /*used for iteration through 'map'*/
+  Tile *i; /*used for iteration through 'map'*/
   Tile *map = malloc(sizeof(Tile)
       * map_size.x * map_size.y);
   i = map;
