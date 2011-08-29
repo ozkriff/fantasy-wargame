@@ -820,7 +820,7 @@ attack (Unit * a, Unit * d){
 
 void
 init (int ac, char ** av){
-  srand(time(NULL));
+  srand( (unsigned int)time(NULL) );
   if(!strcmp(av[1], "-local"))
     local_arguments(ac, av);
   if(!strcmp(av[1], "-net"))
