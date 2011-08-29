@@ -229,8 +229,8 @@ bzline (Scrd a, Scrd b, Uint32 clr){
 static void
 draw_img (Img src, Scrd crd) {
   SDL_Rect rect;
-  rect.x = crd.x;
-  rect.y = crd.y;
+  rect.x = (Sint16)crd.x;
+  rect.y = (Sint16)crd.y;
   SDL_BlitSurface(src, NULL, screen, &rect);
 }
 
@@ -274,8 +274,8 @@ text (char * str, Scrd crd, bool is_centred){
   SDL_Rect rect;
   SDL_Color col = {255, 255, 255, 255};
   Img img = TTF_RenderText_Blended(font, str, col);
-  rect.x = crd.x;
-  rect.y = crd.y;
+  rect.x = (Sint16)crd.x;
+  rect.y = (Sint16)crd.y;
   if(is_centred){
     rect.x -= img->w / 2;
     rect.y -= img->h / 2;
@@ -303,7 +303,7 @@ draw_unit (Unit *u){
   draw_img(type2img(u->t), s);
   if(1){
     char str[100];
-    sprintf(str, "%i", u->count);
+    sprintf(str, "%i", (int)u->count);
     text(str, mk_scrd(s.x+10, s.y+60), false);
   }
 }
@@ -391,7 +391,7 @@ draw_range_event (){
   Unit *u2 = id2unit(e.range.d);
   int dist = mdist(u1->m, u2->m);
   /*[v]ertical [c]orrection*/
-  int vc   = dist*14 * sin((eindex*3.14)/final_eindex);
+  int vc   = (int)(dist*14 * sin((eindex*3.14)/final_eindex));
   Scrd a   = map2scr(u1->m);
   Scrd b   = map2scr(u2->m);
   a.x     += ((b.x-a.x)*eindex)/final_eindex;
@@ -472,7 +472,7 @@ init_draw (){
 
 static void
 mouseclick (SDL_Event e){
-  Mcrd m = scr2map(mk_scrd(e.button.x, e.button.y));
+  Mcrd m = scr2map(mk_scrd((int)e.button.x, (int)e.button.y));
   Unit *u = find_unit_at(m);
   if(u && u->player == cw->id){
     selunit = u;
@@ -495,7 +495,7 @@ mouseclick (SDL_Event e){
 
 static void
 mousemove (SDL_Event e){
-  selected_tile = scr2map(mk_scrd(e.button.x, e.button.y));
+  selected_tile = scr2map(mk_scrd((int)e.button.x, (int)e.button.y));
 }
 
 
