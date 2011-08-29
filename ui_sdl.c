@@ -23,13 +23,11 @@ typedef SDL_Surface * Img;
 
 /* grass, water, forest, hills, mounteens */
 static Img terrain_tiles[10];
+static Img img_units[10];
 static Img img_selected_hex;
 static Img img_reacheble_tile;
 static Img img_fow; /* fog of war */
 static Img img_arrow;
-static Img img_defence_unit;
-static Img img_range_unit;
-static Img img_hunter_unit;
 static Img screen = NULL;
 
 static Img img_rings[10];
@@ -90,9 +88,9 @@ free_sprites (){
   SDL_FreeSurface(img_rings[0]      );
   SDL_FreeSurface(img_rings[1]      );
   SDL_FreeSurface(img_rings[2]      );
-  SDL_FreeSurface(img_defence_unit  );
-  SDL_FreeSurface(img_range_unit    );
-  SDL_FreeSurface(img_hunter_unit   );
+  SDL_FreeSurface(img_units[UNIT_TYPE_DEFENDER]);
+  SDL_FreeSurface(img_units[UNIT_TYPE_ARCHER]);
+  SDL_FreeSurface(img_units[UNIT_TYPE_HUNTER]);
 }
 
 
@@ -111,9 +109,9 @@ load_sprites (){
   img_rings[0]       = loadimg("img/ring_red.png");
   img_rings[1]       = loadimg("img/ring_blue.png");
   img_rings[2]       = loadimg("img/ring_green.png");
-  img_defence_unit   = loadimg("img/defence.png");
-  img_range_unit     = loadimg("img/range.png");
-  img_hunter_unit    = loadimg("img/hunter.png");
+  img_units[UNIT_TYPE_DEFENDER] = loadimg("img/defence.png");
+  img_units[UNIT_TYPE_ARCHER]   = loadimg("img/range.png");
+  img_units[UNIT_TYPE_HUNTER]   = loadimg("img/hunter.png");
 }
 
 
@@ -288,10 +286,7 @@ text (char * str, Scrd crd, bool is_centred){
 
 static Img
 type2img (int t){
-       if(t==UNIT_TYPE_DEFENDER) return(img_defence_unit);
-  else if(t==UNIT_TYPE_HUNTER)   return(img_hunter_unit);
-  else if(t==UNIT_TYPE_ARCHER)   return(img_range_unit);
-  else exit(EXIT_FAILURE);
+  return(img_units[t]);
 }
 
 
