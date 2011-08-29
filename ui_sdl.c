@@ -84,13 +84,13 @@ free_sprites (){
   SDL_FreeSurface(img_arrow         );
   SDL_FreeSurface(img_selected_hex  );
   SDL_FreeSurface(img_reacheble_tile);
-  SDL_FreeSurface(img_fog_of_war           );
+  SDL_FreeSurface(img_fog_of_war    );
   SDL_FreeSurface(img_rings[0]      );
   SDL_FreeSurface(img_rings[1]      );
   SDL_FreeSurface(img_rings[2]      );
   SDL_FreeSurface(img_units[UNIT_TYPE_DEFENDER]);
-  SDL_FreeSurface(img_units[UNIT_TYPE_ARCHER]);
-  SDL_FreeSurface(img_units[UNIT_TYPE_HUNTER]);
+  SDL_FreeSurface(img_units[UNIT_TYPE_ARCHER]  );
+  SDL_FreeSurface(img_units[UNIT_TYPE_HUNTER]  );
 }
 
 
@@ -105,13 +105,13 @@ load_sprites (){
   img_arrow          = loadimg("img/arrow.png");
   img_selected_hex   = loadimg("img/sel.png");
   img_reacheble_tile = loadimg("img/reacheble_tile.png");
-  img_fog_of_war            = loadimg("img/fow.png");
+  img_fog_of_war     = loadimg("img/fow.png");
   img_rings[0]       = loadimg("img/ring_red.png");
   img_rings[1]       = loadimg("img/ring_blue.png");
   img_rings[2]       = loadimg("img/ring_green.png");
   img_units[UNIT_TYPE_DEFENDER] = loadimg("img/defence.png");
-  img_units[UNIT_TYPE_ARCHER]   = loadimg("img/range.png");
-  img_units[UNIT_TYPE_HUNTER]   = loadimg("img/hunter.png");
+  img_units[UNIT_TYPE_ARCHER]   = loadimg("img/range.png"  );
+  img_units[UNIT_TYPE_HUNTER]   = loadimg("img/hunter.png" );
 }
 
 
