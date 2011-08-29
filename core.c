@@ -365,8 +365,8 @@ get_wounds (Unit *a, Unit *d){
   fixnum(0, 9, &to_hit);
   fixnum(0, 9, &to_wound);
   hits   = attacks * to_hit   / 10;
-  wounds = hits    * to_wound / 10;
-  final  = wounds  * to_as    / 10;
+  wounds = hits    * to_as    / 10;
+  final  = wounds  * to_wound / 10;
 #if 1
   printf("%i %i %i -> %i %i %i [%i]\n",
       to_hit, to_wound, to_as, attacks, hits, wounds, final);
