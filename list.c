@@ -1,3 +1,4 @@
+/* See LICENSE file for copyright and license details. */
 
 /* Double-linked list, stack, queue. */
 

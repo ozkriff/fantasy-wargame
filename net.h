@@ -1,3 +1,4 @@
+/* See LICENSE file for copyright and license details. */
 
 void init_network (char * hostname, int port);
 void do_network ();

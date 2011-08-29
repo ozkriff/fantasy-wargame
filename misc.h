@@ -1,3 +1,4 @@
+/* See LICENSE file for copyright and license details. */
 
 #define FOR_EACH_MCRD(mc) \
   for(mc.y=0; mc.y<map_size.y; mc.y++) \

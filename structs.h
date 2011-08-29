@@ -1,3 +1,4 @@
+/* See LICENSE file for copyright and license details. */
 
 typedef struct { int x, y; } Vec2i;
 

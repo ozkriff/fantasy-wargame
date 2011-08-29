@@ -1,3 +1,4 @@
+# See LICENSE file for copyright and license details.
 
 all: ui_sdl ui_cli server
 
