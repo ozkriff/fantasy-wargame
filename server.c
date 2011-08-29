@@ -104,7 +104,7 @@ send_scenario_name_to_clients (char * scenario_name){
   FOR_EACH_NODE(clients, n){
     Client * c = n->d;
     SDLNet_TCP_Send(c->sock, &size, 1);
-    SDLNet_TCP_Send(c->sock, scenario_name, size);
+    SDLNet_TCP_Send(c->sock, scenario_name, (int)size);
   }
 }
 
@@ -125,7 +125,7 @@ init (int ac, char **av){
   SDLNet_Init();
   /* allocate memory for each client + for server */
   sockets = SDLNet_AllocSocketSet(players_count+1);
-  SDLNet_ResolveHost(&ip, NULL, port);
+  SDLNet_ResolveHost(&ip, NULL, (Uint16)port);
   listening_socket = SDLNet_TCP_Open(&ip);
   SDLNet_TCP_AddSocket(sockets, listening_socket);
   wait_for_all_players(players_count);
@@ -147,7 +147,7 @@ receive_data (Client *c, uint8_t *data, uint8_t *size)
 {
   /* receive size of data, then data */
   SDLNet_TCP_Recv(c->sock, size, 1);
-  SDLNet_TCP_Recv(c->sock, data, *size);
+  SDLNet_TCP_Recv(c->sock, data, (int)*size);
 }
 
 
@@ -175,7 +175,7 @@ resend_data (Client * exception, uint8_t * data, uint8_t size){
     Client * c = n->d;
     if(c != exception){
       SDLNet_TCP_Send(c->sock, &size, 1);
-      SDLNet_TCP_Send(c->sock, data, size);
+      SDLNet_TCP_Send(c->sock, data, (int)size);
     }
   }
 }
