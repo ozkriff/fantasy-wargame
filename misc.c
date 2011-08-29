@@ -16,8 +16,8 @@ int
 str2int (char * str) {
   int n;
   if(sscanf(str, "%i", &n) != 1){
-    puts("str2int error.");
-    exit(1);
+    (void)puts("str2int error.");
+    exit(EXIT_FAILURE);
   }
   return(n);
 }
