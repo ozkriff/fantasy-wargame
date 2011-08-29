@@ -21,7 +21,7 @@ typedef Vec2i Scrd;
 
 typedef SDL_Surface * Img;
 
-/* grass, water, forest, hills, mounteens */
+
 static Img terrain_tiles[10];
 static Img img_units[10];
 static Img img_selected_hex;
