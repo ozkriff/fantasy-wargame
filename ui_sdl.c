@@ -467,7 +467,8 @@ init_draw (){
 
 static void
 mouseclick (SDL_Event e){
-  Mcrd m = scr2map(mk_scrd((int)e.button.x, (int)e.button.y));
+  Scrd s = mk_scrd((int)e.button.x, (int)e.button.y);
+  Mcrd m = scr2map(s);
   Unit *u = find_unit_at(m);
   if(u && u->player == cw->id){
     selunit = u;
@@ -490,7 +491,8 @@ mouseclick (SDL_Event e){
 
 static void
 mousemove (SDL_Event e){
-  selected_tile = scr2map(mk_scrd((int)e.button.x, (int)e.button.y));
+  Scrd s = mk_scrd((int)e.button.x, (int)e.button.y);
+  selected_tile = scr2map(s);
 }
 
 
