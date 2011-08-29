@@ -96,8 +96,8 @@ mcrd2index(Mcrd a, Mcrd b){
     if(mcrdeq(neib(a,i), b))
       return(i);
   }
-  puts("mcrd2tile error.");
-  exit(1);
+  (void)puts("mcrd2tile error.");
+  exit(EXIT_FAILURE);
 }
 
 
