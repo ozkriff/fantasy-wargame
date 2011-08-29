@@ -196,7 +196,7 @@ char2tiletype (char c){
   if(c=='h') return(TILE_HILLS);
   if(c=='M') return(TILE_MOUNTEENS);
   puts("ERROR in char2tiletype");
-  exit(1);
+  exit(EXIT_FAILURE);
 }
 
 

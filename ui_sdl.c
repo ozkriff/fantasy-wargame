@@ -67,7 +67,7 @@ loadimg (char * str){
   Img optimized; /*optimized*/
   if(!original){
     printf("loadimg error: %s/ \n", str);
-    exit(1);
+    exit(EXIT_FAILURE);
   }
   optimized = SDL_DisplayFormatAlpha(original);
   SDL_FreeSurface(original);  
@@ -291,7 +291,7 @@ type2img (int t){
        if(t==UNIT_TYPE_DEFENDER) return(img_defence_unit);
   else if(t==UNIT_TYPE_HUNTER)   return(img_hunter_unit);
   else if(t==UNIT_TYPE_ARCHER)   return(img_range_unit);
-  else exit(1);
+  else exit(EXIT_FAILURE);
 }
 
 

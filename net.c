@@ -226,7 +226,7 @@ init_network (char * hostname, int port){
   socket = SDLNet_TCP_Open(&ip);
   if(!socket) {
     puts("cannot open socket"); 
-    exit(1); 
+    exit(EXIT_FAILURE);
   }
   sockets = SDLNet_AllocSocketSet(1);
   SDLNet_TCP_AddSocket(sockets, socket);
