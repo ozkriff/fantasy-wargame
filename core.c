@@ -16,24 +16,10 @@
 
 
 
-/* grass forest water hills mount */
-
-/*terrain movepoints */
-static int tmvp1[5] = {  1, 4, 8, 4, 9 };
-static int tmvp2[5] = {  1, 2, 4, 3, 6 };
-static int tmvp3[5] = {  1, 3, 8, 4, 9 };
-
-/*terrain melee_skill bonus */
-static int tms1[5] = {  0, 1,-2, 0, 0 };
-static int tms2[5] = {  0, 2,-2, 1, 1 };
-static int tms3[5] = {  0, 1,-2, 0, 0 };
-
 
 /* GLOBAL VARIABLES */
-Unit_type utypes[3] = {
-  {1,5,10,  3,3,4,1,3,  3, tmvp1, tms1},
-  {4,5,10,  3,3,3,2,1,  4, tmvp2, tms2},
-  {3,5,10,  2,3,2,1,1,  3, tmvp3, tms3} };
+
+Unit_type utypes[3];
 Mcrd    map_size;
 List    worlds;
 World * cw = NULL; /* current world */
@@ -641,6 +627,95 @@ apply_endturn(Event e){
 
 
 
+static Unit_type
+init_defender (){
+  Unit_type u;
+  u.range_of_vision         =  1;
+  u.morale                  =  5;
+  u.count                   = 10;
+  u.ms                      =  3;
+  u.strength                =  3;
+  u.toughness               =  4;
+  u.attacks                 =  1;
+  u.armor                   =  3;
+  u.mvp                     =  3;
+  u.ter_mvp[TILE_GRASS    ] =  1;
+  u.ter_mvp[TILE_FOREST   ] =  4;
+  u.ter_mvp[TILE_WATER    ] =  8;
+  u.ter_mvp[TILE_HILLS    ] =  4;
+  u.ter_mvp[TILE_MOUNTEENS] =  9;
+  u.ter_ms [TILE_GRASS    ] =  0;
+  u.ter_ms [TILE_FOREST   ] =  1;
+  u.ter_ms [TILE_WATER    ] = -2;
+  u.ter_ms [TILE_HILLS    ] =  0;
+  u.ter_ms [TILE_MOUNTEENS] =  0;
+  return(u);
+}
+
+
+
+static Unit_type
+init_hunter (){
+  Unit_type u;
+  u.range_of_vision         =  4;
+  u.morale                  =  5;
+  u.count                   = 10;
+  u.ms                      =  3;
+  u.strength                =  3;
+  u.toughness               =  3;
+  u.attacks                 =  2;
+  u.armor                   =  1;
+  u.mvp                     =  4;
+  u.ter_mvp[TILE_GRASS    ] =  1;
+  u.ter_mvp[TILE_FOREST   ] =  2;
+  u.ter_mvp[TILE_WATER    ] =  4;
+  u.ter_mvp[TILE_HILLS    ] =  3;
+  u.ter_mvp[TILE_MOUNTEENS] =  6;
+  u.ter_ms [TILE_GRASS    ] =  0;
+  u.ter_ms [TILE_FOREST   ] =  2;
+  u.ter_ms [TILE_WATER    ] = -2;
+  u.ter_ms [TILE_HILLS    ] =  1;
+  u.ter_ms [TILE_MOUNTEENS] =  1;
+  return(u);
+}
+
+
+
+static Unit_type
+init_archer (){
+  Unit_type u;
+  u.range_of_vision         =  3;
+  u.morale                  =  5;
+  u.count                   = 10;
+  u.ms                      =  2;
+  u.strength                =  3;
+  u.toughness               =  2;
+  u.attacks                 =  1;
+  u.armor                   =  1;
+  u.mvp                     =  3;
+  u.ter_mvp[TILE_GRASS    ] =  1;
+  u.ter_mvp[TILE_FOREST   ] =  3;
+  u.ter_mvp[TILE_WATER    ] =  8;
+  u.ter_mvp[TILE_HILLS    ] =  4;
+  u.ter_mvp[TILE_MOUNTEENS] =  9;
+  u.ter_ms [TILE_GRASS    ] =  0;
+  u.ter_ms [TILE_FOREST   ] =  1;
+  u.ter_ms [TILE_WATER    ] = -2;
+  u.ter_ms [TILE_HILLS    ] =  0;
+  u.ter_ms [TILE_MOUNTEENS] =  0;
+  return(u);
+}
+
+
+
+static void
+init_unit_types (){
+  utypes[UNIT_TYPE_DEFENDER] = init_defender();
+  utypes[UNIT_TYPE_HUNTER  ] = init_hunter();
+  utypes[UNIT_TYPE_ARCHER  ] = init_archer();
+}
+
+
 
 /*------------------NON-STATIC FUNCTION------------------*/
 
@@ -821,6 +896,7 @@ attack (Unit * a, Unit * d){
 void
 init (int ac, char ** av){
   srand( (unsigned int)time(NULL) );
+  init_unit_types();
   if(!strcmp(av[1], "-local"))
     local_arguments(ac, av);
   if(!strcmp(av[1], "-net"))

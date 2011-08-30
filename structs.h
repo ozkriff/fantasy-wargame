@@ -16,8 +16,8 @@ typedef struct {
   int   attacks;
   int   armor;
   int   mvp; /*move points*/
-  int * ter_mvp; /* terrain move cost */
-  int * ter_ms; /* melee_skill bonuses at different terrains */
+  int   ter_mvp[10]; /* terrain move cost */
+  int   ter_ms[10]; /* melee_skill bonuses at different terrains */
 } Unit_type;
 
 
