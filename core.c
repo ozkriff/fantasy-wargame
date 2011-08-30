@@ -433,14 +433,6 @@ update_units_visibility (){
 
 
 static void
-add_skill (Unit * u, Skill s){
-  u->skills_n++;
-  u->skills[u->skills_n-1] = s;
-}
-
-
-
-static void
 create_local_world (int id, bool is_ai) {
   World * w = calloc(1, sizeof(World));
   w->id     = id;
@@ -581,20 +573,6 @@ mk_skill_bool (int type){
 
 
 
-static void
-add_default_skills_to_unit (Unit * u){
-  if(u->t == UNIT_TYPE_ARCHER){
-    add_skill(u, mk_skill_range(3, 5, 4));
-  }
-  if(u->t == UNIT_TYPE_HUNTER) {
-    add_skill(u, mk_skill_bool(SKILL_IGNR    ));
-    add_skill(u, mk_skill_bool(SKILL_INVIS   ));
-    add_skill(u, mk_skill_bool(SKILL_NORETURN));
-  }
-}
-
-
-
 static bool
 is_event_visible (Event e){
   switch(e.t){
@@ -649,6 +627,7 @@ init_defender (){
   u.ter_ms [TILE_WATER    ] = -2;
   u.ter_ms [TILE_HILLS    ] =  0;
   u.ter_ms [TILE_MOUNTEENS] =  0;
+  u.skills_n = 0;
   return(u);
 }
 
@@ -676,6 +655,10 @@ init_hunter (){
   u.ter_ms [TILE_WATER    ] = -2;
   u.ter_ms [TILE_HILLS    ] =  1;
   u.ter_ms [TILE_MOUNTEENS] =  1;
+  u.skills_n = 3;
+  u.skills[0] = mk_skill_bool(SKILL_IGNR    );
+  u.skills[1] = mk_skill_bool(SKILL_INVIS   );
+  u.skills[2] = mk_skill_bool(SKILL_NORETURN);
   return(u);
 }
 
@@ -703,6 +686,8 @@ init_archer (){
   u.ter_ms [TILE_WATER    ] = -2;
   u.ter_ms [TILE_HILLS    ] =  0;
   u.ter_ms [TILE_MOUNTEENS] =  0;
+  u.skills_n = 1;
+  u.skills[0] = mk_skill_range(3, 5, 4);
   return(u);
 }
 
@@ -939,8 +924,12 @@ add_unit (
   u->m          = crd;
   u->t          = type;
   u->id         = new_unit_id(world);
-  u->skills_n   = 0;
-  add_default_skills_to_unit(u);
+  u->skills_n   = utypes[type].skills_n;
+  {
+    int i;
+    for(i=0; i<u->skills_n; i++)
+      u->skills[i] = utypes[type].skills[i];
+  }
   l_push(&world->units, u);
 }
 

@@ -6,22 +6,6 @@ typedef struct { int x, y; } Vec2i;
 typedef Vec2i Mcrd; 
 
 
-typedef struct {
-  int range_of_vision;
-  int morale;
-  int count;
-  int ms; /*melee_skill*/
-  int strength;
-  int toughness;
-  int attacks;
-  int armor;
-  int mvp; /*move points*/
-  int ter_mvp[10]; /* terrain move cost */
-  int ter_ms[10]; /* melee_skill bonuses at different terrains */
-} Unit_type;
-
-
-
 #define SKILL_RANGE     1
 #define SKILL_BRSK      2
 #define SKILL_INVIS     3
@@ -38,6 +22,24 @@ typedef union {
   Skill_range    range;
   Skill_berserk  brsk;
 } Skill;
+
+
+
+typedef struct {
+  int range_of_vision;
+  int morale;
+  int count;
+  int ms; /*melee_skill*/
+  int strength;
+  int toughness;
+  int attacks;
+  int armor;
+  int mvp; /*move points*/
+  int ter_mvp[10]; /* terrain move cost */
+  int ter_ms[10]; /* melee_skill bonuses at different terrains */
+  Skill skills[10];
+  int   skills_n;
+} Unit_type;
 
 
 #define UNIT_TYPE_DEFENDER 0
