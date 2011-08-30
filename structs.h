@@ -7,17 +7,17 @@ typedef Vec2i Mcrd;
 
 
 typedef struct {
-  int   range_of_vision;
-  int   morale;
-  int   count;
-  int   ms; /*melee_skill*/
-  int   strength;
-  int   toughness;
-  int   attacks;
-  int   armor;
-  int   mvp; /*move points*/
-  int   ter_mvp[10]; /* terrain move cost */
-  int   ter_ms[10]; /* melee_skill bonuses at different terrains */
+  int range_of_vision;
+  int morale;
+  int count;
+  int ms; /*melee_skill*/
+  int strength;
+  int toughness;
+  int attacks;
+  int armor;
+  int mvp; /*move points*/
+  int ter_mvp[10]; /* terrain move cost */
+  int ter_ms[10]; /* melee_skill bonuses at different terrains */
 } Unit_type;
 
 
