@@ -109,7 +109,7 @@ load_sprites (){
   img_rings[0]       = loadimg("img/ring_red.png");
   img_rings[1]       = loadimg("img/ring_blue.png");
   img_rings[2]       = loadimg("img/ring_green.png");
-  img_units[UNIT_TYPE_DEFENDER] = loadimg("img/defence.png");
+  img_units[UNIT_TYPE_DEFENDER] = loadimg("img/defender.png");
   img_units[UNIT_TYPE_ARCHER]   = loadimg("img/range.png"  );
   img_units[UNIT_TYPE_HUNTER]   = loadimg("img/hunter.png" );
 }
