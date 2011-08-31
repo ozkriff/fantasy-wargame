@@ -166,7 +166,7 @@ is_invis (Unit * u){
     return(false);
   for(i=0; i<6; i++){
     Mcrd nb = neib(u->m, i);
-    Unit * u2 = find_unit_at(nb);
+    Unit * u2 = unit_at(nb);
     if(u2 && u2->player == cw->id)
       return(false);
   }
@@ -298,7 +298,7 @@ mk_event_range (Unit * a, Unit * d, int dmg){
 
 static bool
 ambush(Mcrd next, Unit * moving_unit){
-  Unit * u = find_unit_at(next);
+  Unit * u = unit_at(next);
   if(u && u->player != moving_unit->player){
     add_event( mk_event_melee(u, moving_unit, 1, 3) );
     return(true);
@@ -316,7 +316,7 @@ support_range (Unit * a, Unit * d){
   Unit * sup;  /* [sup]porter */
   int i;
   for(i=0; i<6; i++){
-    sup = find_unit_at( neib(d->m, i) );
+    sup = unit_at( neib(d->m, i) );
     if(sup && sup->player == d->player 
     && find_skill(sup, SKILL_RANGE)){
       break;
@@ -375,7 +375,7 @@ mk_event_death (Unit *u){
 static void
 flee (Unit *u){
   int dir = 0;
-  while(find_unit_at((neib(u->m, dir))) && dir < 6)
+  while(unit_at((neib(u->m, dir))) && dir < 6)
     dir++;
   if(dir==6){
 #if 0

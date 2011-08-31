@@ -469,7 +469,7 @@ static void
 mouseclick (SDL_Event e){
   Scrd s = mk_scrd((int)e.button.x, (int)e.button.y);
   Mcrd m = scr2map(s);
-  Unit *u = find_unit_at(m);
+  Unit *u = unit_at(m);
   if(u && u->player == cw->id){
     selunit = u;
     fill_map(selunit);

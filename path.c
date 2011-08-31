@@ -45,7 +45,7 @@ zoc (Mcrd a, Unit * u, int cost){
   int mvp = utypes[u->t].mvp;
   for(i=0; i<6; i++){
     Mcrd n = neib(a, i);
-    Unit * u2 = find_unit_at(n);
+    Unit * u2 = unit_at(n);
     if(inboard(n) && cost%mvp != 0
     && u2 && u2->player != u->player
     && tile(n)->fog > 0
@@ -65,7 +65,7 @@ process_nbh (Unit * u, Mcrd t, Mcrd nb){
   Unit * u2;
   int n, newcost;
   /* For not to pass through visible enemy. */
-  u2 = find_unit_at(nb);
+  u2 = unit_at(nb);
   if(u2 && u2->player!=u->player
   && tile(nb)->fog>0
   && u2->visible)

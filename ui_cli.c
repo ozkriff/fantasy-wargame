@@ -52,7 +52,7 @@ void ui_move(){
   }else{
     printf("move unit from %i.%i to %i.%i\n",
         f.x, f.y, t.x, t.y);
-    move(find_unit_at(f), t);
+    move(unit_at(f), t);
   }
 }
 
@@ -67,7 +67,7 @@ void ui_attack(){
   }else{
     printf("attack from %i.%i to %i.%i\n",
         f.x, f.y, t.x, t.y);
-    attack(find_unit_at(f), find_unit_at(t));
+    attack(unit_at(f), unit_at(t));
   }
 }
 
@@ -100,7 +100,7 @@ void ui_unit_info(){
   if(n!=2){
     puts("error.");
   }else{
-    Unit * u = find_unit_at(m);
+    Unit * u = unit_at(m);
     char * s = 
         "id: %i\n"
         "health: %i\n"

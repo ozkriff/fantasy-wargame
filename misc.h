@@ -24,5 +24,5 @@ Skill * find_skill (Unit * u, int type);
 Tile * tile (Mcrd c);
 bool   inboard (Mcrd t);
 Unit * id2unit (int id);
-Unit * find_unit_at (Mcrd crd);
+Unit * unit_at (Mcrd crd);
 

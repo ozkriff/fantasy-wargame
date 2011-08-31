@@ -138,7 +138,7 @@ id2unit (int id){
 
 
 Unit *
-find_unit_at (Mcrd crd){
+unit_at (Mcrd crd){
   Node * node;
   FOR_EACH_NODE(cw->units, node){
     Unit * u = node->d;
