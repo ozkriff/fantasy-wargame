@@ -540,7 +540,7 @@ new_unit_id (World *w){
 
 
 
-static Skill
+Skill
 mk_skill_range (int skill, int strength, int range){
   Skill s;
   s.range.t = SKILL_RANGE;
@@ -553,7 +553,7 @@ mk_skill_range (int skill, int strength, int range){
 
 
 #if 0
-static Skill
+Skill
 mk_skill_berserk (int power){
   Skill s;
   s.brsk.t = SKILL_BRSK;
@@ -564,7 +564,7 @@ mk_skill_berserk (int power){
 
 
 
-static Skill
+Skill
 mk_skill_bool (int type){
   Skill s;
   s.t = type;
