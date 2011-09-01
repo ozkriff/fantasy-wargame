@@ -2,13 +2,18 @@
 
 all: ui_sdl ui_cli server
 
-CFLAGS=-g -ansi -std=c89 -Wall -Wextra --pedantic
-#CFLAGS=-O3
-#CFLAGS=-g -O0
-
 CC=gcc
-scenarios=scenario_01.o scenario_02.o
-common_obj=list.o path.o misc.o core.o net.o ai.o utype.o $(scenarios)
+CFLAGS=-g -ansi -std=c89 -Wall -Wextra --pedantic
+common_obj= \
+  list.o \
+  path.o \
+  misc.o \
+  core.o \
+  net.o \
+  ai.o \
+  utype.o \
+  scenario_01.o \
+  scenario_02.o
 
 cli_obj=ui_cli.o $(common_obj)
 cli_lib=-lSDL_net
