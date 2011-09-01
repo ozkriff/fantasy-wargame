@@ -8,7 +8,7 @@ CFLAGS=-g -ansi -std=c89 -Wall -Wextra --pedantic
 
 CC=gcc
 scenarios=scenario_01.o scenario_02.o
-common_obj=list.o path.o misc.o core.o net.o ai.o $(scenarios)
+common_obj=list.o path.o misc.o core.o net.o ai.o utype.o $(scenarios)
 
 cli_obj=ui_cli.o $(common_obj)
 cli_lib=-lSDL_net
@@ -29,6 +29,7 @@ misc.o:   misc.c   misc.h list.h structs.h
 core.o:   core.c   core.h list.h structs.h core_private.h
 net.o:    net.c    net.h  list.h structs.h core_private.h 
 ai.o:     ai.c     ai.h   list.h structs.h
+utype.o:  utype.c  utype.h       structs.h core_private.h
 ui_cli.o: ui_cli.c core.h list.h structs.h misc.h
 ui_sdl.o: ui_sdl.c core.h list.h structs.h misc.h
 server.o: server.c        list.h
