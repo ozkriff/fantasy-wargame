@@ -88,9 +88,9 @@ free_sprites (){
   SDL_FreeSurface(img_rings[0]      );
   SDL_FreeSurface(img_rings[1]      );
   SDL_FreeSurface(img_rings[2]      );
-  SDL_FreeSurface(img_units[UNIT_TYPE_DEFENDER]);
-  SDL_FreeSurface(img_units[UNIT_TYPE_ARCHER]  );
-  SDL_FreeSurface(img_units[UNIT_TYPE_HUNTER]  );
+  SDL_FreeSurface(img_units[DEFENDER]);
+  SDL_FreeSurface(img_units[ARCHER]  );
+  SDL_FreeSurface(img_units[HUNTER]  );
 }
 
 
@@ -109,9 +109,9 @@ load_sprites (){
   img_rings[0]       = loadimg("img/ring_red.png");
   img_rings[1]       = loadimg("img/ring_blue.png");
   img_rings[2]       = loadimg("img/ring_green.png");
-  img_units[UNIT_TYPE_DEFENDER] = loadimg("img/defender.png");
-  img_units[UNIT_TYPE_ARCHER]   = loadimg("img/archer.png"  );
-  img_units[UNIT_TYPE_HUNTER]   = loadimg("img/hunter.png" );
+  img_units[DEFENDER] = loadimg("img/defender.png");
+  img_units[ARCHER]   = loadimg("img/archer.png"  );
+  img_units[HUNTER]   = loadimg("img/hunter.png" );
 }
 
 

@@ -46,15 +46,15 @@ static void
 init_scenario (World *w){
   w->map = str2map(scenario_02.map);
   /*player0 units*/{
-    add_unit(mk_mcrd(1,2), 0, UNIT_TYPE_DEFENDER, w);
-    add_unit(mk_mcrd(1,3), 0, UNIT_TYPE_DEFENDER, w);
-    add_unit(mk_mcrd(1,4), 0, UNIT_TYPE_DEFENDER, w);
-    add_unit(mk_mcrd(1,5), 0, UNIT_TYPE_HUNTER,   w);
+    add_unit(mk_mcrd(1,2), 0, DEFENDER, w);
+    add_unit(mk_mcrd(1,3), 0, DEFENDER, w);
+    add_unit(mk_mcrd(1,4), 0, DEFENDER, w);
+    add_unit(mk_mcrd(1,5), 0, HUNTER,   w);
   }
   /*player1 units*/{
-    add_unit(mk_mcrd(3,4), 1, UNIT_TYPE_HUNTER,   w);
-    add_unit(mk_mcrd(3,5), 1, UNIT_TYPE_DEFENDER, w);
-    add_unit(mk_mcrd(3,3), 1, UNIT_TYPE_ARCHER,   w);
+    add_unit(mk_mcrd(3,4), 1, HUNTER,   w);
+    add_unit(mk_mcrd(3,5), 1, DEFENDER, w);
+    add_unit(mk_mcrd(3,3), 1, ARCHER,   w);
   }
 }
 

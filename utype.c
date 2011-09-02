@@ -100,8 +100,8 @@ init_archer (){
 
 void
 init_unit_types (){
-  utypes[UNIT_TYPE_DEFENDER] = init_defender();
-  utypes[UNIT_TYPE_HUNTER  ] = init_hunter();
-  utypes[UNIT_TYPE_ARCHER  ] = init_archer();
+  utypes[DEFENDER] = init_defender();
+  utypes[HUNTER  ] = init_hunter();
+  utypes[ARCHER  ] = init_archer();
 }
 
