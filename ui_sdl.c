@@ -328,7 +328,7 @@ draw_reachable_tiles(){
   Mcrd m;
   FOR_EACH_MCRD(m){
     Mcrd p = tile(m)->parent;
-    if(tile(m)->cost <= selunit->mvp) {
+    if(tile(m)->cost <= selected_unit->mvp) {
       draw_img(img_reacheble_tile, map2scr(m));
       m2m_bzline(m, p);
     }
@@ -419,10 +419,10 @@ static void
 draw (){
   draw_bg(black);
   draw_map();
-  if(ui_mode==MODE_SELECT && selunit)
+  if(ui_mode==MODE_SELECT && selected_unit)
     draw_reachable_tiles();
-  if(selunit)
-    draw_img(img_selected_hex, map2scr(selunit->m));
+  if(selected_unit)
+    draw_img(img_selected_hex, map2scr(selected_unit->m));
   draw_img(img_selected_hex, map2scr(selected_tile));
   draw_units();
   if(ui_mode==MODE_SHOW_EVENT)
@@ -469,18 +469,18 @@ mouseclick (SDL_Event e){
   Mcrd m = scr2map(s);
   Unit *u = unit_at(m);
   if(u && u->player == cw->id){
-    selunit = u;
-    fill_map(selunit);
-  }else if(selunit){
+    selected_unit = u;
+    fill_map(selected_unit);
+  }else if(selected_unit){
     if( !u || (u && (!u->visible||!tile(m)->fog)) ){
-      if(tile(m)->cost <= selunit->mvp)
-        move(selunit, m);
+      if(tile(m)->cost <= selected_unit->mvp)
+        move(selected_unit, m);
       return;
     }
     if(u && u->player!=cw->id
-    && selunit && selunit->can_attack
+    && selected_unit && selected_unit->can_attack
     && u->visible && tile(m)->fog > 0){
-      attack(selunit, u);
+      attack(selected_unit, u);
     }
   }
 }
@@ -530,7 +530,7 @@ select_keys (SDL_Event e){
   switch(e.key.keysym.sym) {
     case SDLK_SPACE:
       endturn();
-      selunit=0;
+      selected_unit=0;
       break;
     /*case SDLK_r:     change_tile(selected_tile);break;*/
     case SDLK_n:     select_next_unit(); break;

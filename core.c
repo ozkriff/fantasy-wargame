@@ -26,7 +26,7 @@ List    worlds;
 World * cw = NULL; /* current world */
 bool    is_local;
 bool    is_active; /* TODO rename! */
-Unit *  selunit = NULL; /* selected unit */
+Unit *  selected_unit = NULL;
 
 static FILE * logfile;
 static int scenario_players_count;
@@ -45,10 +45,10 @@ unit2node (Unit * u){
 
 static void
 kill_unit (Unit * u){
-  if(u == selunit)
-    selunit = NULL;
+  if(u == selected_unit)
+    selected_unit = NULL;
   l_delete_node(&cw->units, unit2node(u));
-  fill_map(selunit);
+  fill_map(selected_unit);
 }
 
 
@@ -72,7 +72,7 @@ apply_move (Event e){
   else
     u->mvp = 0;
   u->m = neib(u->m, e.move.dir);
-  fill_map(selunit);
+  fill_map(selected_unit);
   if(u->player==cw->id)
     update_fog_after_move(u);
 }
@@ -615,8 +615,8 @@ void
 select_next_unit (){
   Node * node;
   Unit * u;
-  if(selunit)
-    node = unit2node(selunit);
+  if(selected_unit)
+    node = unit2node(selected_unit);
   else
     node = cw->units.h;
   u = node->d;
@@ -624,7 +624,7 @@ select_next_unit (){
     node = node->n ? node->n : cw->units.h;
     u = node->d;
   }while(u->player != cw->id);
-  fill_map(selunit = u);
+  fill_map(selected_unit = u);
 }
 
 

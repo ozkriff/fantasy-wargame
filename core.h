@@ -1,7 +1,7 @@
 /* See LICENSE file for copyright and license details. */
 
 extern Mcrd    map_size;
-extern Unit *  selunit; /* selected unit */
+extern Unit *  selected_unit;
 extern Unit_type utypes[3];
 extern World * cw; /*current world*/
 extern bool    is_local;
