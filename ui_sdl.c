@@ -138,11 +138,10 @@ sdist (Scrd a, Scrd b) {
 
 static Scrd
 map2scr (Mcrd map) {
-  int space = 0; /* space between tiles */
   Scrd scr;
-  scr.y = map_offset.y  + map.y*(29+space);
-  scr.x = map_offset.x  + map.x*(72+space);
-  if(map.y%2) scr.x -= 36;
+  scr.y = map_offset.y  + map.y*(96*3/4);
+  scr.x = map_offset.x  + map.x*(96);
+  if(map.y%2) scr.x -= 96/2;
   return(scr);
 }
 
@@ -154,11 +153,9 @@ scr2map (Scrd m) {
   Mcrd min;
   Mcrd mcrd;
   int min_dist = 9000;
-  m.x /= 2;
   FOR_EACH_MCRD(mcrd){
     Scrd wp = map2scr(mcrd);
-    wp.x += 36; wp.y += 54;
-    wp.x /= 2;
+    wp.x += 96/2; wp.y += 96/2;
     if(sdist(m, wp) < min_dist){
       min_dist = sdist(m, wp);
       min = mcrd;
@@ -251,10 +248,10 @@ draw_map (){
 static void 
 m2m_bzline (Mcrd a, Mcrd b){
   Scrd sa = map2scr(a), sb = map2scr(b);
-  sa.x += 36;
-  sa.y += 54;
-  sb.x += 36;
-  sb.y += 54;
+  sa.x += 96/2;
+  sa.y += 96/2;
+  sb.x += 96/2;
+  sb.y += 96/2;
   bzline(sa, sb, red);
 }
 
