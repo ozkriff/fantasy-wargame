@@ -21,21 +21,14 @@ static void scenario_logic();
 
 Scenario scenario_02 = {
   2, /*players_count*/
-  {7, 14}, /*map_size*/
+  {7, 7}, /*map_size*/
   " . . * . . . *"
   ". . . t . M . "
   " . . . . . . ."
   ". . . . . . . "
   " . . . . . . ."
   ". . . . . . . "
-  " . . . . . * ."
-  ". . * * * . . "
-  " . * h h * . ."
-  ". * h M h * . "
-  " . * h h * . ."
-  ". . * * * . . "
-  " . . . . . . ."
-  ". . . . . . . ",
+  " . . . . . * .",
   init_scenario, 
   scenario_logic
 };
