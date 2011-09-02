@@ -20,7 +20,7 @@ static SDLNet_SocketSet sockets;
 static Event_move
 mk_event_move (Byte * d){
   Event_move e;
-  e.t    = EVENT_MOVE;
+  e.t    = E_MOVE;
   e.u    = (int)d[1];
   e.dir  = (int)d[2];
   return(e);
@@ -31,7 +31,7 @@ mk_event_move (Byte * d){
 static Event_range
 mk_event_range (Byte * d){
   Event_range e;
-  e.t    = EVENT_RANGE;
+  e.t    = E_RANGE;
   e.a    = (int)d[1];
   e.d    = (int)d[2];
   e.dmg  = (int)d[3];
@@ -43,7 +43,7 @@ mk_event_range (Byte * d){
 static Event_melee
 mk_event_melee (Byte * d){
   Event_melee e;
-  e.t                = EVENT_MELEE;
+  e.t                = E_MELEE;
   e.a                = (int)d[1];
   e.d                = (int)d[2];
   e.attackers_killed = (int)d[3];
@@ -56,7 +56,7 @@ mk_event_melee (Byte * d){
 static Event_endturn
 mk_event_endturn (Byte * d){
   Event_endturn e;
-  e.t          = EVENT_ENDTURN;
+  e.t          = E_ENDTURN;
   e.old_player = (int)d[1];
   e.new_player = (int)d[2];
   return(e);
@@ -67,7 +67,7 @@ mk_event_endturn (Byte * d){
 static Event_death
 mk_event_death (Byte *d){
   Event_death e;
-  e.t = EVENT_DEATH;
+  e.t = E_DEATH;
   e.u = *id2unit((int)d[1]);
   return(e);
 }
@@ -171,11 +171,11 @@ print_data (Byte * data, Byte size){
 void
 send_event (Event e) {
   switch(e.t){
-    case EVENT_MELEE: send_melee(e.melee); break;
-    case EVENT_MOVE : send_move (e.move ); break;
-    case EVENT_RANGE: send_range(e.range); break;
-    case EVENT_ENDTURN: send_endturn(e.endturn); break;
-    case EVENT_DEATH: send_death(e.death); break;
+    case E_MELEE: send_melee(e.melee); break;
+    case E_MOVE : send_move (e.move ); break;
+    case E_RANGE: send_range(e.range); break;
+    case E_ENDTURN: send_endturn(e.endturn); break;
+    case E_DEATH: send_death(e.death); break;
   }
 }
 
@@ -192,11 +192,11 @@ send_int_as_uint8 (int n){
 static Event
 mk_event (Byte * d){
   Event e;
-  if(d[0]==EVENT_MOVE ) e.move  = mk_event_move (d);
-  if(d[0]==EVENT_MELEE) e.melee = mk_event_melee(d);
-  if(d[0]==EVENT_RANGE) e.range = mk_event_range(d);
-  if(d[0]==EVENT_ENDTURN) e.endturn = mk_event_endturn(d);
-  if(d[0]==EVENT_DEATH) e.death = mk_event_death(d);
+  if(d[0]==E_MOVE ) e.move  = mk_event_move (d);
+  if(d[0]==E_MELEE) e.melee = mk_event_melee(d);
+  if(d[0]==E_RANGE) e.range = mk_event_range(d);
+  if(d[0]==E_ENDTURN) e.endturn = mk_event_endturn(d);
+  if(d[0]==E_DEATH) e.death = mk_event_death(d);
   return(e);
 }
 

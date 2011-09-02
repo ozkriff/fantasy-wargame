@@ -246,7 +246,7 @@ check_win (){
 static Event
 mk_event_endturn (int old_id, int new_id){
   Event e;
-  e.endturn.t = EVENT_ENDTURN;
+  e.endturn.t = E_ENDTURN;
   e.endturn.old_player = old_id;
   e.endturn.new_player = new_id;
   return(e);
@@ -258,7 +258,7 @@ static Event
 mk_event_move (Unit * u, int dir){
   int tile_type = tile(neib(u->m, dir))->t;
   Event e;
-  e.move.t    = EVENT_MOVE;
+  e.move.t    = E_MOVE;
   e.move.u    = u->id;
   e.move.dir  = dir;
   e.move.cost = utypes[u->t].ter_mvp[tile_type];
@@ -275,7 +275,7 @@ mk_event_melee (
     int defenders_killed)
 {
   Event e;
-  e.melee.t   = EVENT_MELEE;
+  e.melee.t   = E_MELEE;
   e.melee.a   = a->id;
   e.melee.d   = d->id;
   e.melee.attackers_killed = attackers_killed;
@@ -288,7 +288,7 @@ mk_event_melee (
 static Event
 mk_event_range (Unit * a, Unit * d, int dmg){
   Event e;
-  e.range.t   = EVENT_RANGE;
+  e.range.t   = E_RANGE;
   e.range.a   = a->id;
   e.range.d   = d->id;
   e.range.dmg = dmg;
@@ -366,7 +366,7 @@ get_wounds (Unit *a, Unit *d){
 static Event
 mk_event_death (Unit *u){
   Event e;
-  e.t = EVENT_DEATH;
+  e.t = E_DEATH;
   e.death.u = *u;
   return(e);
 }
@@ -577,9 +577,9 @@ mk_skill_bool (int type){
 static bool
 is_event_visible (Event e){
   switch(e.t){
-    case EVENT_MELEE: return(is_melee_visible(e));
-    case EVENT_RANGE: return(is_range_visible(e));
-    case EVENT_MOVE : return(is_move_visible (e));
+    case E_MELEE: return(is_melee_visible(e));
+    case E_RANGE: return(is_range_visible(e));
+    case E_MOVE : return(is_move_visible (e));
     default: return(true);
   }
 }
@@ -644,14 +644,14 @@ add_event_local (Event data){
 
 void
 event2log (Event e){
-  if(e.t == EVENT_MOVE){
+  if(e.t == E_MOVE){
     fprintf(logfile,
         "MOVE  u=%i, dir=%i, cost=%i\n",
         e.move.u,
         e.move.dir,
         e.move.cost );
   }
-  if(e.t == EVENT_MELEE) {
+  if(e.t == E_MELEE) {
     fprintf(logfile,
         "MELEE a=%i, d=%i, ak=%i, dk=%i\n",
         e.melee.a,
@@ -659,20 +659,20 @@ event2log (Event e){
         e.melee.attackers_killed,
         e.melee.defenders_killed );
   }
-  if(e.t == EVENT_RANGE) {
+  if(e.t == E_RANGE) {
     fprintf(logfile,
         "RANGE a=%i, d=%i, dmg=%i\n",
         e.range.a,
         e.range.d,
         e.range.dmg );
   }
-  if(e.t == EVENT_ENDTURN) {
+  if(e.t == E_ENDTURN) {
     fprintf(logfile,
         "TURN %i --> %i\n",
         e.endturn.old_player,
         e.endturn.new_player );
   }
-  if(e.t == EVENT_DEATH) {
+  if(e.t == E_DEATH) {
     fprintf(logfile, "KILLED %i\n", e.death.u.id);
   }
 }
@@ -803,11 +803,11 @@ init (int ac, char ** av){
 void
 apply_event (Event e){
   switch(e.t){
-    case EVENT_MOVE:    apply_move(e);    break;
-    case EVENT_MELEE:   apply_melee(e);   break;
-    case EVENT_RANGE:   apply_range(e);   break;
-    case EVENT_ENDTURN: apply_endturn(e); break;
-    case EVENT_DEATH:   apply_death(e);   break;
+    case E_MOVE:    apply_move(e);    break;
+    case E_MELEE:   apply_melee(e);   break;
+    case E_RANGE:   apply_range(e);   break;
+    case E_ENDTURN: apply_endturn(e); break;
+    case E_DEATH:   apply_death(e);   break;
   }
   update_units_visibility();
 }

@@ -74,11 +74,11 @@ typedef struct {
   Mcrd parent; /* used in pathfinding */
 } Tile;
 
-#define EVENT_MOVE    0
-#define EVENT_MELEE   1
-#define EVENT_RANGE   2
-#define EVENT_ENDTURN 3
-#define EVENT_DEATH   4
+#define E_MOVE    0
+#define E_MELEE   1
+#define E_RANGE   2
+#define E_ENDTURN 3
+#define E_DEATH   4
 
 typedef struct {
   int t;

@@ -309,9 +309,9 @@ draw_units (){
   FOR_EACH_NODE(cw->units, node){
     Unit * u = node->d;
     if(ui_mode == MODE_SHOW_EVENT){
-      if(e.t==EVENT_MOVE  && u->id == e.move.u)
+      if(e.t==E_MOVE  && u->id == e.move.u)
         continue;
-      if(e.t==EVENT_MELEE && u->id == e.melee.a)
+      if(e.t==E_MELEE && u->id == e.melee.a)
         continue;
     }
     if(u->visible){
@@ -396,11 +396,11 @@ draw_range_event (){
 
 static void
 draw_event (){
-  if(e.t==EVENT_MOVE ) 
+  if(e.t==E_MOVE ) 
     draw_move_event ();
-  if(e.t==EVENT_MELEE) 
+  if(e.t==E_MELEE) 
     draw_melee_event();
-  if(e.t==EVENT_RANGE) 
+  if(e.t==E_RANGE) 
     draw_range_event();
 }
 
@@ -577,11 +577,11 @@ sdl_events (){
 
 static int
 get_last_event_index (Event e){
-  if(e.t == EVENT_ENDTURN)
+  if(e.t == E_ENDTURN)
     return(0);
-  else if(e.t == EVENT_MOVE || e.t == EVENT_MELEE)
+  else if(e.t == E_MOVE || e.t == E_MELEE)
     return(steps-1);
-  else if(e.t == EVENT_RANGE){
+  else if(e.t == E_RANGE){
     Mcrd a = id2unit(e.range.a)->m;
     Mcrd b = id2unit(e.range.d)->m;
     return(mdist(a, b)*steps);
