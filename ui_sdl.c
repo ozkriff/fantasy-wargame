@@ -149,16 +149,16 @@ map2scr (Mcrd map) {
 
 /* find tile with nearest coords */
 static Mcrd
-scr2map (Scrd m) {
+scr2map (Scrd s) {
   Mcrd min;
-  Mcrd mcrd;
   int min_dist = 9000;
-  FOR_EACH_MCRD(mcrd){
-    Scrd wp = map2scr(mcrd);
+  Mcrd m;
+  FOR_EACH_MCRD(m){
+    Scrd wp = map2scr(m);
     wp.x += 96/2; wp.y += 96/2;
-    if(sdist(m, wp) < min_dist){
-      min_dist = sdist(m, wp);
-      min = mcrd;
+    if(sdist(s, wp) < min_dist){
+      min_dist = sdist(s, wp);
+      min = m;
     }
   }
   return(min);
