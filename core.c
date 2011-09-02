@@ -67,7 +67,7 @@ update_fog_after_move (Unit * u){
 static void
 apply_move (Event e){
   Unit * u = id2unit(e.move.u);
-  if(find_skill(u, SKILL_IGNR))
+  if(find_skill(u, IGNR))
     u->mvp -= e.move.cost;
   else
     u->mvp = 0;
@@ -82,7 +82,7 @@ apply_move (Event e){
 /* a - shooting unit, b - target */
 static int
 range_damage (Unit * a, Unit * b){
-  Skill_range s   = find_skill(a, SKILL_RANGE)->range;
+  Skill_range s   = find_skill(a, RANGE)->range;
   int hits        = 0;
   int wounds      = 0; /*possible wounds(may be blocked by armour)*/
   int final       = 0; /*final wounds(not blocked by armour)*/
@@ -162,7 +162,7 @@ updatefog (int player){
 static bool
 is_invis (Unit * u){
   int i;
-  if(!find_skill(u, SKILL_INVIS)
+  if(!find_skill(u, INVIS)
   || u->player == cw->id)
     return(false);
   for(i=0; i<6; i++){
@@ -319,7 +319,7 @@ support_range (Unit * a, Unit * d){
   for(i=0; i<6; i++){
     sup = unit_at( neib(d->m, i) );
     if(sup && sup->player == d->player 
-    && find_skill(sup, SKILL_RANGE)){
+    && find_skill(sup, RANGE)){
       break;
     }
   }
@@ -544,7 +544,7 @@ new_unit_id (World *w){
 Skill
 mk_skill_range (int skill, int strength, int range){
   Skill s;
-  s.range.t = SKILL_RANGE;
+  s.range.t = RANGE;
   s.range.skill = skill;
   s.range.strength = strength;
   s.range.range = range;
@@ -557,7 +557,7 @@ mk_skill_range (int skill, int strength, int range){
 Skill
 mk_skill_berserk (int power){
   Skill s;
-  s.brsk.t = SKILL_BRSK;
+  s.brsk.t = BRSK;
   s.brsk.power = power;
   return(s);
 }
@@ -766,7 +766,7 @@ void
 attack (Unit * a, Unit * d){
   Mcrd md = d->m;
   Mcrd ma = a->m;
-  Skill * range = find_skill(a, SKILL_RANGE);
+  Skill * range = find_skill(a, RANGE);
   if(range){
     if(mdist(ma, md) <= range->range.range){
       int targets_killed = range_damage(a, d);

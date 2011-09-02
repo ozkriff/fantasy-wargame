@@ -6,13 +6,14 @@ typedef struct { int x, y; } Vec2i;
 typedef Vec2i Mcrd; 
 
 
-#define SKILL_RANGE     1
-#define SKILL_BRSK      2
-#define SKILL_INVIS     3
-#define SKILL_IGNR      4
-#define SKILL_ARMORED   5
-#define SKILL_ARMPIERC  6
-#define SKILL_NORETURN  7
+/* skills */
+#define RANGE     1
+#define BRSK      2
+#define INVIS     3
+#define IGNR      4
+#define ARMORED   5
+#define ARMPIERC  6
+#define NORETURN  7
 
 typedef struct { int t; int power; } Skill_berserk;
 typedef struct { int t; int skill, strength, range; } Skill_range;

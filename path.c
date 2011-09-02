@@ -71,7 +71,7 @@ process_nbh (Unit * u, Mcrd t, Mcrd nb){
   && u2->visible)
     return;
   n = utypes[u->t].ter_mvp[tile(nb)->t];
-  if(find_skill(u, SKILL_IGNR))
+  if(find_skill(u, IGNR))
     newcost = tile(t)->cost + n;
   else
     newcost = zoc(nb, u, tile(t)->cost + n);
