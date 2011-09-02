@@ -190,11 +190,11 @@ strcmp_sp (char *s1, char *s2){
 /*get tile type corresponding to character*/
 int
 char2tiletype (char c){
-  if(c=='.') return(TILE_GRASS);
-  if(c=='t') return(TILE_FOREST);
-  if(c=='*') return(TILE_WATER);
-  if(c=='h') return(TILE_HILLS);
-  if(c=='M') return(TILE_MOUNTEENS);
+  if(c=='.') return(GRASS);
+  if(c=='t') return(FOREST);
+  if(c=='*') return(WATER);
+  if(c=='h') return(HILLS);
+  if(c=='M') return(MOUNTEENS);
   puts("ERROR in char2tiletype");
   exit(EXIT_FAILURE);
 }

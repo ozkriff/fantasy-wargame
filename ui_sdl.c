@@ -97,11 +97,11 @@ free_sprites (){
 
 static void
 load_sprites (){
-  terrain_tiles[TILE_GRASS    ] = loadimg("img/grass.png"   );
-  terrain_tiles[TILE_FOREST   ] = loadimg("img/tree.png"    );
-  terrain_tiles[TILE_WATER    ] = loadimg("img/water.png"   );
-  terrain_tiles[TILE_HILLS    ] = loadimg("img/hills.png"   );
-  terrain_tiles[TILE_MOUNTEENS] = loadimg("img/mounteen.png");
+  terrain_tiles[GRASS    ] = loadimg("img/grass.png"   );
+  terrain_tiles[FOREST   ] = loadimg("img/tree.png"    );
+  terrain_tiles[WATER    ] = loadimg("img/water.png"   );
+  terrain_tiles[HILLS    ] = loadimg("img/hills.png"   );
+  terrain_tiles[MOUNTEENS] = loadimg("img/mounteen.png");
   img_arrow          = loadimg("img/arrow.png");
   img_selected_hex   = loadimg("img/sel.png");
   img_reacheble_tile = loadimg("img/reacheble_tile.png");

@@ -61,11 +61,11 @@ typedef struct {
 } Unit;
 
 
-#define TILE_GRASS     0
-#define TILE_FOREST    1
-#define TILE_WATER     2
-#define TILE_HILLS     3
-#define TILE_MOUNTEENS 4
+#define GRASS     0
+#define FOREST    1
+#define WATER     2
+#define HILLS     3
+#define MOUNTEENS 4
 
 typedef struct {
   int  fog;  /* fog of war. how many units see this tile. */
