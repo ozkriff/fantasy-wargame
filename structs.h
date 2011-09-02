@@ -19,7 +19,7 @@ typedef struct { int t; int power; } Skill_berserk;
 typedef struct { int t; int skill, strength, range; } Skill_range;
 
 typedef union {
-  int t; /* type: SKILL_* */
+  int t; /* type: S_* */
   Skill_range    range;
   Skill_berserk  brsk;
 } Skill;
@@ -48,7 +48,7 @@ typedef struct {
 #define U_ARCHER   2
 
 typedef struct {
-  int   t; /*UNIT_TYPE_**/
+  int   t; /* U_ */
   int   id;
   int   count;
   int   player;
@@ -70,7 +70,7 @@ typedef struct {
 typedef struct {
   int  fog;  /* fog of war. how many units see this tile. */
   int  cost; /* cost of path for selunit to this tile */
-  int  t; /* TILE_* */
+  int  t; /* T_ */
   Mcrd parent; /* used in pathfinding */
 } Tile;
 
@@ -98,7 +98,7 @@ typedef struct { int t; int old_player, new_player; } Event_endturn;
 typedef struct { int t; Unit u; } Event_death;
 
 typedef union {
-  int t; /* EVENT_* */
+  int t; /* E_ */
   Event_move   move;
   Event_melee  melee;
   Event_range  range;
