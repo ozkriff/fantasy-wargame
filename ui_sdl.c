@@ -514,10 +514,10 @@ common_keys (SDL_Event e){
     case SDLK_q:
       done = true;
       break;
-    case SDLK_UP:    map_offset.y += 58; break;
-    case SDLK_DOWN:  map_offset.y -= 58; break;
-    case SDLK_LEFT:  map_offset.x += 72; break;
-    case SDLK_RIGHT: map_offset.x -= 72; break;
+    case SDLK_UP:    map_offset.y += 2*96*3/4; break;
+    case SDLK_DOWN:  map_offset.y -= 2*96*3/4; break;
+    case SDLK_LEFT:  map_offset.x += 96;       break;
+    case SDLK_RIGHT: map_offset.x -= 96;       break;
     default: break;
   }
 }
