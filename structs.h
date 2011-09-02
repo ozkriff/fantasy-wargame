@@ -7,13 +7,13 @@ typedef Vec2i Mcrd;
 
 
 /* skills */
-#define RANGE     1
-#define BRSK      2
-#define INVIS     3
-#define IGNR      4
-#define ARMORED   5
-#define ARMPIERC  6
-#define NORETURN  7
+#define S_RANGE     1
+#define S_BRSK      2
+#define S_INVIS     3
+#define S_IGNR      4
+#define S_ARMORED   5
+#define S_ARMPIERC  6
+#define S_NORETURN  7
 
 typedef struct { int t; int power; } Skill_berserk;
 typedef struct { int t; int skill, strength, range; } Skill_range;

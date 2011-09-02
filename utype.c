@@ -61,9 +61,9 @@ init_hunter (){
   u.ter_ms [HILLS    ]      =  1;
   u.ter_ms [MOUNTEENS]      =  1;
   u.skills_n = 3;
-  u.skills[0] = mk_skill_bool(IGNR    );
-  u.skills[1] = mk_skill_bool(INVIS   );
-  u.skills[2] = mk_skill_bool(NORETURN);
+  u.skills[0] = mk_skill_bool(S_IGNR    );
+  u.skills[1] = mk_skill_bool(S_INVIS   );
+  u.skills[2] = mk_skill_bool(S_NORETURN);
   return(u);
 }
 
