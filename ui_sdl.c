@@ -560,11 +560,11 @@ sdl_events (){
     switch(e.type){
       case SDL_QUIT:            done = true;   break;
       case SDL_KEYUP:           keys(e);       break;
+      case SDL_MOUSEMOTION:     mousemove(e);  break;
       case SDL_MOUSEBUTTONDOWN:
         if(is_active && ui_mode == MODE_SELECT)
           mouseclick(e);
         break;
-      case SDL_MOUSEMOTION:     mousemove(e);  break;
       case SDL_VIDEORESIZE:
         screen = SDL_SetVideoMode(e.resize.w, e.resize.h,
             32, SDL_SWSURFACE | SDL_RESIZABLE);
