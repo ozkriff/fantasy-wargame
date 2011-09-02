@@ -155,7 +155,8 @@ scr2map (Scrd s) {
   Mcrd m;
   FOR_EACH_MCRD(m){
     Scrd wp = map2scr(m);
-    wp.x += 96/2; wp.y += 96/2;
+    wp.x += 96/2;
+    wp.y += 96/2;
     if(sdist(s, wp) < min_dist){
       min_dist = sdist(s, wp);
       min = m;
