@@ -43,9 +43,9 @@ typedef struct {
 } Unit_type;
 
 
-#define DEFENDER 0
-#define HUNTER   1
-#define ARCHER   2
+#define U_DEFENDER 0
+#define U_HUNTER   1
+#define U_ARCHER   2
 
 typedef struct {
   int   t; /*UNIT_TYPE_**/
