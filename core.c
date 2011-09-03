@@ -831,11 +831,8 @@ add_unit (
   u->t          = type;
   u->id         = new_unit_id(world);
   u->skills_n   = utypes[type].skills_n;
-  {
-    int i;
-    for(i=0; i<u->skills_n; i++)
-      u->skills[i] = utypes[type].skills[i];
-  }
+  memcpy(u->skills, utypes[type].skills,
+      u->skills_n*sizeof(Skill));
   l_push(&world->units, u);
 }
 
