@@ -473,10 +473,6 @@ local_arguments (int ac, char ** av)
       create_local_human(id);
     }
   }
-#if 0
-  scenario = parse_scenario_file(av[2]);
-  apply_scenario_to_all_worlds(scenario);
-#else
   init_scenarios();
   current_scenario = scenarios + str2int(av[2]);
   map_size = current_scenario->map_size;
@@ -488,7 +484,6 @@ local_arguments (int ac, char ** av)
       current_scenario->init(w);
     }
   }
-#endif
   is_local = true;
 }
 
