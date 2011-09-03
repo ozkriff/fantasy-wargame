@@ -29,7 +29,6 @@ bool    is_active; /* TODO rename! */
 Unit *  selected_unit = NULL;
 
 static FILE * logfile;
-static int scenario_players_count;
 static Scenario *current_scenario = NULL;
 
 
@@ -476,7 +475,6 @@ local_arguments (int ac, char ** av)
   init_scenarios();
   current_scenario = scenarios + str2int(av[2]);
   map_size = current_scenario->map_size;
-  scenario_players_count = current_scenario->players_count;
   {
     Node *nd;
     FOR_EACH_NODE(worlds, nd){
@@ -735,7 +733,7 @@ get_next_event (){
 void
 endturn (){
   int id = cw->id + 1;
-  if(id == scenario_players_count)
+  if(id == current_scenario->players_count)
     id = 0;
   add_event(mk_event_endturn(cw->id, id));
 }
