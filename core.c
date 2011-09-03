@@ -188,8 +188,8 @@ is_move_visible (Event e){
 
 static bool
 is_melee_visible (Event e){
-  Unit * a = id2unit( e.melee.a );
-  Unit * d = id2unit( e.melee.d );
+  Unit *a = id2unit(e.melee.a);
+  Unit *d = id2unit(e.melee.d);
   return(tile(a->m)->fog || tile(d->m)->fog);
 }
 
@@ -197,8 +197,8 @@ is_melee_visible (Event e){
 
 static bool
 is_range_visible (Event e){
-  Unit * a = id2unit( e.range.a );
-  Unit * d = id2unit( e.range.d );
+  Unit *a = id2unit(e.range.a);
+  Unit *d = id2unit(e.range.d);
   return(tile(a->m)->fog || tile(d->m)->fog);
 }
 
