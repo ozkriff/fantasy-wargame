@@ -30,6 +30,7 @@ Unit *  selected_unit = NULL;
 
 static FILE * logfile;
 static int scenario_players_count;
+static Scenario *current_scenario = NULL;
 
 
 /* Find unit's node in cw->units list. */
