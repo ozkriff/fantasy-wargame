@@ -171,11 +171,11 @@ print_data (Byte * data, Byte size){
 void
 send_event (Event e) {
   switch(e.t){
-    case E_MELEE: send_melee(e.melee); break;
-    case E_MOVE : send_move (e.move ); break;
-    case E_RANGE: send_range(e.range); break;
+    case E_MELEE  : send_melee(e.melee);     break;
+    case E_MOVE   : send_move (e.move );     break;
+    case E_RANGE  : send_range(e.range);     break;
     case E_ENDTURN: send_endturn(e.endturn); break;
-    case E_DEATH: send_death(e.death); break;
+    case E_DEATH  : send_death(e.death);     break;
   }
 }
 
@@ -192,11 +192,11 @@ send_int_as_uint8 (int n){
 static Event
 mk_event (Byte * d){
   Event e;
-  if(d[0]==E_MOVE ) e.move  = mk_event_move (d);
-  if(d[0]==E_MELEE) e.melee = mk_event_melee(d);
-  if(d[0]==E_RANGE) e.range = mk_event_range(d);
+  if(d[0]==E_MOVE   ) e.move  = mk_event_move (d);
+  if(d[0]==E_MELEE  ) e.melee = mk_event_melee(d);
+  if(d[0]==E_RANGE  ) e.range = mk_event_range(d);
   if(d[0]==E_ENDTURN) e.endturn = mk_event_endturn(d);
-  if(d[0]==E_DEATH) e.death = mk_event_death(d);
+  if(d[0]==E_DEATH  ) e.death = mk_event_death(d);
   return(e);
 }
 
