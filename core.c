@@ -458,6 +458,17 @@ create_local_ai (int id) {
 
 
 static void
+apply_scenario_to_all_worlds (Scenario *s){
+  Node *nd;
+  FOR_EACH_NODE(worlds, nd){
+    World *w = nd->d;
+    s->init(w);
+  }
+}
+
+
+
+static void
 local_arguments (int ac, char ** av)
 {
   /*0-program_name, 1-"-local", 2-scenario_name*/
@@ -475,13 +486,7 @@ local_arguments (int ac, char ** av)
   init_scenarios();
   current_scenario = scenarios + str2int(av[2]);
   map_size = current_scenario->map_size;
-  {
-    Node *nd;
-    FOR_EACH_NODE(worlds, nd){
-      World *w = nd->d;
-      current_scenario->init(w);
-    }
-  }
+  apply_scenario_to_all_worlds(current_scenario);
   is_local = true;
 }
 
