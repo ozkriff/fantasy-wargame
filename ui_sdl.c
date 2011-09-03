@@ -632,7 +632,7 @@ main(int ac, char **av){
   char * s[7] = {
       "./ui_sdl[.exe]",
       "-local",
-      "scenario2",
+      "1", /*scenario index*/
       "-human",
       "0",
       "-human",

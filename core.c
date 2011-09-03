@@ -477,13 +477,15 @@ local_arguments (int ac, char ** av)
   scenario = parse_scenario_file(av[2]);
   apply_scenario_to_all_worlds(scenario);
 #else
+  init_scenarios();
+  current_scenario = scenarios + str2int(av[2]);
+  map_size = current_scenario->map_size;
+  scenario_players_count = current_scenario->players_count;
   {
     Node *nd;
-    scenario_players_count = scenario_02.players_count;
-    map_size = scenario_02.map_size;
     FOR_EACH_NODE(worlds, nd){
       World *w = nd->d;
-      scenario_02.init(w);
+      current_scenario->init(w);
     }
   }
 #endif
