@@ -2,3 +2,8 @@
 
 extern Scenario scenario_01;
 extern Scenario scenario_02;
+
+extern Scenario scenarios[20];
+
+void init_scenarios();
+

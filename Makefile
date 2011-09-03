@@ -12,6 +12,7 @@ common_obj= \
   net.o \
   ai.o \
   utype.o \
+  scenarios.o \
   scenario_01.o \
   scenario_02.o
 
@@ -39,6 +40,7 @@ ui_cli.o: ui_cli.c core.h list.h structs.h misc.h
 ui_sdl.o: ui_sdl.c core.h list.h structs.h misc.h
 server.o: server.c        list.h
 
+scenarios.o:   scenarios.h structs.h
 scenario_01.o: scenario_01.c scenarios.h structs.h
 scenario_02.o: scenario_02.c scenarios.h structs.h
 
