@@ -78,10 +78,10 @@ static void
 send_move (Event_move e){
   Byte size = 3;
   Byte d[3];
-  SDLNet_TCP_Send(socket, &size, 1);
   d[0] = (Byte)e.t;
   d[1] = (Byte)e.u;
   d[2] = (Byte)e.dir;
+  SDLNet_TCP_Send(socket, &size, 1);
   SDLNet_TCP_Send(socket, d, (int)size);
 }
 
@@ -91,12 +91,12 @@ static void
 send_melee (Event_melee e){
   Byte size = 5;
   Byte d[5];
-  SDLNet_TCP_Send(socket, &size, 1);
   d[0] = (Byte)e.t;
   d[1] = (Byte)e.a;
   d[2] = (Byte)e.d;
   d[3] = (Byte)e.attackers_killed;
   d[4] = (Byte)e.defenders_killed;
+  SDLNet_TCP_Send(socket, &size, 1);
   SDLNet_TCP_Send(socket, d, (int)size);
 }
 
@@ -106,11 +106,11 @@ static void
 send_range (Event_range e){
   Byte size = 4;
   Byte d[4];
-  SDLNet_TCP_Send(socket, &size, 1);
   d[0] = (Byte)e.t;
   d[1] = (Byte)e.a;
   d[2] = (Byte)e.d;
   d[3] = (Byte)e.dmg;
+  SDLNet_TCP_Send(socket, &size, 1);
   SDLNet_TCP_Send(socket, d, (int)size);
 }
 
@@ -121,10 +121,10 @@ static void
 send_endturn (Event_endturn e){
   Byte size = 3;
   Byte d[3];
-  SDLNet_TCP_Send(socket, &size, 1);
   d[0] = (Byte)e.t;
   d[1] = (Byte)e.old_player;
   d[2] = (Byte)e.new_player;
+  SDLNet_TCP_Send(socket, &size, 1);
   SDLNet_TCP_Send(socket, d, (int)size);
 }
 
@@ -134,9 +134,9 @@ static void
 send_death (Event_death e){
   Byte size = 2;
   Byte d[2];
-  SDLNet_TCP_Send(socket, &size, 1);
   d[0] = (Byte)e.t;
   d[1] = (Byte)e.u.id;
+  SDLNet_TCP_Send(socket, &size, 1);
   SDLNet_TCP_Send(socket, d, (int)size);
 }
 
