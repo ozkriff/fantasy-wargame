@@ -137,7 +137,6 @@ init (int ac, char **av){
 static void
 cleanup (){
   SDLNet_Quit();
-  SDL_Quit();
 }
 
 

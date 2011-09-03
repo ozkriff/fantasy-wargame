@@ -26,7 +26,7 @@ ui_sdl: $(sdl_obj)
 	$(CC) $(CFLAGS) -o ui_sdl $(sdl_obj) $(sdl_lib)
 	
 server: server.o list.o
-	$(CC) $(CFLAGS) -o server server.o list.o -lSDL -lSDL_net
+	$(CC) $(CFLAGS) -o server server.o list.o -lSDL_net
 
 list.o:   list.c          list.h
 path.o:   path.c   path.h list.h structs.h
