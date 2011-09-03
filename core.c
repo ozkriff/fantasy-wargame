@@ -246,7 +246,7 @@ check_win (){
 static Event
 mk_event_endturn (int old_id, int new_id){
   Event e;
-  e.endturn.t = E_ENDTURN;
+  e.endturn.t          = E_ENDTURN;
   e.endturn.old_player = old_id;
   e.endturn.new_player = new_id;
   return(e);
@@ -275,9 +275,9 @@ mk_event_melee (
     int defenders_killed)
 {
   Event e;
-  e.melee.t   = E_MELEE;
-  e.melee.a   = a->id;
-  e.melee.d   = d->id;
+  e.melee.t                = E_MELEE;
+  e.melee.a                = a->id;
+  e.melee.d                = d->id;
   e.melee.attackers_killed = attackers_killed;
   e.melee.defenders_killed = defenders_killed;
   return(e);
