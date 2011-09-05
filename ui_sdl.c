@@ -429,7 +429,6 @@ mousemove (SDL_Event e){
   selected_tile = scr2map(s);
 }
 
-/* Only in MODE_SHOW_EVENT */
 static void
 event_keys (SDL_Event e){
   switch(e.key.keysym.sym) {
@@ -438,7 +437,6 @@ event_keys (SDL_Event e){
   }
 }
 
-/* In both ui_modes. */
 static void
 common_keys (SDL_Event e){
   switch(e.key.keysym.sym) {
@@ -454,7 +452,6 @@ common_keys (SDL_Event e){
   }
 }
 
-/* Only in SELECT_MODE. */
 static void
 select_keys (SDL_Event e){
   switch(e.key.keysym.sym) {
