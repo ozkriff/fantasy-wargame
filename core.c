@@ -15,8 +15,6 @@
 #include "utype.h"
 #include "scenarios.h"
 
-/* GLOBAL VARIABLES */
-
 Unit_type utypes[3];
 Mcrd    map_size;
 List    worlds;
