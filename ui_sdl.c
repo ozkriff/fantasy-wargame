@@ -23,7 +23,7 @@ typedef SDL_Surface * Img;
 static Img terrain_tiles[10];
 static Img img_units[10];
 static Img img_selected_hex;
-static Img img_reacheble_tile;
+static Img img_reacheble;
 static Img img_fog_of_war;
 static Img img_arrow;
 static Img screen = NULL;
@@ -77,7 +77,7 @@ free_sprites (){
   SDL_FreeSurface(terrain_tiles[4]     );
   SDL_FreeSurface(img_arrow            );
   SDL_FreeSurface(img_selected_hex     );
-  SDL_FreeSurface(img_reacheble_tile   );
+  SDL_FreeSurface(img_reacheble        );
   SDL_FreeSurface(img_fog_of_war       );
   SDL_FreeSurface(img_rings[0]         );
   SDL_FreeSurface(img_rings[1]         );
@@ -96,7 +96,7 @@ load_sprites (){
   terrain_tiles[T_MOUNTEENS] = loadimg("img/mounteen.png");
   img_arrow                  = loadimg("img/arrow.png"   );
   img_selected_hex           = loadimg("img/sel.png"     );
-  img_reacheble_tile         = loadimg("img/reacheble_tile.png");
+  img_reacheble              = loadimg("img/reacheble.png");
   img_fog_of_war             = loadimg("img/fow.png"     );
   img_rings[0]               = loadimg("img/ring_red.png");
   img_rings[1]               = loadimg("img/ring_blue.png");
@@ -287,7 +287,7 @@ draw_reachable_tiles(){
   FOR_EACH_MCRD(m){
     Mcrd p = tile(m)->parent;
     if(tile(m)->cost <= selected_unit->mvp) {
-      draw_img(img_reacheble_tile, map2scr(m));
+      draw_img(img_reacheble, map2scr(m));
       m2m_bzline(m, p);
     }
   }
