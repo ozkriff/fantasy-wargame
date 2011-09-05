@@ -70,18 +70,18 @@ loadimg (char * str){
 
 static void
 free_sprites (){
-  SDL_FreeSurface(terrain_tiles[0]  );
-  SDL_FreeSurface(terrain_tiles[1]  );
-  SDL_FreeSurface(terrain_tiles[2]  );
-  SDL_FreeSurface(terrain_tiles[3]  );
-  SDL_FreeSurface(terrain_tiles[4]  );
-  SDL_FreeSurface(img_arrow         );
-  SDL_FreeSurface(img_selected_hex  );
-  SDL_FreeSurface(img_reacheble_tile);
-  SDL_FreeSurface(img_fog_of_war    );
-  SDL_FreeSurface(img_rings[0]      );
-  SDL_FreeSurface(img_rings[1]      );
-  SDL_FreeSurface(img_rings[2]      );
+  SDL_FreeSurface(terrain_tiles[0]     );
+  SDL_FreeSurface(terrain_tiles[1]     );
+  SDL_FreeSurface(terrain_tiles[2]     );
+  SDL_FreeSurface(terrain_tiles[3]     );
+  SDL_FreeSurface(terrain_tiles[4]     );
+  SDL_FreeSurface(img_arrow            );
+  SDL_FreeSurface(img_selected_hex     );
+  SDL_FreeSurface(img_reacheble_tile   );
+  SDL_FreeSurface(img_fog_of_war       );
+  SDL_FreeSurface(img_rings[0]         );
+  SDL_FreeSurface(img_rings[1]         );
+  SDL_FreeSurface(img_rings[2]         );
   SDL_FreeSurface(img_units[U_DEFENDER]);
   SDL_FreeSurface(img_units[U_ARCHER]  );
   SDL_FreeSurface(img_units[U_HUNTER]  );
@@ -94,16 +94,16 @@ load_sprites (){
   terrain_tiles[T_WATER    ] = loadimg("img/water.png"   );
   terrain_tiles[T_HILLS    ] = loadimg("img/hills.png"   );
   terrain_tiles[T_MOUNTEENS] = loadimg("img/mounteen.png");
-  img_arrow          = loadimg("img/arrow.png");
-  img_selected_hex   = loadimg("img/sel.png");
-  img_reacheble_tile = loadimg("img/reacheble_tile.png");
-  img_fog_of_war     = loadimg("img/fow.png");
-  img_rings[0]       = loadimg("img/ring_red.png");
-  img_rings[1]       = loadimg("img/ring_blue.png");
-  img_rings[2]       = loadimg("img/ring_green.png");
-  img_units[U_DEFENDER] = loadimg("img/defender.png");
-  img_units[U_ARCHER]   = loadimg("img/archer.png"  );
-  img_units[U_HUNTER]   = loadimg("img/hunter.png" );
+  img_arrow                  = loadimg("img/arrow.png"   );
+  img_selected_hex           = loadimg("img/sel.png"     );
+  img_reacheble_tile         = loadimg("img/reacheble_tile.png");
+  img_fog_of_war             = loadimg("img/fow.png"     );
+  img_rings[0]               = loadimg("img/ring_red.png");
+  img_rings[1]               = loadimg("img/ring_blue.png");
+  img_rings[2]               = loadimg("img/ring_green.png");
+  img_units[U_DEFENDER]      = loadimg("img/defender.png");
+  img_units[U_ARCHER]        = loadimg("img/archer.png"  );
+  img_units[U_HUNTER]        = loadimg("img/hunter.png"  );
 }
 
 static Scrd
