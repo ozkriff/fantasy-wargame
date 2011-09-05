@@ -647,7 +647,8 @@ move (Unit * moving_unit, Mcrd destination){
     Mcrd * current = node->d;
     if(ambush(*next, moving_unit))
       break;
-    add_event( mk_event_move(moving_unit, mcrd2index(*current, *next)) );
+    add_event( mk_event_move(moving_unit,
+        mcrd2index(*current, *next)) );
   }
   while(path.count > 0)
     l_delete_node(&path, path.h);
