@@ -312,7 +312,6 @@ get_wounds (Unit *a, Unit *d){
 #endif
   return(final);
 }
- 
 
 static Event
 mk_event_death (Unit *u){
