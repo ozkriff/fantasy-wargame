@@ -519,7 +519,7 @@ apply_endturn(Event e){
   is_active = false;
 }
 
-/*------------------NON-STATIC FUNCTION------------------*/
+/*------------------NON-STATIC FUNCTIONS-----------------*/
 
 void
 select_next_unit (){
