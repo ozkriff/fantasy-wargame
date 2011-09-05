@@ -8,12 +8,8 @@
 #include "core.h"
 #include "path.h"
 
-
-
 /* stack for filling map */
 static Stack stack;
-
-
 
 /* Push this coordinates to stack,
 update cost and parent of this tile */
@@ -26,8 +22,6 @@ push (Mcrd crd, Mcrd parent, int newcost) {
   tile(crd)->parent = parent;
 }
 
-
-
 static Mcrd
 pop (){
   Mcrd * tmp = l_pop(&stack);
@@ -35,8 +29,6 @@ pop (){
   free(tmp);
   return( m );
 }
-
-
 
 /* zone of control */
 static int
@@ -55,8 +47,6 @@ zoc (Mcrd a, Unit * u, int cost){
   }
   return(cost);
 }
-
-
 
 /* process neiborhood */
 /* TODO describe */
@@ -78,8 +68,6 @@ process_nbh (Unit * u, Mcrd t, Mcrd nb){
   if(tile(nb)->cost>newcost && newcost<=utypes[u->t].mvp)
     push(nb, t, newcost);
 }
-
-
 
 void
 fill_map (Unit * u) {
@@ -104,16 +92,12 @@ fill_map (Unit * u) {
     l_delete_node(&stack, stack.h);
 }
 
-
-
 static void
 addwaypoint (List * path, Mcrd m){
   Mcrd * tmp = malloc(sizeof(Mcrd));
   *tmp = m;
   l_push(path, tmp);
 }
-
-
 
 List
 get_path (Mcrd destination){

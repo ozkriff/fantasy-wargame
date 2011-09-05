@@ -15,12 +15,10 @@
 #include "path.h"
 #include "ai.h"
 
-
 /* screen coordinates */
 typedef Vec2i Scrd;
 
 typedef SDL_Surface * Img;
-
 
 static Img terrain_tiles[10];
 static Img img_units[10];
@@ -57,8 +55,6 @@ static int steps = 6;
 
 static bool done;
 
-
-
 static Img
 loadimg (char * str){
   Img original = IMG_Load(str);
@@ -71,8 +67,6 @@ loadimg (char * str){
   SDL_FreeSurface(original);  
   return(optimized);
 }
-
-
 
 static void
 free_sprites (){
@@ -93,8 +87,6 @@ free_sprites (){
   SDL_FreeSurface(img_units[U_HUNTER]  );
 }
 
-
-
 static void
 load_sprites (){
   terrain_tiles[T_GRASS    ] = loadimg("img/grass.png"   );
@@ -114,8 +106,6 @@ load_sprites (){
   img_units[U_HUNTER]   = loadimg("img/hunter.png" );
 }
 
-
-
 static Scrd
 mk_scrd (int x, int y){
   Scrd s;
@@ -123,8 +113,6 @@ mk_scrd (int x, int y){
   s.y = y;
   return(s);
 }
-
-
 
 /* Get distanse between two screen points. */
 static int
@@ -134,8 +122,6 @@ sdist (Scrd a, Scrd b) {
   return( sqrt(pow(dx, 2)+pow(dy, 2)) );
 }
 
-
-
 static Scrd
 map2scr (Mcrd map) {
   Scrd scr;
@@ -144,8 +130,6 @@ map2scr (Mcrd map) {
   if(map.y%2) scr.x -= 96/2;
   return(scr);
 }
-
-
 
 /* find tile with nearest coords */
 static Mcrd
@@ -165,8 +149,6 @@ scr2map (Scrd s) {
   return(min);
 }
 
-
-
 /* Find point between two points. */
 static Scrd
 get_midpoint (Scrd a, Scrd b, int i) {
@@ -175,14 +157,10 @@ get_midpoint (Scrd a, Scrd b, int i) {
   return( mk_scrd(a.x+dx*i, a.y+dy*i) );
 }
 
-
-
 static Scrd
 mbetween(Mcrd a, Mcrd b, int i){
   return(  get_midpoint(map2scr(a), map2scr(b), i)  );
 }
-
-
 
 static void
 pixel (int x, int y, Uint32 pixel) {
@@ -191,8 +169,6 @@ pixel (int x, int y, Uint32 pixel) {
     return;
   pixels[ (y * screen->w) + x ] = pixel;
 }
-
-
 
 /* en.wikipedia.org/wiki/Bresenham's_line_algorithm */
 
@@ -220,8 +196,6 @@ bzline (Scrd a, Scrd b, Uint32 clr){
   }
 }
 
-
-
 static void
 draw_img (Img src, Scrd crd) {
   SDL_Rect rect;
@@ -229,8 +203,6 @@ draw_img (Img src, Scrd crd) {
   rect.y = (Sint16)crd.y;
   SDL_BlitSurface(src, NULL, screen, &rect);
 }
-
-
 
 static void
 draw_map (){
@@ -243,8 +215,6 @@ draw_map (){
   }
 }
 
-
-
 /* Draw line between 2 tiles. */
 static void 
 m2m_bzline (Mcrd a, Mcrd b){
@@ -256,14 +226,10 @@ m2m_bzline (Mcrd a, Mcrd b){
   bzline(sa, sb, red);
 }
 
-
-
 static void
 draw_bg (Uint32 clr){
   SDL_FillRect(screen, NULL, clr);
 }
-
-
 
 static void
 text (char * str, Scrd crd, bool is_centred){
@@ -280,14 +246,10 @@ text (char * str, Scrd crd, bool is_centred){
   SDL_FreeSurface(img);
 }
 
-
-
 static Img
 type2img (int t){
   return(img_units[t]);
 }
-
-
 
 static void
 draw_unit (Unit *u){
@@ -300,8 +262,6 @@ draw_unit (Unit *u){
     text(str, mk_scrd(s.x+10, s.y+60), false);
   }
 }
-
-
 
 static void
 draw_units (){
@@ -320,8 +280,6 @@ draw_units (){
   }
 }
 
-
-
 /*Mark tiles that sulunit can reach during this turn.*/
 static void
 draw_reachable_tiles(){
@@ -334,8 +292,6 @@ draw_reachable_tiles(){
     }
   }
 }
-
-
 
 /*debugging*/
 /*
@@ -356,16 +312,12 @@ maptext (){
 }
 */
 
-
-
 static void
 draw_move_event (){
   Unit * u = id2unit(e.move.u);
   Scrd crd = mbetween(u->m, neib(u->m, e.move.dir), eindex);
   draw_img(type2img(u->t), crd);
 }
-
-
 
 static void
 draw_melee_event (){
@@ -375,8 +327,6 @@ draw_melee_event (){
   Scrd crd = mbetween(a, b, i);
   draw_img(type2img(id2unit(e.melee.a)->t), crd);
 }
-
-
 
 static void
 draw_range_event (){
@@ -392,8 +342,6 @@ draw_range_event (){
   draw_img(img_arrow, mk_scrd(a.x, a.y-vc));
 }
 
-
-
 static void
 draw_event (){
   if(e.t==E_MOVE ) 
@@ -404,16 +352,12 @@ draw_event (){
     draw_range_event();
 }
 
-
-
 static void
 draw_labels (){
   char str[100];
   sprintf(str, "[pl:%i]", cw->id);
   text(str, mk_scrd(0,0), false);
 }
-
-
 
 static void
 draw (){
@@ -432,8 +376,6 @@ draw (){
   SDL_Flip(screen);
 }
 
-
-
 static void
 init_colors (){
   Uint8 x = 255;
@@ -444,8 +386,6 @@ init_colors (){
   white = SDL_MapRGBA(fmt, x, x, x, x);
   black = SDL_MapRGBA(fmt, 0, 0, 0, x);
 }
-
-
 
 static void
 init_draw (){
@@ -460,8 +400,6 @@ init_draw (){
   init_colors();
   selected_tile = mk_mcrd(-1,-1);
 }
-
-
 
 static void
 mouseclick (SDL_Event e){
@@ -485,15 +423,11 @@ mouseclick (SDL_Event e){
   }
 }
 
-
-
 static void
 mousemove (SDL_Event e){
   Scrd s = mk_scrd((int)e.button.x, (int)e.button.y);
   selected_tile = scr2map(s);
 }
-
-
 
 /* Only in MODE_SHOW_EVENT */
 static void
@@ -503,8 +437,6 @@ event_keys (SDL_Event e){
     default: break;
   }
 }
-
-
 
 /* In both ui_modes. */
 static void
@@ -522,8 +454,6 @@ common_keys (SDL_Event e){
   }
 }
 
-
-
 /* Only in SELECT_MODE. */
 static void
 select_keys (SDL_Event e){
@@ -538,8 +468,6 @@ select_keys (SDL_Event e){
   }
 }
 
-
-
 static void
 keys (SDL_Event e){
   common_keys(e);
@@ -550,8 +478,6 @@ keys (SDL_Event e){
   else
     event_keys(e);
 }
-
-
 
 static void
 sdl_events (){
@@ -573,8 +499,6 @@ sdl_events (){
   }
 }
 
-
-
 static int
 get_last_event_index (Event e){
   if(e.t == E_ENDTURN)
@@ -588,8 +512,6 @@ get_last_event_index (Event e){
   }else
     return(0);
 }
-
-
 
 static void
 events (){
@@ -607,8 +529,6 @@ events (){
   }
 }
 
-
-
 static void
 mainloop(){
   while(!done){
@@ -622,8 +542,6 @@ mainloop(){
     SDL_Delay(1*33);
   }
 }
-
-
 
 #undef main
 int

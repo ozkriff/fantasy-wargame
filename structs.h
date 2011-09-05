@@ -5,7 +5,6 @@ typedef struct { int x, y; } Vec2i;
 /* map coordinates */
 typedef Vec2i Mcrd; 
 
-
 /* skills */
 #define S_RANGE     1
 #define S_BRSK      2
@@ -24,8 +23,6 @@ typedef union {
   Skill_berserk  brsk;
 } Skill;
 
-
-
 typedef struct {
   int range_of_vision;
   int morale;
@@ -41,7 +38,6 @@ typedef struct {
   Skill skills[10];
   int   skills_n;
 } Unit_type;
-
 
 #define U_DEFENDER 0
 #define U_HUNTER   1
@@ -59,7 +55,6 @@ typedef struct {
   int   skills_n;
   bool  visible;
 } Unit;
-
 
 #define T_GRASS     0
 #define T_FOREST    1
@@ -106,7 +101,6 @@ typedef union {
   Event_death  death;
 } Event;
 
-
 typedef struct {
   Tile * map;
   List   units;
@@ -114,8 +108,6 @@ typedef struct {
   bool   is_ai;
   int    id;
 } World;
-
- 
 
 typedef struct {
   int   players_count;

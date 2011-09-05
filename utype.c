@@ -8,8 +8,6 @@
 #include "core.h"
 #include "utype.h"
 
-
-
 static Unit_type
 init_defender (){
   Unit_type u;
@@ -35,8 +33,6 @@ init_defender (){
   u.skills_n             =  0;
   return(u);
 }
-
-
 
 static Unit_type
 init_hunter (){
@@ -67,8 +63,6 @@ init_hunter (){
   return(u);
 }
 
-
-
 static Unit_type
 init_archer (){
   Unit_type u;
@@ -95,8 +89,6 @@ init_archer (){
   u.skills[0] = mk_skill_range(3, 5, 4);
   return(u);
 }
-
-
 
 void
 init_unit_types (){

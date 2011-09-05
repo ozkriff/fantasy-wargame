@@ -5,9 +5,7 @@
 #include "structs.h"
 #include "scenarios.h"
 
-
 Scenario scenarios[20];
-
 
 void
 init_scenarios(){

@@ -16,14 +16,10 @@ typedef struct Client {
   List players;
 } Client;
 
-
-
 List clients = {0, 0, 0};
 
 TCPsocket listening_socket;
 SDLNet_SocketSet sockets;
-
-
 
 /* read through scenario to get players_count */
 static int
@@ -46,8 +42,6 @@ get_players_count_from_scenario (char * filename){
   return(players_count);
 }
 
-
-
 static bool
 is_id_free (int id){
   Node * client_node;
@@ -60,8 +54,6 @@ is_id_free (int id){
   }
   return(true);
 }
-
-
 
 static void
 wait_for_all_players (int players_count){
@@ -95,8 +87,6 @@ wait_for_all_players (int players_count){
   }
 }
 
-
-
 static void
 send_scenario_name_to_clients (char * scenario_name){
   uint8_t size = strlen(scenario_name) + 1;
@@ -107,8 +97,6 @@ send_scenario_name_to_clients (char * scenario_name){
     SDLNet_TCP_Send(c->sock, scenario_name, (int)size);
   }
 }
-
-
 
 static void
 init (int ac, char **av){
@@ -132,14 +120,10 @@ init (int ac, char **av){
   send_scenario_name_to_clients(av[2]);
 }
 
-
-
 static void
 cleanup (){
   SDLNet_Quit();
 }
-
-
 
 static void
 receive_data (Client *c, uint8_t *data, uint8_t *size)
@@ -148,8 +132,6 @@ receive_data (Client *c, uint8_t *data, uint8_t *size)
   SDLNet_TCP_Recv(c->sock, size, 1);
   SDLNet_TCP_Recv(c->sock, data, (int)*size);
 }
-
-
 
 #if PRINT_DATA
 static void
@@ -160,8 +142,6 @@ print_data (uint8_t * data, uint8_t size){
   puts("");
 }
 #endif
-
-
 
 /* Resend data to all clients, except <Client * exception> 
   who has sent that data to us.
@@ -178,8 +158,6 @@ resend_data (Client * exception, uint8_t * data, uint8_t size){
     }
   }
 }
-
-
 
 static void
 mainloop (){
@@ -204,8 +182,6 @@ mainloop (){
     }
   }
 }
-
-
 
 #undef main
 int

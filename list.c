@@ -5,7 +5,6 @@
 #include <malloc.h>
 #include "list.h"
 
-
 /* Create node <new> that points to <data> and insert 
   this node into list.
   If <after>==NULL, then <new> will be added at the head
@@ -28,8 +27,6 @@ l_insert_node (List * list, void * data, Node * after){
   list->count++;
 }
 
-
-
 /* Extructs node from list, returns pointer to this node.
   No memory is freed */
 Node *
@@ -42,8 +39,6 @@ l_extruct_node (List * list, Node * old){
   return(old);
 }
 
-
-
 /* Delete data and node. */
 void
 l_delete_node (List * list, Node * old){
@@ -51,8 +46,6 @@ l_delete_node (List * list, Node * old){
   free(node->d);
   free(node);
 }
-
-
 
 /* Extruct node from list, delete node,
   return pointer to data. */

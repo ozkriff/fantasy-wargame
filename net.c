@@ -15,8 +15,6 @@
 static TCPsocket socket;
 static SDLNet_SocketSet sockets;
 
-
-
 static Event_move
 mk_event_move (Byte * d){
   Event_move e;
@@ -25,8 +23,6 @@ mk_event_move (Byte * d){
   e.dir  = (int)d[2];
   return(e);
 }
-
-
 
 static Event_range
 mk_event_range (Byte * d){
@@ -37,8 +33,6 @@ mk_event_range (Byte * d){
   e.dmg  = (int)d[3];
   return(e);
 }
-
-
 
 static Event_melee
 mk_event_melee (Byte * d){
@@ -51,8 +45,6 @@ mk_event_melee (Byte * d){
   return(e);
 }
 
-
-
 static Event_endturn
 mk_event_endturn (Byte * d){
   Event_endturn e;
@@ -62,8 +54,6 @@ mk_event_endturn (Byte * d){
   return(e);
 }
 
-
-
 static Event_death
 mk_event_death (Byte *d){
   Event_death e;
@@ -71,8 +61,6 @@ mk_event_death (Byte *d){
   e.u = *id2unit((int)d[1]);
   return(e);
 }
-
-
 
 static void
 send_move (Event_move e){
@@ -84,8 +72,6 @@ send_move (Event_move e){
   SDLNet_TCP_Send(socket, &size, 1);
   SDLNet_TCP_Send(socket, d, (int)size);
 }
-
-
 
 static void
 send_melee (Event_melee e){
@@ -100,8 +86,6 @@ send_melee (Event_melee e){
   SDLNet_TCP_Send(socket, d, (int)size);
 }
 
-
-
 static void
 send_range (Event_range e){
   Byte size = 4;
@@ -113,8 +97,6 @@ send_range (Event_range e){
   SDLNet_TCP_Send(socket, &size, 1);
   SDLNet_TCP_Send(socket, d, (int)size);
 }
-
-
 
 /*  */
 static void
@@ -128,8 +110,6 @@ send_endturn (Event_endturn e){
   SDLNet_TCP_Send(socket, d, (int)size);
 }
 
-
-
 static void
 send_death (Event_death e){
   Byte size = 2;
@@ -139,8 +119,6 @@ send_death (Event_death e){
   SDLNet_TCP_Send(socket, &size, 1);
   SDLNet_TCP_Send(socket, d, (int)size);
 }
-
-
 
 static void
 get_data (Byte * data, Byte * size){
@@ -153,8 +131,6 @@ get_data (Byte * data, Byte * size){
   }
 }
 
-
-
 /* debugging */
 /*
 static void
@@ -165,8 +141,6 @@ print_data (Byte * data, Byte size){
   puts("");
 }
 */
-
-
 
 void
 send_event (Event e) {
@@ -179,15 +153,11 @@ send_event (Event e) {
   }
 }
 
-
-
 void
 send_int_as_uint8 (int n){
   Byte x = (Byte)n;
   SDLNet_TCP_Send(socket, &x, 1);
 }
-
-
 
 static Event
 mk_event (Byte * d){
@@ -199,8 +169,6 @@ mk_event (Byte * d){
   if(d[0]==E_DEATH  ) e.death = mk_event_death(d);
   return(e);
 }
-
-
 
 void
 do_network (){
@@ -216,8 +184,6 @@ do_network (){
   }
 }
 
-
-
 void
 init_network (char * hostname, int port){
   IPaddress ip;
@@ -231,8 +197,6 @@ init_network (char * hostname, int port){
   sockets = SDLNet_AllocSocketSet(1);
   SDLNet_TCP_AddSocket(sockets, socket);
 }
-
-
 
 void
 get_scenario_name_from_server (char * str){

@@ -20,4 +20,3 @@ bool  is_eq_empty ();
 Event get_next_event ();
 void  apply_event (Event e);
 
-

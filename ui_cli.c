@@ -9,10 +9,8 @@
 #include "core.h"
 #include "misc.h"
 
-
 char b[200]; /* [b]uffer */
 int ui_done;
-
 
 void ui_list_units(){
   Node * n;
@@ -24,8 +22,6 @@ void ui_list_units(){
   }
   printf("\n");
 }
-
-
 
 void ui_help(){
   char * helpstr = 
@@ -41,8 +37,6 @@ void ui_help(){
   puts(helpstr);
 }
 
-
-
 void ui_move(){
   Mcrd f, t; /* from, to */
   int n = sscanf(b, "m %i %i %i %i\n", 
@@ -55,8 +49,6 @@ void ui_move(){
     move(unit_at(f), t);
   }
 }
-
-
 
 void ui_attack(){
   Mcrd f, t; /* from, to */
@@ -71,13 +63,9 @@ void ui_attack(){
   }
 }
 
-
-
 void ui_print_cw_id(){
   printf("cw->id: %i\n", cw->id);
 }
-
-
 
 void ui_print_map(){
   Mcrd m;
@@ -91,8 +79,6 @@ void ui_print_map(){
     putchar('\n');
   }    
 }
-
-
 
 void ui_unit_info(){
   Mcrd m;
@@ -109,13 +95,9 @@ void ui_unit_info(){
   }
 }
 
-
-
 void ui_end_turn(){
   endturn();
 }
-
-
 
 void ui_cmd(char * b){
   switch(b[0]){
@@ -130,8 +112,6 @@ void ui_cmd(char * b){
     case 'p': ui_print_cw_id(); break;
   }
 }
-
-
 
 int main(int ac, char **av){
 #if 0

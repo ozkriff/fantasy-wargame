@@ -12,7 +12,6 @@
 #include "misc.h"
 #include "ai.h"
 
-
 /* if there is enemy at adjustment cell then attack it */
 static void
 ai_attack(Unit * u){
@@ -24,8 +23,6 @@ ai_attack(Unit * u){
     attack(u, enm);
   }
 }
-
-
 
 /* random movement */
 static void
@@ -44,8 +41,6 @@ ai_movement(Unit * u){
     }
   }
 }
-
-
 
 void
 ai (){

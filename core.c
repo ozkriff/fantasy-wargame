@@ -15,9 +15,6 @@
 #include "utype.h"
 #include "scenarios.h"
 
-
-
-
 /* GLOBAL VARIABLES */
 
 Unit_type utypes[3];
@@ -31,7 +28,6 @@ Unit *  selected_unit = NULL;
 static FILE * logfile;
 static Scenario *current_scenario = NULL;
 
-
 /* Find unit's node in cw->units list. */
 static Node *
 unit2node (Unit * u){
@@ -41,8 +37,6 @@ unit2node (Unit * u){
   return n;
 }
 
-
-
 static void
 kill_unit (Unit * u){
   if(u == selected_unit)
@@ -50,8 +44,6 @@ kill_unit (Unit * u){
   l_delete_node(&cw->units, unit2node(u));
   fill_map(selected_unit);
 }
-
-
 
 static void
 update_fog_after_move (Unit * u){
@@ -61,8 +53,6 @@ update_fog_after_move (Unit * u){
       tile(m)->fog++;
   }
 }
-
-
 
 static void
 apply_move (Event e){
@@ -76,8 +66,6 @@ apply_move (Event e){
   if(u->player==cw->id)
     update_fog_after_move(u);
 }
-
-
 
 /* a - shooting unit, b - target */
 static int
@@ -109,8 +97,6 @@ range_damage (Unit * a, Unit * b){
   return(final);
 }
 
-
-
 static void
 apply_melee(Event e){
   Unit * a = id2unit(e.melee.a);
@@ -120,15 +106,11 @@ apply_melee(Event e){
   a->can_attack = false;
 }
 
-
-
 static void
 apply_death (Event e){
   Unit *u = id2unit(e.death.u.id);
   kill_unit(u);
 }
-
-
 
 static void
 apply_range (Event e){
@@ -138,8 +120,6 @@ apply_range (Event e){
   ud->count -= dmg;
   ua->can_attack = false;
 }
-
-
 
 static void
 updatefog (int player){
@@ -157,8 +137,6 @@ updatefog (int player){
   }
 }
 
-
-
 static bool
 is_invis (Unit * u){
   int i;
@@ -174,8 +152,6 @@ is_invis (Unit * u){
   return(true);
 }
 
-
-
 static bool
 is_move_visible (Event e){
   Unit * u = id2unit(e.move.u);
@@ -184,8 +160,6 @@ is_move_visible (Event e){
   return(!hidden && fow);
 }
 
-
-
 static bool
 is_melee_visible (Event e){
   Unit *a = id2unit(e.melee.a);
@@ -193,16 +167,12 @@ is_melee_visible (Event e){
   return(tile(a->m)->fog || tile(d->m)->fog);
 }
 
-
-
 static bool
 is_range_visible (Event e){
   Unit *a = id2unit(e.range.a);
   Unit *d = id2unit(e.range.d);
   return(tile(a->m)->fog || tile(d->m)->fog);
 }
-
-
 
 static bool
 checkunitsleft(){
@@ -214,8 +184,6 @@ checkunitsleft(){
   }
   return(false);
 }
-
-
 
 static void
 refresh_units (){
@@ -229,8 +197,6 @@ refresh_units (){
   }
 }
 
-
-
 static void
 check_win (){
   if(!checkunitsleft()){
@@ -239,8 +205,6 @@ check_win (){
     exit(EXIT_SUCCESS);
   }
 }
-
-
 
 /*old player's id, new player's id*/
 static Event
@@ -252,8 +216,6 @@ mk_event_endturn (int old_id, int new_id){
   return(e);
 }
 
-
-
 static Event
 mk_event_move (Unit * u, int dir){
   int tile_type = tile(neib(u->m, dir))->t;
@@ -264,8 +226,6 @@ mk_event_move (Unit * u, int dir){
   e.move.cost = utypes[u->t].ter_mvp[tile_type];
   return(e);
 }
-
-
 
 static Event
 mk_event_melee (
@@ -283,8 +243,6 @@ mk_event_melee (
   return(e);
 }
 
-
-
 static Event
 mk_event_range (Unit * a, Unit * d, int dmg){
   Event e;
@@ -294,8 +252,6 @@ mk_event_range (Unit * a, Unit * d, int dmg){
   e.range.dmg = dmg;
   return(e);
 }
-
-
 
 static bool
 ambush(Mcrd next, Unit * moving_unit){
@@ -307,8 +263,6 @@ ambush(Mcrd next, Unit * moving_unit){
     return(false);
   }
 }
-
-
 
 /* [a]ttacker, [d]efender */
 static void
@@ -328,8 +282,6 @@ support_range (Unit * a, Unit * d){
   range = mk_event_range(sup, a, 2);
   add_event(range);
 }
-
-
 
 static int
 get_wounds (Unit *a, Unit *d){
@@ -362,7 +314,6 @@ get_wounds (Unit *a, Unit *d){
 }
  
 
-
 static Event
 mk_event_death (Unit *u){
   Event e;
@@ -370,8 +321,6 @@ mk_event_death (Unit *u){
   e.death.u = *u;
   return(e);
 }
-
-
 
 static void
 flee (Unit *u){
@@ -388,8 +337,6 @@ flee (Unit *u){
     add_event(mk_event_move(u, dir));
   }
 }
-
-
 
 /* [a]ttacker, [d]efender */
 static void
@@ -415,8 +362,6 @@ attack_melee (Unit * a, Unit * d){
   puts("");
 }
 
-
-
 /* Check and update visibility of all units in CW */
 static void
 update_units_visibility (){
@@ -431,8 +376,6 @@ update_units_visibility (){
   }
 }
 
-
-
 static void
 create_local_world (int id, bool is_ai) {
   World * w = calloc(1, sizeof(World));
@@ -441,21 +384,15 @@ create_local_world (int id, bool is_ai) {
   l_push(&worlds, w);
 }
 
-
-
 static void
 create_local_human (int id) {
   create_local_world(id, false);
 }
 
-
-
 static void
 create_local_ai (int id) {
   create_local_world(id, true);
 }
-
-
 
 static void
 apply_scenario_to_all_worlds (Scenario *s){
@@ -465,8 +402,6 @@ apply_scenario_to_all_worlds (Scenario *s){
     s->init(w);
   }
 }
-
-
 
 static void
 local_arguments (int ac, char ** av)
@@ -490,16 +425,12 @@ local_arguments (int ac, char ** av)
   is_local = true;
 }
 
-
-
 static void
 net_arguments (int ac, char ** av){
   int no_players_left_mark = 0xff;
   int i;
-
   int port = str2int(av[3]);
   init_network(av[2], port);
-
   /* 0-program_name, 1-"-net", 2-"server", 3-port */
   for(i=4; i<ac; i++){
     if(!strcmp(av[i], "-ai")){
@@ -513,9 +444,7 @@ net_arguments (int ac, char ** av){
       send_int_as_uint8(id);
     }
   }
-
   send_int_as_uint8(no_players_left_mark);
-
 #if 0
   get_scenario_name_from_server(scenarioname);
   scenario = parse_scenario_file(scenarioname);
@@ -526,8 +455,6 @@ net_arguments (int ac, char ** av){
   is_local = false;
   add_event_local(mk_event_endturn(0, 0));
 }
-
-
 
 /*called fron add_unit*/
 static int
@@ -540,8 +467,6 @@ new_unit_id (World *w){
   }
 }
 
-
-
 Skill
 mk_skill_range (int skill, int strength, int range){
   Skill s;
@@ -551,8 +476,6 @@ mk_skill_range (int skill, int strength, int range){
   s.range.range = range;
   return(s);
 }
-
-
 
 #if 0
 Skill
@@ -564,16 +487,12 @@ mk_skill_berserk (int power){
 }
 #endif
 
-
-
 Skill
 mk_skill_bool (int type){
   Skill s;
   s.t = type;
   return(s);
 }
-
-
 
 static bool
 is_event_visible (Event e){
@@ -584,8 +503,6 @@ is_event_visible (Event e){
     default: return(true);
   }
 }
-
-
 
 static void
 apply_endturn(Event e){
@@ -605,12 +522,7 @@ apply_endturn(Event e){
   is_active = false;
 }
 
-
-
-
 /*------------------NON-STATIC FUNCTION------------------*/
-
-
 
 void
 select_next_unit (){
@@ -628,8 +540,6 @@ select_next_unit (){
   fill_map(selected_unit = u);
 }
 
-
-
 void
 add_event_local (Event data){
   Node * nd;
@@ -640,8 +550,6 @@ add_event_local (Event data){
     l_addtail(&world->eq, e);
   }
 }
-
-
 
 void
 event2log (Event e){
@@ -678,8 +586,6 @@ event2log (Event e){
   }
 }
 
-
-
 void
 add_event (Event e){
   add_event_local(e);
@@ -687,8 +593,6 @@ add_event (Event e){
   if(!is_local)
     send_event(e);
 }
-
-
 
 void
 cleanup(){
@@ -703,8 +607,6 @@ cleanup(){
     l_delete_node(&worlds, worlds.h);
   }
 }
-
-
 
 /* called before get_next_event */
 void
@@ -722,8 +624,6 @@ update_eq (){
   }
 }
 
-
-
 /* always called after update_eq */
 Event
 get_next_event (){
@@ -733,8 +633,6 @@ get_next_event (){
   return(e);
 }
 
-
-
 void
 endturn (){
   int id = cw->id + 1;
@@ -742,8 +640,6 @@ endturn (){
     id = 0;
   add_event(mk_event_endturn(cw->id, id));
 }
-
-
 
 void
 move (Unit * moving_unit, Mcrd destination){
@@ -759,8 +655,6 @@ move (Unit * moving_unit, Mcrd destination){
   while(path.count > 0)
     l_delete_node(&path, path.h);
 }
-
-
 
 /* [a]ttacker, [d]efender */
 void
@@ -783,7 +677,6 @@ attack (Unit * a, Unit * d){
   }
 }
 
-
 void
 init (int ac, char ** av){
   srand( (unsigned int)time(NULL) );
@@ -799,8 +692,6 @@ init (int ac, char ** av){
   is_active = true;
 }
 
-
-
 void
 apply_event (Event e){
   switch(e.t){
@@ -812,8 +703,6 @@ apply_event (Event e){
   }
   update_units_visibility();
 }
-
-
 
 void
 add_unit (
@@ -835,8 +724,6 @@ add_unit (
       u->skills_n*sizeof(Skill));
   l_push(&world->units, u);
 }
-
-
 
 bool
 is_eq_empty (){

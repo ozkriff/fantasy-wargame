@@ -10,8 +10,6 @@
 #include "core.h"
 #include "misc.h"
 
-
-
 int
 str2int (char * str) {
   int n;
@@ -22,8 +20,6 @@ str2int (char * str) {
   return(n);
 }
 
-
-
 Mcrd
 mk_mcrd (int x, int y){
   Mcrd m;
@@ -31,8 +27,6 @@ mk_mcrd (int x, int y){
   m.y = y;
   return(m);
 }
-
-
 
 Skill *
 find_skill(Unit * u, int type){
@@ -44,15 +38,11 @@ find_skill(Unit * u, int type){
   return(NULL);
 }
 
-
-
 /* is mcrd equal */
 bool
 mcrdeq(Mcrd a, Mcrd b){
   return(a.x==b.x && a.y==b.y); 
 }
-
-
 
 /* Get distance between tiles. */
 int
@@ -65,8 +55,6 @@ mdist (Mcrd a, Mcrd b) {
   return( (abs(dx) + abs(dy) + abs(dx-dy)) / 2 );
 }
 
-
-
 /* Get tile's neiborhood by it's index. */
 Mcrd
 neib (Mcrd a, int neib_index) {
@@ -78,16 +66,12 @@ neib (Mcrd a, int neib_index) {
   return( mk_mcrd(a.x+dx, a.y+dy) );
 }
 
-
-
 /* Get tile's opposite neiborhood. */
 int
 opposite_neib_index (int i){
   int d[] = {3, 4,2, 5,1, 0};
   return(i + d[i]);
 }
-
-
 
 int
 mcrd2index(Mcrd a, Mcrd b){
@@ -100,19 +84,14 @@ mcrd2index(Mcrd a, Mcrd b){
   exit(EXIT_FAILURE);
 }
 
-
-
 /* -------- NEXT FUNCTIONS USE GLOBAL VARIABLES --------- */
 /* core: cw map_w map_h */
-
 
 /* mcrd2tile */
 Tile *
 tile (Mcrd c){
   return(cw->map + map_size.x*c.y + c.x);
 }
-
-
 
 /* is tile inboard */
 bool
@@ -121,8 +100,6 @@ inboard (Mcrd t){
   bool is_y_ok = t.y >= 0 && t.y < map_size.y;
   return(is_x_ok && is_y_ok);
 }
-
-
 
 Unit *
 id2unit (int id){
@@ -135,8 +112,6 @@ id2unit (int id){
   return(NULL);
 }
 
-
-
 Unit *
 unit_at (Mcrd crd){
   Node * node;
@@ -148,8 +123,6 @@ unit_at (Mcrd crd){
   return(NULL);
 }
 
-
-
 void
 fixnum (int min, int max, int *n){
   if(*n < min)
@@ -158,8 +131,6 @@ fixnum (int min, int max, int *n){
     *n = max;
 }
 
-
-
 int
 rnd (int min, int max){
   if(max != min)
@@ -167,8 +138,6 @@ rnd (int min, int max){
   else
     return(max);
 }
-
-
 
 /*Compare strings till first space or tab.
   strcmp_sp("lo 2 3", "lo %i %i") -> true
@@ -185,8 +154,6 @@ strcmp_sp (char *s1, char *s2){
   return(true);
 }
 
-
-
 /*get tile type corresponding to character*/
 int
 char2tiletype (char c){
@@ -198,8 +165,6 @@ char2tiletype (char c){
   puts("ERROR in char2tiletype");
   exit(EXIT_FAILURE);
 }
-
-
 
 Tile *
 str2map (char *s){

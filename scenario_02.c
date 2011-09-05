@@ -12,12 +12,8 @@
 #include "core_private.h"
 #include "scenarios.h"
 
-
-
 static void init_scenario(World *w);
 static void scenario_logic();
-
-
 
 Scenario scenario_02 = {
   2, /*players_count*/
@@ -32,8 +28,6 @@ Scenario scenario_02 = {
   init_scenario, 
   scenario_logic
 };
-
-
 
 static void
 init_scenario (World *w){
@@ -50,8 +44,6 @@ init_scenario (World *w){
     add_unit(mk_mcrd(3,3), 1, U_ARCHER,   w);
   }
 }
-
-
 
 static void
 scenario_logic (){

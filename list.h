@@ -16,7 +16,6 @@ struct List {
   int  count; /* number of nodes in list */
 };
 
-
 void   l_insert_node (List * list_p, void * data, Node * after);
 Node * l_extruct_node(List * list_p, Node * old);
 void   l_delete_node (List * list_p, Node * old);
@@ -33,7 +32,6 @@ void * l_extruct_data(List * list_p, Node * old);
 #define Queue           List
 #define l_enqueue       l_addtail
 #define l_dequeue(list_p) l_extruct_data(list_p, (list_p)->h)
-
 
 #define FOR_EACH_NODE(list, node_p) \
   for(node_p=(list).h; node_p; node_p=node_p->n)
