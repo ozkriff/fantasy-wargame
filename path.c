@@ -9,7 +9,7 @@
 #include "path.h"
 
 /* stack for filling map */
-static Stack stack;
+static Stack stack = {NULL, NULL, 0};
 
 /* Push this coordinates to stack,
 update cost and parent of this tile */
