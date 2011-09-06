@@ -36,7 +36,7 @@ typedef struct {
   int ter_mvp[10]; /* terrain move cost */
   int ter_ms[10]; /* melee_skill bonuses at different terrains */
   Skill skills[10];
-  int   skills_n;
+  int skills_n;
 } Unit_type;
 
 #define U_DEFENDER 0
