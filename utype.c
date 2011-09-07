@@ -20,6 +20,8 @@ init_defender (){
   u.attacks              =  1;
   u.armor                =  3;
   u.mvp                  =  3;
+  u.energy               = 20;
+  u.energy_rg            =  5;
   u.ter_mvp[T_GRASS    ] =  1;
   u.ter_mvp[T_FOREST   ] =  4;
   u.ter_mvp[T_WATER    ] =  8;
@@ -46,6 +48,8 @@ init_hunter (){
   u.attacks              =  2;
   u.armor                =  1;
   u.mvp                  =  4;
+  u.energy               = 20;
+  u.energy_rg            =  5;
   u.ter_mvp[T_GRASS    ] =  1;
   u.ter_mvp[T_FOREST   ] =  2;
   u.ter_mvp[T_WATER    ] =  4;
@@ -75,6 +79,8 @@ init_archer (){
   u.attacks              =  1;
   u.armor                =  1;
   u.mvp                  =  3;
+  u.energy               = 20;
+  u.energy_rg            =  5;
   u.ter_mvp[T_GRASS    ] =  1;
   u.ter_mvp[T_FOREST   ] =  3;
   u.ter_mvp[T_WATER    ] =  8;
