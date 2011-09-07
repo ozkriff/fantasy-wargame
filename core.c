@@ -729,4 +729,3 @@ is_eq_empty (){
   return(cw->eq.count == 0);
 }
 
-
