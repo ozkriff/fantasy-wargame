@@ -258,7 +258,7 @@ draw_unit (Unit *u){
   draw_img(type2img(u->t), s);
   if(1){
     char str[100];
-    sprintf(str, "%i", (int)u->count);
+    sprintf(str, "%i", u->count);
     text(str, mk_scrd(s.x+10, s.y+60), false);
   }
 }
