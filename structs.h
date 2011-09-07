@@ -56,6 +56,7 @@ typedef struct {
   Skill skills[10];
   int   skills_n;
   bool  visible;
+  int   energy;
 } Unit;
 
 #define T_GRASS     0
