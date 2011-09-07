@@ -37,6 +37,8 @@ typedef struct {
   int ter_ms[10]; /* melee_skill bonuses at different terrains */
   Skill skills[10];
   int skills_n;
+  int energy; /*max unit's energy */
+  int energy_rg; /*regeneration per turn*/
 } Unit_type;
 
 #define U_DEFENDER 0
