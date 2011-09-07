@@ -59,6 +59,7 @@ apply_move (Event e){
     u->mvp -= e.move.cost;
   else
     u->mvp = 0;
+  u->energy -= e.move.cost;
   u->m = neib(u->m, e.move.dir);
   fill_map(selected_unit);
   if(u->player==cw->id)
