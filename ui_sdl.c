@@ -468,12 +468,12 @@ select_keys (SDL_Event e){
 static void
 keys (SDL_Event e){
   common_keys(e);
-  if(!is_active)
-    return;
-  if(ui_mode == MODE_SELECT)
-    select_keys(e);
-  else
-    event_keys(e);
+  if(is_active){
+    if(ui_mode == MODE_SELECT)
+      select_keys(e);
+    else
+      event_keys(e);
+  }
 }
 
 static void
