@@ -23,7 +23,7 @@ int
 str2int (char * str) {
   int n;
   if(sscanf(str, "%i", &n) != 1)
-    die("str2int error.\n");
+    die("str2int error: \'%s\'\n", str);
   return(n);
 }
 
