@@ -20,7 +20,7 @@ typedef Vec2i Scrd;
 
 typedef SDL_Surface * Img;
 
-static Img terrain_tiles[10];
+static Img img_tiles[10];
 static Img img_units[10];
 static Img img_selected_hex;
 static Img img_reacheble;
@@ -68,11 +68,11 @@ loadimg (char * str){
 
 static void
 free_sprites (){
-  SDL_FreeSurface(terrain_tiles[0]     );
-  SDL_FreeSurface(terrain_tiles[1]     );
-  SDL_FreeSurface(terrain_tiles[2]     );
-  SDL_FreeSurface(terrain_tiles[3]     );
-  SDL_FreeSurface(terrain_tiles[4]     );
+  SDL_FreeSurface(img_tiles[0]         );
+  SDL_FreeSurface(img_tiles[1]         );
+  SDL_FreeSurface(img_tiles[2]         );
+  SDL_FreeSurface(img_tiles[3]         );
+  SDL_FreeSurface(img_tiles[4]         );
   SDL_FreeSurface(img_arrow            );
   SDL_FreeSurface(img_selected_hex     );
   SDL_FreeSurface(img_reacheble        );
@@ -87,11 +87,11 @@ free_sprites (){
 
 static void
 load_sprites (){
-  terrain_tiles[T_GRASS    ] = loadimg("img/grass.png"   );
-  terrain_tiles[T_FOREST   ] = loadimg("img/tree.png"    );
-  terrain_tiles[T_WATER    ] = loadimg("img/water.png"   );
-  terrain_tiles[T_HILLS    ] = loadimg("img/hills.png"   );
-  terrain_tiles[T_MOUNTEENS] = loadimg("img/mounteen.png");
+  img_tiles[T_GRASS    ] = loadimg("img/grass.png"   );
+  img_tiles[T_FOREST   ] = loadimg("img/tree.png"    );
+  img_tiles[T_WATER    ] = loadimg("img/water.png"   );
+  img_tiles[T_HILLS    ] = loadimg("img/hills.png"   );
+  img_tiles[T_MOUNTEENS] = loadimg("img/mounteen.png");
   img_arrow                  = loadimg("img/arrow.png"   );
   img_selected_hex           = loadimg("img/sel.png"     );
   img_reacheble              = loadimg("img/reacheble.png");
@@ -206,7 +206,7 @@ static void
 draw_map (){
   Mcrd m;
   FOR_EACH_MCRD(m){
-    Img s = terrain_tiles[tile(m)->t];
+    Img s = img_tiles[tile(m)->t];
     draw_img(s, map2scr(m));
     if(tile(m)->fog <= 0)
       draw_img(img_fog_of_war, map2scr(m));
