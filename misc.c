@@ -10,13 +10,20 @@
 #include "core.h"
 #include "misc.h"
 
+void
+die(const char *errstr, ...){
+  va_list ap;
+  va_start(ap, errstr);
+  vfprintf(stderr, errstr, ap);
+  va_end(ap);
+  exit(EXIT_FAILURE);
+}
+
 int
 str2int (char * str) {
   int n;
-  if(sscanf(str, "%i", &n) != 1){
-    (void)puts("str2int error.");
-    exit(EXIT_FAILURE);
-  }
+  if(sscanf(str, "%i", &n) != 1)
+    die("str2int error.\n");
   return(n);
 }
 
@@ -80,8 +87,8 @@ mcrd2index(Mcrd a, Mcrd b){
     if(mcrdeq(neib(a,i), b))
       return(i);
   }
-  (void)puts("mcrd2tile error.");
-  exit(EXIT_FAILURE);
+  die("mcrd2tile error.");
+  return(0);
 }
 
 /* -------- NEXT FUNCTIONS USE GLOBAL VARIABLES --------- */
@@ -162,8 +169,8 @@ char2tiletype (char c){
   if(c=='*') return(T_WATER);
   if(c=='h') return(T_HILLS);
   if(c=='M') return(T_MOUNTEENS);
-  puts("ERROR in char2tiletype");
-  exit(EXIT_FAILURE);
+  die("ERROR in char2tiletype");
+  return(0);
 }
 
 Tile *

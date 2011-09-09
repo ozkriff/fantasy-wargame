@@ -4,6 +4,7 @@
   for(mc.y=0; mc.y<map_size.y; mc.y++) \
     for(mc.x=0; mc.x<map_size.x; mc.x++)
 
+void   die(const char *errstr, ...);
 int    str2int (char * str);
 Mcrd   mk_mcrd (int x, int y);
 bool   mcrdeq (Mcrd a, Mcrd b);

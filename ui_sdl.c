@@ -59,10 +59,8 @@ static Img
 loadimg (char * str){
   Img original = IMG_Load(str);
   Img optimized; /*optimized*/
-  if(!original){
-    printf("loadimg error: %s/ \n", str);
-    exit(EXIT_FAILURE);
-  }
+  if(!original)
+    die("loadimg error: %s/ \n", str);
   optimized = SDL_DisplayFormatAlpha(original);
   SDL_FreeSurface(original);  
   return(optimized);
