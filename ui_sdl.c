@@ -324,6 +324,7 @@ draw_melee_event (){
   Mcrd b = id2unit(e.melee.d)->m;
   int i = (eindex<steps/2) ? (eindex) : (steps-eindex);
   Scrd crd = mbetween(a, b, i);
+  draw_img(img_rings[id2unit(e.melee.a)->player], map2scr(a));
   draw_img(type2img(id2unit(e.melee.a)->t), crd);
 }
 
