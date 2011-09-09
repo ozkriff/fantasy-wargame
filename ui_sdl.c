@@ -320,13 +320,13 @@ draw_move_event (){
 
 static void
 draw_melee_event (){
-  Mcrd a = id2unit(e.melee.a)->m;
-  Mcrd b = id2unit(e.melee.d)->m;
+  Unit *a = id2unit(e.melee.a);
+  Unit *d = id2unit(e.melee.d);
   int i = (eindex<steps/2) ? (eindex) : (steps-eindex);
-  Scrd crd = mbetween(a, b, i);
-  draw_img(img_rings[id2unit(e.melee.a)->player], map2scr(a));
-  draw_img(type2img(id2unit(e.melee.a)->t), crd);
+  draw_img(img_rings[a->player], map2scr(a->m));
+  draw_img(type2img(a->t), mbetween(a->m, d->m, i));
 }
+
 
 static void
 draw_range_event (){
