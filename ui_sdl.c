@@ -195,10 +195,10 @@ bzline (Scrd a, Scrd b, Uint32 clr){
 }
 
 static void
-draw_img (Img src, Scrd crd) {
+draw_img (Img src, Scrd s) {
   SDL_Rect rect;
-  rect.x = (Sint16)crd.x;
-  rect.y = (Sint16)crd.y;
+  rect.x = (Sint16)s.x;
+  rect.y = (Sint16)s.y;
   SDL_BlitSurface(src, NULL, screen, &rect);
 }
 
