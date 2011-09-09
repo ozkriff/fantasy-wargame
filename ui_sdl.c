@@ -55,6 +55,8 @@ static int steps = 6;
 
 static bool done;
 
+static Scrd mouse_pos = {0, 0};
+
 static Img
 loadimg (char * str){
   Img original = IMG_Load(str);
@@ -424,8 +426,8 @@ mouseclick (SDL_Event e){
 
 static void
 mousemove (SDL_Event e){
-  Scrd s = mk_scrd((int)e.button.x, (int)e.button.y);
-  selected_tile = scr2map(s);
+  mouse_pos = mk_scrd((int)e.button.x, (int)e.button.y);
+  selected_tile = scr2map(mouse_pos);
 }
 
 static void
@@ -526,6 +528,20 @@ events (){
 }
 
 static void
+scroll_map(Scrd s){
+  int scrollspeed = 10; /*pixels per frame*/
+  int offset = 15;
+  if(s.x < offset )
+    map_offset.x += scrollspeed;
+  if(s.y < offset )
+    map_offset.y += scrollspeed;
+  if(s.x > screen->w - offset)
+    map_offset.x -= scrollspeed;
+  if(s.y > screen->h - offset)
+    map_offset.y -= scrollspeed;
+}
+
+static void
 mainloop(){
   while(!done){
     if(cw->is_ai)
@@ -535,6 +551,7 @@ mainloop(){
     sdl_events();
     events();
     draw();
+    scroll_map(mouse_pos);
     SDL_Delay(1*33);
   }
 }
