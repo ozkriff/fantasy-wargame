@@ -191,7 +191,9 @@ init_network (char * hostname, int port){
   SDLNet_ResolveHost(&ip, hostname, (Uint16)port);
   socket = SDLNet_TCP_Open(&ip);
   if(!socket)
-    die("cannot open socket");
+    die("cannot open socket: "
+        "host \'%s\', port %i\n",
+        hostname, port);
   sockets = SDLNet_AllocSocketSet(1);
   SDLNet_TCP_AddSocket(sockets, socket);
 }
