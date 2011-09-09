@@ -92,16 +92,16 @@ load_sprites (){
   img_tiles[T_WATER    ] = loadimg("img/water.png"   );
   img_tiles[T_HILLS    ] = loadimg("img/hills.png"   );
   img_tiles[T_MOUNTEENS] = loadimg("img/mounteen.png");
-  img_arrow                  = loadimg("img/arrow.png"   );
-  img_selected_hex           = loadimg("img/sel.png"     );
-  img_reacheble              = loadimg("img/reacheble.png");
-  img_fog_of_war             = loadimg("img/fow.png"     );
-  img_rings[0]               = loadimg("img/ring_red.png");
-  img_rings[1]               = loadimg("img/ring_blue.png");
-  img_rings[2]               = loadimg("img/ring_green.png");
-  img_units[U_DEFENDER]      = loadimg("img/defender.png");
-  img_units[U_ARCHER]        = loadimg("img/archer.png"  );
-  img_units[U_HUNTER]        = loadimg("img/hunter.png"  );
+  img_arrow              = loadimg("img/arrow.png"   );
+  img_selected_hex       = loadimg("img/sel.png"     );
+  img_reacheble          = loadimg("img/reacheble.png");
+  img_fog_of_war         = loadimg("img/fow.png"     );
+  img_rings[0]           = loadimg("img/ring_red.png");
+  img_rings[1]           = loadimg("img/ring_blue.png");
+  img_rings[2]           = loadimg("img/ring_green.png");
+  img_units[U_DEFENDER]  = loadimg("img/defender.png");
+  img_units[U_ARCHER]    = loadimg("img/archer.png"  );
+  img_units[U_HUNTER]    = loadimg("img/hunter.png"  );
 }
 
 static Scrd
