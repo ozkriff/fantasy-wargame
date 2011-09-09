@@ -327,7 +327,6 @@ draw_melee_event (){
   draw_img(type2img(a->t), mbetween(a->m, d->m, i));
 }
 
-
 static void
 draw_range_event (){
   Unit *u1 = id2unit(e.range.a);
