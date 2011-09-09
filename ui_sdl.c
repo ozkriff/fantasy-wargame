@@ -313,9 +313,9 @@ maptext (){
 static void
 draw_move_event (){
   Unit * u = id2unit(e.move.u);
-  Scrd crd = mbetween(u->m, neib(u->m, e.move.dir), eindex);
-  draw_img(img_rings[u->player], crd);
-  draw_img(type2img(u->t), crd);
+  Scrd s = mbetween(u->m, neib(u->m, e.move.dir), eindex);
+  draw_img(img_rings[u->player], s);
+  draw_img(type2img(u->t), s);
 }
 
 static void
