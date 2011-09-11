@@ -60,7 +60,7 @@ static Scrd mouse_pos = {0, 0};
 static Img
 loadimg (char * str){
   Img original = IMG_Load(str);
-  Img optimized; /*optimized*/
+  Img optimized;
   if(!original)
     die("loadimg error: %s/ \n", str);
   optimized = SDL_DisplayFormatAlpha(original);
