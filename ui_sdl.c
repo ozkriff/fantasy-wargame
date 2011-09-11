@@ -49,7 +49,7 @@ static Event e;    /* current [e]vent */
 /* Internal index of event visualisation. */
 static int eindex;
 
-/*If eindex==eindex=last, then event is shown.*/
+/*if eindex==final_eindex then event is shown.*/
 static int final_eindex;
 static int steps = 6;
 
