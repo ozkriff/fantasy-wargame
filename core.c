@@ -326,16 +326,13 @@ mk_event_death (Unit *u){
 static void
 flee (Unit *u){
   int dir = 0;
-  while(unit_at((neib(u->m, dir))) && dir < 6)
+  while(dir<6){
+    Mcrd m = neib(u->m, dir);
+    if(inboard(m) && !unit_at(m)){
+      add_event(mk_event_move(u, dir));
+      return;
+    }
     dir++;
-  if(dir==6){
-#if 0
-    /*TODO if no place to run away,
-      then attack random unit.*/
-    attack(d, a);
-#endif
-  }else{
-    add_event(mk_event_move(u, dir));
   }
 }
 
