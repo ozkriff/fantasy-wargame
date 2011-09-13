@@ -325,8 +325,9 @@ mk_event_death (Unit *u){
 
 static void
 flee (Unit *u){
-  int dir;
-  for(dit=0; dir<6; dir++){
+  int i;
+  for(i=0; i<6; i++){
+    int dir = opposite_neib_index(i);
     Mcrd m = neib(u->m, dir);
     if(inboard(m) && !unit_at(m)){
       add_event(mk_event_move(u, dir));
