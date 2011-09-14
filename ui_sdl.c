@@ -459,7 +459,7 @@ select_keys (SDL_Event e){
   switch(e.key.keysym.sym) {
     case SDLK_SPACE:
       endturn();
-      selected_unit=0;
+      selected_unit = NULL;
       break;
     case SDLK_n:
       select_next_unit();
