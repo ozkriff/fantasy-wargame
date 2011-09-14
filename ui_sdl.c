@@ -404,8 +404,8 @@ init_draw (){
 }
 
 static void
-mouseclick (SDL_Event e){
-  Scrd s = mk_scrd((int)e.button.x, (int)e.button.y);
+mouseclick (SDL_MouseButtonEvent e){
+  Scrd s = mk_scrd((int)e.x, (int)e.y);
   Mcrd m = scr2map(s);
   Unit *u = unit_at(m);
   if(u && u->player == cw->id){
@@ -488,7 +488,7 @@ sdl_events (){
       case SDL_MOUSEMOTION:     mousemove(e);  break;
       case SDL_MOUSEBUTTONDOWN:
         if(is_active && ui_mode == MODE_SELECT)
-          mouseclick(e);
+          mouseclick(e.button);
         break;
       case SDL_VIDEORESIZE:
         screen = SDL_SetVideoMode(e.resize.w, e.resize.h,
