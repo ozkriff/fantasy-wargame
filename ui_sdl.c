@@ -483,9 +483,15 @@ sdl_events (){
   SDL_Event e;
   while(SDL_PollEvent(&e)){
     switch(e.type){
-      case SDL_QUIT:            done = true;   break;
-      case SDL_KEYUP:           keys(e);       break;
-      case SDL_MOUSEMOTION:     mousemove(e.motion); break;
+      case SDL_QUIT:
+        done = true;
+        break;
+      case SDL_KEYUP:
+        keys(e);
+        break;
+      case SDL_MOUSEMOTION:
+        mousemove(e.motion);
+        break;
       case SDL_MOUSEBUTTONDOWN:
         if(is_active && ui_mode == MODE_SELECT)
           mouseclick(e.button);
