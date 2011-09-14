@@ -426,8 +426,8 @@ mouseclick (SDL_MouseButtonEvent e){
 }
 
 static void
-mousemove (SDL_Event e){
-  mouse_pos = mk_scrd((int)e.button.x, (int)e.button.y);
+mousemove (SDL_MouseMotionEvent e){
+  mouse_pos = mk_scrd((int)e.x, (int)e.y);
   selected_tile = scr2map(mouse_pos);
 }
 
@@ -485,7 +485,7 @@ sdl_events (){
     switch(e.type){
       case SDL_QUIT:            done = true;   break;
       case SDL_KEYUP:           keys(e);       break;
-      case SDL_MOUSEMOTION:     mousemove(e);  break;
+      case SDL_MOUSEMOTION:     mousemove(e.motion); break;
       case SDL_MOUSEBUTTONDOWN:
         if(is_active && ui_mode == MODE_SELECT)
           mouseclick(e.button);
