@@ -461,7 +461,9 @@ select_keys (SDL_Event e){
       endturn();
       selected_unit=0;
       break;
-    case SDLK_n:     select_next_unit(); break;
+    case SDLK_n:
+      select_next_unit();
+      break;
     default: break;
   }
 }
