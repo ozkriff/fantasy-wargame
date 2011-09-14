@@ -280,7 +280,8 @@ draw_units (){
   }
 }
 
-/*Mark tiles that sulelected_unit can reach during this turn.*/
+/*Mark tiles that sulelected_unit can reach 
+  during this turn.*/
 static void
 draw_reachable_tiles(){
   Mcrd m;
