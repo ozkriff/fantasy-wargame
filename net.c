@@ -199,17 +199,15 @@ init_network (char * hostname, int port){
   SDLNet_TCP_AddSocket(sockets, socket);
 }
 
-void
-get_scenario_name_from_server (char * str){
+int
+get_scenario_name_from_server (){
   while(1){
     if(SDLNet_CheckSockets(sockets, 100)==0)
       continue;
     if(SDLNet_SocketReady(socket)){
-      /*incoming data size in bytes*/
-      Byte size;
-      SDLNet_TCP_Recv(socket, &size, 1);
-      SDLNet_TCP_Recv(socket, str, (int)size);
-      return;
+      Byte id;
+      SDLNet_TCP_Recv(socket, &id, 1);
+      return(id);
     }
   }
 }
