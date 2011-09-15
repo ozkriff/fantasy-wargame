@@ -417,7 +417,6 @@ local_arguments (int ac, char ** av)
       create_local_human(id);
     }
   }
-  init_scenarios();
   current_scenario = scenarios + str2int(av[2]);
   map_size = current_scenario->map_size;
   apply_scenario_to_all_worlds(current_scenario);
@@ -681,6 +680,7 @@ void
 init (int ac, char ** av){
   srand( (unsigned int)time(NULL) );
   init_unit_types();
+  init_scenarios();
   if(!strcmp(av[1], "-local"))
     local_arguments(ac, av);
   if(!strcmp(av[1], "-net"))
