@@ -637,8 +637,11 @@ endturn (){
 
 void
 move (Unit * moving_unit, Mcrd destination){
-  List path = get_path(destination);
+  List path;
   Node * node;
+  if(tile(destination)->cost > moving_unit->mvp)
+    return;
+  path = get_path(destination);
   for(node=path.h; node->n; node=node->n){
     Mcrd * next    = node->n->d;
     Mcrd * current = node->d;

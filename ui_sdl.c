@@ -412,10 +412,8 @@ mouseclick (SDL_MouseButtonEvent e){
     selected_unit = u;
     fill_map(selected_unit);
   }else if(selected_unit){
-    if( !u || (u && (!u->visible||!tile(m)->fog)) ){
-      if(tile(m)->cost <= selected_unit->mvp)
-        move(selected_unit, m);
-      return;
+    if(!u || (u && (!u->visible || !tile(m)->fog))){
+      move(selected_unit, m);
     }
     if(u && u->player!=cw->id
     && selected_unit && selected_unit->can_attack
