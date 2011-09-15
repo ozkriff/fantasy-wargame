@@ -67,13 +67,12 @@ wait_for_all_players (int players_count){
 }
 
 static void
-send_scenario_name_to_clients (char * scenario_name){
-  uint8_t size = strlen(scenario_name) + 1;
+send_scenario_to_clients (int id){
+  uint8_t data = id;
   Node * n;
   FOR_EACH_NODE(clients, n){
     Client * c = n->d;
-    SDLNet_TCP_Send(c->sock, &size, 1);
-    SDLNet_TCP_Send(c->sock, scenario_name, (int)size);
+    SDLNet_TCP_Send(c->sock, &data, 1);
   }
 }
 
@@ -81,6 +80,7 @@ static void
 init (int ac, char **av){
   int port;
   int players_count;
+  int scenario_id;
   IPaddress ip;
   if(ac != 4){
     puts("usage: ./server [port] [scenario] [players-count]");
@@ -88,6 +88,7 @@ init (int ac, char **av){
   }
   /* get port */
   sscanf(av[1], "%i", &port);
+  sscanf(av[2], "%i", &scenario_id);
   sscanf(av[3], "%i", &players_count);
   SDLNet_Init();
   /* allocate memory for each client + for server */
@@ -96,7 +97,7 @@ init (int ac, char **av){
   listening_socket = SDLNet_TCP_Open(&ip);
   SDLNet_TCP_AddSocket(sockets, listening_socket);
   wait_for_all_players(players_count);
-  send_scenario_name_to_clients(av[2]);
+  send_scenario_to_clients(scenario_id);
 }
 
 static void
