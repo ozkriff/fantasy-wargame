@@ -21,27 +21,6 @@ List clients = {0, 0, 0};
 TCPsocket listening_socket;
 SDLNet_SocketSet sockets;
 
-/* read through scenario to get players_count */
-static int
-get_players_count_from_scenario (char * filename){
-  int players_count;
-  char line[100];
-  FILE * cfg = fopen(filename, "r");
-  if(!cfg){
-    puts("Can't open scenario.");
-    exit(EXIT_FAILURE);
-  }
-  while( fgets(line, 90, cfg) ){
-    /* Skip comments and empty lines. */
-    if(line[0]=='#' || line[0]=='\n')
-      continue;
-    if(!strncmp("[NUM-OF-PLAYERS]", line, 15))
-      sscanf(line, "[NUM-OF-PLAYERS] %i", &players_count);
-  }
-  fclose(cfg);
-  return(players_count);
-}
-
 static bool
 is_id_free (int id){
   Node * client_node;
@@ -103,13 +82,13 @@ init (int ac, char **av){
   int port;
   int players_count;
   IPaddress ip;
-  if(ac != 3){
-    puts("usage: ./server [port] [scenario]");
+  if(ac != 4){
+    puts("usage: ./server [port] [scenario] [players-count]");
     exit(EXIT_FAILURE);
   }
   /* get port */
   sscanf(av[1], "%i", &port);
-  players_count = get_players_count_from_scenario(av[2]);
+  sscanf(av[3], "%i", &players_count);
   SDLNet_Init();
   /* allocate memory for each client + for server */
   sockets = SDLNet_AllocSocketSet(players_count+1);
