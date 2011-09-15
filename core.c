@@ -91,7 +91,8 @@ range_damage (Unit * a, Unit * b){
   final  = wounds  * to_as    / 10;
 #if 1
   printf("%i %i %i -> %i %i %i [%i]\n",
-      to_hit, to_wound, to_as, attacks, hits, wounds, final);
+      to_hit, to_wound, to_as,
+      attacks, hits, wounds, final);
 #endif
   return(final);
 }
@@ -311,7 +312,8 @@ get_wounds (Unit *a, Unit *d){
   final  = wounds  * to_wound / 10;
 #if 1
   printf("%i %i %i -> %i %i %i [%i]\n",
-      to_hit, to_wound, to_as, attacks, hits, wounds, final);
+      to_hit, to_wound, to_as,
+      attacks, hits, wounds, final);
 #endif
   return(final);
 }
