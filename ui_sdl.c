@@ -432,16 +432,16 @@ mousemove (SDL_MouseMotionEvent e){
 }
 
 static void
-event_keys (SDL_Event e){
-  switch(e.key.keysym.sym) {
+event_keys (SDL_KeyboardEvent e){
+  switch(e.keysym.sym) {
     /* TODO finish event */
     default: break;
   }
 }
 
 static void
-common_keys (SDL_Event e){
-  switch(e.key.keysym.sym) {
+common_keys (SDL_KeyboardEvent e){
+  switch(e.keysym.sym) {
     case SDLK_ESCAPE:
     case SDLK_q:
       done = true;
@@ -455,8 +455,8 @@ common_keys (SDL_Event e){
 }
 
 static void
-select_keys (SDL_Event e){
-  switch(e.key.keysym.sym) {
+select_keys (SDL_KeyboardEvent e){
+  switch(e.keysym.sym) {
     case SDLK_SPACE:
       endturn();
       selected_unit = NULL;
@@ -469,7 +469,7 @@ select_keys (SDL_Event e){
 }
 
 static void
-keys (SDL_Event e){
+keys (SDL_KeyboardEvent e){
   common_keys(e);
   if(is_active){
     if(ui_mode == MODE_SELECT)
@@ -488,7 +488,7 @@ sdl_events (){
         done = true;
         break;
       case SDL_KEYUP:
-        keys(e);
+        keys(e.key);
         break;
       case SDL_MOUSEMOTION:
         mousemove(e.motion);
