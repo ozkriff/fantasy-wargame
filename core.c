@@ -443,13 +443,9 @@ net_arguments (int ac, char ** av){
     }
   }
   send_int_as_uint8(no_players_left_mark);
-#if 0
-  get_scenario_name_from_server(scenarioname);
-  scenario = parse_scenario_file(scenarioname);
-  apply_scenario_to_all_worlds(scenario);
-#else
-  /*TODO load hardcoded scenario*/
-#endif
+  current_scenario = scenarios + get_scenario_from_server();
+  map_size = current_scenario->map_size;
+  apply_scenario_to_all_worlds(current_scenario);
   is_local = false;
   add_event_local(mk_event_endturn(0, 0));
 }
