@@ -80,9 +80,7 @@ send_scenario_to_clients (int id){
 
 static void
 init (int ac, char **av){
-  int port;
-  int players_count;
-  int scenario_id;
+  int port, players_count, scenario_id;
   IPaddress ip;
   if(ac != 4){
     puts("usage: ./server [port] [scenario] [players-count]");
