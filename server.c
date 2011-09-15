@@ -11,6 +11,8 @@
 
 #define PRINT_DATA false
 
+#define Byte uint8_t
+
 typedef struct Client {
   TCPsocket sock;
   List players;
@@ -68,7 +70,7 @@ wait_for_all_players (int players_count){
 
 static void
 send_scenario_to_clients (int id){
-  uint8_t data = id;
+  Byte data = id;
   Node * n;
   FOR_EACH_NODE(clients, n){
     Client * c = n->d;
@@ -106,7 +108,7 @@ cleanup (){
 }
 
 static void
-receive_data (Client *c, uint8_t *data, uint8_t *size)
+receive_data (Client *c, Byte *data, Byte *size)
 {
   /* receive size of data, then data */
   SDLNet_TCP_Recv(c->sock, size, 1);
@@ -115,7 +117,7 @@ receive_data (Client *c, uint8_t *data, uint8_t *size)
 
 #if PRINT_DATA
 static void
-print_data (uint8_t * data, uint8_t size){
+print_data (Byte * data, Byte size){
   int i;
   for(i=0; i<size; i++)
     printf("%u ", (unsigned int)(data[i]));
@@ -128,7 +130,7 @@ print_data (uint8_t * data, uint8_t size){
   Send data size (in bytes), then data. */
 
 static void
-resend_data (Client * exception, uint8_t * data, uint8_t size){
+resend_data (Client * exception, Byte * data, Byte size){
   Node * n;
   FOR_EACH_NODE(clients, n){
     Client * c = n->d;
@@ -141,8 +143,8 @@ resend_data (Client * exception, uint8_t * data, uint8_t size){
 
 static void
 mainloop (){
-  uint8_t data_size;
-  uint8_t data[32];
+  Byte data_size;
+  Byte data[32];
   int active_sockets_count;
   while(1){
     Node * n;
