@@ -162,12 +162,12 @@ send_int_as_uint8 (int n){
 static Event
 mk_event (Byte * d){
   Event e;
-  if(d[0]==E_MOVE   ) e.move  = mk_event_move (d);
-  if(d[0]==E_MELEE  ) e.melee = mk_event_melee(d);
-  if(d[0]==E_RANGE  ) e.range = mk_event_range(d);
+  if(d[0]==E_MOVE   ) e.move    = mk_event_move (d);
+  if(d[0]==E_MELEE  ) e.melee   = mk_event_melee(d);
+  if(d[0]==E_RANGE  ) e.range   = mk_event_range(d);
   if(d[0]==E_ENDTURN) e.endturn = mk_event_endturn(d);
-  if(d[0]==E_DEATH  ) e.death = mk_event_death(d);
-  return(e);
+  if(d[0]==E_DEATH  ) e.death   = mk_event_death(d);
+  return(e); 
 }
 
 void
