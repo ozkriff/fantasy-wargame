@@ -98,7 +98,6 @@ send_range (Event_range e){
   SDLNet_TCP_Send(socket, d, (int)size);
 }
 
-/*  */
 static void
 send_endturn (Event_endturn e){
   Byte size = 3;
