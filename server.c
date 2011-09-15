@@ -88,7 +88,6 @@ init (int ac, char **av){
     puts("usage: ./server [port] [scenario] [players-count]");
     exit(EXIT_FAILURE);
   }
-  /* get port */
   sscanf(av[1], "%i", &port);
   sscanf(av[2], "%i", &scenario_id);
   sscanf(av[3], "%i", &players_count);
