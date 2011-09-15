@@ -154,7 +154,8 @@ is_invis (Unit * u){
 static bool
 is_move_visible (Event e){
   Unit * u = id2unit(e.move.u);
-  bool fow = tile(neib(u->m, e.move.dir))->fog || tile(u->m)->fog;
+  Mcrd m = neib(u->m, e.move.dir);
+  bool fow = tile(m)->fog || tile(u->m)->fog;
   bool hidden = is_invis(u) && u->player!=cw->id;
   return(!hidden && fow);
 }
