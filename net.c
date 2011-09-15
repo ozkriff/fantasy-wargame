@@ -200,7 +200,7 @@ init_network (char * hostname, int port){
 }
 
 int
-get_scenario_name_from_server (){
+get_scenario_from_server (){
   while(1){
     if(SDLNet_CheckSockets(sockets, 100)==0)
       continue;
