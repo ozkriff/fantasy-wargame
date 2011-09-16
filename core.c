@@ -550,32 +550,23 @@ add_event_local (Event data){
 void
 event2log (Event e){
   if(e.t == E_MOVE){
-    fprintf(logfile,
-        "MOVE  u=%i, dir=%i, cost=%i\n",
-        e.move.u,
-        e.move.dir,
-        e.move.cost );
+    fprintf(logfile, "MOVE  u=%i, dir=%i, cost=%i\n",
+        e.move.u, e.move.dir, e.move.cost );
   }
   if(e.t == E_MELEE) {
-    fprintf(logfile,
-        "MELEE a=%i, d=%i, ak=%i, dk=%i\n",
+    fprintf(logfile, "MELEE a=%i, d=%i, ak=%i, dk=%i\n",
         e.melee.a,
         e.melee.d,
         e.melee.attackers_killed,
         e.melee.defenders_killed );
   }
   if(e.t == E_RANGE) {
-    fprintf(logfile,
-        "RANGE a=%i, d=%i, dmg=%i\n",
-        e.range.a,
-        e.range.d,
-        e.range.dmg );
+    fprintf(logfile, "RANGE a=%i, d=%i, dmg=%i\n",
+        e.range.a, e.range.d, e.range.dmg );
   }
   if(e.t == E_ENDTURN) {
-    fprintf(logfile,
-        "TURN %i --> %i\n",
-        e.endturn.old_player,
-        e.endturn.new_player );
+    fprintf(logfile, "TURN %i --> %i\n",
+        e.endturn.old_player, e.endturn.new_player );
   }
   if(e.t == E_DEATH) {
     fprintf(logfile, "KILLED %i\n", e.death.u.id);
