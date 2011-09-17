@@ -274,7 +274,7 @@ draw_units (){
       if(e.t==E_MELEE && u->id == e.melee.a)
         continue;
     }
-    if(u->visible){
+    if(u->is_visible){
       draw_unit(u);
     }
   }
@@ -412,10 +412,10 @@ mouseclick (SDL_MouseButtonEvent e){
     selected_unit = u;
     fill_map(selected_unit);
   }else if(selected_unit){
-    if(!u || (u && !u->visible)){
+    if(!u || (u && !u->is_visible)){
       move(selected_unit, m);
     }
-    if(u && u->player != cw->id && u->visible
+    if(u && u->player != cw->id && u->is_visible
     && selected_unit && selected_unit->can_attack){
       attack(selected_unit, u);
     }
