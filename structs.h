@@ -55,7 +55,7 @@ typedef struct {
   Mcrd  m;
   Skill skills[10];
   int   skills_n;
-  bool  visible;
+  bool  is_visible;
   int   energy;
 } Unit;
 

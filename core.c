@@ -372,9 +372,9 @@ update_units_visibility (){
   FOR_EACH_NODE(cw->units, node){
     Unit * u = node->d;
     if(u->player == cw->id){
-      u->visible = true;
+      u->is_visible = true;
     }else{
-      u->visible = tile(u->m)->fog>0 && !is_invis(u);
+      u->is_visible = tile(u->m)->fog>0 && !is_invis(u);
     }
   }
 }
