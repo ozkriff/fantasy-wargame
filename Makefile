@@ -1,6 +1,6 @@
 # See LICENSE file for copyright and license details.
 
-all: ui_sdl ui_cli server
+all: ui_sdl server
 
 CC=gcc
 CFLAGS=-g -ansi -std=c89 -Wall -Wextra --pedantic
