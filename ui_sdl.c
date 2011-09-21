@@ -43,6 +43,11 @@ static Mcrd selected_tile; /* selected hex */
 #define MODE_SHOW_EVENT 1
 static int ui_mode = MODE_SELECT;
 
+
+#define SCREEN_MENU     0 /*select scenario*/
+#define SCREEN_SCENARIO 1
+static int screen_id = SCREEN_MENU;
+
 static Event e;    /* current [e]vent */
 
 /* event progress? */
@@ -379,6 +384,19 @@ draw (){
 }
 
 static void
+draw_menu(){
+  draw_bg(black);
+  text("q - quit",       mk_scrd(0,  0), false);
+  text("0 - scenario_0", mk_scrd(0, 20), false);
+  text("1 - scenario_1", mk_scrd(0, 40), false);
+  text("2 - net localhost 2000 human 0",
+                         mk_scrd(0, 60), false);
+  text("3 - net localhost 2000 human 1",
+                         mk_scrd(0, 80), false);
+  SDL_Flip(screen);
+}
+
+static void
 init_colors (){
   Uint8 x = 255;
   SDL_PixelFormat * fmt = screen->format;
@@ -467,6 +485,40 @@ select_keys (SDL_KeyboardEvent e){
 }
 
 static void
+menu_keys (SDL_KeyboardEvent e){
+  switch(e.keysym.sym) {
+    case SDLK_q:
+      done = true;
+      break;
+    case SDLK_0:
+      {
+        int worlds[] = {0, 1};
+        init_local_worlds(2, worlds);
+        set_scenario_id(0);
+        screen_id = SCREEN_SCENARIO;
+      }
+      break;
+    case SDLK_1:
+      init_local_worlds_s("hh", 0, 1);
+      set_scenario_id(1);
+      screen_id = SCREEN_SCENARIO;
+      break;
+    case SDLK_2:
+      init_local_worlds_s("h", 0);
+      init_net("localhost", 2000);
+      screen_id = SCREEN_SCENARIO;
+      break;
+    case SDLK_3:
+      init_local_worlds_s("h", 1);
+      init_net("localhost", 2000);
+      screen_id = SCREEN_SCENARIO;
+      break;
+    default:
+      break;
+  }
+}
+
+static void
 keys (SDL_KeyboardEvent e){
   common_keys(e);
   if(is_active){
@@ -486,14 +538,20 @@ sdl_events (){
         done = true;
         break;
       case SDL_KEYUP:
-        keys(e.key);
+        if(screen_id == SCREEN_SCENARIO)
+          keys(e.key);
+        else
+          menu_keys(e.key);
         break;
       case SDL_MOUSEMOTION:
         mousemove(e.motion);
         break;
       case SDL_MOUSEBUTTONDOWN:
-        if(is_active && ui_mode == MODE_SELECT)
+        if(is_active
+        && ui_mode == MODE_SELECT
+        && screen_id == SCREEN_SCENARIO){
           mouseclick(e.button);
+        }
         break;
       case SDL_VIDEORESIZE:
         screen = SDL_SetVideoMode(e.resize.w, e.resize.h,
@@ -550,14 +608,18 @@ scroll_map(Scrd s){
 static void
 mainloop(){
   while(!done){
-    if(cw->is_ai)
-      ai();
-    if(!is_local)
-      do_network();
     sdl_events();
-    events();
-    draw();
-    scroll_map(mouse_pos);
+    if(screen_id == SCREEN_SCENARIO){
+      if(cw->is_ai)
+        ai();
+      if(!is_local)
+        do_network();
+      events();
+      scroll_map(mouse_pos);
+      draw();
+    }else{
+      draw_menu();
+    }
     SDL_Delay(1*33);
   }
 }
@@ -565,19 +627,7 @@ mainloop(){
 #undef main
 int
 main(int ac, char **av){
-#if 1
-  char * s[7] = {
-      "./ui_sdl[.exe]",
-      "-local",
-      "1", /*scenario index*/
-      "-human",
-      "0",
-      "-human",
-      "1" };
-  av = s;
-  ac = 7;
-#endif
-  init(ac, av);
+  init();
   init_draw();
   mainloop();
   free_sprites();

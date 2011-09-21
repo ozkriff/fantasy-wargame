@@ -7,7 +7,7 @@ extern World * cw; /*current world*/
 extern bool    is_local;
 extern bool    is_active; /* TODO: describe */
 
-void  init (int ac, char ** av);
+void  init ();
 void  cleanup();
 
 void  move (Unit * moving_unit, Mcrd destination);
@@ -19,4 +19,9 @@ void  update_eq ();
 bool  is_eq_empty ();
 Event get_next_event ();
 void  apply_event (Event e);
+
+void  init_local_worlds (int n, int *ids);
+void  init_local_worlds_s (char *s, ...);
+void  set_scenario_id (int id);
+void  init_net (char *host, int port);
 

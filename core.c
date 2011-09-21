@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
+#include <stdarg.h>
 #include <time.h>
 #include "list.h"
 #include "structs.h"
@@ -19,7 +20,7 @@ Unit_type utypes[3];
 Mcrd    map_size;
 List    worlds;
 World * cw = NULL; /* current world */
-bool    is_local;
+bool    is_local = true;
 bool    is_active; /* TODO rename! */
 Unit *  selected_unit = NULL;
 
@@ -404,54 +405,6 @@ apply_scenario_to_all_worlds (Scenario *s){
   }
 }
 
-static void
-local_arguments (int ac, char ** av)
-{
-  /*0-program_name, 1-"-local", 2-scenario_name*/
-  int i;
-  for(i=3; i<ac; i++){
-    if(!strcmp(av[i], "-ai")){
-      int id = str2int(av[i+1]);
-      create_local_ai(id);
-    }
-    if(!strcmp(av[i], "-human")){
-      int id = str2int(av[i+1]);
-      create_local_human(id);
-    }
-  }
-  current_scenario = scenarios + str2int(av[2]);
-  map_size = current_scenario->map_size;
-  apply_scenario_to_all_worlds(current_scenario);
-  is_local = true;
-}
-
-static void
-net_arguments (int ac, char ** av){
-  int no_players_left_mark = 0xff;
-  int i;
-  int port = str2int(av[3]);
-  init_network(av[2], port);
-  /* 0-program_name, 1-"-net", 2-"server", 3-port */
-  for(i=4; i<ac; i++){
-    if(!strcmp(av[i], "-ai")){
-      int id = str2int(av[i+1]);
-      create_local_ai(id);
-      send_int_as_uint8(id);
-    }
-    if(!strcmp(av[i], "-human")){
-      int id = str2int(av[i+1]);
-      create_local_human(id);
-      send_int_as_uint8(id);
-    }
-  }
-  send_int_as_uint8(no_players_left_mark);
-  current_scenario = scenarios + get_scenario_from_server();
-  map_size = current_scenario->map_size;
-  apply_scenario_to_all_worlds(current_scenario);
-  is_local = false;
-  add_event_local(mk_event_endturn(0, 0));
-}
-
 /*called fron add_unit*/
 static int
 new_unit_id (World *w){
@@ -516,6 +469,17 @@ apply_endturn(Event e){
     }
   }
   is_active = false;
+}
+
+static void
+send_ids_to_server (){
+  int no_players_left_mark = 0xff;
+  Node *nd;
+  FOR_EACH_NODE(worlds, nd){
+    World *w = nd->d;
+    send_int_as_uint8(w->id);
+  }
+  send_int_as_uint8(no_players_left_mark);
 }
 
 /*------------------NON-STATIC FUNCTIONS-----------------*/
@@ -669,22 +633,6 @@ attack (Unit * a, Unit * d){
 }
 
 void
-init (int ac, char ** av){
-  srand( (unsigned int)time(NULL) );
-  init_unit_types();
-  init_scenarios();
-  if(!strcmp(av[1], "-local"))
-    local_arguments(ac, av);
-  if(!strcmp(av[1], "-net"))
-    net_arguments(ac, av);
-  cw = worlds.h->d;
-  updatefog(cw->id);
-  update_units_visibility();
-  logfile = fopen("log", "w");
-  is_active = true;
-}
-
-void
 apply_event (Event e){
   switch(e.t){
     case E_MOVE:    apply_move(e);    break;
@@ -722,5 +670,76 @@ bool
 is_eq_empty (){
   update_eq();
   return(cw->eq.count == 0);
+}
+
+void
+init_local_worlds (int n, int *ids){
+  int i;
+  printf("new_worlds: %i\n", n);
+  for(i=0; i<n; i++)
+    create_local_human(ids[i]);
+  cw = worlds.h->d;
+}
+
+void
+init_net (char *host, int port){
+  init_network(host, port);
+  send_ids_to_server();
+  set_scenario_id(get_scenario_from_server());
+  is_local = false;
+  add_event_local(mk_event_endturn(0, 0));
+}
+
+void
+mark_ai (int id){
+  int i = 0;
+  Node *nd;
+  FOR_EACH_NODE(worlds, nd){
+    if(i==id){
+      World *w = nd->d;
+      w->is_ai = true;
+      return;
+    }
+    i++;
+  }
+}
+
+/*example: init_local_worlds_s("hh", 0, 1);*/
+void
+init_local_worlds_s (char *s, ...){
+  va_list ap;
+  char *c = s;
+  va_start(ap, s);
+  while(c && *c){
+    int id = va_arg(ap, int);
+    if(*c=='h'){
+      create_local_human(id);
+    }else if(*c=='a'){
+      create_local_ai(id);
+    }else{
+      die("DIE: init_worlds_s(): %c, %i\n", *c, *c);
+    }
+    c++;
+  }
+  va_end(ap);
+  cw = worlds.h->d;
+}
+
+void
+set_scenario_id (int id){
+  current_scenario = scenarios + id;
+  map_size = current_scenario->map_size;
+  apply_scenario_to_all_worlds(current_scenario);
+  updatefog(cw->id);
+  update_units_visibility();
+}
+
+void
+init (){
+  srand( (unsigned int)time(NULL) );
+  init_unit_types();
+  init_scenarios();
+  logfile = fopen("log", "w");
+  is_active = true;
 }
 
