@@ -593,16 +593,16 @@ events (){
 
 static void
 scroll_map(Scrd s){
-  int scrollspeed = 10; /*pixels per frame*/
+  int step = 10; /*pixels per frame*/
   int o = 15; /*offset*/
   if(s.x < o )
-    map_offset.x += scrollspeed;
+    map_offset.x += step;
   if(s.y < o)
-    map_offset.y += scrollspeed;
+    map_offset.y += step;
   if(s.x > screen->w - o)
-    map_offset.x -= scrollspeed;
+    map_offset.x -= step;
   if(s.y > screen->h - o)
-    map_offset.y -= scrollspeed;
+    map_offset.y -= step;
 }
 
 static void
