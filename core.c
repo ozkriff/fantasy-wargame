@@ -48,7 +48,8 @@ static void
 update_fog_after_move (Unit * u){
   Mcrd m;
   FOR_EACH_MCRD(m){
-    if(mdist(m, u->m) <= utypes[u->t].range_of_vision)
+    int range = utypes[u->t].range_of_vision;
+    if(mdist(m, u->m) <= range)
       tile(m)->fog++;
   }
 }
