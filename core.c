@@ -130,10 +130,10 @@ updatefog (int player){
     tile(m)->fog=0;
     FOR_EACH_NODE(cw->units, node){
       Unit * u = node->d;
+      int range = utypes[u->t].range_of_vision;
       if(u->player == player
-      && mdist(m, u->m) <= utypes[u->t].range_of_vision){
+      && mdist(m, u->m) <= range)
         tile(m)->fog++;
-      }
     }
   }
 }
