@@ -21,7 +21,7 @@ Mcrd    map_size;
 List    worlds;
 World * cw = NULL; /* current world */
 bool    is_local = true;
-bool    is_active; /* TODO rename! */
+bool    is_client_active;
 Unit *  selected_unit = NULL;
 
 static FILE * logfile;
@@ -461,7 +461,7 @@ apply_endturn(Event e){
     World *w = nd->d;
     if(w->id == e.endturn.new_player){
       cw = w;
-      is_active = true;
+      is_client_active = true;
       check_win();
       refresh_units();
       updatefog(cw->id);
@@ -469,7 +469,7 @@ apply_endturn(Event e){
       return;
     }
   }
-  is_active = false;
+  is_client_active = false;
 }
 
 static void
@@ -737,6 +737,6 @@ init (){
   init_unit_types();
   init_scenarios();
   logfile = fopen("log", "w");
-  is_active = true;
+  is_client_active = true;
 }
 

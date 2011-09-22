@@ -519,7 +519,7 @@ menu_keys (SDL_KeyboardEvent e){
 static void
 keys (SDL_KeyboardEvent e){
   common_keys(e);
-  if(is_active){
+  if(is_client_active){
     if(ui_mode == MODE_SELECT)
       select_keys(e);
     else
@@ -545,7 +545,7 @@ sdl_events (){
         mousemove(e.motion);
         break;
       case SDL_MOUSEBUTTONDOWN:
-        if(is_active
+        if(is_client_active
         && ui_mode == MODE_SELECT
         && screen_id == SCREEN_SCENARIO){
           mouseclick(e.button);
