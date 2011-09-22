@@ -406,7 +406,7 @@ apply_scenario_to_all_worlds (Scenario *s){
   }
 }
 
-/*called fron add_unit*/
+/*called from add_unit*/
 static int
 new_unit_id (World *w){
   if(w->units.count > 0){
