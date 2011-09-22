@@ -221,7 +221,7 @@ draw_map (){
 
 /* Draw line between 2 tiles. */
 static void 
-m2m_bzline (Mcrd a, Mcrd b){
+mbzline (Mcrd a, Mcrd b){
   Scrd sa = map2scr(a), sb = map2scr(b);
   sa.x += 96/2;
   sa.y += 96/2;
@@ -293,7 +293,7 @@ draw_reachable_tiles(){
     Mcrd p = tile(m)->parent;
     if(tile(m)->cost <= selected_unit->mvp) {
       draw_img(img_reacheble, map2scr(m));
-      m2m_bzline(m, p);
+      mbzline(m, p);
     }
   }
 }
