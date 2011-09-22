@@ -569,8 +569,9 @@ get_last_event_index (Event e){
     Mcrd a = id2unit(e.range.a)->m;
     Mcrd b = id2unit(e.range.d)->m;
     return(mdist(a, b)*steps);
-  }else
-    return(0);
+  }else{
+    die("DIE: Unknow event '%i'.\n", e.t);
+  }
 }
 
 static void
