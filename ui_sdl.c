@@ -561,17 +561,19 @@ sdl_events (){
 
 static int
 get_last_event_index (Event e){
+  int n;
   if(e.t == E_ENDTURN || e.t == E_DEATH)
-    return(0);
+    n = 0;
   else if(e.t == E_MOVE || e.t == E_MELEE)
-    return(steps-1);
+    n = steps-1;
   else if(e.t == E_RANGE){
     Mcrd a = id2unit(e.range.a)->m;
     Mcrd b = id2unit(e.range.d)->m;
-    return(mdist(a, b)*steps);
+    n = mdist(a, b)*steps;
   }else{
     die("DIE: Unknow event '%i'.\n", e.t);
   }
+  return(n);
 }
 
 static void
