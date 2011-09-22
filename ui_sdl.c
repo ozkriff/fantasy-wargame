@@ -594,7 +594,7 @@ static void
 scroll_map(Scrd s){
   int step = 10; /*pixels per frame*/
   int o = 15; /*offset*/
-  if(s.x < o )
+  if(s.x < o)
     map_offset.x += step;
   if(s.y < o)
     map_offset.y += step;
