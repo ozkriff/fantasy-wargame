@@ -91,8 +91,7 @@ mcrd2index(Mcrd a, Mcrd b){
   return(0);
 }
 
-/* -------- NEXT FUNCTIONS USE GLOBAL VARIABLES --------- */
-/* core: cw map_w map_h */
+/*------------------------------------------------------*/
 
 /* mcrd2tile */
 Tile *
