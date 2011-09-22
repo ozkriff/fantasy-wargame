@@ -170,9 +170,8 @@ mbetween(Mcrd a, Mcrd b, int i){
 static void
 pixel (int x, int y, Uint32 pixel) {
   Uint32 * pixels = (Uint32 *)screen->pixels;
-  if( x<0 || y<0 || x >= screen->w || y >= screen->h )
-    return;
-  pixels[ (y * screen->w) + x ] = pixel;
+  if(x >= 0 && y >= 0 && x < screen->w && y < screen->h)
+    pixels[ (y * screen->w) + x ] = pixel;
 }
 
 /* en.wikipedia.org/wiki/Bresenham's_line_algorithm */
