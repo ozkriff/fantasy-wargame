@@ -561,7 +561,7 @@ sdl_events (){
 
 static int
 get_last_event_index (Event e){
-  if(e.t == E_ENDTURN)
+  if(e.t == E_ENDTURN || e.t == E_DEATH)
     return(0);
   else if(e.t == E_MOVE || e.t == E_MELEE)
     return(steps-1);
