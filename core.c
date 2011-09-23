@@ -164,9 +164,9 @@ is_move_visible (Event e){
 }
 
 static bool
-is_melee_visible (Event e){
-  Unit *a = id2unit(e.melee.a);
-  Unit *d = id2unit(e.melee.d);
+is_melee_visible (Event_melee e){
+  Unit *a = id2unit(e.a);
+  Unit *d = id2unit(e.d);
   return(tile(a->m)->fog || tile(d->m)->fog);
 }
 
@@ -447,7 +447,7 @@ mk_skill_bool (int type){
 static bool
 is_event_visible (Event e){
   switch(e.t){
-    case E_MELEE: return(is_melee_visible(e));
+    case E_MELEE: return(is_melee_visible(e.melee));
     case E_RANGE: return(is_range_visible(e));
     case E_MOVE : return(is_move_visible (e));
     default: return(true);
