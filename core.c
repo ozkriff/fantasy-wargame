@@ -155,9 +155,9 @@ is_invis (Unit * u){
 }
 
 static bool
-is_move_visible (Event e){
-  Unit * u = id2unit(e.move.u);
-  Mcrd m = neib(u->m, e.move.dir);
+is_move_visible (Event_move e){
+  Unit * u = id2unit(e.u);
+  Mcrd m = neib(u->m, e.dir);
   bool fow = tile(m)->fog || tile(u->m)->fog;
   bool hidden = is_invis(u) && u->player!=cw->id;
   return(!hidden && fow);
@@ -449,7 +449,7 @@ is_event_visible (Event e){
   switch(e.t){
     case E_MELEE: return(is_melee_visible(e.melee));
     case E_RANGE: return(is_range_visible(e.range));
-    case E_MOVE : return(is_move_visible (e));
+    case E_MOVE : return(is_move_visible (e.move));
     default: return(true);
   }
 }
