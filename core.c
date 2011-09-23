@@ -450,6 +450,7 @@ is_event_visible (Event e){
     case E_MELEE: return(is_melee_visible(e.melee));
     case E_RANGE: return(is_range_visible(e.range));
     case E_MOVE : return(is_move_visible (e.move));
+    case E_DEATH: return(true);
     default: return(true);
   }
 }
