@@ -285,7 +285,7 @@ support_range (Unit * a, Unit * d){
   }
   if(i==6)
     return;
-  range = mk_event_range(sup, a, 2);
+  range = mk_event_range(sup, a, range_damage(sup, a));
   add_event(range);
 }
 
