@@ -16,7 +16,7 @@
 #include "utype.h"
 #include "scenarios.h"
 
-Unit_type utypes[3];
+Unit_type utypes[30];
 Mcrd    map_size;
 List    worlds;
 World * cw = NULL; /* current world */

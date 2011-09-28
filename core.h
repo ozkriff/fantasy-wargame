@@ -2,7 +2,7 @@
 
 extern Mcrd    map_size;
 extern Unit *  selected_unit;
-extern Unit_type utypes[3];
+extern Unit_type utypes[30];
 extern World * cw; /*current world*/
 extern bool    is_local;
 extern bool    is_client_active;
