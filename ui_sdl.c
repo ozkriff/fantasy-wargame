@@ -471,7 +471,7 @@ common_keys (SDL_KeyboardEvent e){
 static void
 select_keys (SDL_KeyboardEvent e){
   switch(e.keysym.sym) {
-    case SDLK_SPACE:
+    case SDLK_t:
       endturn();
       selected_unit = NULL;
       break;
