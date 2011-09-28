@@ -217,7 +217,7 @@ get_scenario_from_server (){
     if(SDLNet_SocketReady(socket)){
       Byte id;
       SDLNet_TCP_Recv(socket, &id, 1);
-      return(id);
+      return((int)id);
     }
   }
 }
