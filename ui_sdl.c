@@ -264,8 +264,9 @@ draw_bg (Uint32 clr){
 static void
 text (char * str, Scrd crd, bool is_centred){
   SDL_Rect rect;
-  SDL_Color col = {255, 255, 255, 255};
-  Img img = TTF_RenderText_Blended(font, str, col);
+  SDL_Color fg = {255, 255, 255, 255};
+  SDL_Color bg = {  0,   0,   0, 155};
+  Img img = TTF_RenderText_Shaded(font, str, fg, bg);
   rect.x = (Sint16)crd.x;
   rect.y = (Sint16)crd.y;
   if(is_centred){
