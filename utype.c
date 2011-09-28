@@ -239,6 +239,34 @@ init_scout (){
   return(u);
 }
 
+static Unit_type
+init_goblin (){
+  Unit_type u;
+  u.range_of_vision      =   3;
+  u.morale               =   2;
+  u.count                =   9;
+  u.ms                   =   2;
+  u.strength             =   2;
+  u.toughness            =   2;
+  u.attacks              =   2;
+  u.armor                =   0;
+  u.mvp                  =   3;
+  u.energy               =   8;
+  u.energy_rg            =   2;
+  u.ter_mvp[T_GRASS    ] =   1;
+  u.ter_mvp[T_FOREST   ] =   2;
+  u.ter_mvp[T_WATER    ] =   8;
+  u.ter_mvp[T_HILLS    ] =   4;
+  u.ter_mvp[T_MOUNTEENS] =   9;
+  u.ter_ms [T_GRASS    ] =   0;
+  u.ter_ms [T_FOREST   ] =   1;
+  u.ter_ms [T_WATER    ] =  -2;
+  u.ter_ms [T_HILLS    ] =   0;
+  u.ter_ms [T_MOUNTEENS] =   0;
+  u.skills_n             =   0;
+  return(u);
+}
+
 void
 init_unit_types (){
   utypes[U_DEFENDER] = init_defender();
