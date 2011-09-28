@@ -642,6 +642,10 @@ apply_event (Event e){
     case E_RANGE:   apply_range(e);   break;
     case E_ENDTURN: apply_endturn(e); break;
     case E_DEATH:   apply_death(e);   break;
+    default:
+      die("core: apply_event(): "
+          "unknown event '%i'\n", e.t);
+      break;
   }
   update_units_visibility();
 }
