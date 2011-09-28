@@ -209,13 +209,20 @@ draw_img (Img src, Scrd s) {
 }
 
 static void
+draw_fog (){
+  Mcrd m;
+  FOR_EACH_MCRD(m){
+    if(tile(m)->fog <= 0)
+      draw_img(img_fog_of_war, map2scr(m));
+  }
+}
+
+static void
 draw_map (){
   Mcrd m;
   FOR_EACH_MCRD(m){
     Img s = img_tiles[tile(m)->t];
     draw_img(s, map2scr(m));
-    if(tile(m)->fog <= 0)
-      draw_img(img_fog_of_war, map2scr(m));
   }
 }
 
@@ -369,6 +376,7 @@ static void
 draw (){
   draw_bg(black);
   draw_map();
+  draw_fog();
   if(ui_mode==MODE_SELECT && selected_unit)
     draw_reachable_tiles();
   if(selected_unit)
