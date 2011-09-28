@@ -96,7 +96,7 @@ init_archer (){
   return(u);
 }
 
-static void
+static Unit_type
 init_peasant (){
   Unit_type u;
   u.range_of_vision      =   3;
