@@ -165,11 +165,18 @@ send_int_as_uint8 (int n){
 static Event
 mk_event (Byte * d){
   Event e;
-  if(d[0]==E_MOVE   ) e.move    = mk_event_move (d);
-  if(d[0]==E_MELEE  ) e.melee   = mk_event_melee(d);
-  if(d[0]==E_RANGE  ) e.range   = mk_event_range(d);
-  if(d[0]==E_ENDTURN) e.endturn = mk_event_endturn(d);
-  if(d[0]==E_DEATH  ) e.death   = mk_event_death(d);
+  int type = d[0];
+  switch(type){
+    case E_MOVE:    e.move    = mk_event_move(d);    break;
+    case E_MELEE:   e.melee   = mk_event_melee(d);   break;
+    case E_RANGE:   e.range   = mk_event_range(d);   break;
+    case E_ENDTURN: e.endturn = mk_event_endturn(d); break;
+    case E_DEATH:   e.death   = mk_event_death(d);   break;
+    default:
+      die("net: mk_event(): "
+          "Unknown event '%i'\n", type);
+      break;
+  }
   return(e); 
 }
 
