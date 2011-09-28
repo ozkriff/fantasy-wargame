@@ -9,94 +9,6 @@
 #include "utype.h"
 
 static Unit_type
-init_defender (){
-  Unit_type u;
-  u.range_of_vision      =  1;
-  u.morale               =  5;
-  u.count                = 10;
-  u.ms                   =  3;
-  u.strength             =  3;
-  u.toughness            =  4;
-  u.attacks              =  1;
-  u.armor                =  3;
-  u.mvp                  =  3;
-  u.energy               = 20;
-  u.energy_rg            =  5;
-  u.ter_mvp[T_GRASS    ] =  1;
-  u.ter_mvp[T_FOREST   ] =  4;
-  u.ter_mvp[T_WATER    ] =  8;
-  u.ter_mvp[T_HILLS    ] =  4;
-  u.ter_mvp[T_MOUNTEENS] =  9;
-  u.ter_ms [T_GRASS    ] =  0;
-  u.ter_ms [T_FOREST   ] =  1;
-  u.ter_ms [T_WATER    ] = -2;
-  u.ter_ms [T_HILLS    ] =  0;
-  u.ter_ms [T_MOUNTEENS] =  0;
-  u.skills_n             =  0;
-  return(u);
-}
-
-static Unit_type
-init_hunter (){
-  Unit_type u;
-  u.range_of_vision      =  4;
-  u.morale               =  5;
-  u.count                = 10;
-  u.ms                   =  3;
-  u.strength             =  3;
-  u.toughness            =  3;
-  u.attacks              =  2;
-  u.armor                =  1;
-  u.mvp                  =  4;
-  u.energy               = 20;
-  u.energy_rg            =  5;
-  u.ter_mvp[T_GRASS    ] =  1;
-  u.ter_mvp[T_FOREST   ] =  2;
-  u.ter_mvp[T_WATER    ] =  4;
-  u.ter_mvp[T_HILLS    ] =  3;
-  u.ter_mvp[T_MOUNTEENS] =  6;
-  u.ter_ms [T_GRASS    ] =  0;
-  u.ter_ms [T_FOREST   ] =  2;
-  u.ter_ms [T_WATER    ] = -2;
-  u.ter_ms [T_HILLS    ] =  1;
-  u.ter_ms [T_MOUNTEENS] =  1;
-  u.skills_n             =  3;
-  u.skills[0] = mk_skill_bool(S_IGNR    );
-  u.skills[1] = mk_skill_bool(S_INVIS   );
-  u.skills[2] = mk_skill_bool(S_NORETURN);
-  return(u);
-}
-
-static Unit_type
-init_archer (){
-  Unit_type u;
-  u.range_of_vision      =  3;
-  u.morale               =  5;
-  u.count                = 10;
-  u.ms                   =  2;
-  u.strength             =  3;
-  u.toughness            =  2;
-  u.attacks              =  1;
-  u.armor                =  1;
-  u.mvp                  =  3;
-  u.energy               = 20;
-  u.energy_rg            =  5;
-  u.ter_mvp[T_GRASS    ] =  1;
-  u.ter_mvp[T_FOREST   ] =  3;
-  u.ter_mvp[T_WATER    ] =  8;
-  u.ter_mvp[T_HILLS    ] =  4;
-  u.ter_mvp[T_MOUNTEENS] =  9;
-  u.ter_ms [T_GRASS    ] =  0;
-  u.ter_ms [T_FOREST   ] =  1;
-  u.ter_ms [T_WATER    ] = -2;
-  u.ter_ms [T_HILLS    ] =  0;
-  u.ter_ms [T_MOUNTEENS] =  0;
-  u.skills_n             =  1;
-  u.skills[0] = mk_skill_range(3, 5, 4);
-  return(u);
-}
-
-static Unit_type
 init_peasant (){
   Unit_type u;
   u.range_of_vision      =   3;
@@ -413,8 +325,16 @@ init_troll (){
 
 void
 init_unit_types (){
-  utypes[U_DEFENDER] = init_defender();
-  utypes[U_HUNTER  ] = init_hunter();
-  utypes[U_ARCHER  ] = init_archer();
+  utypes[U_PEASANT       ] = init_peasant();
+  utypes[U_SWORDSMAN     ] = init_swordsman();
+  utypes[U_FOOT_KNIGHT   ] = init_foot_knight();
+  utypes[U_POOR_ARCHER   ] = init_poor_archer();
+  utypes[U_SCOUT         ] = init_scout();
+  utypes[U_GOBLIN        ] = init_goblin();
+  utypes[U_GOBLIN_SLINGER] = init_goblin_slinger();
+  utypes[U_GOBLIN_SCOUT  ] = init_goblin_scout();
+  utypes[U_ORC           ] = init_orc();
+  utypes[U_ARMORED_ORC   ] = init_armored_orc();
+  utypes[U_TROLL         ] = init_troll();
 }
 

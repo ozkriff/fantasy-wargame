@@ -9,6 +9,7 @@
 #include "SDL/SDL_net.h"
 #include "list.h"
 #include "structs.h"
+#include "utype.h"
 #include "net.h"
 #include "core.h"
 #include "misc.h"
@@ -21,7 +22,7 @@ typedef Vec2i Scrd;
 typedef SDL_Surface * Img;
 
 static Img img_tiles[10];
-static Img img_units[10];
+static Img img_units[30];
 static Img img_selected_hex;
 static Img img_reacheble;
 static Img img_fog_of_war;
@@ -87,9 +88,18 @@ free_sprites (){
   SDL_FreeSurface(img_rings[0]         );
   SDL_FreeSurface(img_rings[1]         );
   SDL_FreeSurface(img_rings[2]         );
-  SDL_FreeSurface(img_units[U_DEFENDER]);
-  SDL_FreeSurface(img_units[U_ARCHER]  );
-  SDL_FreeSurface(img_units[U_HUNTER]  );
+  SDL_FreeSurface(img_units[U_PEASANT       ]);
+  SDL_FreeSurface(img_units[U_SWORDSMAN     ]);
+  SDL_FreeSurface(img_units[U_FOOT_KNIGHT   ]);
+  SDL_FreeSurface(img_units[U_POOR_ARCHER   ]);
+  SDL_FreeSurface(img_units[U_SCOUT         ]);
+  SDL_FreeSurface(img_units[U_GOBLIN        ]);
+  SDL_FreeSurface(img_units[U_GOBLIN_SLINGER]);
+  SDL_FreeSurface(img_units[U_GOBLIN_SCOUT  ]);
+  SDL_FreeSurface(img_units[U_ORC           ]);
+  SDL_FreeSurface(img_units[U_ARMORED_ORC   ]);
+  SDL_FreeSurface(img_units[U_CRAZY_ORC     ]);
+  SDL_FreeSurface(img_units[U_TROLL         ]);
 }
 
 static void
@@ -106,9 +116,18 @@ load_sprites (){
   img_rings[0]           = loadimg("img/ring_red.png"  );
   img_rings[1]           = loadimg("img/ring_blue.png" );
   img_rings[2]           = loadimg("img/ring_green.png");
-  img_units[U_DEFENDER]  = loadimg("img/defender.png"  );
-  img_units[U_ARCHER]    = loadimg("img/archer.png"    );
-  img_units[U_HUNTER]    = loadimg("img/hunter.png"    );
+  img_units[U_PEASANT       ] = loadimg("img/human/peasant.png"    );
+  img_units[U_SWORDSMAN     ] = loadimg("img/human/swordsman.png"  );
+  img_units[U_FOOT_KNIGHT   ] = loadimg("img/human/foot_knight.png");
+  img_units[U_POOR_ARCHER   ] = loadimg("img/human/poor_archer.png");
+  img_units[U_SCOUT         ] = loadimg("img/human/scout.png"      );
+  img_units[U_GOBLIN        ] = loadimg("img/goblin/normal.png"    );
+  img_units[U_GOBLIN_SLINGER] = loadimg("img/goblin/slinger.png"   );
+  img_units[U_GOBLIN_SCOUT  ] = loadimg("img/goblin/scout.png"     );
+  img_units[U_ORC           ] = loadimg("img/orc/normal.png"       );
+  img_units[U_ARMORED_ORC   ] = loadimg("img/orc/armored.png"      );
+  img_units[U_CRAZY_ORC     ] = loadimg("img/orc/crazy.png"        );
+  img_units[U_TROLL         ] = loadimg("img/troll/normal.png"     );
 }
 
 static Scrd

@@ -7,6 +7,7 @@
 #include <time.h>
 #include "list.h"
 #include "structs.h"
+#include "utype.h"
 #include "misc.h"
 #include "core.h"
 #include "core_private.h"
@@ -40,10 +41,10 @@ static void
 init_scenario (World *w){
   w->map = str2map(scenario_01.map);
   /*player0 units*/{
-    add_unit(mk_mcrd(1,2), 0, U_DEFENDER, w);
+    add_unit(mk_mcrd(1,2), 0, U_ORC, w);
   }
   /*player1 units*/{
-    add_unit(mk_mcrd(3,5), 1, U_DEFENDER, w);
+    add_unit(mk_mcrd(3,5), 1, U_SWORDSMAN, w);
   }
 }
 
