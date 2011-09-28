@@ -121,7 +121,7 @@ init_peasant (){
   u.ter_ms [T_HILLS    ] =   1;
   u.ter_ms [T_MOUNTEENS] =   0;
   u.skills_n             =   0;
-  return(u)
+  return(u);
 }
 
 void
