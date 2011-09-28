@@ -67,7 +67,7 @@ loadimg (char * str){
   Img original = IMG_Load(str);
   Img optimized;
   if(!original)
-    die("loadimg error: %s/ \n", str);
+    die("ui_sdl: loadimg(): No file '%s'\n", str);
   optimized = SDL_DisplayFormatAlpha(original);
   SDL_FreeSurface(original);  
   return(optimized);
