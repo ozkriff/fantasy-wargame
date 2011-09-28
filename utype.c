@@ -327,6 +327,34 @@ init_goblin_scout (){
   return(u);
 }
 
+static Unit_type
+init_orc (){
+  Unit_type u;
+  u.range_of_vision      =   3;
+  u.morale               =   5;
+  u.count                =   6;
+  u.ms                   =   3;
+  u.strength             =   5;
+  u.toughness            =   4;
+  u.attacks              =   5;
+  u.armor                =   2;
+  u.mvp                  =   3;
+  u.energy               =  20;
+  u.energy_rg            =   5;
+  u.ter_mvp[T_GRASS    ] =   1;
+  u.ter_mvp[T_FOREST   ] =   3;
+  u.ter_mvp[T_WATER    ] =   8;
+  u.ter_mvp[T_HILLS    ] =   4;
+  u.ter_mvp[T_MOUNTEENS] =   9;
+  u.ter_ms [T_GRASS    ] =   0;
+  u.ter_ms [T_FOREST   ] =   1;
+  u.ter_ms [T_WATER    ] =  -2;
+  u.ter_ms [T_HILLS    ] =   0;
+  u.ter_ms [T_MOUNTEENS] =   0;
+  u.skills_n             =   0;
+  return(u);
+}
+
 void
 init_unit_types (){
   utypes[U_DEFENDER] = init_defender();
