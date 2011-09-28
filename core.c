@@ -451,6 +451,7 @@ is_event_visible (Event e){
     case E_RANGE: return(is_range_visible(e.range));
     case E_MOVE : return(is_move_visible (e.move));
     case E_DEATH: return(true);
+    case E_ENDTURN: return(true);
     default:
       die("is_event_visible: unknown event '%i'\n", e.t);
       return(true);
