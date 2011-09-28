@@ -296,6 +296,37 @@ init_goblin_slinger (){
   return(u);
 }
 
+static Unit_type
+init_goblin_scout (){
+  Unit_type u;
+  u.range_of_vision      =   6;
+  u.morale               =   4;
+  u.count                =   6;
+  u.ms                   =   4;
+  u.strength             =   3;
+  u.toughness            =   2;
+  u.attacks              =   6;
+  u.armor                =   1;
+  u.mvp                  =   4;
+  u.energy               =  15;
+  u.energy_rg            =   4;
+  u.ter_mvp[T_GRASS    ] =   1;
+  u.ter_mvp[T_FOREST   ] =   3;
+  u.ter_mvp[T_WATER    ] =   8;
+  u.ter_mvp[T_HILLS    ] =   4;
+  u.ter_mvp[T_MOUNTEENS] =   9;
+  u.ter_ms [T_GRASS    ] =   0;
+  u.ter_ms [T_FOREST   ] =   1;
+  u.ter_ms [T_WATER    ] =  -2;
+  u.ter_ms [T_HILLS    ] =   0;
+  u.ter_ms [T_MOUNTEENS] =   0;
+  u.skills_n             =   2;
+  u.skills[0] = mk_skill_bool(S_NORETURN);
+  u.skills[0] = mk_skill_bool(S_IGNR);
+  u.skills[1] = mk_skill_bool(S_INVIS);
+  return(u);
+}
+
 void
 init_unit_types (){
   utypes[U_DEFENDER] = init_defender();
