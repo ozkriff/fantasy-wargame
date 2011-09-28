@@ -18,32 +18,55 @@ static void scenario_logic();
 
 Scenario scenario_02 = {
   2, /*players_count*/
-  {7, 7}, /*map_size*/
-  " . . * . . . *"
-  ". . . t . M . "
-  " . . . . . . ."
-  ". . . . . . . "
-  " . . . . . . ."
-  ". . . . . . . "
-  " . . . . . * .",
+  {12, 12}, /*map_size*/
+  " . . * . . h * . . . . ."
+  ". . . t . M . . . . . . "
+  " . . . . . . . t . . . ."
+  ". . . . . . h M . . . . "
+  " . . . . . . h . . . . ."
+  ". . . . . t . . . . . . "
+  " . . . . . t . . . . . ."
+  ". . . . h . . . . . . . "
+  " . . . . M . . . t . . ."
+  ". . * . h . . . t t . . "
+  " . * . . . . . t . . . ."
+  ". . * . . * . . . . . . ",
   init_scenario, 
   scenario_logic
 };
 
 static void
+player_0_units (World *w){
+  add_unit(mk_mcrd( 0,  3), 0, U_PEASANT, w);
+  add_unit(mk_mcrd( 0,  4), 0, U_SCOUT, w);
+  add_unit(mk_mcrd( 0,  5), 0, U_PEASANT, w);
+  add_unit(mk_mcrd( 0,  6), 0, U_PEASANT, w);
+  add_unit(mk_mcrd( 1,  4), 0, U_SWORDSMAN, w);
+  add_unit(mk_mcrd( 1,  5), 0, U_POOR_ARCHER, w);
+  add_unit(mk_mcrd( 1,  6), 0, U_FOOT_KNIGHT, w);
+  add_unit(mk_mcrd( 1,  7), 0, U_SWORDSMAN, w);
+}
+
+static void
+player_1_units (World *w){
+  add_unit(mk_mcrd( 8,  4), 1, U_GOBLIN, w);
+  add_unit(mk_mcrd( 8,  5), 1, U_GOBLIN, w);
+  add_unit(mk_mcrd( 8,  6), 1, U_ORC, w);
+  add_unit(mk_mcrd( 8,  7), 1, U_GOBLIN, w);
+  add_unit(mk_mcrd( 9,  3), 1, U_GOBLIN_SCOUT, w);
+  add_unit(mk_mcrd( 9,  7), 1, U_GOBLIN_SLINGER, w);
+  add_unit(mk_mcrd( 9,  4), 1, U_ARMORED_ORC, w);
+  add_unit(mk_mcrd(10,  4), 1, U_TROLL, w);
+  add_unit(mk_mcrd(10,  5), 1, U_ORC, w);
+}
+
+
+
+static void
 init_scenario (World *w){
   w->map = str2map(scenario_02.map);
-  /*player0 units*/{
-    add_unit(mk_mcrd(1,2), 0, U_PEASANT, w);
-    add_unit(mk_mcrd(1,3), 0, U_PEASANT, w);
-    add_unit(mk_mcrd(1,4), 0, U_SWORDSMAN, w);
-    add_unit(mk_mcrd(1,5), 0, U_SCOUT, w);
-  }
-  /*player1 units*/{
-    add_unit(mk_mcrd(3,4), 1, U_ORC, w);
-    add_unit(mk_mcrd(3,3), 1, U_GOBLIN, w);
-    add_unit(mk_mcrd(3,2), 1, U_GOBLIN_SLINGER, w);
-  }
+  player_0_units(w);
+  player_1_units(w);
 }
 
 static void
