@@ -370,6 +370,22 @@ draw_labels (){
   char str[100];
   sprintf(str, "[pl:%i]", cw->id);
   text(str, mk_scrd(0,0), false);
+  if(inboard(selected_tile)){
+    char *s = NULL;
+    switch(tile(selected_tile)->t){
+      case T_GRASS:     s = "(grass)";     break;
+      case T_FOREST:    s = "(forest)";    break;
+      case T_WATER:     s = "(water)";     break;
+      case T_HILLS:     s = "(hills)";     break;
+      case T_MOUNTEENS: s = "(mounteens)"; break;
+      default:
+        die("ui_sdl: draw_labels(): "
+            "Unknown tile type - '%i'\n",
+            tile(selected_tile)->t);
+        break;
+    }
+    text(s, mk_scrd(0, 20), false);
+  }
 }
 
 static void
