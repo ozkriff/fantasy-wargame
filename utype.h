@@ -1,25 +1,27 @@
 /* See LICENSE file for copyright and license details. */
 
-#define U_PEASANT         0
-#define U_MILITIAMAN      1
-#define U_SPEARMAN        2
-#define U_SWORDSMAN       3
-#define U_FOOT_KNIGHT     4
-#define U_KNIGHT          5
-#define U_POOR_ARCHER     6
-#define U_ARCHER          7
-#define U_SCOUT           8
+enum{
+  U_PEASANT,
+  U_MILITIAMAN,
+  U_SPEARMAN,
+  U_SWORDSMAN,
+  U_FOOT_KNIGHT,
+  U_KNIGHT,
+  U_POOR_ARCHER,
+  U_ARCHER,
+  U_SCOUT,
 
-#define U_WEAK_GOBLIN     9
-#define U_GOBLIN         10
-#define U_GOBLIN_SLINGER 11
-#define U_GOBLIN_SCOUT   12
-#define U_YOUNG_ORC      13
-#define U_ORC            14
-#define U_ARMORED_ORC    15
-#define U_CRAZY_ORC      16
-#define U_YOUNG_TROLL    17
-#define U_TROLL          18
+  U_WEAK_GOBLIN,
+  U_GOBLIN,
+  U_GOBLIN_SLINGER,
+  U_GOBLIN_SCOUT,
+  U_YOUNG_ORC,
+  U_ORC,
+  U_ARMORED_ORC,
+  U_CRAZY_ORC,
+  U_YOUNG_TROLL,
+  U_TROLL
+};
 
 void init_unit_types();
 
