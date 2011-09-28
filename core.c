@@ -723,7 +723,8 @@ init_local_worlds_s (char *s, ...){
     }else if(*c=='a'){
       create_local_ai(id);
     }else{
-      die("DIE: init_worlds_s(): %c, %i\n", *c, *c);
+      die("core: init_worlds_s(): "
+          "%c, %i\n", *c, *c);
     }
     c++;
   }
