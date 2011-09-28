@@ -453,7 +453,8 @@ is_event_visible (Event e){
     case E_DEATH: return(true);
     case E_ENDTURN: return(true);
     default:
-      die("is_event_visible: unknown event '%i'\n", e.t);
+      die("core: is_event_visible(): "
+          "unknown event '%i'\n", e.t);
       return(true);
   }
 }
