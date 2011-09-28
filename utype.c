@@ -383,6 +383,34 @@ init_armored_orc (){
   return(u);
 }
 
+static Unit_type
+init_troll (){
+  Unit_type u;
+  u.range_of_vision      =   1;
+  u.morale               =   5;
+  u.count                =   6;
+  u.ms                   =   6;
+  u.strength             =   8;
+  u.toughness            =   6;
+  u.attacks              =   2;
+  u.armor                =   2;
+  u.mvp                  =   2;
+  u.energy               =  60;
+  u.energy_rg            =  10;
+  u.ter_mvp[T_GRASS    ] =   1;
+  u.ter_mvp[T_FOREST   ] =   3;
+  u.ter_mvp[T_WATER    ] =   8;
+  u.ter_mvp[T_HILLS    ] =   4;
+  u.ter_mvp[T_MOUNTEENS] =   9;
+  u.ter_ms [T_GRASS    ] =   0;
+  u.ter_ms [T_FOREST   ] =   1;
+  u.ter_ms [T_WATER    ] =  -2;
+  u.ter_ms [T_HILLS    ] =   0;
+  u.ter_ms [T_MOUNTEENS] =   0;
+  u.skills_n             =   0;
+  return(u);
+}
+
 void
 init_unit_types (){
   utypes[U_DEFENDER] = init_defender();
