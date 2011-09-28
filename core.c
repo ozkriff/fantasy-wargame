@@ -519,24 +519,34 @@ add_event_local (Event data){
 
 void
 event2log (Event e){
-  if(e.t == E_MOVE){
-    fprintf(logfile, "MOVE  u=%i, dir=%i, cost=%i\n",
-        e.move.u, e.move.dir, e.move.cost );
-  }else if(e.t == E_MELEE){
-    fprintf(logfile, "MELEE a=%i, d=%i, ak=%i, dk=%i\n",
-        e.melee.a,
-        e.melee.d,
-        e.melee.attackers_killed,
-        e.melee.defenders_killed );
-  }else if(e.t == E_RANGE){
-    fprintf(logfile, "RANGE a=%i, d=%i, dmg=%i\n",
-        e.range.a, e.range.d, e.range.dmg );
-  }else if(e.t == E_ENDTURN){
-    fprintf(logfile, "TURN %i --> %i\n",
-        e.endturn.old_player, e.endturn.new_player );
-  }else if(e.t == E_DEATH){
-    fprintf(logfile, "KILLED %i\n", e.death.u.id);
-  }
+  switch(e.t){
+    case E_MOVE:
+      fprintf(logfile, "MOVE  u=%i, dir=%i, cost=%i\n",
+          e.move.u, e.move.dir, e.move.cost );
+      break;
+    case E_MELEE:
+      fprintf(logfile, "MELEE a=%i, d=%i, ak=%i, dk=%i\n",
+          e.melee.a,
+          e.melee.d,
+          e.melee.attackers_killed,
+          e.melee.defenders_killed );
+       break;
+    case E_RANGE:
+      fprintf(logfile, "RANGE a=%i, d=%i, dmg=%i\n",
+          e.range.a, e.range.d, e.range.dmg );
+      break;
+    case E_ENDTURN:
+      fprintf(logfile, "TURN %i --> %i\n",
+          e.endturn.old_player, e.endturn.new_player );
+      break;
+    case E_DEATH:
+      fprintf(logfile, "KILLED %i\n", e.death.u.id);
+      break;
+    default:
+      die("core: event2log(): "
+          "unknown event '%i'\n", e.t);
+      break;
+   }
 }
 
 void
