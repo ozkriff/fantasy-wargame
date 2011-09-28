@@ -149,6 +149,10 @@ send_event (Event e) {
     case E_RANGE  : send_range(e.range);     break;
     case E_ENDTURN: send_endturn(e.endturn); break;
     case E_DEATH  : send_death(e.death);     break;
+    default:
+      die("net: send_event(): "
+          "Unknown event '%i'\n", e.t);
+      break;
   }
 }
 
