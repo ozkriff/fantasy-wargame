@@ -627,7 +627,7 @@ mainloop(){
 
 #undef main
 int
-main(int ac, char **av){
+main(){
   init();
   init_draw();
   mainloop();
