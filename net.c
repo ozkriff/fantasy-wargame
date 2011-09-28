@@ -144,11 +144,11 @@ print_data (Byte * data, Byte size){
 void
 send_event (Event e) {
   switch(e.t){
-    case E_MELEE  : send_melee(e.melee);     break;
-    case E_MOVE   : send_move (e.move );     break;
-    case E_RANGE  : send_range(e.range);     break;
+    case E_MELEE:   send_melee(e.melee);     break;
+    case E_MOVE:    send_move(e.move);       break;
+    case E_RANGE:   send_range(e.range);     break;
     case E_ENDTURN: send_endturn(e.endturn); break;
-    case E_DEATH  : send_death(e.death);     break;
+    case E_DEATH:   send_death(e.death);     break;
     default:
       die("net: send_event(): "
           "Unknown event '%i'\n", e.t);
