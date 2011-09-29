@@ -196,8 +196,7 @@ refresh_units (){
     u->mvp = utypes[u->t].mvp;
     u->can_attack = true;
     u->energy += utypes[u->t].energy_rg;
-    if(u->energy > utypes[u->t].energy)
-      u->energy = utypes[u->t].energy;
+    fixnum(0, utypes[u->t].energy, &u->energy);
   }
 }
 
