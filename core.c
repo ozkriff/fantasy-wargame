@@ -460,13 +460,15 @@ is_event_visible (Event e){
 static void
 apply_endturn(Event e){
   Node *nd;
+  if(e.endturn.new_player == 0){
+    check_win();
+    refresh_units();
+  }
   FOR_EACH_NODE(worlds, nd){
     World *w = nd->d;
     if(w->id == e.endturn.new_player){
       cw = w;
       is_client_active = true;
-      check_win();
-      refresh_units();
       updatefog(cw->id);
       update_units_visibility();
       return;
