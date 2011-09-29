@@ -193,13 +193,11 @@ refresh_units (){
   Node * node;
   FOR_EACH_NODE(cw->units, node){
     Unit * u = node->d;
-    if(u->player == cw->id){
-      u->mvp = utypes[u->t].mvp;
-      u->can_attack = true;
-      u->energy += utypes[u->t].energy_rg;
-      if(u->energy > utypes[u->t].energy)
-        u->energy = utypes[u->t].energy;
-    }
+    u->mvp = utypes[u->t].mvp;
+    u->can_attack = true;
+    u->energy += utypes[u->t].energy_rg;
+    if(u->energy > utypes[u->t].energy)
+      u->energy = utypes[u->t].energy;
   }
 }
 
