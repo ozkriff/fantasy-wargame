@@ -615,7 +615,8 @@ get_last_event_index (Event e){
     Mcrd b = id2unit(e.range.d)->m;
     n = mdist(a, b)*steps;
   }else{
-    die("DIE: Unknow event '%i'.\n", e.t);
+    die("ui_sdl: get_last_event_index(): "
+        "unknow event '%i'.\n", e.t);
   }
   return(n);
 }
