@@ -465,9 +465,7 @@ init_draw (){
 }
 
 static void
-mouseclick (SDL_MouseButtonEvent e){
-  Scrd s = mk_scrd((int)e.x, (int)e.y);
-  Mcrd m = scr2map(s);
+tile_action (Mcrd m){
   Unit *u = unit_at(m);
   if(u && u->player == cw->id){
     selected_unit = u;
@@ -481,6 +479,13 @@ mouseclick (SDL_MouseButtonEvent e){
       attack(selected_unit, u);
     }
   }
+}
+
+
+static void
+mouseclick (SDL_MouseButtonEvent e){
+  Scrd s = mk_scrd((int)e.x, (int)e.y);
+  tile_action(scr2map(s));
 }
 
 static void
