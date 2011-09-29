@@ -527,6 +527,13 @@ select_keys (SDL_KeyboardEvent e){
     case SDLK_n:
       select_next_unit();
       break;
+    case SDLK_h: selected_tile.x--; break;
+    case SDLK_j: selected_tile.y++; break;
+    case SDLK_k: selected_tile.y--; break;
+    case SDLK_l: selected_tile.x++; break;
+    case SDLK_v:
+      tile_action(selected_tile);
+      break;
     default: break;
   }
 }
