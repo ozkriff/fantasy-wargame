@@ -737,7 +737,7 @@ init_local_worlds_s (char *s, ...){
     c++;
   }
   va_end(ap);
-  cw = worlds.h->d;
+  cw = worlds.t->d;
 }
 
 void
