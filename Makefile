@@ -29,20 +29,25 @@ ui_sdl: $(sdl_obj)
 server: server.o list.o
 	$(CC) $(CFLAGS) -o server server.o list.o -lSDL_net
 
-list.o:   list.c          list.h
-path.o:   path.c   path.h list.h structs.h
-misc.o:   misc.c   misc.h list.h structs.h
-core.o:   core.c   core.h list.h structs.h core_private.h
-net.o:    net.c    net.h  list.h structs.h core_private.h 
-ai.o:     ai.c     ai.h   list.h structs.h
-utype.o:  utype.c  utype.h       structs.h core_private.h
+list.o:   list.c list.h
+path.o:   path.c path.h list.h structs.h misc.h
+misc.o:   misc.c misc.h list.h structs.h core.h
+core.o:   core.c core.h list.h structs.h core_private.h \
+          path.h net.h utype.h scenarios.h
+net.o:    net.c net.h list.h structs.h core_private.h \
+          misc.h
+ai.o:     ai.c ai.h list.h structs.h core.h path.h misc.h
+utype.o:  utype.c utype.h list.h structs.h \
+          core_private.h core.h
 ui_cli.o: ui_cli.c core.h list.h structs.h misc.h
-ui_sdl.o: ui_sdl.c core.h list.h structs.h misc.h
-server.o: server.c        list.h
-
+ui_sdl.o: ui_sdl.c core.h list.h structs.h misc.h \
+          utype.h net.h ai.h path.h
+server.o: server.c list.h
 scenarios.o:   scenarios.h structs.h
-scenario_01.o: scenario_01.c scenarios.h structs.h
-scenario_02.o: scenario_02.c scenarios.h structs.h
+scenario_01.o: scenario_01.c scenarios.h structs.h list.h \
+               utype.h core.h core_private.h misc.h
+scenario_02.o: scenario_02.c scenarios.h structs.h list.h \
+               utype.h core.h core_private.h misc.h
 
 clean:
 	rm -f *.o ui_cli ui_sdl server
