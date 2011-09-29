@@ -1,6 +1,6 @@
 /* See LICENSE file for copyright and license details. */
 
-enum{
+enum Unit_type_id {
   U_PEASANT,
   U_MILITIAMAN,
   U_SPEARMAN,
