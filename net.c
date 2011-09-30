@@ -165,7 +165,7 @@ send_int_as_uint8 (int n){
 static Event
 mk_event (Byte * d){
   Event e;
-  int type = d[0];
+  int type = (int)d[0];
   switch(type){
     case E_MOVE:    e.move    = mk_event_move(d);    break;
     case E_MELEE:   e.melee   = mk_event_melee(d);   break;
