@@ -43,7 +43,7 @@ ai_movement(Unit * u){
 }
 
 void
-ai (){
+ai (void){
   Node * n;
   while(cw->eq.count > 0){
     apply_event(get_next_event());

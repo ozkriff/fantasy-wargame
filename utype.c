@@ -9,7 +9,7 @@
 #include "utype.h"
 
 static Unit_type
-init_peasant (){
+init_peasant (void){
   Unit_type u;
   u.range_of_vision      =   3;
   u.morale               =   3;
@@ -37,7 +37,7 @@ init_peasant (){
 }
 
 static Unit_type
-init_swordsman (){
+init_swordsman (void){
   Unit_type u;
   u.range_of_vision      =   3;
   u.morale               =   5;
@@ -65,7 +65,7 @@ init_swordsman (){
 }
 
 static Unit_type
-init_foot_knight (){
+init_foot_knight (void){
   Unit_type u;
   u.range_of_vision      =   2;
   u.morale               =   7;
@@ -93,7 +93,7 @@ init_foot_knight (){
 }
 
 static Unit_type
-init_poor_archer (){
+init_poor_archer (void){
   Unit_type u;
   u.range_of_vision      =   4;
   u.morale               =   5;
@@ -122,7 +122,7 @@ init_poor_archer (){
 }
 
 static Unit_type
-init_scout (){
+init_scout (void){
   Unit_type u;
   u.range_of_vision      =   5;
   u.morale               =   5;
@@ -152,7 +152,7 @@ init_scout (){
 }
 
 static Unit_type
-init_goblin (){
+init_goblin (void){
   Unit_type u;
   u.range_of_vision      =   3;
   u.morale               =   2;
@@ -180,7 +180,7 @@ init_goblin (){
 }
 
 static Unit_type
-init_goblin_slinger (){
+init_goblin_slinger (void){
   Unit_type u;
   u.range_of_vision      =   4;
   u.morale               =   3;
@@ -209,7 +209,7 @@ init_goblin_slinger (){
 }
 
 static Unit_type
-init_goblin_scout (){
+init_goblin_scout (void){
   Unit_type u;
   u.range_of_vision      =   6;
   u.morale               =   4;
@@ -240,7 +240,7 @@ init_goblin_scout (){
 }
 
 static Unit_type
-init_orc (){
+init_orc (void){
   Unit_type u;
   u.range_of_vision      =   3;
   u.morale               =   5;
@@ -268,7 +268,7 @@ init_orc (){
 }
 
 static Unit_type
-init_armored_orc (){
+init_armored_orc (void){
   Unit_type u;
   u.range_of_vision      =   3;
   u.morale               =   7;
@@ -296,7 +296,7 @@ init_armored_orc (){
 }
 
 static Unit_type
-init_troll (){
+init_troll (void){
   Unit_type u;
   u.range_of_vision      =   1;
   u.morale               =   5;

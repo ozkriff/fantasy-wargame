@@ -113,6 +113,6 @@ typedef struct {
   Mcrd  map_size;
   char *map;
   void (*init)(World *w);
-  void (*logic)();
+  void (*logic)(void);
 } Scenario;
 

@@ -191,7 +191,7 @@ checkunitsleft(){
 }
 
 static void
-refresh_units (){
+refresh_units (void){
   Node * node;
   FOR_EACH_NODE(cw->units, node){
     Unit * u = node->d;
@@ -203,7 +203,7 @@ refresh_units (){
 }
 
 static void
-check_win (){
+check_win (void){
   if(!checkunitsleft()){
     /* TODO generate special event. */
     puts("WINNER!");
@@ -369,7 +369,7 @@ attack_melee (Unit * a, Unit * d){
 
 /* Check and update visibility of all units in CW */
 static void
-update_units_visibility (){
+update_units_visibility (void){
   Node * node;
   FOR_EACH_NODE(cw->units, node){
     Unit * u = node->d;
@@ -482,7 +482,7 @@ apply_endturn(Event_endturn e){
 }
 
 static void
-send_ids_to_server (){
+send_ids_to_server (void){
   int no_players_left_mark = 0xff;
   Node *nd;
   FOR_EACH_NODE(worlds, nd){
@@ -495,7 +495,7 @@ send_ids_to_server (){
 /*------------------NON-STATIC FUNCTIONS-----------------*/
 
 void
-select_next_unit (){
+select_next_unit (void){
   Node * node;
   Unit * u;
   if(selected_unit)
@@ -562,7 +562,7 @@ add_event (Event e){
 }
 
 void
-cleanup(){
+cleanup (void){
   fclose(logfile);
   while(worlds.count > 0){
     World * w = worlds.h->d;
@@ -577,7 +577,7 @@ cleanup(){
 
 /* called before get_next_event */
 void
-update_eq (){
+update_eq (void){
   Event * e;
   while(cw->eq.count > 0){
     e = cw->eq.h->d;
@@ -593,7 +593,7 @@ update_eq (){
 
 /* always called after update_eq */
 Event
-get_next_event (){
+get_next_event (void){
   Event * tmp = deq_node(&cw->eq);
   Event e = *tmp;
   free(tmp);
@@ -601,7 +601,7 @@ get_next_event (){
 }
 
 void
-endturn (){
+endturn (void){
   int id = cw->id + 1;
   if(id == current_scenario->players_count)
     id = 0;
@@ -687,7 +687,7 @@ add_unit (
 }
 
 bool
-is_eq_empty (){
+is_eq_empty (void){
   update_eq();
   return(cw->eq.count == 0);
 }
@@ -756,7 +756,7 @@ set_scenario_id (int id){
 }
 
 void
-init (){
+init (void){
   srand( (unsigned int)time(NULL) );
   init_unit_types();
   init_scenarios();

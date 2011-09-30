@@ -12,7 +12,7 @@
 char b[200]; /* [b]uffer */
 int ui_done;
 
-void ui_list_units(){
+void ui_list_units (void){
   Node * n;
   FOR_EACH_NODE(cw->units, n){
     Unit * u = n->d;
@@ -23,7 +23,7 @@ void ui_list_units(){
   printf("\n");
 }
 
-void ui_help(){
+void ui_help (void){
   char * helpstr = 
     "u - units\n"
     "i - unit info\n"
@@ -37,7 +37,7 @@ void ui_help(){
   puts(helpstr);
 }
 
-void ui_move(){
+void ui_move (void){
   Mcrd f, t; /* from, to */
   int n = sscanf(b, "m %i %i %i %i\n", 
       &f.x, &f.y, &t.x, &t.y);
@@ -50,7 +50,7 @@ void ui_move(){
   }
 }
 
-void ui_attack(){
+void ui_attack (void){
   Mcrd f, t; /* from, to */
   int n = sscanf(b, "a %i %i %i %i\n", 
       &f.x, &f.y, &t.x, &t.y);
@@ -63,11 +63,11 @@ void ui_attack(){
   }
 }
 
-void ui_print_cw_id(){
+void ui_print_cw_id (void){
   printf("cw->id: %i\n", cw->id);
 }
 
-void ui_print_map(){
+void ui_print_map (void){
   Mcrd m;
   for(m.y=0; m.y<map_size.y; m.y++){
     if(m.y%2 == 0)
@@ -80,7 +80,7 @@ void ui_print_map(){
   }    
 }
 
-void ui_unit_info(){
+void ui_unit_info (void){
   Mcrd m;
   int n = sscanf(b, "i %i %i\n", &m.x, &m.y);
   if(n!=2){
@@ -95,7 +95,7 @@ void ui_unit_info(){
   }
 }
 
-void ui_end_turn(){
+void ui_end_turn (void){
   endturn();
 }
 

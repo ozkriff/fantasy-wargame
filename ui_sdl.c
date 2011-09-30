@@ -75,7 +75,7 @@ loadimg (char * str){
 }
 
 static void
-free_sprites (){
+free_sprites (void){
   SDL_FreeSurface(img_tiles[0]         );
   SDL_FreeSurface(img_tiles[1]         );
   SDL_FreeSurface(img_tiles[2]         );
@@ -103,7 +103,7 @@ free_sprites (){
 }
 
 static void
-load_sprites (){
+load_sprites (void){
   img_tiles[T_GRASS    ] = loadimg("img/grass.png"     );
   img_tiles[T_FOREST   ] = loadimg("img/tree.png"      );
   img_tiles[T_WATER    ] = loadimg("img/water.png"     );
@@ -228,7 +228,7 @@ draw_img (Img src, Scrd s) {
 }
 
 static void
-draw_fog (){
+draw_fog (void){
   Mcrd m;
   FOR_EACH_MCRD(m){
     if(tile(m)->fog <= 0)
@@ -237,7 +237,7 @@ draw_fog (){
 }
 
 static void
-draw_map (){
+draw_map (void){
   Mcrd m;
   FOR_EACH_MCRD(m){
     Img s = img_tiles[tile(m)->t];
@@ -295,7 +295,7 @@ draw_unit (Unit *u){
 }
 
 static void
-draw_units (){
+draw_units (void){
   Node * node;
   FOR_EACH_NODE(cw->units, node){
     Unit * u = node->d;
@@ -314,7 +314,7 @@ draw_units (){
 /*Mark tiles that sulelected_unit can reach 
   during this turn.*/
 static void
-draw_reachable_tiles(){
+draw_reachable_tiles (void){
   Mcrd m;
   FOR_EACH_MCRD(m){
     Mcrd p = tile(m)->parent;
@@ -328,7 +328,7 @@ draw_reachable_tiles(){
 /*debugging*/
 /*
 static void
-maptext (){
+maptext (void){
   char str[40];
   Mcrd m;
   FOR_EACH_MCRD(m){
@@ -345,7 +345,7 @@ maptext (){
 */
 
 static void
-draw_move_event (){
+draw_move_event (void){
   Unit * u = id2unit(e.move.u);
   Scrd s = mbetween(u->m, neib(u->m, e.move.dir), eindex);
   draw_img(img_rings[u->player], s);
@@ -353,7 +353,7 @@ draw_move_event (){
 }
 
 static void
-draw_melee_event (){
+draw_melee_event (void){
   Unit *a = id2unit(e.melee.a);
   Unit *d = id2unit(e.melee.d);
   int i = (eindex<steps/2) ? (eindex) : (steps-eindex);
@@ -362,7 +362,7 @@ draw_melee_event (){
 }
 
 static void
-draw_range_event (){
+draw_range_event (void){
   Unit *u1 = id2unit(e.range.a);
   Unit *u2 = id2unit(e.range.d);
   int dist = mdist(u1->m, u2->m);
@@ -376,7 +376,7 @@ draw_range_event (){
 }
 
 static void
-draw_event (){
+draw_event (void){
   if(e.t==E_MOVE ) 
     draw_move_event ();
   if(e.t==E_MELEE) 
@@ -386,7 +386,7 @@ draw_event (){
 }
 
 static void
-draw_labels (){
+draw_labels (void){
   char str[100];
   sprintf(str, "[pl:%i]", cw->id);
   text(str, mk_scrd(0,0), false);
@@ -409,7 +409,7 @@ draw_labels (){
 }
 
 static void
-draw (){
+draw (void){
   draw_bg(black);
   draw_map();
   draw_fog();
@@ -427,7 +427,7 @@ draw (){
 }
 
 static void
-draw_menu(){
+draw_menu (void){
   draw_bg(black);
   text("q - quit",       mk_scrd(0,  0), false);
   text("0 - scenario_0", mk_scrd(0, 20), false);
@@ -440,7 +440,7 @@ draw_menu(){
 }
 
 static void
-init_colors (){
+init_colors (void){
   Uint8 x = 255;
   SDL_PixelFormat * fmt = screen->format;
   red   = SDL_MapRGBA(fmt, x, 0, 0, x);
@@ -451,7 +451,7 @@ init_colors (){
 }
 
 static void
-init_draw (){
+init_draw (void){
   SDL_Init(SDL_INIT_VIDEO);
   IMG_Init(IMG_INIT_PNG);
   TTF_Init();
@@ -584,7 +584,7 @@ keys (SDL_KeyboardEvent e){
 }
 
 static void
-sdl_events (){
+sdl_events (void){
   SDL_Event e;
   while(SDL_PollEvent(&e)){
     switch(e.type){
@@ -634,7 +634,7 @@ get_last_event_index (Event e){
 }
 
 static void
-events (){
+events (void){
   if(ui_mode == MODE_SHOW_EVENT)
     eindex++;
   if(ui_mode==MODE_SHOW_EVENT && eindex >= final_eindex){
@@ -664,7 +664,7 @@ scroll_map(Scrd s){
 }
 
 static void
-mainloop(){
+mainloop (void){
   while(!done){
     sdl_events();
     if(screen_id == SCREEN_SCENARIO){
@@ -684,7 +684,7 @@ mainloop(){
 
 #undef main
 int
-main(){
+main (void){
   init();
   init_draw();
   mainloop();

@@ -23,5 +23,5 @@ enum Unit_type_id {
   U_TROLL
 };
 
-void init_unit_types();
+void init_unit_types (void);
 

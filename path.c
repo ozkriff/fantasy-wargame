@@ -23,7 +23,7 @@ push (Mcrd crd, Mcrd parent, int newcost) {
 }
 
 static Mcrd
-pop (){
+pop (void){
   Mcrd * tmp = pop_node(&stack);
   Mcrd m = *tmp;
   free(tmp);

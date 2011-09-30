@@ -8,7 +8,7 @@
 Scenario scenarios[20];
 
 void
-init_scenarios(){
+init_scenarios (void){
   scenarios[0] = scenario_01;
   scenarios[1] = scenario_02;
 }

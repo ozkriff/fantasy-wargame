@@ -100,7 +100,7 @@ init (int ac, char **av){
 }
 
 static void
-cleanup (){
+cleanup (void){
   SDLNet_Quit();
 }
 
@@ -139,7 +139,7 @@ resend_data (Client * exception, Byte * data, Byte size){
 }
 
 static void
-mainloop (){
+mainloop (void){
   Byte data_size;
   Byte data[32];
   int active_sockets_count;

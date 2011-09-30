@@ -14,7 +14,7 @@
 #include "scenarios.h"
 
 static void init_scenario(World *w);
-static void scenario_logic();
+static void scenario_logic(void);
 
 Scenario scenario_02 = {
   2, /*players_count*/
@@ -70,7 +70,7 @@ init_scenario (World *w){
 }
 
 static void
-scenario_logic (){
+scenario_logic (void){
   /* TODO */
 }
 

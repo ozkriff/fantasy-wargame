@@ -181,7 +181,7 @@ mk_event (Byte * d){
 }
 
 void
-do_network (){
+do_network (void){
   Event e;
   Byte size, data[10];
   if(SDLNet_CheckSockets(sockets, 0)
@@ -210,7 +210,7 @@ init_network (char * hostname, int port){
 }
 
 int
-get_scenario_from_server (){
+get_scenario_from_server (void){
   while(1){
     if(SDLNet_CheckSockets(sockets, 100)==0)
       continue;

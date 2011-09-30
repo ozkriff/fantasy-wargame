@@ -5,5 +5,5 @@ extern Scenario scenario_02;
 
 extern Scenario scenarios[20];
 
-void init_scenarios();
+void init_scenarios(void);
 
