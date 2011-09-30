@@ -55,14 +55,14 @@ update_fog_after_move (Unit * u){
 }
 
 static void
-apply_move (Event e){
-  Unit * u = id2unit(e.move.u);
+apply_move (Event_move e){
+  Unit * u = id2unit(e.u);
   if(find_skill(u, S_IGNR))
-    u->mvp -= e.move.cost;
+    u->mvp -= e.cost;
   else
     u->mvp = 0;
-  u->energy -= e.move.cost;
-  u->m = neib(u->m, e.move.dir);
+  u->energy -= e.cost;
+  u->m = neib(u->m, e.dir);
   fill_map(selected_unit);
   if(u->player==cw->id)
     update_fog_after_move(u);
@@ -100,27 +100,27 @@ range_damage (Unit * a, Unit * b){
 }
 
 static void
-apply_melee(Event e){
-  Unit * a = id2unit(e.melee.a);
-  Unit * d = id2unit(e.melee.d);
-  a->count -= e.melee.attackers_killed;
-  d->count -= e.melee.defenders_killed;
+apply_melee(Event_melee e){
+  Unit * a = id2unit(e.a);
+  Unit * d = id2unit(e.d);
+  a->count -= e.attackers_killed;
+  d->count -= e.defenders_killed;
   a->energy -= 2;
   d->energy -= 2;
   a->can_attack = false;
 }
 
 static void
-apply_death (Event e){
-  Unit *u = id2unit(e.death.u.id);
+apply_death (Event_death e){
+  Unit *u = id2unit(e.u.id);
   kill_unit(u);
 }
 
 static void
-apply_range (Event e){
-  Unit * ua = id2unit(e.range.a);
-  Unit * ud = id2unit(e.range.d);
-  int dmg = e.range.dmg;
+apply_range (Event_range e){
+  Unit * ua = id2unit(e.a);
+  Unit * ud = id2unit(e.d);
+  int dmg = e.dmg;
   ud->count -= dmg;
   ua->can_attack = false;
 }
@@ -462,15 +462,15 @@ is_event_visible (Event e){
 }
 
 static void
-apply_endturn(Event e){
+apply_endturn(Event_endturn e){
   Node *nd;
-  if(e.endturn.new_player == 0){
+  if(e.new_player == 0){
     check_win();
     refresh_units();
   }
   FOR_EACH_NODE(worlds, nd){
     World *w = nd->d;
-    if(w->id == e.endturn.new_player){
+    if(w->id == e.new_player){
       cw = w;
       is_client_active = true;
       updatefog(cw->id);
@@ -651,11 +651,11 @@ attack (Unit * a, Unit * d){
 void
 apply_event (Event e){
   switch(e.t){
-    case E_MOVE:    apply_move(e);    break;
-    case E_MELEE:   apply_melee(e);   break;
-    case E_RANGE:   apply_range(e);   break;
-    case E_ENDTURN: apply_endturn(e); break;
-    case E_DEATH:   apply_death(e);   break;
+    case E_MOVE:    apply_move(e.move);       break;
+    case E_MELEE:   apply_melee(e.melee);     break;
+    case E_RANGE:   apply_range(e.range);     break;
+    case E_ENDTURN: apply_endturn(e.endturn); break;
+    case E_DEATH:   apply_death(e.death);     break;
     default:
       die("core: apply_event(): "
           "unknown event '%i'\n", e.t);
