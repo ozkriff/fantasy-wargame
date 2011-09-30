@@ -293,7 +293,7 @@ get_wounds (Unit *a, Unit *d){
   int final    = 0; /*final wounds(not blocked by armour)*/
   int attacks  = utypes[a->t].attacks * a->count;
   int a_ms     = utypes[a->t].ms + utypes[a->t].ter_ms[tile(d->m)->t];
-  int d_ms     = utypes[a->t].ms + utypes[a->t].ter_ms[tile(d->m)->t];
+  int d_ms     = utypes[d->t].ms + utypes[d->t].ter_ms[tile(d->m)->t];
   /*chances to hit, to wound and to ignore armour. percents.*/
   int to_hit   = 5 + (a_ms - d_ms);
   int to_wound = 5 + (utypes[a->t].strength - utypes[d->t].toughness);
