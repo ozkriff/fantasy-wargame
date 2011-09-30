@@ -70,7 +70,7 @@ wait_for_all_players (int players_count){
 
 static void
 send_scenario_to_clients (int id){
-  Byte data = id;
+  Byte data = (Byte)id;
   Node * n;
   FOR_EACH_NODE(clients, n){
     Client * c = n->d;
