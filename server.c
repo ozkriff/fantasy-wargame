@@ -59,10 +59,10 @@ wait_for_all_players (int players_count){
         }
         player_id = calloc(1, sizeof(int));
         *player_id = data;
-        l_push(&c->players, player_id);
+        push_node(&c->players, player_id);
         printf("added player to client...\n");
       }
-      l_push(&clients, c);
+      push_node(&clients, c);
       printf("added client...\n");
     }
   }

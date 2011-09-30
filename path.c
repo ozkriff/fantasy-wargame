@@ -17,14 +17,14 @@ static void
 push (Mcrd crd, Mcrd parent, int newcost) {
   Mcrd * m = malloc(sizeof(Mcrd));
   *m = crd;
-  l_push(&stack, m);
+  push_node(&stack, m);
   tile(crd)->cost   = newcost;
   tile(crd)->parent = parent;
 }
 
 static Mcrd
 pop (){
-  Mcrd * tmp = l_pop(&stack);
+  Mcrd * tmp = pop_node(&stack);
   Mcrd m = *tmp;
   free(tmp);
   return( m );
@@ -89,14 +89,14 @@ fill_map (Unit * u) {
     }
   }
   while(stack.count > 0)
-    l_delete_node(&stack, stack.h);
+    delete_node(&stack, stack.h);
 }
 
 static void
 addwaypoint (List * path, Mcrd m){
   Mcrd * tmp = malloc(sizeof(Mcrd));
   *tmp = m;
-  l_push(path, tmp);
+  push_node(path, tmp);
 }
 
 List

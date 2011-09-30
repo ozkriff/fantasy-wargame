@@ -40,7 +40,7 @@ static void
 kill_unit (Unit * u){
   if(u == selected_unit)
     selected_unit = NULL;
-  l_delete_node(&cw->units, unit2node(u));
+  delete_node(&cw->units, unit2node(u));
   fill_map(selected_unit);
 }
 
@@ -386,7 +386,7 @@ create_local_world (int id, bool is_ai) {
   World * w = calloc(1, sizeof(World));
   w->id     = id;
   w->is_ai  = is_ai;
-  l_push(&worlds, w);
+  push_node(&worlds, w);
 }
 
 static void
@@ -517,7 +517,7 @@ add_event_local (Event data){
     World * world = nd->d;
     Event * e = calloc(1, sizeof(Event));
     *e = data; /* copy */
-    l_addtail(&world->eq, e);
+    add_node_to_tail(&world->eq, e);
   }
 }
 
@@ -567,11 +567,11 @@ cleanup(){
   while(worlds.count > 0){
     World * w = worlds.h->d;
     while(w->eq.count > 0)
-      l_delete_node(&w->eq, w->eq.h);
+      delete_node(&w->eq, w->eq.h);
     while(w->units.count > 0)
-      l_delete_node(&w->units, w->units.h);
+      delete_node(&w->units, w->units.h);
     free(w->map);
-    l_delete_node(&worlds, worlds.h);
+    delete_node(&worlds, worlds.h);
   }
 }
 
@@ -582,7 +582,7 @@ update_eq (){
   while(cw->eq.count > 0){
     e = cw->eq.h->d;
     if(!is_event_visible(*e)){
-      e = l_dequeue(&cw->eq);
+      e = deq_node(&cw->eq);
       apply_event(*e);
       free(e);
     }else{
@@ -594,7 +594,7 @@ update_eq (){
 /* always called after update_eq */
 Event
 get_next_event (){
-  Event * tmp = l_dequeue(&cw->eq);
+  Event * tmp = deq_node(&cw->eq);
   Event e = *tmp;
   free(tmp);
   return(e);
@@ -624,7 +624,7 @@ move (Unit * moving_unit, Mcrd destination){
         mcrd2index(*current, *next)) );
   }
   while(path.count > 0)
-    l_delete_node(&path, path.h);
+    delete_node(&path, path.h);
 }
 
 /* [a]ttacker, [d]efender */
@@ -683,7 +683,7 @@ add_unit (
   u->energy     = utypes[type].energy;
   memcpy(u->skills, utypes[type].skills,
       u->skills_n*sizeof(Skill));
-  l_push(&world->units, u);
+  push_node(&world->units, u);
 }
 
 bool
