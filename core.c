@@ -105,6 +105,8 @@ apply_melee(Event e){
   Unit * d = id2unit(e.melee.d);
   a->count -= e.melee.attackers_killed;
   d->count -= e.melee.defenders_killed;
+  a->energy -= 2;
+  d->energy -= 2;
   a->can_attack = false;
 }
 
