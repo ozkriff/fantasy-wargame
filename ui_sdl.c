@@ -104,6 +104,30 @@ free_sprites (void){
 
 static void
 load_sprites (void){
+  char *peasant        = "img/human/peasant.png";
+  char *swordsman      = "img/human/swordsman.png";
+  char *foot_knight    = "img/human/foot_knight.png";
+  char *poor_archer    = "img/human/poor_archer.png";
+  char *scout          = "img/human/scout.png";
+  char *goblin         = "img/goblin/normal.png";
+  char *goblin_slinger = "img/goblin/slinger.png";
+  char *goblin_scout   = "img/goblin/scout.png";
+  char *orc            = "img/orc/normal.png";
+  char *armored_orc    = "img/orc/armored.png";
+  char *crazy_orc      = "img/orc/crazy.png";
+  char *troll          = "img/troll/normal.png";
+  img_units[U_PEASANT       ] = loadimg(peasant);
+  img_units[U_SWORDSMAN     ] = loadimg(swordsman);
+  img_units[U_FOOT_KNIGHT   ] = loadimg(foot_knight);
+  img_units[U_POOR_ARCHER   ] = loadimg(poor_archer);
+  img_units[U_SCOUT         ] = loadimg(scout);
+  img_units[U_GOBLIN        ] = loadimg(goblin);
+  img_units[U_GOBLIN_SLINGER] = loadimg(goblin_slinger);
+  img_units[U_GOBLIN_SCOUT  ] = loadimg(goblin_scout);
+  img_units[U_ORC           ] = loadimg(orc);
+  img_units[U_ARMORED_ORC   ] = loadimg(armored_orc);
+  img_units[U_CRAZY_ORC     ] = loadimg(crazy_orc);
+  img_units[U_TROLL         ] = loadimg(troll);
   img_tiles[T_GRASS    ] = loadimg("img/grass.png"     );
   img_tiles[T_FOREST   ] = loadimg("img/tree.png"      );
   img_tiles[T_WATER    ] = loadimg("img/water.png"     );
@@ -116,18 +140,6 @@ load_sprites (void){
   img_rings[0]           = loadimg("img/ring_red.png"  );
   img_rings[1]           = loadimg("img/ring_blue.png" );
   img_rings[2]           = loadimg("img/ring_green.png");
-  img_units[U_PEASANT       ] = loadimg("img/human/peasant.png"    );
-  img_units[U_SWORDSMAN     ] = loadimg("img/human/swordsman.png"  );
-  img_units[U_FOOT_KNIGHT   ] = loadimg("img/human/foot_knight.png");
-  img_units[U_POOR_ARCHER   ] = loadimg("img/human/poor_archer.png");
-  img_units[U_SCOUT         ] = loadimg("img/human/scout.png"      );
-  img_units[U_GOBLIN        ] = loadimg("img/goblin/normal.png"    );
-  img_units[U_GOBLIN_SLINGER] = loadimg("img/goblin/slinger.png"   );
-  img_units[U_GOBLIN_SCOUT  ] = loadimg("img/goblin/scout.png"     );
-  img_units[U_ORC           ] = loadimg("img/orc/normal.png"       );
-  img_units[U_ARMORED_ORC   ] = loadimg("img/orc/armored.png"      );
-  img_units[U_CRAZY_ORC     ] = loadimg("img/orc/crazy.png"        );
-  img_units[U_TROLL         ] = loadimg("img/troll/normal.png"     );
 }
 
 static Scrd
