@@ -24,7 +24,7 @@ bool    is_local = true;
 bool    is_client_active;
 Unit *  selected_unit = NULL;
 
-static FILE * logfile;
+static FILE * logfile = NULL;
 static Scenario *current_scenario = NULL;
 
 /* Find unit's node in cw->units list. */
@@ -564,6 +564,7 @@ add_event (Event e){
 void
 cleanup (void){
   fclose(logfile);
+  logfile = NULL;
   while(worlds.count > 0){
     World * w = worlds.h->d;
     while(w->eq.count > 0)
@@ -753,6 +754,9 @@ set_scenario_id (int id){
   apply_scenario_to_all_worlds(current_scenario);
   updatefog(cw->id);
   update_units_visibility();
+  if(logfile)
+    die("core: set_scenario_id(): logfile != NULL.");
+  logfile = fopen("log", "w");
 }
 
 void
@@ -760,7 +764,6 @@ init (void){
   srand( (unsigned int)time(NULL) );
   init_unit_types();
   init_scenarios();
-  logfile = fopen("log", "w");
   is_client_active = true;
 }
 

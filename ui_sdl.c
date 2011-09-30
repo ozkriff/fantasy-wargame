@@ -519,7 +519,14 @@ common_keys (SDL_KeyboardEvent e){
   switch(e.keysym.sym) {
     case SDLK_ESCAPE:
     case SDLK_q:
-      done = true;
+      if(screen_id == SCREEN_MENU)
+        done = true;
+      else{
+        selected_unit = NULL;
+        selected_tile = mk_mcrd(0, 0);
+        cleanup();
+        screen_id = SCREEN_MENU;
+      }
       break;
     case SDLK_UP:    map_offset.y += 2*96*3/4; break;
     case SDLK_DOWN:  map_offset.y -= 2*96*3/4; break;
@@ -701,7 +708,6 @@ main (void){
   init_draw();
   mainloop();
   free_sprites();
-  cleanup();
   return(EXIT_SUCCESS);
 }
 
