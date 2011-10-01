@@ -60,6 +60,7 @@ static int final_eindex;
 static int steps = 6;
 
 static bool done;
+static bool is_dirty = true;
 
 static Scrd mouse_pos = {0, 0};
 
@@ -659,6 +660,7 @@ sdl_events (void){
             32, SDL_SWSURFACE | SDL_RESIZABLE);
         break;
     }
+    is_dirty = true;
   }
 }
 
@@ -682,17 +684,21 @@ get_last_event_index (Event e){
 
 static void
 events (void){
-  if(ui_mode == MODE_SHOW_EVENT)
+  if(ui_mode == MODE_SHOW_EVENT){
     eindex++;
+    is_dirty = true;
+  }
   if(ui_mode==MODE_SHOW_EVENT && eindex >= final_eindex){
     apply_event(e);
     ui_mode = MODE_SELECT;
+    is_dirty = true;
   }
   if(ui_mode == MODE_SELECT && !is_eq_empty()){
     e = get_next_event();
     ui_mode = MODE_SHOW_EVENT;
     eindex = 0;
     final_eindex = get_last_event_index(e);
+    is_dirty = true;
   }
 }
 
@@ -720,10 +726,14 @@ mainloop (void){
       if(!is_local)
         do_network();
       events();
-      scroll_map(mouse_pos);
-      draw();
+      if(is_dirty){
+        draw();
+        scroll_map(mouse_pos);
+        is_dirty = false;
+      }
     }else{
       draw_menu();
+      is_dirty = false;
     }
     SDL_Delay(1*33);
   }
