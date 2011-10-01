@@ -640,7 +640,7 @@ get_last_event_index (Event e){
   if(e.t == E_ENDTURN || e.t == E_DEATH)
     n = 0;
   else if(e.t == E_MOVE || e.t == E_MELEE)
-    n = steps-1;
+    n = steps;
   else if(e.t == E_RANGE){
     Mcrd a = id2unit(e.range.a)->m;
     Mcrd b = id2unit(e.range.d)->m;
