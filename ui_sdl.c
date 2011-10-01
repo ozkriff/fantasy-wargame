@@ -405,12 +405,25 @@ draw_range_event (void){
 
 static void
 draw_event (void){
-  if(e.t==E_MOVE ) 
-    draw_move_event ();
-  if(e.t==E_MELEE) 
-    draw_melee_event();
-  if(e.t==E_RANGE) 
-    draw_range_event();
+  switch(e.t){
+    case E_MOVE:
+      draw_move_event();
+      break;
+    case E_MELEE:
+      draw_melee_event();
+      break;
+    case E_RANGE:
+      draw_range_event();
+      break;
+    case E_ENDTURN:
+      break;
+    case E_DEATH:
+      break;
+    default:
+      die("ui_sdl: draw_event(): "
+          "Unknown event type: '%i'\n", e.t);
+      break;
+  }
 }
 
 static void
