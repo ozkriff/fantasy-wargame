@@ -467,7 +467,6 @@ init_draw (void){
   SDL_Init(SDL_INIT_VIDEO);
   IMG_Init(IMG_INIT_PNG);
   TTF_Init();
-  atexit(SDL_Quit);
   screen = SDL_SetVideoMode(640, 480,
       32, SDL_SWSURFACE | SDL_RESIZABLE);
   font = TTF_OpenFont("font.ttf", 12);
@@ -708,6 +707,10 @@ main (void){
   init_draw();
   mainloop();
   free_sprites();
+  SDL_Quit();
+  IMG_Quit();
+  TTF_CloseFont(font);
+  TTF_Quit();
   return(EXIT_SUCCESS);
 }
 
