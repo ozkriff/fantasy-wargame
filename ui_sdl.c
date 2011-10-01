@@ -161,8 +161,8 @@ sdist (Scrd a, Scrd b) {
 static Scrd
 map2scr (Mcrd map) {
   Scrd scr;
-  scr.y = map_offset.y  + map.y*(96*3/4);
-  scr.x = map_offset.x  + map.x*(96);
+  scr.y = map_offset.y + map.y*(96*3/4) + 96/2;
+  scr.x = map_offset.x + map.x*(96)     + 92/2;
   if(map.y%2) scr.x -= 96/2;
   return(scr);
 }
@@ -175,8 +175,6 @@ scr2map (Scrd s) {
   Mcrd m;
   FOR_EACH_MCRD(m){
     Scrd wp = map2scr(m);
-    wp.x += 96/2;
-    wp.y += 96/2;
     if(sdist(s, wp) < min_dist){
       min_dist = sdist(s, wp);
       min = m;
@@ -234,8 +232,8 @@ bzline (Scrd a, Scrd b, Uint32 clr){
 static void
 draw_img (Img src, Scrd s) {
   SDL_Rect rect;
-  rect.x = (Sint16)s.x;
-  rect.y = (Sint16)s.y;
+  rect.x = (Sint16)s.x - src->w/2;
+  rect.y = (Sint16)s.y - src->h/2;
   SDL_BlitSurface(src, NULL, screen, &rect);
 }
 
@@ -260,11 +258,8 @@ draw_map (void){
 /* Draw line between 2 tiles. */
 static void 
 mbzline (Mcrd a, Mcrd b){
-  Scrd sa = map2scr(a), sb = map2scr(b);
-  sa.x += 96/2;
-  sa.y += 96/2;
-  sb.x += 96/2;
-  sb.y += 96/2;
+  Scrd sa = map2scr(a);
+  Scrd sb = map2scr(b);
   bzline(sa, sb, red);
 }
 
@@ -302,7 +297,7 @@ draw_unit (Unit *u){
   if(1){
     char str[100];
     sprintf(str, "%i,%i", u->count, u->energy);
-    text(str, mk_scrd(s.x+10, s.y+60), false);
+    text(str, mk_scrd(s.x, s.y+20), false);
   }
 }
 
@@ -395,7 +390,7 @@ draw_range_event (void){
   int dist  = mdist(a->m, d->m);
   int xstep = (sd.x-sa.x)/final_eindex;
   int ystep = (sd.y-sa.y)/final_eindex;
-  Scrd s    = mk_scrd(sa.x+48, sa.y+48);
+  Scrd s    = sa;
   Scrd new_s;
   int i;
   for(i=0; i<eindex; i++, s=new_s){
@@ -405,7 +400,7 @@ draw_range_event (void){
     new_s       = mk_scrd(s.x+xstep, s.y+ystep-vc_diff);
     bzline(s, new_s, white);
   }
-  draw_img(img_arrow, mk_scrd(s.x-48, s.y-48));
+  draw_img(img_arrow, s);
 }
 
 static void
