@@ -352,17 +352,17 @@ maptext (void){
 */
 
 static void
-draw_move_event (void){
-  Unit * u = id2unit(e.move.u);
-  Scrd s = mbetween(u->m, neib(u->m, e.move.dir), eindex);
+draw_move_event (Event_move e){
+  Unit * u = id2unit(e.u);
+  Scrd s = mbetween(u->m, neib(u->m, e.dir), eindex);
   draw_img(img_rings[u->player], s);
   draw_img(type2img(u->t), s);
 }
 
 static void
-draw_melee_event (void){
-  Unit *a = id2unit(e.melee.a);
-  Unit *d = id2unit(e.melee.d);
+draw_melee_event (Event_melee e){
+  Unit *a = id2unit(e.a);
+  Unit *d = id2unit(e.d);
   int i = (eindex<steps/2) ? (eindex) : (steps-eindex);
   draw_img(img_rings[a->player], map2scr(a->m));
   draw_img(type2img(a->t), mbetween(a->m, d->m, i));
@@ -382,9 +382,9 @@ get_vc (int dist, int step, int final_step){
 }
 
 static void
-draw_range_event (void){
-  Unit *a   = id2unit(e.range.a);
-  Unit *d   = id2unit(e.range.d);
+draw_range_event (Event_range e){
+  Unit *a   = id2unit(e.a);
+  Unit *d   = id2unit(e.d);
   Scrd sa   = map2scr(a->m);
   Scrd sd   = map2scr(d->m);
   int dist  = mdist(a->m, d->m);
@@ -407,13 +407,13 @@ static void
 draw_event (void){
   switch(e.t){
     case E_MOVE:
-      draw_move_event();
+      draw_move_event(e.move);
       break;
     case E_MELEE:
-      draw_melee_event();
+      draw_melee_event(e.melee);
       break;
     case E_RANGE:
-      draw_range_event();
+      draw_range_event(e.range);
       break;
     case E_ENDTURN:
       break;
