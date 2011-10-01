@@ -117,7 +117,7 @@ init_poor_archer (void){
   u.ter_ms [T_HILLS    ] =   0;
   u.ter_ms [T_MOUNTEENS] =   0;
   u.skills_n             =   1;
-  u.skills[0] = mk_skill_range(3, 4, 3);
+  u.skills[0] = mk_skill_range(5, 5, 3);
   return(u);
 }
 
@@ -145,9 +145,10 @@ init_scout (void){
   u.ter_ms [T_WATER    ] =  -2;
   u.ter_ms [T_HILLS    ] =   0;
   u.ter_ms [T_MOUNTEENS] =   0;
-  u.skills_n             =   2;
+  u.skills_n             =   3;
   u.skills[0] = mk_skill_bool(S_IGNR);
   u.skills[1] = mk_skill_bool(S_INVIS);
+  u.skills[2] = mk_skill_range(5, 4, 2);
   return(u);
 }
 
