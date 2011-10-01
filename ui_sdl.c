@@ -373,18 +373,39 @@ draw_melee_event (void){
   draw_img(type2img(a->t), mbetween(a->m, d->m, i));
 }
 
+/*get vertical correction.
+  used in draw_range_event()
+  dist       - distance (in pixels)
+  step       - current step (index)
+  final_step - total steps count
+*/
+static int
+get_vc (int dist, int step, int final_step){
+  float n = sin( step * 3.14 / final_step );
+  float vc = n * dist * 28;
+  return((int)vc);
+}
+
 static void
 draw_range_event (void){
-  Unit *u1 = id2unit(e.range.a);
-  Unit *u2 = id2unit(e.range.d);
-  int dist = mdist(u1->m, u2->m);
-  /*[v]ertical [c]orrection*/
-  int vc   = (int)(dist*14 * sin((eindex*3.14)/final_eindex));
-  Scrd a   = map2scr(u1->m);
-  Scrd b   = map2scr(u2->m);
-  a.x     += ((b.x-a.x)*eindex)/final_eindex;
-  a.y     += ((b.y-a.y)*eindex)/final_eindex;
-  draw_img(img_arrow, mk_scrd(a.x, a.y-vc));
+  Unit *a   = id2unit(e.range.a);
+  Unit *d   = id2unit(e.range.d);
+  Scrd sa   = map2scr(a->m);
+  Scrd sd   = map2scr(d->m);
+  int dist  = mdist(a->m, d->m);
+  int xstep = (sd.x-sa.x)/final_eindex;
+  int ystep = (sd.y-sa.y)/final_eindex;
+  Scrd s    = mk_scrd(sa.x+48, sa.y+48);
+  Scrd new_s;
+  int i;
+  for(i=0; i<eindex; i++, s=new_s){
+    int vc_old  = get_vc(dist, i, final_eindex);
+    int vc_new  = get_vc(dist, i+1, final_eindex);
+    int vc_diff = vc_new - vc_old;
+    new_s       = mk_scrd(s.x+xstep, s.y+ystep-vc_diff);
+    bzline(s, new_s, white);
+  }
+  draw_img(img_arrow, mk_scrd(s.x-48, s.y-48));
 }
 
 static void
