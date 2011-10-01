@@ -21,6 +21,7 @@ mk_event_move (Byte * d){
   e.t    = E_MOVE;
   e.u    = (int)d[1];
   e.dir  = (int)d[2];
+  e.cost = (int)d[3];
   return(e);
 }
 
@@ -64,11 +65,12 @@ mk_event_death (Byte *d){
 
 static void
 send_move (Event_move e){
-  Byte size = 3;
-  Byte d[3];
+  Byte size = 4;
+  Byte d[4];
   d[0] = (Byte)e.t;
   d[1] = (Byte)e.u;
   d[2] = (Byte)e.dir;
+  d[3] = (Byte)e.cost;
   SDLNet_TCP_Send(socket, &size, 1);
   SDLNet_TCP_Send(socket, d, (int)size);
 }
