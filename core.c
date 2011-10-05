@@ -422,7 +422,7 @@ new_unit_id (World *w){
 Skill
 mk_skill_range (int skill, int strength, int range){
   Skill s;
-  s.range.t = S_RANGE;
+  s.t = S_RANGE;
   s.range.skill = skill;
   s.range.strength = strength;
   s.range.range = range;

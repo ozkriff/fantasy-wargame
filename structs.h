@@ -13,7 +13,7 @@ typedef Vec2i Mcrd;
 #define S_ARMPIERC  6
 #define S_NORETURN  7
 
-typedef struct { int t; int skill, strength, range; } Skill_range;
+typedef struct { int skill, strength, range; } Skill_range;
 
 typedef union {
   int t; /* type: S_* */
