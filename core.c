@@ -23,6 +23,7 @@ World * cw = NULL; /* current world */
 bool    is_local = true;
 bool    is_client_active;
 Unit *  selected_unit = NULL;
+int     last_event_index = 0;
 
 static FILE * logfile = NULL;
 static Scenario *current_scenario = NULL;
@@ -556,6 +557,8 @@ event2log (Event e){
 
 void
 add_event (Event e){
+  e.id = last_event_index;
+  last_event_index++;
   add_event_local(e);
   event2log(e);
   if(!is_local)

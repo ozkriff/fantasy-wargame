@@ -88,6 +88,7 @@ typedef struct { Unit u; } Event_death;
 
 typedef struct {
   int t; /* E_ */
+  int id;
   union {
     Event_move   move;
     Event_melee  melee;
