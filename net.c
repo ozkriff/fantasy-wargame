@@ -19,9 +19,9 @@ static Event
 mk_event_move (Byte * d){
   Event e;
   e.t = E_MOVE;
-  e.move.u    = (int)d[1];
-  e.move.dir  = (int)d[2];
-  e.move.cost = (int)d[3];
+  e.e.move.u    = (int)d[1];
+  e.e.move.dir  = (int)d[2];
+  e.e.move.cost = (int)d[3];
   return(e);
 }
 
@@ -29,9 +29,9 @@ static Event
 mk_event_range (Byte * d){
   Event e;
   e.t = E_RANGE;
-  e.range.a   = (int)d[1];
-  e.range.d   = (int)d[2];
-  e.range.dmg = (int)d[3];
+  e.e.range.a   = (int)d[1];
+  e.e.range.d   = (int)d[2];
+  e.e.range.dmg = (int)d[3];
   return(e);
 }
 
@@ -39,10 +39,10 @@ static Event
 mk_event_melee (Byte * d){
   Event e;
   e.t = E_MELEE;
-  e.melee.a                = (int)d[1];
-  e.melee.d                = (int)d[2];
-  e.melee.attackers_killed = (int)d[3];
-  e.melee.defenders_killed = (int)d[4];
+  e.e.melee.a                = (int)d[1];
+  e.e.melee.d                = (int)d[2];
+  e.e.melee.attackers_killed = (int)d[3];
+  e.e.melee.defenders_killed = (int)d[4];
   return(e);
 }
 
@@ -50,8 +50,8 @@ static Event
 mk_event_endturn (Byte * d){
   Event e;
   e.t = E_ENDTURN;
-  e.endturn.old_player = (int)d[1];
-  e.endturn.new_player = (int)d[2];
+  e.e.endturn.old_player = (int)d[1];
+  e.e.endturn.new_player = (int)d[2];
   return(e);
 }
 
@@ -59,7 +59,7 @@ static Event
 mk_event_death (Byte *d){
   Event e;
   e.t = E_DEATH;
-  e.death.u = *id2unit((int)d[1]);
+  e.e.death.u = *id2unit((int)d[1]);
   return(e);
 }
 
@@ -146,11 +146,11 @@ print_data (Byte * data, Byte size){
 void
 send_event (Event e) {
   switch(e.t){
-    case E_MELEE:   send_melee(e.melee);     break;
-    case E_MOVE:    send_move(e.move);       break;
-    case E_RANGE:   send_range(e.range);     break;
-    case E_ENDTURN: send_endturn(e.endturn); break;
-    case E_DEATH:   send_death(e.death);     break;
+    case E_MELEE:   send_melee(e.e.melee);     break;
+    case E_MOVE:    send_move(e.e.move);       break;
+    case E_RANGE:   send_range(e.e.range);     break;
+    case E_ENDTURN: send_endturn(e.e.endturn); break;
+    case E_DEATH:   send_death(e.e.death);     break;
     default:
       die("net: send_event(): "
           "Unknown event '%i'\n", e.t);

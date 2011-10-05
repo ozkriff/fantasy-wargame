@@ -308,9 +308,9 @@ draw_units (void){
   FOR_EACH_NODE(cw->units, node){
     Unit * u = node->d;
     if(ui_mode == MODE_SHOW_EVENT){
-      if(e.t==E_MOVE  && u->id == e.move.u)
+      if(e.t==E_MOVE  && u->id == e.e.move.u)
         continue;
-      if(e.t==E_MELEE && u->id == e.melee.a)
+      if(e.t==E_MELEE && u->id == e.e.melee.a)
         continue;
     }
     if(u->is_visible){
@@ -408,13 +408,13 @@ static void
 draw_event (void){
   switch(e.t){
     case E_MOVE:
-      draw_move_event(e.move);
+      draw_move_event(e.e.move);
       break;
     case E_MELEE:
-      draw_melee_event(e.melee);
+      draw_melee_event(e.e.melee);
       break;
     case E_RANGE:
-      draw_range_event(e.range);
+      draw_range_event(e.e.range);
       break;
     case E_ENDTURN:
       break;
@@ -672,8 +672,8 @@ get_last_event_index (Event e){
   else if(e.t == E_MOVE || e.t == E_MELEE)
     n = steps;
   else if(e.t == E_RANGE){
-    Mcrd a = id2unit(e.range.a)->m;
-    Mcrd b = id2unit(e.range.d)->m;
+    Mcrd a = id2unit(e.e.range.a)->m;
+    Mcrd b = id2unit(e.e.range.d)->m;
     n = mdist(a, b)*steps;
   }else{
     die("ui_sdl: get_last_event_index(): "

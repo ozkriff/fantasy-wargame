@@ -87,13 +87,15 @@ typedef struct { int a, d; int dmg; }  Event_range;
 typedef struct { int old_player, new_player; } Event_endturn;
 typedef struct { Unit u; } Event_death;
 
-typedef union {
+typedef struct {
   int t; /* E_ */
-  Event_move   move;
-  Event_melee  melee;
-  Event_range  range;
-  Event_endturn endturn;
-  Event_death  death;
+  union {
+    Event_move   move;
+    Event_melee  melee;
+    Event_range  range;
+    Event_endturn endturn;
+    Event_death  death;
+  } e;
 } Event;
 
 typedef struct {

@@ -216,8 +216,8 @@ static Event
 mk_event_endturn (int old_id, int new_id){
   Event e;
   e.t = E_ENDTURN;
-  e.endturn.old_player = old_id;
-  e.endturn.new_player = new_id;
+  e.e.endturn.old_player = old_id;
+  e.e.endturn.new_player = new_id;
   return(e);
 }
 
@@ -225,10 +225,10 @@ static Event
 mk_event_move (Unit * u, int dir){
   int tile_type = tile(neib(u->m, dir))->t;
   Event e;
-  e.move.t    = E_MOVE;
-  e.move.u    = u->id;
-  e.move.dir  = dir;
-  e.move.cost = utypes[u->t].ter_mvp[tile_type];
+  e.e.move.t    = E_MOVE;
+  e.e.move.u    = u->id;
+  e.e.move.dir  = dir;
+  e.e.move.cost = utypes[u->t].ter_mvp[tile_type];
   return(e);
 }
 
@@ -241,10 +241,10 @@ mk_event_melee (
 {
   Event e;
   e.t = E_MELEE;
-  e.melee.a                = a->id;
-  e.melee.d                = d->id;
-  e.melee.attackers_killed = attackers_killed;
-  e.melee.defenders_killed = defenders_killed;
+  e.e.melee.a                = a->id;
+  e.e.melee.d                = d->id;
+  e.e.melee.attackers_killed = attackers_killed;
+  e.e.melee.defenders_killed = defenders_killed;
   return(e);
 }
 
@@ -252,9 +252,9 @@ static Event
 mk_event_range (Unit * a, Unit * d, int dmg){
   Event e;
   e.t = E_RANGE;
-  e.range.a   = a->id;
-  e.range.d   = d->id;
-  e.range.dmg = dmg;
+  e.e.range.a   = a->id;
+  e.e.range.d   = d->id;
+  e.e.range.dmg = dmg;
   return(e);
 }
 
@@ -326,7 +326,7 @@ static Event
 mk_event_death (Unit *u){
   Event e;
   e.t = E_DEATH;
-  e.death.u = *u;
+  e.e.death.u = *u;
   return(e);
 }
 
@@ -449,9 +449,9 @@ mk_skill_bool (int type){
 static bool
 is_event_visible (Event e){
   switch(e.t){
-    case E_MELEE:   return(is_melee_visible(e.melee));
-    case E_RANGE:   return(is_range_visible(e.range));
-    case E_MOVE:    return(is_move_visible(e.move));
+    case E_MELEE:   return(is_melee_visible(e.e.melee));
+    case E_RANGE:   return(is_range_visible(e.e.range));
+    case E_MOVE:    return(is_move_visible(e.e.move));
     case E_DEATH:   return(true);
     case E_ENDTURN: return(true);
     default:
@@ -526,25 +526,26 @@ event2log (Event e){
   switch(e.t){
     case E_MOVE:
       fprintf(logfile, "MOVE  u=%i, dir=%i, cost=%i\n",
-          e.move.u, e.move.dir, e.move.cost );
+          e.e.move.u, e.e.move.dir, e.e.move.cost );
       break;
     case E_MELEE:
       fprintf(logfile, "MELEE a=%i, d=%i, ak=%i, dk=%i\n",
-          e.melee.a,
-          e.melee.d,
-          e.melee.attackers_killed,
-          e.melee.defenders_killed );
+          e.e.melee.a,
+          e.e.melee.d,
+          e.e.melee.attackers_killed,
+          e.e.melee.defenders_killed );
        break;
     case E_RANGE:
       fprintf(logfile, "RANGE a=%i, d=%i, dmg=%i\n",
-          e.range.a, e.range.d, e.range.dmg );
+          e.e.range.a, e.e.range.d, e.e.range.dmg );
       break;
     case E_ENDTURN:
       fprintf(logfile, "TURN %i --> %i\n",
-          e.endturn.old_player, e.endturn.new_player );
+          e.e.endturn.old_player,
+          e.e.endturn.new_player );
       break;
     case E_DEATH:
-      fprintf(logfile, "KILLED %i\n", e.death.u.id);
+      fprintf(logfile, "KILLED %i\n", e.e.death.u.id);
       break;
     default:
       die("core: event2log(): "
@@ -652,11 +653,11 @@ attack (Unit * a, Unit * d){
 void
 apply_event (Event e){
   switch(e.t){
-    case E_MOVE:    apply_move(e.move);       break;
-    case E_MELEE:   apply_melee(e.melee);     break;
-    case E_RANGE:   apply_range(e.range);     break;
-    case E_ENDTURN: apply_endturn(e.endturn); break;
-    case E_DEATH:   apply_death(e.death);     break;
+    case E_MOVE:    apply_move(e.e.move);       break;
+    case E_MELEE:   apply_melee(e.e.melee);     break;
+    case E_RANGE:   apply_range(e.e.range);     break;
+    case E_ENDTURN: apply_endturn(e.e.endturn); break;
+    case E_DEATH:   apply_death(e.e.death);     break;
     default:
       die("core: apply_event(): "
           "unknown event '%i'\n", e.t);
