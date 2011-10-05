@@ -215,7 +215,7 @@ check_win (void){
 static Event
 mk_event_endturn (int old_id, int new_id){
   Event e;
-  e.endturn.t          = E_ENDTURN;
+  e.t = E_ENDTURN;
   e.endturn.old_player = old_id;
   e.endturn.new_player = new_id;
   return(e);
@@ -240,7 +240,7 @@ mk_event_melee (
     int defenders_killed)
 {
   Event e;
-  e.melee.t                = E_MELEE;
+  e.t = E_MELEE;
   e.melee.a                = a->id;
   e.melee.d                = d->id;
   e.melee.attackers_killed = attackers_killed;
@@ -251,7 +251,7 @@ mk_event_melee (
 static Event
 mk_event_range (Unit * a, Unit * d, int dmg){
   Event e;
-  e.range.t   = E_RANGE;
+  e.t = E_RANGE;
   e.range.a   = a->id;
   e.range.d   = d->id;
   e.range.dmg = dmg;

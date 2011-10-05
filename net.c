@@ -15,51 +15,51 @@
 static TCPsocket socket;
 static SDLNet_SocketSet sockets;
 
-static Event_move
+static Event
 mk_event_move (Byte * d){
-  Event_move e;
-  e.t    = E_MOVE;
-  e.u    = (int)d[1];
-  e.dir  = (int)d[2];
-  e.cost = (int)d[3];
+  Event e;
+  e.t = E_MOVE;
+  e.move.u    = (int)d[1];
+  e.move.dir  = (int)d[2];
+  e.move.cost = (int)d[3];
   return(e);
 }
 
-static Event_range
+static Event
 mk_event_range (Byte * d){
-  Event_range e;
-  e.t    = E_RANGE;
-  e.a    = (int)d[1];
-  e.d    = (int)d[2];
-  e.dmg  = (int)d[3];
+  Event e;
+  e.t = E_RANGE;
+  e.range.a   = (int)d[1];
+  e.range.d   = (int)d[2];
+  e.range.dmg = (int)d[3];
   return(e);
 }
 
-static Event_melee
+static Event
 mk_event_melee (Byte * d){
-  Event_melee e;
-  e.t                = E_MELEE;
-  e.a                = (int)d[1];
-  e.d                = (int)d[2];
-  e.attackers_killed = (int)d[3];
-  e.defenders_killed = (int)d[4];
+  Event e;
+  e.t = E_MELEE;
+  e.melee.a                = (int)d[1];
+  e.melee.d                = (int)d[2];
+  e.melee.attackers_killed = (int)d[3];
+  e.melee.defenders_killed = (int)d[4];
   return(e);
 }
 
-static Event_endturn
+static Event
 mk_event_endturn (Byte * d){
-  Event_endturn e;
-  e.t          = E_ENDTURN;
-  e.old_player = (int)d[1];
-  e.new_player = (int)d[2];
+  Event e;
+  e.t = E_ENDTURN;
+  e.endturn.old_player = (int)d[1];
+  e.endturn.new_player = (int)d[2];
   return(e);
 }
 
-static Event_death
+static Event
 mk_event_death (Byte *d){
-  Event_death e;
+  Event e;
   e.t = E_DEATH;
-  e.u = *id2unit((int)d[1]);
+  e.death.u = *id2unit((int)d[1]);
   return(e);
 }
 
@@ -79,7 +79,7 @@ static void
 send_melee (Event_melee e){
   Byte size = 5;
   Byte d[5];
-  d[0] = (Byte)e.t;
+  d[0] = E_MELEE;
   d[1] = (Byte)e.a;
   d[2] = (Byte)e.d;
   d[3] = (Byte)e.attackers_killed;
@@ -92,7 +92,7 @@ static void
 send_range (Event_range e){
   Byte size = 4;
   Byte d[4];
-  d[0] = (Byte)e.t;
+  d[0] = E_RANGE;
   d[1] = (Byte)e.a;
   d[2] = (Byte)e.d;
   d[3] = (Byte)e.dmg;
@@ -104,7 +104,7 @@ static void
 send_endturn (Event_endturn e){
   Byte size = 3;
   Byte d[3];
-  d[0] = (Byte)e.t;
+  d[0] = E_ENDTURN;
   d[1] = (Byte)e.old_player;
   d[2] = (Byte)e.new_player;
   SDLNet_TCP_Send(socket, &size, 1);
@@ -115,7 +115,7 @@ static void
 send_death (Event_death e){
   Byte size = 2;
   Byte d[2];
-  d[0] = (Byte)e.t;
+  d[0] = E_DEATH;
   d[1] = (Byte)e.u.id;
   SDLNet_TCP_Send(socket, &size, 1);
   SDLNet_TCP_Send(socket, d, (int)size);
@@ -169,11 +169,11 @@ mk_event (Byte * d){
   Event e;
   int type = (int)d[0];
   switch(type){
-    case E_MOVE:    e.move    = mk_event_move(d);    break;
-    case E_MELEE:   e.melee   = mk_event_melee(d);   break;
-    case E_RANGE:   e.range   = mk_event_range(d);   break;
-    case E_ENDTURN: e.endturn = mk_event_endturn(d); break;
-    case E_DEATH:   e.death   = mk_event_death(d);   break;
+    case E_MOVE:    e = mk_event_move(d);    break;
+    case E_MELEE:   e = mk_event_melee(d);   break;
+    case E_RANGE:   e = mk_event_range(d);   break;
+    case E_ENDTURN: e = mk_event_endturn(d); break;
+    case E_DEATH:   e = mk_event_death(d);   break;
     default:
       die("net: mk_event(): "
           "Unknown event '%i'\n", type);

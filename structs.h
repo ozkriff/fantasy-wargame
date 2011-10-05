@@ -79,14 +79,13 @@ typedef struct {
 }  Event_move;
 
 typedef struct {
-  int t;
   int a, d; /* attacker, defender */
   int attackers_killed;
   int defenders_killed;
 } Event_melee;
-typedef struct { int t; int a, d; int dmg; }  Event_range;
-typedef struct { int t; int old_player, new_player; } Event_endturn;
-typedef struct { int t; Unit u; } Event_death;
+typedef struct { int a, d; int dmg; }  Event_range;
+typedef struct { int old_player, new_player; } Event_endturn;
+typedef struct { Unit u; } Event_death;
 
 typedef union {
   int t; /* E_ */
