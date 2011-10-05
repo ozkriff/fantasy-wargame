@@ -67,7 +67,7 @@ static void
 send_move (Event_move e){
   Byte size = 4;
   Byte d[4];
-  d[0] = (Byte)e.t;
+  d[0] = E_MOVE;
   d[1] = (Byte)e.u;
   d[2] = (Byte)e.dir;
   d[3] = (Byte)e.cost;

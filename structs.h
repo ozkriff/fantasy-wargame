@@ -72,7 +72,6 @@ typedef struct {
 #define E_DEATH   4
 
 typedef struct {
-  int t;
   int u; /*unit's id*/
   int dir; /*direction index*/
   int cost;

@@ -225,7 +225,7 @@ static Event
 mk_event_move (Unit * u, int dir){
   int tile_type = tile(neib(u->m, dir))->t;
   Event e;
-  e.e.move.t    = E_MOVE;
+  e.t = E_MOVE;
   e.e.move.u    = u->id;
   e.e.move.dir  = dir;
   e.e.move.cost = utypes[u->t].ter_mvp[tile_type];
