@@ -561,8 +561,8 @@ common_keys (SDL_KeyboardEvent e){
       break;
     case SDLK_UP:    map_offset.y += 2*96*3/4; break;
     case SDLK_DOWN:  map_offset.y -= 2*96*3/4; break;
-    case SDLK_LEFT:  map_offset.x += 96;       break;
-    case SDLK_RIGHT: map_offset.x -= 96;       break;
+    case SDLK_LEFT:  map_offset.x += 2*96;     break;
+    case SDLK_RIGHT: map_offset.x -= 2*96;     break;
     default: break;
   }
 }
