@@ -13,7 +13,11 @@ typedef Vec2i Mcrd;
 #define S_ARMPIERC  6
 #define S_NORETURN  7
 
-typedef struct { int skill, strength, range; } Skill_range;
+typedef struct {
+  int skill;
+  int strength;
+  int range;
+} Skill_range;
 
 typedef union {
   int t; /* type: S_* */
@@ -82,9 +86,20 @@ typedef struct {
   int attackers_killed;
   int defenders_killed;
 } Event_melee;
-typedef struct { int a, d; int dmg; }  Event_range;
-typedef struct { int old_player, new_player; } Event_endturn;
-typedef struct { int id; } Event_death;
+
+typedef struct {
+  int a, d;
+  int dmg;
+} Event_range;
+
+typedef struct {
+  int old_player;
+  int new_player;
+} Event_endturn;
+
+typedef struct {
+  int id;
+} Event_death;
 
 typedef struct {
   int t; /* E_ */
