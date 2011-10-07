@@ -18,20 +18,23 @@
 
 Unit_type utypes[30];
 Mcrd    map_size;
-List    worlds;
-World * cw = NULL; /* current world */
+Tile   *map;
 bool    is_local = true;
 bool    is_client_active;
 Unit *  selected_unit = NULL;
-int     last_event_index = 0;
+List    units = {0, 0, 0};
+Player *player = NULL;
 
 static FILE * logfile = NULL;
 static Scenario *current_scenario = NULL;
+static List      dead_units = {0, 0, 0};
+static List      players = {0, 0, 0};
+static List      eventlist = {0, 0, 0};
 
-/* Find unit's node in cw->units list. */
+/* Find unit's node in units list. */
 static Node *
 unit2node (Unit * u){
-  Node * n = cw->units.h;
+  Node * n = units.h;
   while(u != (Unit*)n->d)
     n = n->n;
   return n;
@@ -39,10 +42,12 @@ unit2node (Unit * u){
 
 static void
 kill_unit (Unit * u){
+  Node *n = extruct_node(&units, unit2node(u));
+  push_node(&dead_units, n);
   if(u == selected_unit)
     selected_unit = NULL;
-  delete_node(&cw->units, unit2node(u));
-  fill_map(selected_unit);
+  else
+    fill_map(selected_unit);
 }
 
 static void
@@ -65,7 +70,7 @@ apply_move (Event_move e){
   u->energy -= e.cost;
   u->m = neib(u->m, e.dir);
   fill_map(selected_unit);
-  if(u->player==cw->id)
+  if(u->player==player->id)
     update_fog_after_move(u);
 }
 
@@ -132,7 +137,7 @@ updatefog (int player){
   FOR_EACH_MCRD(m){
     Node * node;
     tile(m)->fog=0;
-    FOR_EACH_NODE(cw->units, node){
+    FOR_EACH_NODE(units, node){
       Unit * u = node->d;
       int range = utypes[u->t].range_of_vision;
       if(u->player == player
@@ -146,12 +151,12 @@ static bool
 is_invis (Unit * u){
   int i;
   if(!find_skill(u, S_INVIS)
-  || u->player == cw->id)
+  || u->player == player->id)
     return(false);
   for(i=0; i<6; i++){
     Mcrd nb = neib(u->m, i);
     Unit * u2 = unit_at(nb);
-    if(u2 && u2->player == cw->id)
+    if(u2 && u2->player == player->id)
       return(false);
   }
   return(true);
@@ -162,7 +167,7 @@ is_move_visible (Event_move e){
   Unit * u = id2unit(e.u);
   Mcrd m = neib(u->m, e.dir);
   bool fow = tile(m)->fog || tile(u->m)->fog;
-  bool hidden = is_invis(u) && u->player!=cw->id;
+  bool hidden = is_invis(u) && u->player!=player->id;
   return(!hidden && fow);
 }
 
@@ -183,9 +188,9 @@ is_range_visible (Event_range e){
 static bool
 checkunitsleft(){
   Node * node;
-  FOR_EACH_NODE(cw->units, node){
+  FOR_EACH_NODE(units, node){
     Unit * u = node->d;
-    if(u->player == cw->id)
+    if(u->player == player->id)
       return(true);
   }
   return(false);
@@ -194,7 +199,7 @@ checkunitsleft(){
 static void
 refresh_units (void){
   Node * node;
-  FOR_EACH_NODE(cw->units, node){
+  FOR_EACH_NODE(units, node){
     Unit * u = node->d;
     u->mvp = utypes[u->t].mvp;
     u->can_attack = true;
@@ -372,9 +377,9 @@ attack_melee (Unit * a, Unit * d){
 static void
 update_units_visibility (void){
   Node * node;
-  FOR_EACH_NODE(cw->units, node){
+  FOR_EACH_NODE(units, node){
     Unit * u = node->d;
-    if(u->player == cw->id){
+    if(u->player == player->id){
       u->is_visible = true;
     }else{
       u->is_visible = tile(u->m)->fog>0 && !is_invis(u);
@@ -383,37 +388,28 @@ update_units_visibility (void){
 }
 
 static void
-create_local_world (int id, bool is_ai) {
-  World * w = calloc(1, sizeof(World));
-  w->id     = id;
-  w->is_ai  = is_ai;
-  push_node(&worlds, w);
-}
-
-static void
 create_local_human (int id) {
-  create_local_world(id, false);
+  Player *p = calloc(1, sizeof(Player));
+  p->id     = id;
+  p->is_ai  = false;
+  p->last_event_id = -1;
+  push_node(&players, p);
 }
 
 static void
 create_local_ai (int id) {
-  create_local_world(id, true);
-}
-
-static void
-apply_scenario_to_all_worlds (Scenario *s){
-  Node *nd;
-  FOR_EACH_NODE(worlds, nd){
-    World *w = nd->d;
-    s->init(w);
-  }
+  Player *p = calloc(1, sizeof(Player));
+  p->id     = id;
+  p->is_ai  = true;
+  p->last_event_id = -1;
+  push_node(&players, p);
 }
 
 /*called from add_unit*/
 static int
-new_unit_id (World *w){
-  if(w->units.count > 0){
-    Unit *u = w->units.h->d;
+new_unit_id (){
+  if(units.count > 0){
+    Unit *u = units.h->d;
     return(u->id + 1);
   }else{
     return(0);
@@ -469,12 +465,20 @@ apply_endturn(Event_endturn e){
     check_win();
     refresh_units();
   }
-  FOR_EACH_NODE(worlds, nd){
-    World *w = nd->d;
-    if(w->id == e.new_player){
-      cw = w;
+  FOR_EACH_NODE(players, nd){
+    Player *p = nd->d;
+    if(p->id == e.new_player){
+      player = p;
+      /*undo all events that this player have not seen yet*/
+      {
+        Node *n = eventlist.t;
+        while( n && ((Event*)n->d)->id != player->last_event_id){
+          undo_event( *((Event*)n->d) );
+          n = n->p;
+        }
+      }
       is_client_active = true;
-      updatefog(cw->id);
+      updatefog(player->id);
       update_units_visibility();
       return;
     }
@@ -486,14 +490,74 @@ static void
 send_ids_to_server (void){
   int no_players_left_mark = 0xff;
   Node *nd;
-  FOR_EACH_NODE(worlds, nd){
-    World *w = nd->d;
-    send_int_as_uint8(w->id);
+  FOR_EACH_NODE(players, nd){
+    Player *p = nd->d;
+    send_int_as_uint8(p->id);
   }
   send_int_as_uint8(no_players_left_mark);
 }
 
+static void
+undo_move (Event_move e){
+  Unit * u = id2unit(e.u);
+  int dir = e.dir + 3;
+  if(dir >= 6)
+    dir -= 6;
+  if(find_skill(u, S_IGNR))
+    u->mvp += e.cost;
+  else
+    u->mvp = utypes[u->t].mvp;
+  u->energy += e.cost;
+  u->m = neib(u->m, dir);
+  fill_map(selected_unit);
+  if(u->player == player->id)
+    updatefog(player->id);
+}
+
+static void
+undo_melee (Event_melee e){
+  Unit *a = id2unit(e.a);
+  Unit *d = id2unit(e.d);
+  a->count += e.attackers_killed;
+  d->count += e.defenders_killed;
+  a->energy += 2;
+  d->energy += 2;
+  a->can_attack = true;;
+}
+
+static void
+undo_range (Event_range e){
+  Unit *a = id2unit(e.a);
+  Unit *d = id2unit(e.d);
+  int dmg = e.dmg;
+  d->count += dmg;
+  a->can_attack = true;;
+}
+
+static void
+undo_death (Event_death e){
+  Node *n = deq_node(&dead_units);
+  Unit *u = n->d;
+  if(u->id != e.u.id)
+    die("NOOO");
+  push_node(&units, n->d);
+  free(n);
+  fill_map(selected_unit);
+}
+
 /*------------------NON-STATIC FUNCTIONS-----------------*/
+
+void
+undo_event (Event e){
+  switch(e.t){
+    case E_MOVE:  undo_move(e.e.move);   break;
+    case E_MELEE: undo_melee(e.e.melee); break;
+    case E_DEATH: undo_death(e.e.death); break;
+    case E_RANGE: undo_range(e.e.range); break;
+    default: break; 
+  }
+  update_units_visibility();
+}
 
 void
 select_next_unit (void){
@@ -502,24 +566,20 @@ select_next_unit (void){
   if(selected_unit)
     node = unit2node(selected_unit);
   else
-    node = cw->units.h;
+    node = units.h;
   u = node->d;
   do{
-    node = node->n ? node->n : cw->units.h;
+    node = node->n ? node->n : units.h;
     u = node->d;
-  }while(u->player != cw->id);
+  }while(u->player != player->id);
   fill_map(selected_unit = u);
 }
 
 void
 add_event_local (Event data){
-  Node * nd;
-  FOR_EACH_NODE(worlds, nd){
-    World * world = nd->d;
-    Event * e = calloc(1, sizeof(Event));
-    *e = data; /* copy */
-    add_node_to_tail(&world->eq, e);
-  }
+  Event * e = calloc(1, sizeof(Event));
+  *e = data;
+  add_node_to_tail(&eventlist, e);
 }
 
 void
@@ -557,8 +617,12 @@ event2log (Event e){
 
 void
 add_event (Event e){
-  e.id = last_event_index;
-  last_event_index++;
+  if(eventlist.count > 0){
+    Event *lastevent = eventlist.t->d;
+    e.id = lastevent->id + 1;
+  }else{
+    e.id = 0;
+  }
   add_event_local(e);
   event2log(e);
   if(!is_local)
@@ -569,48 +633,68 @@ void
 cleanup (void){
   fclose(logfile);
   logfile = NULL;
-  while(worlds.count > 0){
-    World * w = worlds.h->d;
-    while(w->eq.count > 0)
-      delete_node(&w->eq, w->eq.h);
-    while(w->units.count > 0)
-      delete_node(&w->units, w->units.h);
-    free(w->map);
-    delete_node(&worlds, worlds.h);
+  while(players.count > 0)
+    delete_node(&players, players.h);
+  while(eventlist.count > 0)
+    delete_node(&eventlist, eventlist.h);
+  while(units.count > 0)
+    delete_node(&units, units.h);
+  while(dead_units.count > 0)
+    delete_node(&dead_units, dead_units.h);
+}
+
+static void
+apply_invisible_events (void){
+  Event *e;
+  Node *node;
+  if(eventlist.count == 0)
+    return;
+  /*find last seen event*/
+  FOR_EACH_NODE(eventlist, node){ 
+    e = node->d;
+    if(e->id == player->last_event_id)
+      break;
+  }
+  if(!node)
+    return;
+  node = node->n;
+  while(node){
+    e = node->d;
+    if(!is_event_visible(*e))
+      apply_event(*e);
+    else
+      break;
+    node = node->n;
   }
 }
 
-/* called before get_next_event */
-void
-update_eq (void){
-  Event * e;
-  while(cw->eq.count > 0){
-    e = cw->eq.h->d;
-    if(!is_event_visible(*e)){
-      e = deq_node(&cw->eq);
-      apply_event(*e);
-      free(e);
-    }else{
-      return;
+/* always called after apply_invisible_events */
+Event *
+get_next_event (void){
+  Node *node;
+  Event *e = NULL;
+  if(eventlist.count == 0)
+    return(NULL);
+  if(player->last_event_id == -1){
+    e = eventlist.h->d;
+    return(e);
+  }
+  FOR_EACH_NODE(eventlist, node){ 
+    e = node->d;
+    if(e->id == player->last_event_id){
+      e = node->n->d;
+      return(e);
     }
   }
-}
-
-/* always called after update_eq */
-Event
-get_next_event (void){
-  Event * tmp = deq_node(&cw->eq);
-  Event e = *tmp;
-  free(tmp);
-  return(e);
+  return(NULL);
 }
 
 void
 endturn (void){
-  int id = cw->id + 1;
+  int id = player->id + 1;
   if(id == current_scenario->players_count)
     id = 0;
-  add_event(mk_event_endturn(cw->id, id));
+  add_event(mk_event_endturn(player->id, id));
 }
 
 void
@@ -655,6 +739,8 @@ attack (Unit * a, Unit * d){
 
 void
 apply_event (Event e){
+  printf("apply event N_%i\n", e.id);
+  player->last_event_id = e.id;
   switch(e.t){
     case E_MOVE:    apply_move(e.e.move);       break;
     case E_MELEE:   apply_melee(e.e.melee);     break;
@@ -670,40 +756,39 @@ apply_event (Event e){
 }
 
 void
-add_unit (
-    Mcrd crd,
-    int player,
-    int type,
-    World * world)
-{
+add_unit (Mcrd crd, int plr, int type) {
   Unit * u      = calloc(1, sizeof(Unit));
-  u->player     = player;
+  u->player     = plr;
   u->mvp        = utypes[type].mvp;
   u->count      = utypes[type].count;
   u->can_attack = true;
   u->m          = crd;
   u->t          = type;
-  u->id         = new_unit_id(world);
+  u->id         = new_unit_id();
   u->skills_n   = utypes[type].skills_n;
   u->energy     = utypes[type].energy;
   memcpy(u->skills, utypes[type].skills,
       u->skills_n*sizeof(Skill));
-  push_node(&world->units, u);
+  push_node(&units, u);
 }
 
+/* called before get_next_event */
 bool
-is_eq_empty (void){
-  update_eq();
-  return(cw->eq.count == 0);
+unshown_events_left (void){
+  apply_invisible_events();
+  if(eventlist.count == 0){
+    return(false);
+  }else{
+    Event *e = eventlist.t->d;
+    return(e->id != player->last_event_id);
+  }
 }
 
 void
-init_local_worlds (int n, int *ids){
+init_local_players (int n, int *ids){
   int i;
-  printf("new_worlds: %i\n", n);
   for(i=0; i<n; i++)
     create_local_human(ids[i]);
-  cw = worlds.h->d;
 }
 
 void
@@ -719,19 +804,19 @@ void
 mark_ai (int id){
   int i = 0;
   Node *nd;
-  FOR_EACH_NODE(worlds, nd){
+  FOR_EACH_NODE(players, nd){
     if(i==id){
-      World *w = nd->d;
-      w->is_ai = true;
+      Player *p = nd->d;
+      p->is_ai = true;
       return;
     }
     i++;
   }
 }
 
-/*example: init_local_worlds_s("hh", 0, 1);*/
+/*example: init_local_players_s("hh", 0, 1);*/
 void
-init_local_worlds_s (char *s, ...){
+init_local_players_s (char *s, ...){
   va_list ap;
   char *c = s;
   va_start(ap, s);
@@ -742,21 +827,22 @@ init_local_worlds_s (char *s, ...){
     }else if(*c=='a'){
       create_local_ai(id);
     }else{
-      die("core: init_worlds_s(): "
+      die("core: init_players_s(): "
           "%c, %i\n", *c, *c);
     }
     c++;
   }
   va_end(ap);
-  cw = worlds.t->d;
+  player = players.t->d;
 }
 
 void
 set_scenario_id (int id){
+  player = players.t->d;
   current_scenario = scenarios + id;
   map_size = current_scenario->map_size;
-  apply_scenario_to_all_worlds(current_scenario);
-  updatefog(cw->id);
+  current_scenario->init();
+  updatefog(player->id);
   update_units_visibility();
   if(logfile)
     die("core: set_scenario_id(): logfile != NULL.");

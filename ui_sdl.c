@@ -49,7 +49,7 @@ static int ui_mode = MODE_SELECT;
 #define SCREEN_SCENARIO 1
 static int screen_id = SCREEN_MENU;
 
-static Event e;    /* current [e]vent */
+static Event *current_event;
 
 /* event progress? */
 /* Internal index of event visualisation. */
@@ -305,12 +305,14 @@ draw_unit (Unit *u){
 static void
 draw_units (void){
   Node * node;
-  FOR_EACH_NODE(cw->units, node){
+  FOR_EACH_NODE(units, node){
     Unit * u = node->d;
     if(ui_mode == MODE_SHOW_EVENT){
-      if(e.t==E_MOVE  && u->id == e.e.move.u)
+      if(current_event->t == E_MOVE
+      && current_event->e.move.u == u->id)
         continue;
-      if(e.t==E_MELEE && u->id == e.e.melee.a)
+      if(current_event->t == E_MELEE
+      && current_event->e.melee.a == u->id)
         continue;
     }
     if(u->is_visible){
@@ -405,7 +407,7 @@ draw_range_event (Event_range e){
 }
 
 static void
-draw_event (void){
+draw_event (Event e){
   switch(e.t){
     case E_MOVE:
       draw_move_event(e.e.move);
@@ -430,7 +432,7 @@ draw_event (void){
 static void
 draw_labels (void){
   char str[100];
-  sprintf(str, "[pl:%i]", cw->id);
+  sprintf(str, "[pl:%i]", player->id);
   text(str, mk_scrd(0,0), false);
   if(inboard(selected_tile)){
     char *s = NULL;
@@ -462,7 +464,7 @@ draw (void){
   }
   draw_img(img_selected_hex, map2scr(selected_tile));
   if(ui_mode==MODE_SHOW_EVENT)
-    draw_event();
+    draw_event(*current_event);
   /*maptext();*/
   draw_labels();
   SDL_Flip(screen);
@@ -508,14 +510,14 @@ init_draw (void){
 static void
 tile_action (Mcrd m){
   Unit *u = unit_at(m);
-  if(u && u->player == cw->id){
+  if(u && u->player == player->id){
     selected_unit = u;
     fill_map(selected_unit);
   }else if(selected_unit){
     if(!u || (u && !u->is_visible)){
       move(selected_unit, m);
     }
-    if(u && u->player != cw->id && u->is_visible
+    if(u && u->player != player->id && u->is_visible
     && selected_unit && selected_unit->can_attack){
       attack(selected_unit, u);
     }
@@ -595,23 +597,23 @@ menu_keys (SDL_KeyboardEvent e){
     case SDLK_0:
       {
         int worlds[] = {0, 1};
-        init_local_worlds(2, worlds);
+        init_local_players(2, worlds);
         set_scenario_id(0);
         screen_id = SCREEN_SCENARIO;
       }
       break;
     case SDLK_1:
-      init_local_worlds_s("hh", 0, 1);
+      init_local_players_s("hh", 0, 1);
       set_scenario_id(1);
       screen_id = SCREEN_SCENARIO;
       break;
     case SDLK_2:
-      init_local_worlds_s("h", 0);
+      init_local_players_s("h", 0);
       init_net("localhost", 2000);
       screen_id = SCREEN_SCENARIO;
       break;
     case SDLK_3:
-      init_local_worlds_s("h", 1);
+      init_local_players_s("h", 1);
       init_net("localhost", 2000);
       screen_id = SCREEN_SCENARIO;
       break;
@@ -689,15 +691,15 @@ events (void){
     is_dirty = true;
   }
   if(ui_mode==MODE_SHOW_EVENT && eindex >= final_eindex){
-    apply_event(e);
+    apply_event(*current_event);
     ui_mode = MODE_SELECT;
     is_dirty = true;
   }
-  if(ui_mode == MODE_SELECT && !is_eq_empty()){
-    e = get_next_event();
+  if(ui_mode == MODE_SELECT && unshown_events_left()){
+    current_event = get_next_event();
     ui_mode = MODE_SHOW_EVENT;
     eindex = 0;
-    final_eindex = get_last_event_index(e);
+    final_eindex = get_last_event_index(*current_event);
     is_dirty = true;
   }
 }
@@ -721,7 +723,7 @@ mainloop (void){
   while(!done){
     sdl_events();
     if(screen_id == SCREEN_SCENARIO){
-      if(cw->is_ai)
+      if(player->is_ai)
         ai();
       if(!is_local)
         do_network();

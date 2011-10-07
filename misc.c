@@ -96,7 +96,7 @@ mcrd2index(Mcrd a, Mcrd b){
 /* mcrd2tile */
 Tile *
 tile (Mcrd c){
-  return(cw->map + map_size.x*c.y + c.x);
+  return(map + map_size.x*c.y + c.x);
 }
 
 /* is tile inboard */
@@ -110,7 +110,7 @@ inboard (Mcrd t){
 Unit *
 id2unit (int id){
   Node * node;
-  FOR_EACH_NODE(cw->units, node){
+  FOR_EACH_NODE(units, node){
     Unit * u = node->d;
     if(u->id == id)
       return(u);
@@ -121,7 +121,7 @@ id2unit (int id){
 Unit *
 unit_at (Mcrd crd){
   Node * node;
-  FOR_EACH_NODE(cw->units, node){
+  FOR_EACH_NODE(units, node){
     Unit * u = node->d;
     if(mcrdeq(u->m, crd))
       return(u);

@@ -13,8 +13,8 @@
 #include "core_private.h"
 #include "scenarios.h"
 
-static void init_scenario(World *w);
-static void scenario_logic (void);
+static void init_scenario(void);
+static void scenario_logic(void);
 
 Scenario scenario_01 = {
   2, /*players_count*/
@@ -38,13 +38,13 @@ Scenario scenario_01 = {
 };
 
 static void
-init_scenario (World *w){
-  w->map = str2map(scenario_01.map);
+init_scenario (void){
+  map = str2map(scenario_01.map);
   /*player0 units*/{
-    add_unit(mk_mcrd(1,2), 0, U_ORC, w);
+    add_unit(mk_mcrd(1,2), 0, U_ORC);
   }
   /*player1 units*/{
-    add_unit(mk_mcrd(3,5), 1, U_SWORDSMAN, w);
+    add_unit(mk_mcrd(3,5), 1, U_SWORDSMAN);
   }
 }
 

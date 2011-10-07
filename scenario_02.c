@@ -13,7 +13,7 @@
 #include "core_private.h"
 #include "scenarios.h"
 
-static void init_scenario(World *w);
+static void init_scenario(void);
 static void scenario_logic(void);
 
 Scenario scenario_02 = {
@@ -36,37 +36,37 @@ Scenario scenario_02 = {
 };
 
 static void
-player_0_units (World *w){
-  add_unit(mk_mcrd( 0,  3), 0, U_PEASANT, w);
-  add_unit(mk_mcrd( 0,  4), 0, U_SCOUT, w);
-  add_unit(mk_mcrd( 0,  5), 0, U_PEASANT, w);
-  add_unit(mk_mcrd( 0,  6), 0, U_PEASANT, w);
-  add_unit(mk_mcrd( 1,  4), 0, U_SWORDSMAN, w);
-  add_unit(mk_mcrd( 1,  5), 0, U_POOR_ARCHER, w);
-  add_unit(mk_mcrd( 1,  6), 0, U_FOOT_KNIGHT, w);
-  add_unit(mk_mcrd( 1,  7), 0, U_SWORDSMAN, w);
+player_0_units (void){
+  add_unit(mk_mcrd( 0,  3), 0, U_PEASANT);
+  add_unit(mk_mcrd( 0,  4), 0, U_SCOUT);
+  add_unit(mk_mcrd( 0,  5), 0, U_PEASANT);
+  add_unit(mk_mcrd( 0,  6), 0, U_PEASANT);
+  add_unit(mk_mcrd( 1,  4), 0, U_SWORDSMAN);
+  add_unit(mk_mcrd( 1,  5), 0, U_POOR_ARCHER);
+  add_unit(mk_mcrd( 1,  6), 0, U_FOOT_KNIGHT);
+  add_unit(mk_mcrd( 1,  7), 0, U_SWORDSMAN);
 }
 
 static void
-player_1_units (World *w){
-  add_unit(mk_mcrd( 8,  4), 1, U_GOBLIN, w);
-  add_unit(mk_mcrd( 8,  5), 1, U_GOBLIN, w);
-  add_unit(mk_mcrd( 8,  6), 1, U_ORC, w);
-  add_unit(mk_mcrd( 8,  7), 1, U_GOBLIN, w);
-  add_unit(mk_mcrd( 9,  3), 1, U_GOBLIN_SCOUT, w);
-  add_unit(mk_mcrd( 9,  7), 1, U_GOBLIN_SLINGER, w);
-  add_unit(mk_mcrd( 9,  4), 1, U_ARMORED_ORC, w);
-  add_unit(mk_mcrd(10,  4), 1, U_TROLL, w);
-  add_unit(mk_mcrd(10,  5), 1, U_ORC, w);
+player_1_units (void){
+  add_unit(mk_mcrd( 8,  4), 1, U_GOBLIN);
+  add_unit(mk_mcrd( 8,  5), 1, U_GOBLIN);
+  add_unit(mk_mcrd( 8,  6), 1, U_ORC);
+  add_unit(mk_mcrd( 8,  7), 1, U_GOBLIN);
+  add_unit(mk_mcrd( 9,  3), 1, U_GOBLIN_SCOUT);
+  add_unit(mk_mcrd( 9,  7), 1, U_GOBLIN_SLINGER);
+  add_unit(mk_mcrd( 9,  4), 1, U_ARMORED_ORC);
+  add_unit(mk_mcrd(10,  4), 1, U_TROLL);
+  add_unit(mk_mcrd(10,  5), 1, U_ORC);
 }
 
 
 
 static void
-init_scenario (World *w){
-  w->map = str2map(scenario_02.map);
-  player_0_units(w);
-  player_1_units(w);
+init_scenario (void){
+  map = str2map(scenario_02.map);
+  player_0_units();
+  player_1_units();
 }
 
 static void

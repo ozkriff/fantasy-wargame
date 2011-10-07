@@ -99,18 +99,16 @@ typedef struct {
 } Event;
 
 typedef struct {
-  Tile * map;
-  List   units;
-  List   eq; /* events queue */
-  bool   is_ai;
-  int    id;
-} World;
+  int   id;
+  bool  is_ai;
+  int   last_event_id;
+} Player;
 
 typedef struct {
   int   players_count;
   Mcrd  map_size;
   char *map;
-  void (*init)(World *w);
+  void (*init)(void);
   void (*logic)(void);
 } Scenario;
 

@@ -18,7 +18,7 @@ ai_attack(Unit * u){
   int i;
   for(i=0; i<6; i++){
     Unit * enm = unit_at( neib(u->m, i) );
-    if(!enm || enm->player==cw->id)
+    if(!enm || enm->player==player->id)
       continue;
     attack(u, enm);
   }
@@ -44,8 +44,9 @@ ai_movement(Unit * u){
 
 void
 ai (void){
+#if 0
   Node * n;
-  while(cw->eq.count > 0){
+  while(eq.count > 0){
     apply_event(get_next_event());
   }
   FOR_EACH_NODE(cw->units, n){
@@ -59,4 +60,5 @@ ai (void){
     }
   }
   endturn();
+#endif
 }
