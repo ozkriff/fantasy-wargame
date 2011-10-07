@@ -705,6 +705,18 @@ events (void){
 }
 
 static void
+correct_map_offset (){
+  int left   = 96/2;
+  int right  = screen->w - map_size.x*96;
+  int top    = 0;
+  int bottom = screen->h - map_size.y*96*3/4 - 96/4;
+  if(map_offset.x > left)   map_offset.x = left;
+  if(map_offset.x < right)  map_offset.x = right;
+  if(map_offset.y > top)    map_offset.y = top;
+  if(map_offset.y < bottom) map_offset.y = bottom;
+}
+
+static void
 scroll_map(Scrd s){
   int step = 10; /*pixels per frame*/
   int o = 15; /*offset*/
@@ -716,6 +728,8 @@ scroll_map(Scrd s){
     map_offset.x -= step;
   if(s.y > screen->h - o)
     map_offset.y -= step;
+  correct_map_offset();
+  is_dirty = true;
 }
 
 static void
@@ -728,9 +742,9 @@ mainloop (void){
       if(!is_local)
         do_network();
       events();
+      scroll_map(mouse_pos);
       if(is_dirty){
         draw();
-        scroll_map(mouse_pos);
         is_dirty = false;
       }
     }else{
