@@ -98,7 +98,7 @@ typedef struct {
 } Event_endturn;
 
 typedef struct {
-  int id;
+  int id; /*Dead unit's id*/
 } Event_death;
 
 typedef struct {
