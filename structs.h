@@ -84,7 +84,7 @@ typedef struct {
 } Event_melee;
 typedef struct { int a, d; int dmg; }  Event_range;
 typedef struct { int old_player, new_player; } Event_endturn;
-typedef struct { Unit u; } Event_death;
+typedef struct { int id; } Event_death;
 
 typedef struct {
   int t; /* E_ */
