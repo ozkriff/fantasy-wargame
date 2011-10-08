@@ -718,11 +718,10 @@ move (Unit * moving_unit, Mcrd destination){
 /* [a]ttacker, [d]efender */
 void
 attack (Unit * a, Unit * d){
-  Mcrd md = d->m;
-  Mcrd ma = a->m;
+  int dist = mdist(a->m, d->m);
   Skill * range = find_skill(a, S_RANGE);
   if(range){
-    if(mdist(ma, md) <= range->range.range){
+    if(dist <= range->range.range){
       int targets_killed = range_damage(a, d);
       add_event( mk_event_range(a, d, targets_killed) );
       if(d->count - targets_killed <= 0)
@@ -730,7 +729,7 @@ attack (Unit * a, Unit * d){
       puts("");
     }
   }else{
-    if(mdist(ma, md) <= 1){
+    if(dist <= 1){
       attack_melee(a, d);
     }
   }
