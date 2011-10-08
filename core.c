@@ -54,8 +54,7 @@ static void
 update_fog_after_move (Unit * u){
   Mcrd m;
   FOR_EACH_MCRD(m){
-    int range = utypes[u->t].v;
-    if(mdist(m, u->m) <= range)
+    if(mdist(m, u->m) <= utypes[u->t].v)
       tile(m)->visible = true;
   }
 }
