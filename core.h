@@ -5,7 +5,7 @@ extern Unit *  selected_unit;
 extern Unit_type utypes[30];
 extern bool    is_local;
 extern bool    is_client_active;
-extern Player *player;
+extern Player *current_player;
 extern List    units;
 extern Tile   *map;
 

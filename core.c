@@ -23,7 +23,7 @@ bool    is_local = true;
 bool    is_client_active;
 Unit *  selected_unit = NULL;
 List    units = {0, 0, 0};
-Player *player = NULL;
+Player *current_player = NULL;
 
 static FILE * logfile = NULL;
 static Scenario *current_scenario = NULL;
@@ -70,7 +70,7 @@ apply_move (Event_move e){
   u->energy -= e.cost;
   u->m = neib(u->m, e.dir);
   fill_map(selected_unit);
-  if(u->player==player->id)
+  if(u->player == current_player->id)
     update_fog_after_move(u);
 }
 
@@ -151,12 +151,12 @@ static bool
 is_invis (Unit * u){
   int i;
   if(!find_skill(u, S_INVIS)
-  || u->player == player->id)
+  || u->player == current_player->id)
     return(false);
   for(i=0; i<6; i++){
     Mcrd nb = neib(u->m, i);
     Unit * u2 = unit_at(nb);
-    if(u2 && u2->player == player->id)
+    if(u2 && u2->player == current_player->id)
       return(false);
   }
   return(true);
@@ -167,7 +167,7 @@ is_move_visible (Event_move e){
   Unit * u = id2unit(e.u);
   Mcrd m = neib(u->m, e.dir);
   bool fow = tile(m)->fog || tile(u->m)->fog;
-  bool hidden = is_invis(u) && u->player!=player->id;
+  bool hidden = is_invis(u) && u->player != current_player->id;
   return(!hidden && fow);
 }
 
@@ -190,7 +190,7 @@ checkunitsleft(){
   Node * node;
   FOR_EACH_NODE(units, node){
     Unit * u = node->d;
-    if(u->player == player->id)
+    if(u->player == current_player->id)
       return(true);
   }
   return(false);
@@ -379,7 +379,7 @@ update_units_visibility (void){
   Node * node;
   FOR_EACH_NODE(units, node){
     Unit * u = node->d;
-    if(u->player == player->id){
+    if(u->player == current_player->id){
       u->is_visible = true;
     }else{
       u->is_visible = tile(u->m)->fog>0 && !is_invis(u);
@@ -468,17 +468,17 @@ apply_endturn(Event_endturn e){
   FOR_EACH_NODE(players, nd){
     Player *p = nd->d;
     if(p->id == e.new_player){
-      player = p;
+      current_player = p;
       /*undo all events that this player have not seen yet*/
       {
         Node *n = eventlist.t;
-        while( n && ((Event*)n->d)->id != player->last_event_id){
+        while( n && ((Event*)n->d)->id != current_player->last_event_id){
           undo_event( *((Event*)n->d) );
           n = n->p;
         }
       }
       is_client_active = true;
-      updatefog(player->id);
+      updatefog(current_player->id);
       update_units_visibility();
       return;
     }
@@ -510,8 +510,8 @@ undo_move (Event_move e){
   u->energy += e.cost;
   u->m = neib(u->m, dir);
   fill_map(selected_unit);
-  if(u->player == player->id)
-    updatefog(player->id);
+  if(u->player == current_player->id)
+    updatefog(current_player->id);
 }
 
 static void
@@ -571,7 +571,7 @@ select_next_unit (void){
   do{
     node = node->n ? node->n : units.h;
     u = node->d;
-  }while(u->player != player->id);
+  }while(u->player != current_player->id);
   fill_map(selected_unit = u);
 }
 
@@ -652,7 +652,7 @@ apply_invisible_events (void){
   /*find last seen event*/
   FOR_EACH_NODE(eventlist, node){ 
     e = node->d;
-    if(e->id == player->last_event_id)
+    if(e->id == current_player->last_event_id)
       break;
   }
   if(!node)
@@ -675,13 +675,13 @@ get_next_event (void){
   Event *e = NULL;
   if(eventlist.count == 0)
     return(NULL);
-  if(player->last_event_id == -1){
+  if(current_player->last_event_id == -1){
     e = eventlist.h->d;
     return(e);
   }
   FOR_EACH_NODE(eventlist, node){ 
     e = node->d;
-    if(e->id == player->last_event_id){
+    if(e->id == current_player->last_event_id){
       e = node->n->d;
       return(e);
     }
@@ -691,10 +691,10 @@ get_next_event (void){
 
 void
 endturn (void){
-  int id = player->id + 1;
+  int id = current_player->id + 1;
   if(id == current_scenario->players_count)
     id = 0;
-  add_event(mk_event_endturn(player->id, id));
+  add_event(mk_event_endturn(current_player->id, id));
 }
 
 void
@@ -740,7 +740,7 @@ attack (Unit * a, Unit * d){
 void
 apply_event (Event e){
   printf("apply event N_%i\n", e.id);
-  player->last_event_id = e.id;
+  current_player->last_event_id = e.id;
   switch(e.t){
     case E_MOVE:    apply_move(e.e.move);       break;
     case E_MELEE:   apply_melee(e.e.melee);     break;
@@ -780,7 +780,7 @@ unshown_events_left (void){
     return(false);
   }else{
     Event *e = eventlist.t->d;
-    return(e->id != player->last_event_id);
+    return(e->id != current_player->last_event_id);
   }
 }
 
@@ -833,16 +833,16 @@ init_local_players_s (char *s, ...){
     c++;
   }
   va_end(ap);
-  player = players.t->d;
+  current_player = players.t->d;
 }
 
 void
 set_scenario_id (int id){
-  player = players.t->d;
+  current_player = players.t->d;
   current_scenario = scenarios + id;
   map_size = current_scenario->map_size;
   current_scenario->init();
-  updatefog(player->id);
+  updatefog(current_player->id);
   update_units_visibility();
   if(logfile)
     die("core: set_scenario_id(): logfile != NULL.");

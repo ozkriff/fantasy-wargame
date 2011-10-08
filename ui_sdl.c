@@ -432,7 +432,7 @@ draw_event (Event e){
 static void
 draw_labels (void){
   char str[100];
-  sprintf(str, "[pl:%i]", player->id);
+  sprintf(str, "[pl:%i]", current_player->id);
   text(str, mk_scrd(0,0), false);
   if(inboard(selected_tile)){
     char *s = NULL;
@@ -510,14 +510,14 @@ init_draw (void){
 static void
 tile_action (Mcrd m){
   Unit *u = unit_at(m);
-  if(u && u->player == player->id){
+  if(u && u->player == current_player->id){
     selected_unit = u;
     fill_map(selected_unit);
   }else if(selected_unit){
     if(!u || (u && !u->is_visible)){
       move(selected_unit, m);
     }
-    if(u && u->player != player->id && u->is_visible
+    if(u && u->player != current_player->id && u->is_visible
     && selected_unit && selected_unit->can_attack){
       attack(selected_unit, u);
     }
@@ -737,7 +737,7 @@ mainloop (void){
   while(!done){
     sdl_events();
     if(screen_id == SCREEN_SCENARIO){
-      if(player->is_ai)
+      if(current_player->is_ai)
         ai();
       if(!is_local)
         do_network();

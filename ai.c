@@ -18,7 +18,7 @@ ai_attack(Unit * u){
   int i;
   for(i=0; i<6; i++){
     Unit * enm = unit_at( neib(u->m, i) );
-    if(!enm || enm->player==player->id)
+    if(!enm || enm->player == current_player->id)
       continue;
     attack(u, enm);
   }
