@@ -63,7 +63,7 @@ typedef struct {
 #define T_MOUNTEENS 4
 
 typedef struct {
-  int  fog;  /* fog of war. how many units see this tile. */
+  bool visible; /*fog of war*/
   int  cost; /* cost of path for selunit to this tile */
   int  t; /* T_ */
   Mcrd parent; /* used in pathfinding */

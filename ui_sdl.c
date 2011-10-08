@@ -242,7 +242,7 @@ static void
 draw_fog (void){
   Mcrd m;
   FOR_EACH_MCRD(m){
-    if(tile(m)->fog <= 0)
+    if(!tile(m)->visible)
       draw_img(img_fog_of_war, map2scr(m));
   }
 }

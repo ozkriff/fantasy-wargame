@@ -40,7 +40,7 @@ zoc (Mcrd a, Unit * u, int cost){
     Unit * u2 = unit_at(n);
     if(inboard(n) && cost%mvp != 0
     && u2 && u2->player != u->player
-    && tile(n)->fog > 0
+    && tile(n)->visible
     && u2->is_visible ){
       return(cost + mvp - (cost % mvp));
     }
@@ -57,7 +57,7 @@ process_nbh (Unit * u, Mcrd t, Mcrd nb){
   /* For not to pass through visible enemy. */
   u2 = unit_at(nb);
   if(u2 && u2->player!=u->player
-  && tile(nb)->fog>0
+  && tile(nb)->visible
   && u2->is_visible)
     return;
   n = utypes[u->t].ter_mvp[tile(nb)->t];

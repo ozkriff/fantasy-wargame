@@ -56,7 +56,7 @@ update_fog_after_move (Unit * u){
   FOR_EACH_MCRD(m){
     int range = utypes[u->t].v;
     if(mdist(m, u->m) <= range)
-      tile(m)->fog++;
+      tile(m)->visible = true;
   }
 }
 
@@ -136,12 +136,12 @@ updatefog (int player){
   Mcrd m;
   FOR_EACH_MCRD(m){
     Node * node;
-    tile(m)->fog=0;
+    tile(m)->visible = false;
     FOR_EACH_NODE(units, node){
       Unit * u = node->d;
       if(u->player == player
       && mdist(m, u->m) <= utypes[u->t].v)
-        tile(m)->fog++;
+        tile(m)->visible = true;
     }
   }
 }
@@ -165,7 +165,7 @@ static bool
 is_move_visible (Event_move e){
   Unit * u = id2unit(e.u);
   Mcrd m = neib(u->m, e.dir);
-  bool fow = tile(m)->fog || tile(u->m)->fog;
+  bool fow = tile(m)->visible || tile(u->m)->visible;
   bool hidden = is_invis(u) && u->player != current_player->id;
   return(!hidden && fow);
 }
@@ -174,14 +174,14 @@ static bool
 is_melee_visible (Event_melee e){
   Unit *a = id2unit(e.a);
   Unit *d = id2unit(e.d);
-  return(tile(a->m)->fog || tile(d->m)->fog);
+  return(tile(a->m)->visible || tile(d->m)->visible);
 }
 
 static bool
 is_range_visible (Event_range e){
   Unit *a = id2unit(e.a);
   Unit *d = id2unit(e.d);
-  return(tile(a->m)->fog || tile(d->m)->fog);
+  return(tile(a->m)->visible || tile(d->m)->visible);
 }
 
 static bool
@@ -381,7 +381,7 @@ update_units_visibility (void){
     if(u->player == current_player->id){
       u->is_visible = true;
     }else{
-      u->is_visible = tile(u->m)->fog>0 && !is_invis(u);
+      u->is_visible = tile(u->m)->visible && !is_invis(u);
     }
   }
 }
