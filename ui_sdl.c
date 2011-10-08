@@ -137,7 +137,7 @@ load_sprites (void){
   img_arrow              = loadimg("img/arrow.png"     );
   img_selected_hex       = loadimg("img/sel.png"       );
   img_reacheble          = loadimg("img/reacheble.png" );
-  img_fog_of_war         = loadimg("img/fow.png"       );
+  img_fog_of_war         = loadimg("img/fog.png"       );
   img_rings[0]           = loadimg("img/ring_red.png"  );
   img_rings[1]           = loadimg("img/ring_blue.png" );
   img_rings[2]           = loadimg("img/ring_green.png");
