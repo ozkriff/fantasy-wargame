@@ -19,7 +19,7 @@ typedef struct {
   int range;
 } Skill_range;
 
-typedef union {
+typedef struct {
   int t; /* type: S_* */
   Skill_range    range;
 } Skill;
