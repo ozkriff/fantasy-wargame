@@ -306,7 +306,8 @@ get_wounds (Unit *a, Unit *d){
   int d_ms     = (dt.ms + dt.ter_ms[tt]) * d->energy/dt.energy;
   /*chances to hit, to wound and to ignore armour. percents.*/
   int to_hit   = 5 + (a_ms - d_ms);
-  int to_wound = 5 + (at.strength - dt.toughness);
+  int a_stren  = at.strength * a->energy/at.energy;
+  int to_wound = 5 + (a_stren - dt.toughness);
   int to_as    = 10- dt.armor;
 #if 1
   int r = 1;
