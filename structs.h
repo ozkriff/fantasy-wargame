@@ -25,7 +25,7 @@ typedef union {
 } Skill;
 
 typedef struct {
-  int range_of_vision;
+  int v; /*range of vision*/
   int morale;
   int count;
   int ms; /*melee_skill*/

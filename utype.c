@@ -11,7 +11,7 @@
 static Unit_type
 init_peasant (void){
   Unit_type u;
-  u.range_of_vision      =   3;
+  u.v                    =   3;
   u.morale               =   3;
   u.count                =   6;
   u.ms                   =   3;
@@ -39,7 +39,7 @@ init_peasant (void){
 static Unit_type
 init_swordsman (void){
   Unit_type u;
-  u.range_of_vision      =   3;
+  u.v                    =   3;
   u.morale               =   5;
   u.count                =   6;
   u.ms                   =   5;
@@ -67,7 +67,7 @@ init_swordsman (void){
 static Unit_type
 init_foot_knight (void){
   Unit_type u;
-  u.range_of_vision      =   2;
+  u.v                    =   2;
   u.morale               =   7;
   u.count                =   6;
   u.ms                   =   6;
@@ -95,7 +95,7 @@ init_foot_knight (void){
 static Unit_type
 init_poor_archer (void){
   Unit_type u;
-  u.range_of_vision      =   4;
+  u.v                    =   4;
   u.morale               =   5;
   u.count                =   6;
   u.ms                   =   3;
@@ -124,7 +124,7 @@ init_poor_archer (void){
 static Unit_type
 init_scout (void){
   Unit_type u;
-  u.range_of_vision      =   5;
+  u.v                    =   5;
   u.morale               =   5;
   u.count                =   6;
   u.ms                   =   3;
@@ -155,7 +155,7 @@ init_scout (void){
 static Unit_type
 init_goblin (void){
   Unit_type u;
-  u.range_of_vision      =   3;
+  u.v                    =   3;
   u.morale               =   2;
   u.count                =   9;
   u.ms                   =   2;
@@ -183,7 +183,7 @@ init_goblin (void){
 static Unit_type
 init_goblin_slinger (void){
   Unit_type u;
-  u.range_of_vision      =   4;
+  u.v                    =   4;
   u.morale               =   3;
   u.count                =   9;
   u.ms                   =   2;
@@ -212,7 +212,7 @@ init_goblin_slinger (void){
 static Unit_type
 init_goblin_scout (void){
   Unit_type u;
-  u.range_of_vision      =   6;
+  u.v                    =   6;
   u.morale               =   4;
   u.count                =   6;
   u.ms                   =   4;
@@ -243,7 +243,7 @@ init_goblin_scout (void){
 static Unit_type
 init_orc (void){
   Unit_type u;
-  u.range_of_vision      =   3;
+  u.v                    =   3;
   u.morale               =   5;
   u.count                =   6;
   u.ms                   =   3;
@@ -271,7 +271,7 @@ init_orc (void){
 static Unit_type
 init_armored_orc (void){
   Unit_type u;
-  u.range_of_vision      =   3;
+  u.v                    =   3;
   u.morale               =   7;
   u.count                =   6;
   u.ms                   =   3;
@@ -299,7 +299,7 @@ init_armored_orc (void){
 static Unit_type
 init_troll (void){
   Unit_type u;
-  u.range_of_vision      =   1;
+  u.v                    =   1;
   u.morale               =   5;
   u.count                =   6;
   u.ms                   =   6;
