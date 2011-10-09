@@ -73,11 +73,13 @@ typedef struct {
   Mcrd parent; /* used in pathfinding */
 } Tile;
 
-#define E_MOVE    0
-#define E_MELEE   1
-#define E_RANGE   2
-#define E_ENDTURN 3
-#define E_DEATH   4
+typedef enum {
+  E_MOVE,
+  E_MELEE,
+  E_RANGE,
+  E_ENDTURN,
+  E_DEATH
+} Event_type_id;
 
 typedef struct {
   int u; /*unit's id*/
@@ -106,7 +108,7 @@ typedef struct {
 } Event_death;
 
 typedef struct {
-  int t; /* E_ */
+  Event_type_id t;
   int id;
   union {
     Event_move   move;
