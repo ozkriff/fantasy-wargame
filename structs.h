@@ -85,7 +85,7 @@ typedef struct {
   int u; /*unit's id*/
   int dir; /*direction index*/
   int cost;
-}  Event_move;
+} Event_move;
 
 typedef struct {
   int a, d; /* attacker, defender */
