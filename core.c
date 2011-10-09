@@ -424,16 +424,6 @@ mk_skill_range (int skill, int strength, int range){
   return(s);
 }
 
-#if 0
-Skill
-mk_skill_berserk (int power){
-  Skill s;
-  s.brsk.t = BRSK;
-  s.brsk.power = power;
-  return(s);
-}
-#endif
-
 Skill
 mk_skill_bool (int type){
   Skill s;
