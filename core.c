@@ -201,7 +201,9 @@ refresh_units (void){
     u->mvp = utypes[u->t].mvp;
     u->can_attack = true;
     u->energy += utypes[u->t].energy_rg;
+    u->morale += utypes[u->t].morale_rg;
     fixnum(0, utypes[u->t].energy, &u->energy);
+    fixnum(0, utypes[u->t].morale, &u->morale);
   }
 }
 
@@ -753,6 +755,7 @@ add_unit (Mcrd crd, int plr, int type) {
   u->id         = new_unit_id();
   u->skills_n   = utypes[type].skills_n;
   u->energy     = utypes[type].energy;
+  u->morale     = utypes[type].morale;
   memcpy(u->skills, utypes[type].skills,
       u->skills_n*sizeof(Skill));
   push_node(&units, u);

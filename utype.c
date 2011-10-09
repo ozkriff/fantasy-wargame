@@ -13,6 +13,7 @@ init_peasant (void){
   Unit_type u;
   u.v                    =   3;
   u.morale               =   3;
+  u.morale_rg            =   2;
   u.count                =   6;
   u.ms                   =   3;
   u.strength             =   2;
@@ -41,6 +42,7 @@ init_swordsman (void){
   Unit_type u;
   u.v                    =   3;
   u.morale               =   5;
+  u.morale_rg            =   2;
   u.count                =   6;
   u.ms                   =   5;
   u.strength             =   4;
@@ -69,6 +71,7 @@ init_foot_knight (void){
   Unit_type u;
   u.v                    =   2;
   u.morale               =   7;
+  u.morale_rg            =   2;
   u.count                =   6;
   u.ms                   =   6;
   u.strength             =   5;
@@ -97,6 +100,7 @@ init_poor_archer (void){
   Unit_type u;
   u.v                    =   4;
   u.morale               =   5;
+  u.morale_rg            =   2;
   u.count                =   6;
   u.ms                   =   3;
   u.strength             =   2;
@@ -126,6 +130,7 @@ init_scout (void){
   Unit_type u;
   u.v                    =   5;
   u.morale               =   5;
+  u.morale_rg            =   2;
   u.count                =   6;
   u.ms                   =   3;
   u.strength             =   2;
@@ -157,6 +162,7 @@ init_goblin (void){
   Unit_type u;
   u.v                    =   3;
   u.morale               =   2;
+  u.morale_rg            =   2;
   u.count                =   9;
   u.ms                   =   2;
   u.strength             =   2;
@@ -185,6 +191,7 @@ init_goblin_slinger (void){
   Unit_type u;
   u.v                    =   4;
   u.morale               =   3;
+  u.morale_rg            =   2;
   u.count                =   9;
   u.ms                   =   2;
   u.strength             =   2;
@@ -214,6 +221,7 @@ init_goblin_scout (void){
   Unit_type u;
   u.v                    =   6;
   u.morale               =   4;
+  u.morale_rg            =   2;
   u.count                =   6;
   u.ms                   =   4;
   u.strength             =   3;
@@ -245,6 +253,7 @@ init_orc (void){
   Unit_type u;
   u.v                    =   3;
   u.morale               =   5;
+  u.morale_rg            =   2;
   u.count                =   6;
   u.ms                   =   3;
   u.strength             =   5;
@@ -273,6 +282,7 @@ init_armored_orc (void){
   Unit_type u;
   u.v                    =   3;
   u.morale               =   7;
+  u.morale_rg            =   2;
   u.count                =   6;
   u.ms                   =   3;
   u.strength             =   5;
@@ -301,6 +311,7 @@ init_troll (void){
   Unit_type u;
   u.v                    =   1;
   u.morale               =   5;
+  u.morale_rg            =   2;
   u.count                =   6;
   u.ms                   =   6;
   u.strength             =   8;

@@ -29,6 +29,7 @@ typedef struct {
 typedef struct {
   int v; /*range of vision*/
   int morale;
+  int morale_rg; /*regeneration per turn*/
   int count;
   int ms; /*melee_skill*/
   int strength;
@@ -56,6 +57,7 @@ typedef struct {
   int   skills_n;
   bool  is_visible;
   int   energy;
+  int   morale;
 } Unit;
 
 typedef enum {
