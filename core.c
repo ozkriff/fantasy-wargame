@@ -302,7 +302,7 @@ get_wounds (Unit *a, Unit *d){
   int hits     = 0;
   int wounds   = 0; /*possible wounds(may be blocked by armour)*/
   int final    = 0; /*final wounds(not blocked by armour)*/
-  int attacks  = at.attacks * a->count;
+  int attacks  = at.attacks * a->count * a->energy/at.energy;
   int a_ms     = (at.ms + at.ter_ms[tt]) * a->energy/at.energy;
   int d_ms     = (dt.ms + dt.ter_ms[tt]) * d->energy/dt.energy;
   /*chances to hit, to wound and to ignore armour. percents.*/
