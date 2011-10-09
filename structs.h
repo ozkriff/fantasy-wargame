@@ -36,8 +36,8 @@ typedef struct {
   int toughness;
   int attacks;
   int armor;
-  int mvp; /*move points*/
-  int ter_mvp[10]; /* terrain move cost */
+  int mv; /*move points*/
+  int ter_mv[10]; /* terrain move cost */
   int ter_ms[10]; /* melee_skill bonuses at different terrains */
   Skill skills[10];
   int skills_n;
@@ -51,7 +51,7 @@ typedef struct {
   int   count;
   int   player;
   bool  can_attack;
-  int   mvp;
+  int   mv;
   Mcrd  m;
   Skill skills[10];
   int   skills_n;

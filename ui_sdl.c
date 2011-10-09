@@ -324,7 +324,7 @@ draw_reachable_tiles (void){
   Mcrd m;
   FOR_EACH_MCRD(m){
     Mcrd p = tile(m)->parent;
-    if(tile(m)->cost <= selected_unit->mvp) {
+    if(tile(m)->cost <= selected_unit->mv) {
       draw_img(img_reacheble, map2scr(m));
       mbzline(m, p);
     }
@@ -461,7 +461,7 @@ draw_unit_info (Unit *u, Scrd s){
   char toughness[30];
   char attacks[30];
   char armor[30];
-  char mvp[30];
+  char mv[30];
   sprintf(type_id,   " type_id   %2i ", u->t);
   sprintf(v,         " v         %2i ", t->v);
   sprintf(morale,    " morale    %2i ", t->morale);
@@ -471,7 +471,7 @@ draw_unit_info (Unit *u, Scrd s){
   sprintf(toughness, " toughness %2i ", t->toughness);
   sprintf(attacks,   " attacks   %2i ", t->attacks);
   sprintf(armor,     " armor     %2i ", t->armor);
-  sprintf(mvp,       " mvp       %2i ", t->mvp);
+  sprintf(mv,        " mv        %2i ", t->mv);
   text(type_id,   mk_scrd(s.x, s.y+0*step));
   text(v,         mk_scrd(s.x, s.y+1*step));
   text(morale,    mk_scrd(s.x, s.y+2*step));
@@ -481,7 +481,7 @@ draw_unit_info (Unit *u, Scrd s){
   text(toughness, mk_scrd(s.x, s.y+6*step));
   text(attacks,   mk_scrd(s.x, s.y+7*step));
   text(armor,     mk_scrd(s.x, s.y+8*step));
-  text(mvp,       mk_scrd(s.x, s.y+9*step));
+  text(mv,        mk_scrd(s.x, s.y+9*step));
 }
 
 static void

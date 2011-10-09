@@ -63,9 +63,9 @@ static void
 apply_move (Event_move e){
   Unit * u = id2unit(e.u);
   if(find_skill(u, S_IGNR))
-    u->mvp -= e.cost;
+    u->mv -= e.cost;
   else
-    u->mvp = 0;
+    u->mv = 0;
   u->energy -= e.cost;
   u->m = neib(u->m, e.dir);
   fill_map(selected_unit);
@@ -199,7 +199,7 @@ refresh_units (void){
   FOR_EACH_NODE(units, node){
     Unit * u = node->d;
     Unit_type *t = &utypes[u->t];
-    u->mvp = utypes[u->t].mvp;
+    u->mv = utypes[u->t].mv;
     u->can_attack = true;
     u->energy += t->energy_rg;
     u->morale += t->morale_rg;
@@ -234,7 +234,7 @@ mk_event_move (Unit * u, int dir){
   e.t = E_MOVE;
   e.e.move.u    = u->id;
   e.e.move.dir  = dir;
-  e.e.move.cost = utypes[u->t].ter_mvp[tile_type];
+  e.e.move.cost = utypes[u->t].ter_mv[tile_type];
   return(e);
 }
 
@@ -495,9 +495,9 @@ undo_move (Event_move e){
   if(dir >= 6)
     dir -= 6;
   if(find_skill(u, S_IGNR))
-    u->mvp += e.cost;
+    u->mv += e.cost;
   else
-    u->mvp = utypes[u->t].mvp;
+    u->mv = utypes[u->t].mv;
   u->energy += e.cost;
   u->m = neib(u->m, dir);
   fill_map(selected_unit);
@@ -691,7 +691,7 @@ void
 move (Unit * moving_unit, Mcrd destination){
   List path;
   Node * node;
-  if(tile(destination)->cost > moving_unit->mvp)
+  if(tile(destination)->cost > moving_unit->mv)
     return;
   path = get_path(destination);
   for(node=path.h; node->n; node=node->n){
@@ -748,7 +748,7 @@ void
 add_unit (Mcrd crd, int plr, int type) {
   Unit * u      = calloc(1, sizeof(Unit));
   u->player     = plr;
-  u->mvp        = utypes[type].mvp;
+  u->mv         = utypes[type].mv;
   u->count      = utypes[type].count;
   u->can_attack = true;
   u->m          = crd;

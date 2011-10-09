@@ -35,15 +35,15 @@ pop (void){
 static int
 zoc (Mcrd a, Unit * u, int cost){
   int i;
-  int mvp = utypes[u->t].mvp;
+  int mv = utypes[u->t].mv;
   for(i=0; i<6; i++){
     Mcrd n = neib(a, i);
     Unit * u2 = unit_at(n);
-    if(inboard(n) && cost%mvp != 0
+    if(inboard(n) && cost%mv != 0
     && u2 && u2->player != u->player
     && tile(n)->visible
     && u2->is_visible ){
-      return(cost + mvp - (cost % mvp));
+      return(cost + mv - (cost % mv));
     }
   }
   return(cost);
@@ -61,12 +61,12 @@ process_nbh (Unit * u, Mcrd t, Mcrd nb){
   && tile(nb)->visible
   && u2->is_visible)
     return;
-  n = utypes[u->t].ter_mvp[tile(nb)->t];
+  n = utypes[u->t].ter_mv[tile(nb)->t];
   if(find_skill(u, S_IGNR))
     newcost = tile(t)->cost + n;
   else
     newcost = zoc(nb, u, tile(t)->cost + n);
-  if(tile(nb)->cost>newcost && newcost<=utypes[u->t].mvp)
+  if(tile(nb)->cost>newcost && newcost<=utypes[u->t].mv)
     push(nb, t, newcost);
 }
 
