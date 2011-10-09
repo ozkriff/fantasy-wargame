@@ -58,16 +58,18 @@ typedef struct {
   int   energy;
 } Unit;
 
-#define T_GRASS     0
-#define T_FOREST    1
-#define T_WATER     2
-#define T_HILLS     3
-#define T_MOUNTEENS 4
+typedef enum {
+  T_GRASS,
+  T_FOREST,
+  T_WATER,
+  T_HILLS,
+  T_MOUNTEENS
+} Tiletype_id;
 
 typedef struct {
   bool visible; /*fog of war*/
   int  cost; /* cost of path for selunit to this tile */
-  int  t; /* T_ */
+  Tiletype_id t;
   Mcrd parent; /* used in pathfinding */
 } Tile;
 
