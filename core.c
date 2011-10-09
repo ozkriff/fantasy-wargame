@@ -125,8 +125,7 @@ static void
 apply_range (Event_range e){
   Unit * ua = id2unit(e.a);
   Unit * ud = id2unit(e.d);
-  int dmg = e.dmg;
-  ud->count -= dmg;
+  ud->count -= e.defenders_killed;
   ua->can_attack = false;
 }
 
@@ -258,7 +257,7 @@ mk_event_range (Unit * a, Unit * d, int dmg){
   e.t = E_RANGE;
   e.e.range.a   = a->id;
   e.e.range.d   = d->id;
-  e.e.range.dmg = dmg;
+  e.e.range.defenders_killed = dmg;
   return(e);
 }
 
@@ -528,8 +527,7 @@ static void
 undo_range (Event_range e){
   Unit *a = id2unit(e.a);
   Unit *d = id2unit(e.d);
-  int dmg = e.dmg;
-  d->count += dmg;
+  d->count += e.defenders_killed;
   a->can_attack = true;;
 }
 
@@ -596,8 +594,8 @@ event2log (Event e){
           e.e.melee.defenders_killed );
        break;
     case E_RANGE:
-      fprintf(logfile, "RANGE a=%i, d=%i, dmg=%i\n",
-          e.e.range.a, e.e.range.d, e.e.range.dmg );
+      fprintf(logfile, "RANGE a=%i, d=%i, killed=%i\n",
+          e.e.range.a, e.e.range.d, e.e.range.defenders_killed );
       break;
     case E_ENDTURN:
       fprintf(logfile, "TURN %i --> %i\n",

@@ -31,7 +31,7 @@ mk_event_range (Byte * d){
   e.t = E_RANGE;
   e.e.range.a   = (int)d[1];
   e.e.range.d   = (int)d[2];
-  e.e.range.dmg = (int)d[3];
+  e.e.range.defenders_killed = (int)d[3];
   return(e);
 }
 
@@ -95,7 +95,7 @@ send_range (Event_range e){
   d[0] = E_RANGE;
   d[1] = (Byte)e.a;
   d[2] = (Byte)e.d;
-  d[3] = (Byte)e.dmg;
+  d[3] = (Byte)e.defenders_killed;
   SDLNet_TCP_Send(socket, &size, 1);
   SDLNet_TCP_Send(socket, d, (int)size);
 }

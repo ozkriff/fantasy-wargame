@@ -89,7 +89,7 @@ typedef struct {
 
 typedef struct {
   int a, d;
-  int dmg;
+  int defenders_killed;
 } Event_range;
 
 typedef struct {
