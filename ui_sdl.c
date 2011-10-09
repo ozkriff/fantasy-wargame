@@ -453,6 +453,42 @@ draw_labels (void){
 }
 
 static void
+draw_unit_info (Unit *u, Scrd s){
+  Unit_type *t = &utypes[u->t];
+  int step = 14;
+  char type_id[30];
+  char v[30];
+  char morale[30];
+  char morale_rg[30];
+  char ms[30];
+  char strength[30];
+  char toughness[30];
+  char attacks[30];
+  char armor[30];
+  char mvp[30];
+  sprintf(type_id,   " type_id   %2i ", u->t);
+  sprintf(v,         " v         %2i ", t->v);
+  sprintf(morale,    " morale    %2i ", t->morale);
+  sprintf(morale_rg, " morale_rg %2i ", t->morale_rg);
+  sprintf(ms,        " ms        %2i ", t->ms);
+  sprintf(strength,  " strength  %2i ", t->strength);
+  sprintf(toughness, " toughness %2i ", t->toughness);
+  sprintf(attacks,   " attacks   %2i ", t->attacks);
+  sprintf(armor,     " armor     %2i ", t->armor);
+  sprintf(mvp,       " mvp       %2i ", t->mvp);
+  text(type_id,   mk_scrd(s.x, s.y+0*step), false);
+  text(v,         mk_scrd(s.x, s.y+1*step), false);
+  text(morale,    mk_scrd(s.x, s.y+2*step), false);
+  text(morale_rg, mk_scrd(s.x, s.y+3*step), false);
+  text(ms,        mk_scrd(s.x, s.y+4*step), false);
+  text(strength,  mk_scrd(s.x, s.y+5*step), false);
+  text(toughness, mk_scrd(s.x, s.y+6*step), false);
+  text(attacks,   mk_scrd(s.x, s.y+7*step), false);
+  text(armor,     mk_scrd(s.x, s.y+8*step), false);
+  text(mvp,       mk_scrd(s.x, s.y+9*step), false);
+}
+
+static void
 draw (void){
   draw_bg(black);
   draw_map();
@@ -466,6 +502,15 @@ draw (void){
   if(ui_mode==MODE_SHOW_EVENT)
     draw_event(*current_event);
   /*maptext();*/
+  if(ui_mode==MODE_SELECT && unit_at(selected_tile)){
+#if 0
+    draw_unit_info(unit_at(selected_tile), mk_scrd(5, 40));
+#else
+    Scrd s = map2scr(selected_tile);
+    s.x += 96/2;
+    draw_unit_info(unit_at(selected_tile), s);
+#endif
+  }
   draw_labels();
   SDL_Flip(screen);
 }
