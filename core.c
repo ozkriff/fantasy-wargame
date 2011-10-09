@@ -226,7 +226,7 @@ mk_event_endturn (int old_id, int new_id){
 
 static Event
 mk_event_move (Unit * u, int dir){
-  Tiletype_id tile_type = tile(neib(u->m, dir))->t;
+  Tile_type_id tile_type = tile(neib(u->m, dir))->t;
   Event e;
   e.t = E_MOVE;
   e.e.move.u    = u->id;

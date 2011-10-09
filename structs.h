@@ -64,12 +64,12 @@ typedef enum {
   T_WATER,
   T_HILLS,
   T_MOUNTEENS
-} Tiletype_id;
+} Tile_type_id;
 
 typedef struct {
   bool visible; /*fog of war*/
   int  cost; /* cost of path for selunit to this tile */
-  Tiletype_id t;
+  Tile_type_id t;
   Mcrd parent; /* used in pathfinding */
 } Tile;
 
