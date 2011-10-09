@@ -358,7 +358,10 @@ attack_melee (Unit * a, Unit * d){
   int defenders_killed;
   support_range(a, d);
   defenders_killed = get_wounds(a, d);
-  attackers_killed = get_wounds(d, a);
+  if(!find_skill(a, S_NORETURN))
+    attackers_killed = get_wounds(d, a);
+  else
+    attackers_killed = 0;
   melee = mk_event_melee(a, d,
       attackers_killed, defenders_killed);
   add_event( melee );
