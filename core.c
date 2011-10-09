@@ -198,12 +198,13 @@ refresh_units (void){
   Node * node;
   FOR_EACH_NODE(units, node){
     Unit * u = node->d;
+    Unit_type *t = &utypes[u->t];
     u->mvp = utypes[u->t].mvp;
     u->can_attack = true;
-    u->energy += utypes[u->t].energy_rg;
-    u->morale += utypes[u->t].morale_rg;
-    fixnum(0, utypes[u->t].energy, &u->energy);
-    fixnum(0, utypes[u->t].morale, &u->morale);
+    u->energy += t->energy_rg;
+    u->morale += t->morale_rg;
+    fixnum(0, t->energy, &u->energy);
+    fixnum(0, t->morale, &u->morale);
   }
 }
 
