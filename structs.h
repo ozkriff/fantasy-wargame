@@ -6,12 +6,14 @@ typedef struct { int x, y; } Vec2i;
 typedef Vec2i Mcrd; 
 
 /* skills */
-#define S_RANGE     1
-#define S_INVIS     3
-#define S_IGNR      4
-#define S_ARMORED   5
-#define S_ARMPIERC  6
-#define S_NORETURN  7
+typedef enum {
+  S_RANGE,
+  S_INVIS,
+  S_IGNR,
+  S_ARMORED,
+  S_ARMPIERC,
+  S_NORETURN
+} Skill_id;
 
 typedef struct {
   int skill;
@@ -20,7 +22,7 @@ typedef struct {
 } Skill_range;
 
 typedef struct {
-  int t; /* type: S_* */
+  Skill_id t;
   Skill_range    range;
 } Skill;
 

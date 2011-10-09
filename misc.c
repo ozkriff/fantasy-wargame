@@ -36,7 +36,7 @@ mk_mcrd (int x, int y){
 }
 
 Skill *
-find_skill(Unit * u, int type){
+find_skill(Unit * u, Skill_id type){
   int i;
   for(i=0; i<u->skills_n; i++){
     if(u->skills[i].t == type)

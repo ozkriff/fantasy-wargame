@@ -18,7 +18,7 @@ bool   strcmp_sp (char *s1, char *s2);
 int    char2tiletype(char c);
 Tile*  str2map(char *s);
 
-Skill * find_skill (Unit * u, int type);
+Skill * find_skill (Unit * u, Skill_id type);
 
 /* ----------------------------------------------------- */
 
