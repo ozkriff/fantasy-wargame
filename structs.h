@@ -23,7 +23,7 @@ typedef struct {
 
 typedef struct {
   Skill_id t;
-  Skill_range    range;
+  Skill_range range;
 } Skill;
 
 typedef struct {
