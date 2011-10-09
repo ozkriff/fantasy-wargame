@@ -6,8 +6,8 @@
 #include <stdio.h>
 #include <time.h>
 #include "list.h"
-#include "structs.h"
 #include "utype.h"
+#include "structs.h"
 #include "misc.h"
 #include "core.h"
 #include "core_private.h"

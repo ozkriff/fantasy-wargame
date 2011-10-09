@@ -3,6 +3,7 @@
 #include <stdbool.h>
 #include <stdlib.h>
 #include "list.h"
+#include "utype.h"
 #include "structs.h"
 #include "misc.h"
 #include "core.h"

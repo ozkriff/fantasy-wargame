@@ -3,10 +3,10 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include "list.h"
+#include "utype.h"
 #include "structs.h"
 #include "core_private.h"
 #include "core.h"
-#include "utype.h"
 
 static Unit_type
 init_peasant (void){

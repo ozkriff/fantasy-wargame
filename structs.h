@@ -45,7 +45,7 @@ typedef struct {
 } Unit_type;
 
 typedef struct {
-  int   t; /* U_ */
+  Unit_type_id t;
   int   id;
   int   count;
   int   player;

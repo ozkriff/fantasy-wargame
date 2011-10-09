@@ -7,13 +7,13 @@
 #include <stdarg.h>
 #include <time.h>
 #include "list.h"
+#include "utype.h"
 #include "structs.h"
 #include "path.h"
 #include "misc.h"
 #include "core.h"
 #include "core_private.h"
 #include "net.h"
-#include "utype.h"
 #include "scenarios.h"
 
 Unit_type utypes[30];

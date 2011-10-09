@@ -4,6 +4,7 @@
 #include <stdbool.h>
 #include "SDL/SDL_net.h"
 #include "list.h"
+#include "utype.h"
 #include "structs.h"
 #include "misc.h"
 #include "core.h"

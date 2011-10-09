@@ -2,6 +2,7 @@
 
 #include <stdbool.h>
 #include "list.h"
+#include "utype.h"
 #include "structs.h"
 #include "scenarios.h"
 
