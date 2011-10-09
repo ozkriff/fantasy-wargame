@@ -270,17 +270,13 @@ draw_bg (Uint32 clr){
 }
 
 static void
-text (char * str, Scrd crd, bool is_centred){
+text (char * str, Scrd crd){
   SDL_Rect rect;
   SDL_Color fg = {255, 255, 255, 255};
   SDL_Color bg = {  0,   0,   0, 155};
   Img img = TTF_RenderText_Shaded(font, str, fg, bg);
   rect.x = (Sint16)crd.x;
   rect.y = (Sint16)crd.y;
-  if(is_centred){
-    rect.x -= img->w / 2;
-    rect.y -= img->h / 2;
-  }
   SDL_BlitSurface(img, NULL, screen, &rect);
   SDL_FreeSurface(img);
 }
@@ -298,7 +294,7 @@ draw_unit (Unit *u){
   if(1){
     char str[100];
     sprintf(str, "%i,%i", u->count, u->energy);
-    text(str, mk_scrd(s.x, s.y+20), false);
+    text(str, mk_scrd(s.x, s.y+20));
   }
 }
 
@@ -348,7 +344,7 @@ maptext (void){
       s.x += 36;
       s.y += 54;
       sprintf(str, "%i", tile(m)->cost);
-      text(str, s, true);
+      text(str, s);
     }
   }
 }
@@ -433,7 +429,7 @@ static void
 draw_labels (void){
   char str[100];
   sprintf(str, "[pl:%i]", current_player->id);
-  text(str, mk_scrd(0,0), false);
+  text(str, mk_scrd(0, 0));
   if(inboard(selected_tile)){
     char *s = NULL;
     switch(tile(selected_tile)->t){
@@ -448,7 +444,7 @@ draw_labels (void){
             tile(selected_tile)->t);
         break;
     }
-    text(s, mk_scrd(0, 20), false);
+    text(s, mk_scrd(0, 20));
   }
 }
 
@@ -476,16 +472,16 @@ draw_unit_info (Unit *u, Scrd s){
   sprintf(attacks,   " attacks   %2i ", t->attacks);
   sprintf(armor,     " armor     %2i ", t->armor);
   sprintf(mvp,       " mvp       %2i ", t->mvp);
-  text(type_id,   mk_scrd(s.x, s.y+0*step), false);
-  text(v,         mk_scrd(s.x, s.y+1*step), false);
-  text(morale,    mk_scrd(s.x, s.y+2*step), false);
-  text(morale_rg, mk_scrd(s.x, s.y+3*step), false);
-  text(ms,        mk_scrd(s.x, s.y+4*step), false);
-  text(strength,  mk_scrd(s.x, s.y+5*step), false);
-  text(toughness, mk_scrd(s.x, s.y+6*step), false);
-  text(attacks,   mk_scrd(s.x, s.y+7*step), false);
-  text(armor,     mk_scrd(s.x, s.y+8*step), false);
-  text(mvp,       mk_scrd(s.x, s.y+9*step), false);
+  text(type_id,   mk_scrd(s.x, s.y+0*step));
+  text(v,         mk_scrd(s.x, s.y+1*step));
+  text(morale,    mk_scrd(s.x, s.y+2*step));
+  text(morale_rg, mk_scrd(s.x, s.y+3*step));
+  text(ms,        mk_scrd(s.x, s.y+4*step));
+  text(strength,  mk_scrd(s.x, s.y+5*step));
+  text(toughness, mk_scrd(s.x, s.y+6*step));
+  text(attacks,   mk_scrd(s.x, s.y+7*step));
+  text(armor,     mk_scrd(s.x, s.y+8*step));
+  text(mvp,       mk_scrd(s.x, s.y+9*step));
 }
 
 static void
@@ -518,13 +514,13 @@ draw (void){
 static void
 draw_menu (void){
   draw_bg(black);
-  text("q - quit",       mk_scrd(0,  0), false);
-  text("0 - scenario_0", mk_scrd(0, 20), false);
-  text("1 - scenario_1", mk_scrd(0, 40), false);
+  text("q - quit",       mk_scrd(0,  0));
+  text("0 - scenario_0", mk_scrd(0, 20));
+  text("1 - scenario_1", mk_scrd(0, 40));
   text("2 - net localhost 2000 human 0",
-                         mk_scrd(0, 60), false);
+                         mk_scrd(0, 60));
   text("3 - net localhost 2000 human 1",
-                         mk_scrd(0, 80), false);
+                         mk_scrd(0, 80));
   SDL_Flip(screen);
 }
 
