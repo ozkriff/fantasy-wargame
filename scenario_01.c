@@ -18,34 +18,53 @@ static void scenario_logic(void);
 
 Scenario scenario_01 = {
   2, /*players_count*/
-  {7, 14}, /*map_size*/
-  " . . * . . . *"
-  ". . . t . M . "
-  " . . . . . . ."
-  ". . . . . . . "
-  " . . . . . . ."
-  ". . . . . . . "
-  " . . . . . * ."
-  ". . * * * . . "
-  " . * h h * . ."
-  ". * h M h * . "
-  " . * h h * . ."
-  ". . * * * . . "
-  " . . . . . . ."
-  ". . . . . . . ",
+  {12, 12}, /*map_size*/
+  " t t t . . h . . . . . ."
+  "t t t t . M . . . . . . "
+  " t t t . . . M h . . . ."
+  ". . . . t t h h . . . . "
+  " . . t t . . . . . . . ."
+  ". . . . . . . . . . . . "
+  " . . . . . . . . . . . ."
+  ". . . . . . . . . . . . "
+  " . . . . h . t . t . . ."
+  ". . * . h . . . . t . . "
+  " * * * . . . . t . . . ."
+  "* * * . . * . . . . . . ",
   init_scenario, 
   scenario_logic
 };
 
 static void
+player_0_units (void){
+  add_unit(mk_mcrd( 1,  4), 0, U_PEASANT);
+  add_unit(mk_mcrd( 1,  5), 0, U_SCOUT);
+  add_unit(mk_mcrd( 1,  6), 0, U_PEASANT);
+  add_unit(mk_mcrd( 1,  7), 0, U_PEASANT);
+  add_unit(mk_mcrd( 2,  5), 0, U_SWORDSMAN);
+  add_unit(mk_mcrd( 2,  6), 0, U_POOR_ARCHER);
+  add_unit(mk_mcrd( 2,  7), 0, U_FOOT_KNIGHT);
+  add_unit(mk_mcrd( 2,  8), 0, U_SWORDSMAN);
+}
+
+static void
+player_1_units (void){
+  add_unit(mk_mcrd( 7,  4), 1, U_GOBLIN);
+  add_unit(mk_mcrd( 7,  5), 1, U_GOBLIN);
+  add_unit(mk_mcrd( 7,  6), 1, U_ORC);
+  add_unit(mk_mcrd( 7,  7), 1, U_GOBLIN);
+  add_unit(mk_mcrd( 8,  3), 1, U_GOBLIN_SCOUT);
+  add_unit(mk_mcrd( 8,  7), 1, U_GOBLIN_SLINGER);
+  add_unit(mk_mcrd( 8,  4), 1, U_ARMORED_ORC);
+  add_unit(mk_mcrd( 9,  4), 1, U_TROLL);
+  add_unit(mk_mcrd( 9,  5), 1, U_ORC);
+}
+
+static void
 init_scenario (void){
   map = str2map(scenario_01.map);
-  /*player0 units*/{
-    add_unit(mk_mcrd(1,2), 0, U_ORC);
-  }
-  /*player1 units*/{
-    add_unit(mk_mcrd(3,5), 1, U_SWORDSMAN);
-  }
+  player_0_units();
+  player_1_units();
 }
 
 static void
