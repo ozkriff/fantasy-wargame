@@ -60,8 +60,6 @@ player_1_units (void){
   add_unit(mk_mcrd(10,  5), 1, U_ORC);
 }
 
-
-
 static void
 init_scenario (void){
   map = str2map(scenario_02.map);
