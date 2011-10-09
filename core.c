@@ -220,8 +220,8 @@ static Event
 mk_event_endturn (int old_id, int new_id){
   Event e;
   e.t = E_ENDTURN;
-  e.e.endturn.old_player = old_id;
-  e.e.endturn.new_player = new_id;
+  e.e.endturn.old_id = old_id;
+  e.e.endturn.new_id = new_id;
   return(e);
 }
 
@@ -460,13 +460,13 @@ is_event_visible (Event e){
 static void
 apply_endturn(Event_endturn e){
   Node *nd;
-  if(e.new_player == 0){
+  if(e.new_id == 0){
     check_win();
     refresh_units();
   }
   FOR_EACH_NODE(players, nd){
     Player *p = nd->d;
-    if(p->id == e.new_player){
+    if(p->id == e.new_id){
       current_player = p;
       /*undo all events that this player have not seen yet*/
       {
@@ -601,8 +601,8 @@ event2log (Event e){
       break;
     case E_ENDTURN:
       fprintf(logfile, "TURN %i --> %i\n",
-          e.e.endturn.old_player,
-          e.e.endturn.new_player );
+          e.e.endturn.old_id,
+          e.e.endturn.new_id);
       break;
     case E_DEATH:
       fprintf(logfile, "KILLED %i\n", e.e.death.id);

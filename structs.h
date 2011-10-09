@@ -93,8 +93,8 @@ typedef struct {
 } Event_range;
 
 typedef struct {
-  int old_player;
-  int new_player;
+  int old_id;
+  int new_id;
 } Event_endturn;
 
 typedef struct {

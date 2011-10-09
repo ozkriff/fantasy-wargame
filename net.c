@@ -50,8 +50,8 @@ static Event
 mk_event_endturn (Byte * d){
   Event e;
   e.t = E_ENDTURN;
-  e.e.endturn.old_player = (int)d[1];
-  e.e.endturn.new_player = (int)d[2];
+  e.e.endturn.old_id = (int)d[1];
+  e.e.endturn.new_id = (int)d[2];
   return(e);
 }
 
@@ -105,8 +105,8 @@ send_endturn (Event_endturn e){
   Byte size = 3;
   Byte d[3];
   d[0] = E_ENDTURN;
-  d[1] = (Byte)e.old_player;
-  d[2] = (Byte)e.new_player;
+  d[1] = (Byte)e.old_id;
+  d[2] = (Byte)e.new_id;
   SDLNet_TCP_Send(socket, &size, 1);
   SDLNet_TCP_Send(socket, d, (int)size);
 }
