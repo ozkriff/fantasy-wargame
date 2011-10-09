@@ -14,7 +14,7 @@ int ui_done;
 
 void ui_list_units (void){
   Node * n;
-  FOR_EACH_NODE(cw->units, n){
+  FOR_EACH_NODE(units, n){
     Unit * u = n->d;
     char * s = 
         "id=%i mcrd={%i,%i} plr=%i\n";
@@ -63,8 +63,8 @@ void ui_attack (void){
   }
 }
 
-void ui_print_cw_id (void){
-  printf("cw->id: %i\n", cw->id);
+void ui_print_player_id (void){
+  printf("player->id: %i\n", current_player->id);
 }
 
 void ui_print_map (void){
@@ -74,7 +74,7 @@ void ui_print_map (void){
       putchar(' ');
     for(m.x=0; m.x<map_size.x; m.x++){
       /*printf("%i ", tile(m)->type);*/
-      printf("%i ", tile(m)->fog);
+      printf("%i ", tile(m)->visible);
     }
     putchar('\n');
   }    
@@ -109,24 +109,14 @@ void ui_cmd(char * b){
     case 'a': ui_attack();      break;
     case 't': ui_end_turn();    break;
     case 'q': ui_done = 1;      break;
-    case 'p': ui_print_cw_id(); break;
+    case 'p': ui_print_player_id(); break;
   }
 }
 
-int main(int ac, char **av){
-#if 0
-  char *s[7] = {
-    "./ui-cli",
-    "-local",
-    "scenario2",
-    "-human",
-    "0",
-    "-human",
-    "1" };
-  ac = 7;
-  av = s;
-#endif
-  init(ac, av);
+int main(void){
+  init();
+  init_local_players_s("hh", 0, 1);
+  set_scenario_id(1);
   while(!ui_done){
     printf(">> ");
     fgets(b, 200, stdin);
