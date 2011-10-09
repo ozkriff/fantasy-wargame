@@ -1,6 +1,6 @@
 /* See LICENSE file for copyright and license details. */
 
-enum Unit_type_id {
+typedef enum {
   U_PEASANT,
   U_MILITIAMAN,
   U_SPEARMAN,
@@ -21,7 +21,7 @@ enum Unit_type_id {
   U_CRAZY_ORC,
   U_YOUNG_TROLL,
   U_TROLL
-};
+} Unit_type_id;
 
 void init_unit_types (void);
 
