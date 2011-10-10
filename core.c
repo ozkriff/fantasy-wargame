@@ -719,7 +719,6 @@ attack (Unit * a, Unit * d){
 
 void
 apply_event (Event e){
-  printf("apply event N_%i\n", e.id);
   current_player->last_event_id = e.id;
   switch(e.t){
     case E_MOVE:    apply_move(e.e.move);       break;
