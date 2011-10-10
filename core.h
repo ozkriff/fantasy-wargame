@@ -19,6 +19,8 @@ typedef struct {
   int skill;
   int strength;
   int range;
+  int shoots_max;
+  int shoots; /*shoots left this turn*/
 } Skill_range;
 
 typedef struct {

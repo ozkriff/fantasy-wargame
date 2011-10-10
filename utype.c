@@ -120,7 +120,12 @@ init_poor_archer (void){
   u.ter_ms[T_HILLS    ] =   0;
   u.ter_ms[T_MOUNTEENS] =   0;
   u.skills_n            =   1;
-  u.skills[0] = mk_skill_range(5, 5, 3);
+  u.skills[0].t = S_RANGE;
+  u.skills[0].range.skill      = 5;
+  u.skills[0].range.strength   = 5;
+  u.skills[0].range.range      = 3;
+  u.skills[0].range.shoots_max = 2;
+  u.skills[0].range.shoots     = 2;
   return(u);
 }
 
@@ -150,9 +155,14 @@ init_scout (void){
   u.ter_ms[T_HILLS    ] =   0;
   u.ter_ms[T_MOUNTEENS] =   0;
   u.skills_n            =   3;
-  u.skills[0] = mk_skill_bool(S_IGNR);
-  u.skills[1] = mk_skill_bool(S_INVIS);
-  u.skills[2] = mk_skill_range(5, 4, 2);
+  u.skills[0].t = S_IGNR;
+  u.skills[1].t = S_INVIS;
+  u.skills[2].t = S_RANGE;
+  u.skills[2].range.skill      = 5;
+  u.skills[2].range.strength   = 5;
+  u.skills[2].range.range      = 3;
+  u.skills[2].range.shoots_max = 2;
+  u.skills[2].range.shoots     = 2;
   return(u);
 }
 
@@ -211,7 +221,12 @@ init_goblin_slinger (void){
   u.ter_ms[T_HILLS    ] =   0;
   u.ter_ms[T_MOUNTEENS] =   0;
   u.skills_n            =   1;
-  u.skills[0] = mk_skill_range(5, 4, 2);
+  u.skills[0].t = S_RANGE;
+  u.skills[0].range.skill      = 5;
+  u.skills[0].range.strength   = 4;
+  u.skills[0].range.range      = 2;
+  u.skills[0].range.shoots_max = 2;
+  u.skills[0].range.shoots     = 2;
   return(u);
 }
 
@@ -241,9 +256,9 @@ init_goblin_scout (void){
   u.ter_ms[T_HILLS    ] =   0;
   u.ter_ms[T_MOUNTEENS] =   0;
   u.skills_n            =   3;
-  u.skills[0] = mk_skill_bool(S_NORETURN);
-  u.skills[1] = mk_skill_bool(S_IGNR);
-  u.skills[2] = mk_skill_bool(S_INVIS);
+  u.skills[0].t = S_NORETURN;
+  u.skills[1].t = S_IGNR;
+  u.skills[2].t = S_INVIS;
   return(u);
 }
 

@@ -126,6 +126,7 @@ apply_range (Event_range e){
   Unit * ud = id2unit(e.d);
   ud->count -= e.defenders_killed;
   ua->can_attack = false;
+  find_skill(ua, S_RANGE)->range.shoots--;
 }
 
 static void
@@ -197,6 +198,7 @@ refresh_units (void){
   Node * node;
   FOR_EACH_NODE(units, node){
     Unit * u = node->d;
+    Skill *range = find_skill(u, S_RANGE);
     Unit_type *t = &utypes[u->t];
     u->mv = utypes[u->t].mv;
     u->can_attack = true;
@@ -204,6 +206,8 @@ refresh_units (void){
     u->morale += t->morale_rg;
     fixnum(0, t->energy, &u->energy);
     fixnum(0, t->morale, &u->morale);
+    if(range)
+      range->range.shoots = range->range.shoots_max;
   }
 }
 
@@ -277,7 +281,6 @@ ambush(Mcrd next, Unit * moving_unit){
 /* [a]ttacker, [d]efender */
 static void
 support_range (Unit * a, Unit * d){
-  Event range;
   Unit * sup;  /* [sup]porter */
   int i;
   for(i=0; i<6; i++){
@@ -289,8 +292,10 @@ support_range (Unit * a, Unit * d){
   }
   if(i==6)
     return;
-  range = mk_event_range(sup, a, range_damage(sup, a));
-  add_event(range);
+  if(find_skill(sup, S_RANGE)->range.shoots > 0){
+    int killed = range_damage(sup, a);
+    add_event(mk_event_range(sup, a, killed));
+  }
 }
 
 static int
@@ -714,7 +719,8 @@ attack (Unit * a, Unit * d){
   int dist = mdist(a->m, d->m);
   Skill * range = find_skill(a, S_RANGE);
   if(range){
-    if(dist <= range->range.range){
+    if(dist <= range->range.range
+    && range->range.shoots > 0){
       int targets_killed = range_damage(a, d);
       add_event( mk_event_range(a, d, targets_killed) );
       if(d->count - targets_killed <= 0)
@@ -722,7 +728,7 @@ attack (Unit * a, Unit * d){
       puts("");
     }
   }else{
-    if(dist <= 1){
+    if(a->can_attack && dist == 1){
       attack_melee(a, d);
     }
   }

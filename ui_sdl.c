@@ -558,7 +558,7 @@ tile_action (Mcrd m){
       move(selected_unit, m);
     }
     if(u && u->player != current_player->id && u->is_visible
-    && selected_unit && selected_unit->can_attack){
+    && selected_unit){
       attack(selected_unit, u);
     }
   }
