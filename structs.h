@@ -130,7 +130,6 @@ typedef struct {
 typedef struct {
   int   players_count;
   Mcrd  map_size;
-  char *map;
   void (*init)(void);
   void (*logic)(void);
 } Scenario;

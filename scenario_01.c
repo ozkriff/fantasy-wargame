@@ -16,21 +16,23 @@
 static void init_scenario(void);
 static void scenario_logic(void);
 
+static char *s_map =
+    " t t t . . h . . . . . ."
+    "t t t t . M . . . . . . "
+    " t t t . . . M h . . . ."
+    ". . . . t t h h . . . . "
+    " . . t t . . . . . . . ."
+    ". . . . . . . . . . . . "
+    " . . . . . . . . . . . ."
+    ". . . . . . . . . . . . "
+    " . . . . h . t . t . . ."
+    ". . * . h . . . . t . . "
+    " * * * . . . . t . . . ."
+    "* * * . . * . . . . . . ";
+
 Scenario scenario_01 = {
   2, /*players_count*/
   {12, 12}, /*map_size*/
-  " t t t . . h . . . . . ."
-  "t t t t . M . . . . . . "
-  " t t t . . . M h . . . ."
-  ". . . . t t h h . . . . "
-  " . . t t . . . . . . . ."
-  ". . . . . . . . . . . . "
-  " . . . . . . . . . . . ."
-  ". . . . . . . . . . . . "
-  " . . . . h . t . t . . ."
-  ". . * . h . . . . t . . "
-  " * * * . . . . t . . . ."
-  "* * * . . * . . . . . . ",
   init_scenario, 
   scenario_logic
 };
@@ -62,7 +64,7 @@ player_1_units (void){
 
 static void
 init_scenario (void){
-  map = str2map(scenario_01.map);
+  map = str2map(s_map);
   player_0_units();
   player_1_units();
 }
