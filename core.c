@@ -424,23 +424,6 @@ new_unit_id (){
   }
 }
 
-Skill
-mk_skill_range (int skill, int strength, int range){
-  Skill s;
-  s.t = S_RANGE;
-  s.range.skill = skill;
-  s.range.strength = strength;
-  s.range.range = range;
-  return(s);
-}
-
-Skill
-mk_skill_bool (int type){
-  Skill s;
-  s.t = type;
-  return(s);
-}
-
 static bool
 is_event_visible (Event e){
   switch(e.t){
