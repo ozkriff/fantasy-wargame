@@ -7,7 +7,6 @@
 #include <stdarg.h>
 #include "list.h"
 #include "utype.h"
-#include "structs.h"
 #include "core.h"
 #include "path.h"
 #include "misc.h"

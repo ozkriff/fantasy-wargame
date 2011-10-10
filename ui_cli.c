@@ -5,7 +5,6 @@
 #include <stdlib.h>
 #include <stdlib.h>
 #include "list.h"
-#include "structs.h"
 #include "core.h"
 #include "misc.h"
 

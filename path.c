@@ -4,9 +4,8 @@
 #include <stdlib.h>
 #include "list.h"
 #include "utype.h"
-#include "structs.h"
-#include "misc.h"
 #include "core.h"
+#include "misc.h"
 #include "path.h"
 
 /* stack for filling map */

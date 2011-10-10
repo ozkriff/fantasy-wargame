@@ -3,7 +3,7 @@
 #include <stdbool.h>
 #include "list.h"
 #include "utype.h"
-#include "structs.h"
+#include "core.h"
 #include "scenarios.h"
 
 Scenario scenarios[20];
