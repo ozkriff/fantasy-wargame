@@ -497,7 +497,9 @@ draw (void){
   if(ui_mode==MODE_SHOW_EVENT)
     draw_event(*current_event);
   /*maptext();*/
-  if(ui_mode==MODE_SELECT && unit_at(selected_tile)){
+  if(ui_mode==MODE_SELECT
+  && unit_at(selected_tile)
+  && unit_at(selected_tile)->is_visible) {
 #if 0
     draw_unit_info(unit_at(selected_tile), mk_scrd(5, 40));
 #else
