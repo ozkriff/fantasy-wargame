@@ -1,12 +1,12 @@
 /* See LICENSE file for copyright and license details. */
 
-#include <stdbool.h>
 #include <stdio.h>
 #include <stdarg.h>
 #include <stdlib.h>
 #include <math.h>
 #include <time.h>
 #include "SDL/SDL_net.h"
+#include "bool.h"
 #include "list.h"
 
 #define PRINT_DATA false

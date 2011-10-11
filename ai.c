@@ -2,9 +2,9 @@
 
 #include <stdio.h>
 #include <string.h>
-#include <stdbool.h>
 #include <stdlib.h>
 #include <stdarg.h>
+#include "bool.h"
 #include "list.h"
 #include "utype.h"
 #include "core.h"

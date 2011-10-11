@@ -1,12 +1,12 @@
 /* See LICENSE file for copyright and license details. */
 
-#include <stdbool.h>
 #include <stdlib.h>
 #include <math.h>
 #include "SDL/SDL.h"
 #include "SDL/SDL_image.h"
 #include "SDL/SDL_ttf.h"
 #include "SDL/SDL_net.h"
+#include "bool.h"
 #include "list.h"
 #include "utype.h"
 #include "core.h"

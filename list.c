@@ -3,6 +3,7 @@
 /* Double-linked list, stack, queue. */
 
 #include <malloc.h>
+#include "bool.h"
 #include "list.h"
 
 /* Create node <new> that points to <data> and insert 
