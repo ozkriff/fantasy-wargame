@@ -797,17 +797,22 @@ mainloop (void){
   }
 }
 
+static void
+cleanup_ui(){
+  free_sprites();
+  SDL_Quit();
+  IMG_Quit();
+  TTF_CloseFont(font);
+  TTF_Quit();
+}
+
 #undef main
 int
 main (void){
   init();
   init_draw();
   mainloop();
-  free_sprites();
-  SDL_Quit();
-  IMG_Quit();
-  TTF_CloseFont(font);
-  TTF_Quit();
+  cleanup_ui();
   return(EXIT_SUCCESS);
 }
 
