@@ -439,6 +439,19 @@ is_event_visible (Event e){
   }
 }
 
+/*undo all events that this player have not seen yet*/
+static void
+undo_unshown_events (){
+  Node *node = eventlist.t;
+  while(node){
+    Event *e = node->d;
+    if(e->id == current_player->last_event_id)
+      break;
+    undo_event(*e);
+    node = node->p;
+  }
+}
+
 static void
 apply_endturn(Event_endturn e){
   Node *nd;
@@ -450,14 +463,7 @@ apply_endturn(Event_endturn e){
     Player *p = nd->d;
     if(p->id == e.new_id){
       current_player = p;
-      /*undo all events that this player have not seen yet*/
-      {
-        Node *n = eventlist.t;
-        while( n && ((Event*)n->d)->id != current_player->last_event_id){
-          undo_event( *((Event*)n->d) );
-          n = n->p;
-        }
-      }
+      undo_unshown_events();
       is_client_active = true;
       updatefog(current_player->id);
       update_units_visibility();
