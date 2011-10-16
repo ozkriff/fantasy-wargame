@@ -453,6 +453,41 @@ draw_labels (void){
   }
 }
 
+static char*
+unittype2name (Unit_type_id t){
+  switch(t){
+    /*humans*/
+    case U_PEASANT:       return("peasant");
+    case U_MILITIAMAN:    return("militiaman");
+    case U_SPEARMAN:      return("spearman");
+    case U_SWORDSMAN:     return("swordsman");
+    case U_FOOT_KNIGHT:   return("foot knight");
+    case U_KNIGHT:        return("knight");
+    case U_POOR_ARCHER:   return("poor_archer");
+    case U_ARCHER:        return("archer");
+    case U_SCOUT:         return("scout");
+    /*goblins*/
+    case U_WEAK_GOBLIN:   return("weak goblin");
+    case U_GOBLIN:        return("goblin");
+    case U_GOBLIN_SLINGER:return("goblin slinger");
+    case U_GOBLIN_SCOUT:  return("goblin scout");
+    /*orcs*/
+    case U_YOUNG_ORC:     return("young orc");
+    case U_ORC:           return("orc");
+    case U_ARMORED_ORC:   return("armored orc");
+    case U_CRAZY_ORC:     return("crazy orc");
+    /*trolls*/
+    case U_YOUNG_TROLL:   return("young orc");
+    case U_TROLL:         return("troll");
+    default:
+      die("ui_sdl: unittype2name(): "
+          "Unknown unit type id: '%i'\n", t);
+      break;
+  }
+  return(NULL);
+
+}
+
 static void
 draw_unit_info (Unit *u, Scrd s){
   Unit_type *t = &utypes[u->t];
@@ -467,6 +502,7 @@ draw_unit_info (Unit *u, Scrd s){
   char attacks[30];
   char armor[30];
   char mv[30];
+  char name[30];
   sprintf(type_id,   " type_id   %2i ", u->t);
   sprintf(v,         " v         %2i ", t->v);
   sprintf(morale,    " morale    %2i ", t->morale);
@@ -477,6 +513,8 @@ draw_unit_info (Unit *u, Scrd s){
   sprintf(attacks,   " attacks   %2i ", t->attacks);
   sprintf(armor,     " armor     %2i ", t->armor);
   sprintf(mv,        " mv        %2i ", t->mv);
+  sprintf(name,      " %s ", unittype2name(u->t));
+  text(name,      mk_scrd(s.x, s.y-1*step));
   text(type_id,   mk_scrd(s.x, s.y+0*step));
   text(v,         mk_scrd(s.x, s.y+1*step));
   text(morale,    mk_scrd(s.x, s.y+2*step));
