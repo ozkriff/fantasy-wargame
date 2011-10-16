@@ -194,12 +194,14 @@ checkunitsleft(){
 }
 
 static void
-refresh_units (void){
+refresh_units (int player_id){
   Node * node;
   FOR_EACH_NODE(units, node){
     Unit * u = node->d;
     Skill *range = find_skill(u, S_RANGE);
     Unit_type *t = &utypes[u->t];
+    if(u->player != player_id)
+      continue;
     u->mv = utypes[u->t].mv;
     u->can_attack = true;
     u->energy += t->energy_rg;
@@ -455,16 +457,14 @@ undo_unshown_events (){
 static void
 apply_endturn(Event_endturn e){
   Node *nd;
-  if(e.new_id == 0){
-    check_win();
-    refresh_units();
-  }
   FOR_EACH_NODE(players, nd){
     Player *p = nd->d;
     if(p->id == e.new_id){
       current_player = p;
       undo_unshown_events();
       is_client_active = true;
+      check_win();
+      refresh_units(current_player->id);
       updatefog(current_player->id);
       update_units_visibility();
       return;
