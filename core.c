@@ -281,8 +281,9 @@ ambush(Mcrd next, Unit * moving_unit){
 }
 
 /* [a]ttacker, [d]efender */
-static void
+static int
 support_range (Unit * a, Unit * d){
+  int killed = 0;
   Unit * sup;  /* [sup]porter */
   int i;
   for(i=0; i<6; i++){
@@ -293,11 +294,12 @@ support_range (Unit * a, Unit * d){
     }
   }
   if(i==6)
-    return;
+    return(0);
   if(find_skill(sup, S_RANGE)->range.shoots > 0){
-    int killed = range_damage(sup, a);
+    killed = range_damage(sup, a);
     add_event(mk_event_range(sup, a, killed));
   }
+  return(killed);
 }
 
 static int
@@ -362,7 +364,11 @@ attack_melee (Unit * a, Unit * d){
   Event melee;
   int attackers_killed;
   int defenders_killed;
-  support_range(a, d);
+  int sup_killed = support_range(a, d);
+  if(a->count - sup_killed <= 0){
+    add_event(mk_event_death(a));
+    return;
+  }
   defenders_killed = get_wounds(a, d);
   if(!find_skill(a, S_NORETURN))
     attackers_killed = get_wounds(d, a);
@@ -371,7 +377,7 @@ attack_melee (Unit * a, Unit * d){
   melee = mk_event_melee(a, d,
       attackers_killed, defenders_killed);
   add_event( melee );
-  if(a->count - attackers_killed <= 0)
+  if(a->count - (attackers_killed + sup_killed) <= 0)
     add_event(mk_event_death(a));
   if(d->count - defenders_killed <= 0){
     add_event(mk_event_death(d));
