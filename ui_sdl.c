@@ -424,25 +424,31 @@ draw_event (Event e){
   }
 }
 
+static char *
+tiletype2name (int tiletype){
+  switch(tiletype){
+    case T_GRASS:     return("(grass)");
+    case T_FOREST:    return("(forest)");
+    case T_WATER:     return("(water)");
+    case T_HILLS:     return("(hills)");
+    case T_MOUNTEENS: return("(mounteens)");
+    default:
+      die("ui_sdl: tiletype2name(): "
+          "Unknown tile type - '%i'\n",
+          tiletype);
+      break;
+  }
+  return(NULL);
+}
+
 static void
 draw_labels (void){
   char str[100];
   sprintf(str, "[pl:%i]", current_player->id);
   text(str, mk_scrd(0, 0));
   if(inboard(selected_tile)){
-    char *s = NULL;
-    switch(tile(selected_tile)->t){
-      case T_GRASS:     s = "(grass)";     break;
-      case T_FOREST:    s = "(forest)";    break;
-      case T_WATER:     s = "(water)";     break;
-      case T_HILLS:     s = "(hills)";     break;
-      case T_MOUNTEENS: s = "(mounteens)"; break;
-      default:
-        die("ui_sdl: draw_labels(): "
-            "Unknown tile type - '%i'\n",
-            tile(selected_tile)->t);
-        break;
-    }
+    int t = tile(selected_tile)->t;
+    char *s = tiletype2name(t);
     text(s, mk_scrd(0, 20));
   }
 }
