@@ -194,22 +194,28 @@ checkunitsleft(){
 }
 
 static void
+refresh_unit (Unit *u){
+  Skill *range;
+  Unit_type *t = &utypes[u->t];
+  u->mv = t->mv;
+  u->can_attack = true;
+  u->energy += t->energy_rg;
+  u->morale += t->morale_rg;
+  fixnum(0, t->energy, &u->energy);
+  fixnum(0, t->morale, &u->morale);
+  range = find_skill(u, S_RANGE);
+  if(range){
+    range->range.shoots = range->range.shoots_max;
+  }
+}
+
+static void
 refresh_units (int player_id){
   Node * node;
   FOR_EACH_NODE(units, node){
     Unit * u = node->d;
-    Skill *range = find_skill(u, S_RANGE);
-    Unit_type *t = &utypes[u->t];
-    if(u->player != player_id)
-      continue;
-    u->mv = utypes[u->t].mv;
-    u->can_attack = true;
-    u->energy += t->energy_rg;
-    u->morale += t->morale_rg;
-    fixnum(0, t->energy, &u->energy);
-    fixnum(0, t->morale, &u->morale);
-    if(range)
-      range->range.shoots = range->range.shoots_max;
+    if(u->player == player_id)
+      refresh_unit(u);
   }
 }
 
