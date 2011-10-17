@@ -503,6 +503,7 @@ draw_unit_info (Unit *u, Scrd s){
   char armor[30];
   char mv[30];
   char name[30];
+  char id[30];
   sprintf(type_id,   " type_id   %2i ", u->t);
   sprintf(v,         " v         %2i ", t->v);
   sprintf(morale,    " morale    %2i ", t->morale);
@@ -514,6 +515,8 @@ draw_unit_info (Unit *u, Scrd s){
   sprintf(armor,     " armor     %2i ", t->armor);
   sprintf(mv,        " mv        %2i ", t->mv);
   sprintf(name,      " %s ", unittype2name(u->t));
+  sprintf(id,        " id        %2i ", u->id);
+  text(id,        mk_scrd(s.x, s.y-2*step));
   text(name,      mk_scrd(s.x, s.y-1*step));
   text(type_id,   mk_scrd(s.x, s.y+0*step));
   text(v,         mk_scrd(s.x, s.y+1*step));
