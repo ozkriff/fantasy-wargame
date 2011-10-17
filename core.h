@@ -45,6 +45,7 @@ typedef struct {
   int skills_n;
   int energy; /*max unit's energy */
   int energy_rg; /*regeneration per turn*/
+  int cost;
 } Unit_type;
 
 typedef struct {

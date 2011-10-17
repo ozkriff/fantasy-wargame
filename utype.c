@@ -22,6 +22,7 @@ init_peasant (void){
   u.mv                  =   4;
   u.energy              =  10;
   u.energy_rg           =   3;
+  u.cost                =   3;
   u.ter_mv[T_GRASS    ] =   1;
   u.ter_mv[T_FOREST   ] =   3;
   u.ter_mv[T_WATER    ] =   8;
@@ -51,6 +52,7 @@ init_swordsman (void){
   u.mv                  =   3;
   u.energy              =  20;
   u.energy_rg           =   4;
+  u.cost                =   5;
   u.ter_mv[T_GRASS    ] =   1;
   u.ter_mv[T_FOREST   ] =   3;
   u.ter_mv[T_WATER    ] =   8;
@@ -80,6 +82,7 @@ init_foot_knight (void){
   u.mv                  =   2;
   u.energy              =  20;
   u.energy_rg           =   4;
+  u.cost                =   8;
   u.ter_mv[T_GRASS    ] =   1;
   u.ter_mv[T_FOREST   ] =   3;
   u.ter_mv[T_WATER    ] =   8;
@@ -109,6 +112,7 @@ init_poor_archer (void){
   u.mv                  =   4;
   u.energy              =  15;
   u.energy_rg           =   4;
+  u.cost                =   4;
   u.ter_mv[T_GRASS    ] =   1;
   u.ter_mv[T_FOREST   ] =   3;
   u.ter_mv[T_WATER    ] =   8;
@@ -144,6 +148,7 @@ init_scout (void){
   u.mv                  =   4;
   u.energy              =  15;
   u.energy_rg           =   4;
+  u.cost                =   6;
   u.ter_mv[T_GRASS    ] =   1;
   u.ter_mv[T_FOREST   ] =   3;
   u.ter_mv[T_WATER    ] =   8;
@@ -181,6 +186,7 @@ init_goblin (void){
   u.mv                  =   3;
   u.energy              =   8;
   u.energy_rg           =   2;
+  u.cost                =   2;
   u.ter_mv[T_GRASS    ] =   1;
   u.ter_mv[T_FOREST   ] =   2;
   u.ter_mv[T_WATER    ] =   8;
@@ -210,6 +216,7 @@ init_goblin_slinger (void){
   u.mv                  =   3;
   u.energy              =   8;
   u.energy_rg           =   2;
+  u.cost                =   4;
   u.ter_mv[T_GRASS    ] =   1;
   u.ter_mv[T_FOREST   ] =   3;
   u.ter_mv[T_WATER    ] =   8;
@@ -245,6 +252,7 @@ init_goblin_scout (void){
   u.mv                  =   4;
   u.energy              =  15;
   u.energy_rg           =   4;
+  u.cost                =   5;
   u.ter_mv[T_GRASS    ] =   1;
   u.ter_mv[T_FOREST   ] =   3;
   u.ter_mv[T_WATER    ] =   8;
@@ -277,6 +285,7 @@ init_orc (void){
   u.mv                  =   3;
   u.energy              =  20;
   u.energy_rg           =   5;
+  u.cost                =   6;
   u.ter_mv[T_GRASS    ] =   1;
   u.ter_mv[T_FOREST   ] =   3;
   u.ter_mv[T_WATER    ] =   8;
@@ -306,6 +315,7 @@ init_armored_orc (void){
   u.mv                  =   2;
   u.energy              =  20;
   u.energy_rg           =   6;
+  u.cost                =   7;
   u.ter_mv[T_GRASS    ] =   1;
   u.ter_mv[T_FOREST   ] =   3;
   u.ter_mv[T_WATER    ] =   8;
@@ -335,6 +345,7 @@ init_troll (void){
   u.mv                  =   2;
   u.energy              =  60;
   u.energy_rg           =  10;
+  u.cost                =   8;
   u.ter_mv[T_GRASS    ] =   1;
   u.ter_mv[T_FOREST   ] =   3;
   u.ter_mv[T_WATER    ] =   8;
