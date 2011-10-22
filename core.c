@@ -209,13 +209,41 @@ refresh_unit (Unit *u){
   }
 }
 
+/*Search through friends in vision range and add differense
+  between friend's cost and this unit's cost to morale.
+  Search through enemies in vision range and add differense
+  between enemy's cost and this unit's cost to morale.*/
+static void
+update_unit_morale (Unit *u){
+  Unit_type *t = utypes + u->t;
+  int plus = 0;
+  int minus = 0;
+  Node *node;
+  FOR_EACH_NODE(units, node){
+    Unit *u2 = node->d;
+    Unit_type *t2 = utypes + u2->t;
+    int diff = 1 + (t2->cost - t->cost);
+    fixnum(0, t2->cost, &diff);
+    if(mdist(u->m, u2->m) <= t->v){
+      if(u->player == u2->player)
+        plus += diff;
+      else
+        minus += diff;
+    }
+  }
+  u->morale = u->morale + plus - minus;
+  fixnum(0, t->morale, &u->morale);
+}
+
 static void
 refresh_units (int player_id){
   Node * node;
   FOR_EACH_NODE(units, node){
     Unit * u = node->d;
-    if(u->player == player_id)
+    if(u->player == player_id){
       refresh_unit(u);
+      update_unit_morale(u);
+    }
   }
 }
 
