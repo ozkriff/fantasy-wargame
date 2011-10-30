@@ -316,7 +316,7 @@ draw_units (void){
   }
 }
 
-/*Mark tiles that sulelected_unit can reach 
+/*Mark tiles that selected_unit can reach 
   during this turn.*/
 static void
 draw_reachable_tiles (void){
