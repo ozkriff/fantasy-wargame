@@ -91,6 +91,15 @@ mcrd2index(Mcrd a, Mcrd b){
   return(0);
 }
 
+Node *
+data2node (List l, void *d){
+  Node *node;
+  FOR_EACH_NODE(l, node)
+    if(node->d == d)
+      return(node);
+  return(NULL);
+}
+
 /*------------------------------------------------------*/
 
 /* mcrd2tile */
