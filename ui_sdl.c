@@ -525,43 +525,34 @@ unittype2name (Unit_type_id t){
 static void
 draw_unit_info (Unit *u, Scrd s){
   Unit_type *t = &utypes[u->t];
-  int step = 14;
-  char type_id[30];
-  char v[30];
-  char morale[30];
-  char morale_rg[30];
-  char ms[30];
-  char strength[30];
-  char toughness[30];
-  char attacks[30];
-  char armor[30];
-  char mv[30];
-  char name[30];
-  char id[30];
-  sprintf(type_id,   " type_id   %2i ", u->t);
-  sprintf(v,         " v         %2i ", t->v);
-  sprintf(morale,    " morale    %2i ", t->morale);
-  sprintf(morale_rg, " morale_rg %2i ", t->morale_rg);
-  sprintf(ms,        " ms        %2i ", t->ms);
-  sprintf(strength,  " strength  %2i ", t->strength);
-  sprintf(toughness, " toughness %2i ", t->toughness);
-  sprintf(attacks,   " attacks   %2i ", t->attacks);
-  sprintf(armor,     " armor     %2i ", t->armor);
-  sprintf(mv,        " mv        %2i ", t->mv);
-  sprintf(name,      " %s ", unittype2name(u->t));
-  sprintf(id,        " id        %2i ", u->id);
-  text(&font, id,        mk_scrd(s.x, s.y-2*step));
-  text(&font, name,      mk_scrd(s.x, s.y-1*step));
-  text(&font, type_id,   mk_scrd(s.x, s.y+0*step));
-  text(&font, v,         mk_scrd(s.x, s.y+1*step));
-  text(&font, morale,    mk_scrd(s.x, s.y+2*step));
-  text(&font, morale_rg, mk_scrd(s.x, s.y+3*step));
-  text(&font, ms,        mk_scrd(s.x, s.y+4*step));
-  text(&font, strength,  mk_scrd(s.x, s.y+5*step));
-  text(&font, toughness, mk_scrd(s.x, s.y+6*step));
-  text(&font, attacks,   mk_scrd(s.x, s.y+7*step));
-  text(&font, armor,     mk_scrd(s.x, s.y+8*step));
-  text(&font, mv,        mk_scrd(s.x, s.y+9*step));
+  char str[12 * 30];
+  char *template =
+      " type_id   %2i \n"
+      " v         %2i \n"
+      " morale    %2i \n"
+      " morale_rg %2i \n"
+      " ms        %2i \n"
+      " strength  %2i \n"
+      " toughness %2i \n"
+      " attacks   %2i \n"
+      " armor     %2i \n"
+      " mv        %2i \n"
+      " %s \n"
+      " id        %2i \n";
+  sprintf(str, template,
+      u->t,
+      t->v,
+      t->morale,
+      t->morale_rg,
+      t->ms,
+      t->strength,
+      t->toughness,
+      t->attacks,
+      t->armor,
+      t->mv,
+      unittype2name(u->t),
+      u->id);
+  text(&font, str, s);
 }
 
 static void
