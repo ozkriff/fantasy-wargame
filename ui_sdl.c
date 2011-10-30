@@ -24,6 +24,15 @@ typedef struct {
   int w, h;
 } BitmapFont;
 
+typedef struct {
+  int frames_left;
+  Mcrd pos;
+  Img img;
+  char *s;
+} Label;
+
+static List labels = {NULL, NULL, 0};
+
 static BitmapFont font;
 
 static Img img_tiles[10];
@@ -474,6 +483,32 @@ tiletype2name (int tiletype){
   }
   return(NULL);
 }
+ 
+static void
+draw_label (Label *l){
+  Scrd pos = map2scr(l->pos);
+  pos.y -= 4 * (60 - l->frames_left);
+  text(&font, l->s, pos);
+}
+
+static void
+draw_labels_2 (void){
+  Node *node = labels.h;
+  while(node){
+    Label *l = node->d;
+    draw_label(l);
+    l->frames_left--;
+    /*delete old nodes*/
+    if(l->frames_left == 0){
+      Node *prev = node->p;
+      SDL_FreeSurface(l->img);
+      delete_node(&labels, node);
+      node = prev;
+    }
+    if(node)
+      node = node->n;
+  }
+}
 
 static void
 draw_labels (void){
@@ -485,6 +520,7 @@ draw_labels (void){
     char *s = tiletype2name(t);
     text(&font, s, mk_scrd(0, 20));
   }
+  draw_labels_2();
 }
 
 static char*
@@ -606,6 +642,15 @@ init_colors (void){
   blue  = SDL_MapRGBA(fmt, 0, 0, x, x);
   white = SDL_MapRGBA(fmt, x, x, x, x);
   black = SDL_MapRGBA(fmt, 0, 0, 0, x);
+}
+ 
+static void
+add_label (char *str, Mcrd pos){
+  Label *l = calloc(1, sizeof(Label));
+  l->frames_left = 60;
+  l->pos = pos;
+  l->s = str;
+  push_node(&labels, l);
 }
 
 static void
@@ -813,6 +858,22 @@ events (void){
     ui_mode = MODE_SHOW_EVENT;
     eindex = 0;
     final_eindex = get_last_event_index(*current_event);
+    {
+      if(current_event->t == E_MELEE){
+        char str_a[20];
+        char str_d[20];
+        Event_melee e = current_event->e.melee;
+        sprintf(str_a, "-%i", e.attackers_killed);
+        add_label(str_a, id2unit(e.a)->m);
+        sprintf(str_d, "-%i", e.defenders_killed);
+        add_label(str_d, id2unit(e.d)->m);
+      }else if(current_event->t == E_RANGE){
+        Event_range e = current_event->e.range;
+        char str[10];
+        sprintf(str, "-%i", e.defenders_killed);
+        add_label(str, id2unit(e.d)->m);
+      }
+    }
     is_dirty = true;
   }
 }
