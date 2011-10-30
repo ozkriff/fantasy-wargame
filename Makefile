@@ -22,7 +22,7 @@ ui_cli: $(cli_obj)
 	$(CC) $(CFLAGS) -o ui_cli $(cli_obj) $(cli_lib)
 
 sdl_obj=ui_sdl.o $(common_obj)
-sdl_lib=-lSDL -lSDL_image -lSDL_ttf -lSDL_net
+sdl_lib=-lSDL -lSDL_image -lSDL_net
 ui_sdl: $(sdl_obj)
 	$(CC) $(CFLAGS) -o ui_sdl $(sdl_obj) $(sdl_lib)
 	

@@ -4,7 +4,6 @@
 #include <math.h>
 #include "SDL/SDL.h"
 #include "SDL/SDL_image.h"
-#include "SDL/SDL_ttf.h"
 #include "SDL/SDL_net.h"
 #include "bool.h"
 #include "list.h"
@@ -20,6 +19,13 @@ typedef Vec2i Scrd;
 
 typedef SDL_Surface * Img;
 
+typedef struct {
+  SDL_Surface *bitmap;
+  int w, h;
+} BitmapFont;
+
+static BitmapFont font;
+
 static Img img_tiles[10];
 static Img img_units[30];
 static Img img_selected_hex;
@@ -29,8 +35,6 @@ static Img img_arrow;
 static Img screen = NULL;
 
 static Img img_rings[10];
-
-static TTF_Font * font = NULL;
 
 static Vec2i map_offset = {72, 72/4};
 
@@ -76,6 +80,7 @@ loadimg (char * str){
 
 static void
 free_sprites (void){
+  SDL_FreeSurface(font.bitmap          );
   SDL_FreeSurface(img_tiles[0]         );
   SDL_FreeSurface(img_tiles[1]         );
   SDL_FreeSurface(img_tiles[2]         );
@@ -268,16 +273,45 @@ draw_bg (Uint32 clr){
   SDL_FillRect(screen, NULL, clr);
 }
 
-static void
-text (char * str, Scrd crd){
-  SDL_Rect rect;
-  SDL_Color fg = {255, 255, 255, 255};
-  SDL_Color bg = {  0,   0,   0, 155};
-  Img img = TTF_RenderText_Shaded(font, str, fg, bg);
-  rect.x = (Sint16)crd.x;
-  rect.y = (Sint16)crd.y;
-  SDL_BlitSurface(img, NULL, screen, &rect);
-  SDL_FreeSurface(img);
+BitmapFont
+build_font (SDL_Surface *surface, int w, int h){
+  BitmapFont font;
+  font.bitmap = surface;
+  font.w = w;
+  font.h = h;
+  return(font);
+}
+
+/*Go through the text.
+  If meet ' ' then move over.
+  If meet '\n' then move down and move back.
+  If meet normal character then show the character
+  and move over the width of the character*/
+void
+text (BitmapFont *font, char *s, Scrd pos){
+  Scrd cursor = pos;
+  int i;
+  if(font->bitmap == NULL)
+    return;
+  for(i = 0; s[i] != '\0'; i++){
+    if(s[i] == ' '){
+      cursor.x += font->w; 
+    }else if(s[i] == '\n'){
+      cursor.y += font->h; 
+      cursor.x = pos.x; 
+    }else{
+      int n = s[i] - 32;
+      SDL_Rect clip, offset;
+      clip.x = font->w * (n % 16);
+      clip.y = font->h * (n / 16);
+      clip.w = font->w;
+      clip.h = font->h;
+      offset.x = cursor.x;
+      offset.y = cursor.y;
+      SDL_BlitSurface(font->bitmap, &clip, screen, &offset);
+      cursor.x += font->w;
+    }
+  }
 }
 
 static Img
@@ -293,7 +327,7 @@ draw_unit (Unit *u){
   if(1){
     char str[100];
     sprintf(str, "%i,%i", u->count, u->energy);
-    text(str, mk_scrd(s.x, s.y+20));
+    text(&font, str, mk_scrd(s.x, s.y+20));
   }
 }
 
@@ -445,11 +479,11 @@ static void
 draw_labels (void){
   char str[100];
   sprintf(str, "[pl:%i]", current_player->id);
-  text(str, mk_scrd(0, 0));
+  text(&font, str, mk_scrd(0, 0));
   if(inboard(selected_tile)){
     int t = tile(selected_tile)->t;
     char *s = tiletype2name(t);
-    text(s, mk_scrd(0, 20));
+    text(&font, s, mk_scrd(0, 20));
   }
 }
 
@@ -516,18 +550,18 @@ draw_unit_info (Unit *u, Scrd s){
   sprintf(mv,        " mv        %2i ", t->mv);
   sprintf(name,      " %s ", unittype2name(u->t));
   sprintf(id,        " id        %2i ", u->id);
-  text(id,        mk_scrd(s.x, s.y-2*step));
-  text(name,      mk_scrd(s.x, s.y-1*step));
-  text(type_id,   mk_scrd(s.x, s.y+0*step));
-  text(v,         mk_scrd(s.x, s.y+1*step));
-  text(morale,    mk_scrd(s.x, s.y+2*step));
-  text(morale_rg, mk_scrd(s.x, s.y+3*step));
-  text(ms,        mk_scrd(s.x, s.y+4*step));
-  text(strength,  mk_scrd(s.x, s.y+5*step));
-  text(toughness, mk_scrd(s.x, s.y+6*step));
-  text(attacks,   mk_scrd(s.x, s.y+7*step));
-  text(armor,     mk_scrd(s.x, s.y+8*step));
-  text(mv,        mk_scrd(s.x, s.y+9*step));
+  text(&font, id,        mk_scrd(s.x, s.y-2*step));
+  text(&font, name,      mk_scrd(s.x, s.y-1*step));
+  text(&font, type_id,   mk_scrd(s.x, s.y+0*step));
+  text(&font, v,         mk_scrd(s.x, s.y+1*step));
+  text(&font, morale,    mk_scrd(s.x, s.y+2*step));
+  text(&font, morale_rg, mk_scrd(s.x, s.y+3*step));
+  text(&font, ms,        mk_scrd(s.x, s.y+4*step));
+  text(&font, strength,  mk_scrd(s.x, s.y+5*step));
+  text(&font, toughness, mk_scrd(s.x, s.y+6*step));
+  text(&font, attacks,   mk_scrd(s.x, s.y+7*step));
+  text(&font, armor,     mk_scrd(s.x, s.y+8*step));
+  text(&font, mv,        mk_scrd(s.x, s.y+9*step));
 }
 
 static void
@@ -562,12 +596,12 @@ draw (void){
 static void
 draw_menu (void){
   draw_bg(black);
-  text("q - quit",       mk_scrd(0,  0));
-  text("0 - scenario_0", mk_scrd(0, 20));
-  text("1 - scenario_1", mk_scrd(0, 40));
-  text("2 - net localhost 2000 human 0",
+  text(&font, "q - quit",       mk_scrd(0,  0));
+  text(&font, "0 - scenario_0", mk_scrd(0, 20));
+  text(&font, "1 - scenario_1", mk_scrd(0, 40));
+  text(&font, "2 - net localhost 2000 human 0",
                          mk_scrd(0, 60));
-  text("3 - net localhost 2000 human 1",
+  text(&font, "3 - net localhost 2000 human 1",
                          mk_scrd(0, 80));
   SDL_Flip(screen);
 }
@@ -587,10 +621,9 @@ static void
 init_draw (void){
   SDL_Init(SDL_INIT_VIDEO);
   IMG_Init(IMG_INIT_PNG);
-  TTF_Init();
   screen = SDL_SetVideoMode(640, 480,
       32, SDL_SWSURFACE | SDL_RESIZABLE);
-  font = TTF_OpenFont("font.ttf", 12);
+  font = build_font(loadimg("img/font_8x12.png"), 8, 12);
   load_sprites();
   init_colors();
   selected_tile = mk_mcrd(-1,-1);
@@ -849,8 +882,6 @@ cleanup_ui(){
   free_sprites();
   SDL_Quit();
   IMG_Quit();
-  TTF_CloseFont(font);
-  TTF_Quit();
 }
 
 #undef main
