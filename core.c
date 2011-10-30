@@ -30,18 +30,9 @@ static List      dead_units = {0, 0, 0};
 static List      players = {0, 0, 0};
 static List      eventlist = {0, 0, 0};
 
-/* Find unit's node in units list. */
-static Node *
-unit2node (Unit * u){
-  Node * n = units.h;
-  while(u != (Unit*)n->d)
-    n = n->n;
-  return n;
-}
-
 static void
 kill_unit (Unit * u){
-  Node *n = extruct_node(&units, unit2node(u));
+  Node *n = extruct_node(&units, data2node(units, u));
   push_node(&dead_units, n);
   if(u == selected_unit)
     selected_unit = NULL;
@@ -590,7 +581,7 @@ select_next_unit (void){
   Node * node;
   Unit * u;
   if(selected_unit)
-    node = unit2node(selected_unit);
+    node = data2node(units, selected_unit);
   else
     node = units.h;
   u = node->d;
