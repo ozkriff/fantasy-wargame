@@ -595,14 +595,14 @@ draw (void){
 
 static void
 draw_menu (void){
+  char *str = 
+      "q - quit\n"
+      "0 - scenario_0\n"
+      "1 - scenario_1\n"
+      "2 - net localhost 2000 human 0\n"
+      "3 - net localhost 2000 human 1\n";
   draw_bg(black);
-  text(&font, "q - quit",       mk_scrd(0,  0));
-  text(&font, "0 - scenario_0", mk_scrd(0, 20));
-  text(&font, "1 - scenario_1", mk_scrd(0, 40));
-  text(&font, "2 - net localhost 2000 human 0",
-                         mk_scrd(0, 60));
-  text(&font, "3 - net localhost 2000 human 1",
-                         mk_scrd(0, 80));
+  text(&font, str, mk_scrd(10, 10));
   SDL_Flip(screen);
 }
 
