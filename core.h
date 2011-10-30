@@ -5,6 +5,15 @@ typedef struct { int x, y; } Vec2i;
 /* map coordinates */
 typedef Vec2i Mcrd; 
 
+typedef enum {
+  D_S,
+  D_SW,
+  D_NW,
+  D_N,
+  D_NE,
+  D_SE
+} Direction;
+
 /* skills */
 typedef enum {
   S_RANGE,
