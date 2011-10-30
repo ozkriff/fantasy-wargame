@@ -58,3 +58,12 @@ extruct_data (List * list, Node * old){
   return(data);
 }
 
+Node *
+data2node (List l, void *d){
+  Node *node;
+  FOR_EACH_NODE(l, node)
+    if(node->d == d)
+      return(node);
+  return(NULL);
+}
+

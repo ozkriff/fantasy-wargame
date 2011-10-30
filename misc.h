@@ -17,7 +17,6 @@ int    rnd (int min, int max);
 bool   strcmp_sp (char *s1, char *s2);
 int    char2tiletype(char c);
 Tile*  str2map(char *s);
-Node * data2node (List l, void *d);
 
 Skill * find_skill (Unit * u, Skill_id type);
 
