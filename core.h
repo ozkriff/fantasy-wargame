@@ -77,7 +77,7 @@ typedef enum {
   T_FOREST,
   T_WATER,
   T_HILLS,
-  T_MOUNTEENS
+  T_MOUNTAINS
 } Tile_type_id;
 
 typedef struct {

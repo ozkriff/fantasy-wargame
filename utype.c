@@ -27,12 +27,12 @@ init_peasant (void){
   u.ter_mv[T_FOREST   ] =   3;
   u.ter_mv[T_WATER    ] =   8;
   u.ter_mv[T_HILLS    ] =   4;
-  u.ter_mv[T_MOUNTEENS] =   9;
+  u.ter_mv[T_MOUNTAINS] =   9;
   u.ter_ms[T_GRASS    ] =   0;
   u.ter_ms[T_FOREST   ] =   1;
   u.ter_ms[T_WATER    ] =  -2;
   u.ter_ms[T_HILLS    ] =   1;
-  u.ter_ms[T_MOUNTEENS] =   0;
+  u.ter_ms[T_MOUNTAINS] =   0;
   u.skills_n            =   0;
   return(u);
 }
@@ -57,12 +57,12 @@ init_swordsman (void){
   u.ter_mv[T_FOREST   ] =   3;
   u.ter_mv[T_WATER    ] =   8;
   u.ter_mv[T_HILLS    ] =   4;
-  u.ter_mv[T_MOUNTEENS] =   9;
+  u.ter_mv[T_MOUNTAINS] =   9;
   u.ter_ms[T_GRASS    ] =   0;
   u.ter_ms[T_FOREST   ] =   1;
   u.ter_ms[T_WATER    ] =  -2;
   u.ter_ms[T_HILLS    ] =   0;
-  u.ter_ms[T_MOUNTEENS] =   0;
+  u.ter_ms[T_MOUNTAINS] =   0;
   u.skills_n            =   0;
   return(u);
 }
@@ -87,12 +87,12 @@ init_foot_knight (void){
   u.ter_mv[T_FOREST   ] =   3;
   u.ter_mv[T_WATER    ] =   8;
   u.ter_mv[T_HILLS    ] =   4;
-  u.ter_mv[T_MOUNTEENS] =   9;
+  u.ter_mv[T_MOUNTAINS] =   9;
   u.ter_ms[T_GRASS    ] =   0;
   u.ter_ms[T_FOREST   ] =   1;
   u.ter_ms[T_WATER    ] =  -2;
   u.ter_ms[T_HILLS    ] =   0;
-  u.ter_ms[T_MOUNTEENS] =   0;
+  u.ter_ms[T_MOUNTAINS] =   0;
   u.skills_n            =   0;
   return(u);
 }
@@ -117,12 +117,12 @@ init_poor_archer (void){
   u.ter_mv[T_FOREST   ] =   3;
   u.ter_mv[T_WATER    ] =   8;
   u.ter_mv[T_HILLS    ] =   4;
-  u.ter_mv[T_MOUNTEENS] =   9;
+  u.ter_mv[T_MOUNTAINS] =   9;
   u.ter_ms[T_GRASS    ] =   0;
   u.ter_ms[T_FOREST   ] =   1;
   u.ter_ms[T_WATER    ] =  -2;
   u.ter_ms[T_HILLS    ] =   0;
-  u.ter_ms[T_MOUNTEENS] =   0;
+  u.ter_ms[T_MOUNTAINS] =   0;
   u.skills_n            =   1;
   u.skills[0].t = S_RANGE;
   u.skills[0].range.skill      = 5;
@@ -153,12 +153,12 @@ init_scout (void){
   u.ter_mv[T_FOREST   ] =   3;
   u.ter_mv[T_WATER    ] =   8;
   u.ter_mv[T_HILLS    ] =   4;
-  u.ter_mv[T_MOUNTEENS] =   9;
+  u.ter_mv[T_MOUNTAINS] =   9;
   u.ter_ms[T_GRASS    ] =   0;
   u.ter_ms[T_FOREST   ] =   1;
   u.ter_ms[T_WATER    ] =  -2;
   u.ter_ms[T_HILLS    ] =   0;
-  u.ter_ms[T_MOUNTEENS] =   0;
+  u.ter_ms[T_MOUNTAINS] =   0;
   u.skills_n            =   3;
   u.skills[0].t = S_IGNR;
   u.skills[1].t = S_INVIS;
@@ -191,12 +191,12 @@ init_goblin (void){
   u.ter_mv[T_FOREST   ] =   2;
   u.ter_mv[T_WATER    ] =   8;
   u.ter_mv[T_HILLS    ] =   4;
-  u.ter_mv[T_MOUNTEENS] =   9;
+  u.ter_mv[T_MOUNTAINS] =   9;
   u.ter_ms[T_GRASS    ] =   0;
   u.ter_ms[T_FOREST   ] =   1;
   u.ter_ms[T_WATER    ] =  -2;
   u.ter_ms[T_HILLS    ] =   0;
-  u.ter_ms[T_MOUNTEENS] =   0;
+  u.ter_ms[T_MOUNTAINS] =   0;
   u.skills_n            =   0;
   return(u);
 }
@@ -221,12 +221,12 @@ init_goblin_slinger (void){
   u.ter_mv[T_FOREST   ] =   3;
   u.ter_mv[T_WATER    ] =   8;
   u.ter_mv[T_HILLS    ] =   4;
-  u.ter_mv[T_MOUNTEENS] =   9;
+  u.ter_mv[T_MOUNTAINS] =   9;
   u.ter_ms[T_GRASS    ] =   0;
   u.ter_ms[T_FOREST   ] =   1;
   u.ter_ms[T_WATER    ] =  -2;
   u.ter_ms[T_HILLS    ] =   0;
-  u.ter_ms[T_MOUNTEENS] =   0;
+  u.ter_ms[T_MOUNTAINS] =   0;
   u.skills_n            =   1;
   u.skills[0].t = S_RANGE;
   u.skills[0].range.skill      = 5;
@@ -257,12 +257,12 @@ init_goblin_scout (void){
   u.ter_mv[T_FOREST   ] =   3;
   u.ter_mv[T_WATER    ] =   8;
   u.ter_mv[T_HILLS    ] =   4;
-  u.ter_mv[T_MOUNTEENS] =   9;
+  u.ter_mv[T_MOUNTAINS] =   9;
   u.ter_ms[T_GRASS    ] =   0;
   u.ter_ms[T_FOREST   ] =   1;
   u.ter_ms[T_WATER    ] =  -2;
   u.ter_ms[T_HILLS    ] =   0;
-  u.ter_ms[T_MOUNTEENS] =   0;
+  u.ter_ms[T_MOUNTAINS] =   0;
   u.skills_n            =   3;
   u.skills[0].t = S_NORETURN;
   u.skills[1].t = S_IGNR;
@@ -290,12 +290,12 @@ init_orc (void){
   u.ter_mv[T_FOREST   ] =   3;
   u.ter_mv[T_WATER    ] =   8;
   u.ter_mv[T_HILLS    ] =   4;
-  u.ter_mv[T_MOUNTEENS] =   9;
+  u.ter_mv[T_MOUNTAINS] =   9;
   u.ter_ms[T_GRASS    ] =   0;
   u.ter_ms[T_FOREST   ] =   1;
   u.ter_ms[T_WATER    ] =  -2;
   u.ter_ms[T_HILLS    ] =   0;
-  u.ter_ms[T_MOUNTEENS] =   0;
+  u.ter_ms[T_MOUNTAINS] =   0;
   u.skills_n            =   0;
   return(u);
 }
@@ -320,12 +320,12 @@ init_armored_orc (void){
   u.ter_mv[T_FOREST   ] =   3;
   u.ter_mv[T_WATER    ] =   8;
   u.ter_mv[T_HILLS    ] =   4;
-  u.ter_mv[T_MOUNTEENS] =   9;
+  u.ter_mv[T_MOUNTAINS] =   9;
   u.ter_ms[T_GRASS    ] =   0;
   u.ter_ms[T_FOREST   ] =   1;
   u.ter_ms[T_WATER    ] =  -2;
   u.ter_ms[T_HILLS    ] =   0;
-  u.ter_ms[T_MOUNTEENS] =   0;
+  u.ter_ms[T_MOUNTAINS] =   0;
   u.skills_n            =   0;
   return(u);
 }
@@ -350,12 +350,12 @@ init_troll (void){
   u.ter_mv[T_FOREST   ] =   3;
   u.ter_mv[T_WATER    ] =   8;
   u.ter_mv[T_HILLS    ] =   4;
-  u.ter_mv[T_MOUNTEENS] =   9;
+  u.ter_mv[T_MOUNTAINS] =   9;
   u.ter_ms[T_GRASS    ] =   0;
   u.ter_ms[T_FOREST   ] =   1;
   u.ter_ms[T_WATER    ] =  -2;
   u.ter_ms[T_HILLS    ] =   0;
-  u.ter_ms[T_MOUNTEENS] =   0;
+  u.ter_ms[T_MOUNTAINS] =   0;
   u.skills_n            =   0;
   return(u);
 }

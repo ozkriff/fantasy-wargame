@@ -146,7 +146,7 @@ load_sprites (void){
   img_tiles[T_FOREST   ] = loadimg("img/tree.png"      );
   img_tiles[T_WATER    ] = loadimg("img/water.png"     );
   img_tiles[T_HILLS    ] = loadimg("img/hills.png"     );
-  img_tiles[T_MOUNTEENS] = loadimg("img/mounteen.png"  );
+  img_tiles[T_MOUNTAINS] = loadimg("img/mounteen.png"  );
   img_arrow              = loadimg("img/arrow.png"     );
   img_selected_hex       = loadimg("img/sel.png"       );
   img_reacheble          = loadimg("img/reacheble.png" );
@@ -474,7 +474,7 @@ tiletype2name (int tiletype){
     case T_FOREST:    return("(forest)");
     case T_WATER:     return("(water)");
     case T_HILLS:     return("(hills)");
-    case T_MOUNTEENS: return("(mounteens)");
+    case T_MOUNTAINS: return("(mounteens)");
     default:
       die("ui_sdl: tiletype2name(): "
           "Unknown tile type - '%i'\n",
