@@ -320,7 +320,7 @@ get_rendered_size (BitmapFont *font, char *s){
   If meet normal character then show the character
   and move over the width of the character*/
 void
-text (BitmapFont *font, char *s, Scrd pos){
+render_text (Img dest, BitmapFont *font, char *s, Scrd pos){
   Scrd cursor = pos;
   int i;
   if(font->bitmap == NULL)
@@ -340,10 +340,15 @@ text (BitmapFont *font, char *s, Scrd pos){
       clip.h = font->h;
       offset.x = cursor.x;
       offset.y = cursor.y;
-      SDL_BlitSurface(font->bitmap, &clip, screen, &offset);
+      SDL_BlitSurface(font->bitmap, &clip, dest, &offset);
       cursor.x += font->w;
     }
   }
+}
+
+void
+text (BitmapFont *font, char *s, Scrd pos){
+  render_text(screen, font, s, pos);
 }
 
 static Img
