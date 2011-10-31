@@ -351,6 +351,20 @@ text (BitmapFont *font, char *s, Scrd pos){
   render_text(screen, font, s, pos);
 }
 
+Img
+create_text (BitmapFont *f, char *s){
+  Scrd pos = {0, 0};
+  Scrd size = get_rendered_size(f, s);
+  SDL_PixelFormat* fmt = screen->format;
+  SDL_Surface *srf = SDL_CreateRGBSurface(0,
+      size.x, size.y, fmt->BitsPerPixel, 0, 0, 0, 0);
+  Uint32 color = SDL_MapRGBA(srf->format, 0, 255, 255, 255);
+  SDL_FillRect(srf, NULL, color);
+  SDL_SetColorKey(srf, SDL_SRCCOLORKEY, color); 
+  render_text(srf, f, s, pos);
+  return(srf);
+}
+
 static Img
 type2img (int t){
   return(img_units[t]);
