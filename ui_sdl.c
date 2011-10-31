@@ -50,7 +50,7 @@ static Vec2i map_offset = {72, 72/4};
 static Uint32 red, black, green, blue, white;
 
 /* mouse points to this hex */
-static Mcrd selected_tile; /* selected hex */
+static Mcrd selected_tile;
 
 #define MODE_SELECT     0
 #define MODE_SHOW_EVENT 1
