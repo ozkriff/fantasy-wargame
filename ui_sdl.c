@@ -887,6 +887,13 @@ add_event_melee_label (Event_melee e){
 }
 
 static void
+add_event_range_label (Event_range e){
+  char str[10];
+  sprintf(str, "-%i", e.defenders_killed);
+  add_label(str, id2unit(e.d)->m);
+}
+
+static void
 events (void){
   if(ui_mode == MODE_SHOW_EVENT){
     eindex++;
@@ -906,10 +913,7 @@ events (void){
       if(current_event->t == E_MELEE){
         add_event_melee_label(current_event->e.melee);
       }else if(current_event->t == E_RANGE){
-        Event_range e = current_event->e.range;
-        char str[10];
-        sprintf(str, "-%i", e.defenders_killed);
-        add_label(str, id2unit(e.d)->m);
+        add_event_range_label(current_event->e.range);
       }
     }
     is_dirty = true;
