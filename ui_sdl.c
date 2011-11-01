@@ -334,12 +334,12 @@ render_text (Img dest, BitmapFont *font, char *s, Scrd pos){
     }else{
       int n = s[i] - 32;
       SDL_Rect clip, offset;
-      clip.x = font->w * (n % 16);
-      clip.y = font->h * (n / 16);
-      clip.w = font->w;
-      clip.h = font->h;
-      offset.x = cursor.x;
-      offset.y = cursor.y;
+      clip.x = (Sint16)font->w * (n % 16);
+      clip.y = (Sint16)font->h * (n / 16);
+      clip.w = (Sint16)font->w;
+      clip.h = (Sint16)font->h;
+      offset.x = (Sint16)cursor.x;
+      offset.y = (Sint16)cursor.y;
       SDL_BlitSurface(font->bitmap, &clip, dest, &offset);
       cursor.x += font->w;
     }
@@ -357,7 +357,7 @@ create_text (BitmapFont *f, char *s){
   Scrd size = get_rendered_size(f, s);
   SDL_PixelFormat* fmt = screen->format;
   SDL_Surface *srf = SDL_CreateRGBSurface(0,
-      size.x, size.y, fmt->BitsPerPixel, 0, 0, 0, 0);
+      size.x, size.y, (int)fmt->BitsPerPixel, 0, 0, 0, 0);
   Uint32 color = SDL_MapRGBA(srf->format, 0, 255, 255, 255);
   SDL_FillRect(srf, NULL, color);
   SDL_SetColorKey(srf, SDL_SRCCOLORKEY, color); 
