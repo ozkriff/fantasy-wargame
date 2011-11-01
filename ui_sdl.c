@@ -2,6 +2,7 @@
 
 #include <stdlib.h>
 #include <math.h>
+#include <string.h>
 #include "SDL/SDL.h"
 #include "SDL/SDL_image.h"
 #include "SDL/SDL_net.h"
@@ -544,6 +545,7 @@ draw_labels_2 (void){
     if(l->frames_left == 0){
       Node *prev = node->p;
       SDL_FreeSurface(l->img);
+      free(l->s);
       delete_node(&labels, node);
       node = prev;
     }
@@ -691,7 +693,8 @@ add_label (char *str, Mcrd pos){
   Label *l = calloc(1, sizeof(Label));
   l->frames_left = 60;
   l->pos = pos;
-  l->s = str;
+  l->s = malloc(strlen(str) + 1);
+  strcpy(l->s, str);
   push_node(&labels, l);
 }
 
