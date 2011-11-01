@@ -877,6 +877,16 @@ get_last_event_index (Event e){
 }
 
 static void
+add_event_melee_label (Event_melee e){
+  char str_a[20];
+  char str_d[20];
+  sprintf(str_a, "-%i", e.attackers_killed);
+  add_label(str_a, id2unit(e.a)->m);
+  sprintf(str_d, "-%i", e.defenders_killed);
+  add_label(str_d, id2unit(e.d)->m);
+}
+
+static void
 events (void){
   if(ui_mode == MODE_SHOW_EVENT){
     eindex++;
@@ -894,13 +904,7 @@ events (void){
     final_eindex = get_last_event_index(*current_event);
     {
       if(current_event->t == E_MELEE){
-        char str_a[20];
-        char str_d[20];
-        Event_melee e = current_event->e.melee;
-        sprintf(str_a, "-%i", e.attackers_killed);
-        add_label(str_a, id2unit(e.a)->m);
-        sprintf(str_d, "-%i", e.defenders_killed);
-        add_label(str_d, id2unit(e.d)->m);
+        add_event_melee_label(current_event->e.melee);
       }else if(current_event->t == E_RANGE){
         Event_range e = current_event->e.range;
         char str[10];
