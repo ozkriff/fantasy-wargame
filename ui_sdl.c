@@ -21,7 +21,7 @@ typedef Vec2i Scrd;
 typedef struct {
   SDL_Surface *bitmap;
   int w, h;
-} BitmapFont;
+} Font;
 
 typedef struct {
   int frames_left;
@@ -31,7 +31,7 @@ typedef struct {
 
 static List labels = {NULL, NULL, 0};
 
-static BitmapFont font;
+static Font font;
 
 static SDL_Surface *img_tiles[10];
 static SDL_Surface *img_units[30];
@@ -280,9 +280,9 @@ draw_bg (Uint32 clr){
   SDL_FillRect(screen, NULL, clr);
 }
 
-BitmapFont
+Font
 build_font (SDL_Surface *surface, int w, int h){
-  BitmapFont font;
+  Font font;
   font.bitmap = surface;
   font.w = w;
   font.h = h;
@@ -290,7 +290,7 @@ build_font (SDL_Surface *surface, int w, int h){
 }
 
 Scrd
-get_rendered_size (BitmapFont *font, char *s){
+get_rendered_size (Font *font, char *s){
   Scrd size;
   int y = font->h;
   int x = 0;
@@ -318,7 +318,7 @@ get_rendered_size (BitmapFont *font, char *s){
   If meet normal character then show the character
   and move over the width of the character*/
 void
-render_text (SDL_Surface *dest, BitmapFont *font, char *s, Scrd pos){
+render_text (SDL_Surface *dest, Font *font, char *s, Scrd pos){
   Scrd cursor = pos;
   int i;
   if(font->bitmap == NULL)
@@ -345,12 +345,12 @@ render_text (SDL_Surface *dest, BitmapFont *font, char *s, Scrd pos){
 }
 
 void
-text (BitmapFont *font, char *s, Scrd pos){
+text (Font *font, char *s, Scrd pos){
   render_text(screen, font, s, pos);
 }
 
 SDL_Surface *
-create_text (BitmapFont *f, char *s){
+create_text (Font *f, char *s){
   Scrd pos = {0, 0};
   Scrd size = get_rendered_size(f, s);
   SDL_PixelFormat* fmt = screen->format;
