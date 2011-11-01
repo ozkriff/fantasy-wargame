@@ -898,6 +898,14 @@ add_event_range_label (Event_range e){
 }
 
 static void
+add_event_label (Event e){
+  if(current_event->t == E_MELEE)
+    add_event_melee_label(e.e.melee);
+  if(current_event->t == E_RANGE)
+    add_event_range_label(e.e.range);
+}
+
+static void
 events (void){
   if(ui_mode == MODE_SHOW_EVENT){
     eindex++;
@@ -913,13 +921,7 @@ events (void){
     ui_mode = MODE_SHOW_EVENT;
     eindex = 0;
     final_eindex = get_last_event_index(*current_event);
-    {
-      if(current_event->t == E_MELEE){
-        add_event_melee_label(current_event->e.melee);
-      }else if(current_event->t == E_RANGE){
-        add_event_range_label(current_event->e.range);
-      }
-    }
+    add_event_label(*current_event);
     is_dirty = true;
   }
 }
