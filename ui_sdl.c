@@ -878,15 +878,14 @@ get_last_event_index (Event e){
 
 static void
 add_event_melee_label (Event_melee e){
+  char str[20];
   if(e.attackers_killed > 0){
-    char str_a[20];
-    sprintf(str_a, "-%i", e.attackers_killed);
-    add_label(str_a, id2unit(e.a)->m);
+    sprintf(str, "-%i", e.attackers_killed);
+    add_label(str, id2unit(e.a)->m);
   }
   if(e.defenders_killed > 0){
-    char str_d[20];
-    sprintf(str_d, "-%i", e.defenders_killed);
-    add_label(str_d, id2unit(e.d)->m);
+    sprintf(str, "-%i", e.defenders_killed);
+    add_label(str, id2unit(e.d)->m);
   }
 }
 
