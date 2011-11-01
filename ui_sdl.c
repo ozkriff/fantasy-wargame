@@ -29,7 +29,6 @@ typedef struct {
   int frames_left;
   Mcrd pos;
   Img img;
-  char *s;
 } Label;
 
 static List labels = {NULL, NULL, 0};
@@ -531,7 +530,7 @@ static void
 draw_label (Label *l){
   Scrd pos = map2scr(l->pos);
   pos.y -= 4 * (60 - l->frames_left);
-  text(&font, l->s, pos);
+  draw_img(l->img, pos);
 }
 
 static void
@@ -545,7 +544,6 @@ draw_labels_2 (void){
     if(l->frames_left == 0){
       Node *prev = node->p;
       SDL_FreeSurface(l->img);
-      free(l->s);
       delete_node(&labels, node);
       node = prev;
     }
@@ -693,8 +691,7 @@ add_label (char *str, Mcrd pos){
   Label *l = calloc(1, sizeof(Label));
   l->frames_left = 60;
   l->pos = pos;
-  l->s = malloc(strlen(str) + 1);
-  strcpy(l->s, str);
+  l->img = create_text(&font, str);
   push_node(&labels, l);
 }
 
