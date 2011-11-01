@@ -18,8 +18,6 @@
 /* screen coordinates */
 typedef Vec2i Scrd;
 
-typedef SDL_Surface * Img;
-
 typedef struct {
   SDL_Surface *bitmap;
   int w, h;
@@ -28,22 +26,22 @@ typedef struct {
 typedef struct {
   int frames_left;
   Mcrd pos;
-  Img img;
+  SDL_Surface *img;
 } Label;
 
 static List labels = {NULL, NULL, 0};
 
 static BitmapFont font;
 
-static Img img_tiles[10];
-static Img img_units[30];
-static Img img_selected_hex;
-static Img img_reacheble;
-static Img img_fog_of_war;
-static Img img_arrow;
-static Img screen = NULL;
+static SDL_Surface *img_tiles[10];
+static SDL_Surface *img_units[30];
+static SDL_Surface *img_selected_hex;
+static SDL_Surface *img_reacheble;
+static SDL_Surface *img_fog_of_war;
+static SDL_Surface *img_arrow;
+static SDL_Surface *screen = NULL;
 
-static Img img_rings[10];
+static SDL_Surface *img_rings[10];
 
 static Vec2i map_offset = {72, 72/4};
 
@@ -76,10 +74,10 @@ static bool is_dirty = true;
 
 static Scrd mouse_pos = {0, 0};
 
-static Img
+static SDL_Surface *
 loadimg (char * str){
-  Img original = IMG_Load(str);
-  Img optimized;
+  SDL_Surface *original = IMG_Load(str);
+  SDL_Surface *optimized;
   if(!original)
     die("ui_sdl: loadimg(): No file '%s'\n", str);
   optimized = SDL_DisplayFormatAlpha(original);
@@ -244,7 +242,7 @@ bzline (Scrd a, Scrd b, Uint32 clr){
 }
 
 static void
-draw_img (Img src, Scrd s) {
+draw_img (SDL_Surface *src, Scrd s) {
   SDL_Rect rect;
   rect.x = (Sint16)s.x - src->w/2;
   rect.y = (Sint16)s.y - src->h/2;
@@ -264,7 +262,7 @@ static void
 draw_map (void){
   Mcrd m;
   FOR_EACH_MCRD(m){
-    Img s = img_tiles[tile(m)->t];
+    SDL_Surface *s = img_tiles[tile(m)->t];
     draw_img(s, map2scr(m));
   }
 }
@@ -320,7 +318,7 @@ get_rendered_size (BitmapFont *font, char *s){
   If meet normal character then show the character
   and move over the width of the character*/
 void
-render_text (Img dest, BitmapFont *font, char *s, Scrd pos){
+render_text (SDL_Surface *dest, BitmapFont *font, char *s, Scrd pos){
   Scrd cursor = pos;
   int i;
   if(font->bitmap == NULL)
@@ -351,7 +349,7 @@ text (BitmapFont *font, char *s, Scrd pos){
   render_text(screen, font, s, pos);
 }
 
-Img
+SDL_Surface *
 create_text (BitmapFont *f, char *s){
   Scrd pos = {0, 0};
   Scrd size = get_rendered_size(f, s);
@@ -365,7 +363,7 @@ create_text (BitmapFont *f, char *s){
   return(srf);
 }
 
-static Img
+static SDL_Surface *
 type2img (int t){
   return(img_units[t]);
 }
