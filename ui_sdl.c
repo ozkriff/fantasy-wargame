@@ -280,7 +280,7 @@ draw_bg (Uint32 clr){
   SDL_FillRect(screen, NULL, clr);
 }
 
-Font
+static Font
 build_font (SDL_Surface *surface, int w, int h){
   Font font;
   font.bitmap = surface;
@@ -289,7 +289,7 @@ build_font (SDL_Surface *surface, int w, int h){
   return(font);
 }
 
-Scrd
+static Scrd
 get_rendered_size (Font *font, char *s){
   Scrd size;
   int y = font->h;
@@ -317,7 +317,7 @@ get_rendered_size (Font *font, char *s){
   If meet '\n' then move down and move back.
   If meet normal character then show the character
   and move over the width of the character*/
-void
+static void
 render_text (SDL_Surface *dest, Font *font, char *s, Scrd pos){
   Scrd cursor = pos;
   int i;
@@ -344,12 +344,12 @@ render_text (SDL_Surface *dest, Font *font, char *s, Scrd pos){
   }
 }
 
-void
+static void
 text (Font *font, char *s, Scrd pos){
   render_text(screen, font, s, pos);
 }
 
-SDL_Surface *
+static SDL_Surface *
 create_text (Font *f, char *s){
   Scrd pos = {0, 0};
   Scrd size = get_rendered_size(f, s);
