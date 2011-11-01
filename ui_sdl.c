@@ -648,13 +648,7 @@ draw (void){
   if(ui_mode==MODE_SELECT
   && unit_at(selected_tile)
   && unit_at(selected_tile)->is_visible) {
-#if 0
     draw_unit_info(unit_at(selected_tile), mk_scrd(5, 40));
-#else
-    Scrd s = map2scr(selected_tile);
-    s.x += 96/2;
-    draw_unit_info(unit_at(selected_tile), s);
-#endif
   }
   draw_labels();
   SDL_Flip(screen);
