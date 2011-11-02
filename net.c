@@ -16,7 +16,7 @@ static TCPsocket socket;
 static SDLNet_SocketSet sockets;
 
 static Event
-mk_event_move (Byte * d){
+mk_event_move (Byte *d){
   Event e;
   e.t = E_MOVE;
   e.e.move.u    = (int)d[1];
@@ -26,7 +26,7 @@ mk_event_move (Byte * d){
 }
 
 static Event
-mk_event_range (Byte * d){
+mk_event_range (Byte *d){
   Event e;
   e.t = E_RANGE;
   e.e.range.a   = (int)d[1];
@@ -36,7 +36,7 @@ mk_event_range (Byte * d){
 }
 
 static Event
-mk_event_melee (Byte * d){
+mk_event_melee (Byte *d){
   Event e;
   e.t = E_MELEE;
   e.e.melee.a                = (int)d[1];
@@ -47,7 +47,7 @@ mk_event_melee (Byte * d){
 }
 
 static Event
-mk_event_endturn (Byte * d){
+mk_event_endturn (Byte *d){
   Event e;
   e.t = E_ENDTURN;
   e.e.endturn.old_id = (int)d[1];
@@ -122,7 +122,7 @@ send_death (Event_death e){
 }
 
 static void
-get_data (Byte * data, Byte * size){
+get_data (Byte *data, Byte *size){
   int bytes_recieved;
   SDLNet_TCP_Recv(socket, size, 1);
   bytes_recieved = SDLNet_TCP_Recv(socket, data, (int)*size);
@@ -135,7 +135,7 @@ get_data (Byte * data, Byte * size){
 /* debugging */
 /*
 static void
-print_data (Byte * data, Byte size){
+print_data (Byte *data, Byte size){
   int i;
   for(i=0; i<size; i++)
     printf("%u ", (unsigned int)(data[i]));
@@ -165,7 +165,7 @@ send_int_as_uint8 (int n){
 }
 
 static Event
-mk_event (Byte * d){
+mk_event (Byte *d){
   Event e;
   int type = (int)d[0];
   switch(type){
@@ -197,7 +197,7 @@ do_network (void){
 }
 
 void
-init_network (char * hostname, int port){
+init_network (char *hostname, int port){
   IPaddress ip;
   SDLNet_Init();
   SDLNet_ResolveHost(&ip, hostname, (Uint16)port);

@@ -25,10 +25,10 @@ SDLNet_SocketSet sockets;
 
 static bool
 is_id_free (int id){
-  Node * client_node;
+  Node *client_node;
   FOR_EACH_NODE(clients, client_node){
-    Client * c = client_node->d;
-    Node * id_node;
+    Client *c = client_node->d;
+    Node *id_node;
     FOR_EACH_NODE(c->players, id_node)
       if(id == *(int*)id_node->d)
         return(false);
@@ -38,7 +38,7 @@ is_id_free (int id){
 
 static void
 wait_for_all_players (int players_count){
-  Client * c;
+  Client *c;
   while(clients.count < players_count) {
     if( SDLNet_CheckSockets(sockets, 100)
     && SDLNet_SocketReady(listening_socket) ){
@@ -48,7 +48,7 @@ wait_for_all_players (int players_count){
       c->sock = sock;
       while(1){
         int data = 0;
-        int * player_id;
+        int *player_id;
         SDLNet_TCP_Recv(sock, &data, 1);
         /*mark that all players are already sent*/
         if(data == 0xff)
@@ -71,9 +71,9 @@ wait_for_all_players (int players_count){
 static void
 send_scenario_to_clients (int id){
   Byte data = (Byte)id;
-  Node * n;
+  Node *n;
   FOR_EACH_NODE(clients, n){
-    Client * c = n->d;
+    Client *c = n->d;
     SDLNet_TCP_Send(c->sock, &data, 1);
   }
 }
@@ -114,7 +114,7 @@ receive_data (Client *c, Byte *data, Byte *size)
 
 #if PRINT_DATA
 static void
-print_data (Byte * data, Byte size){
+print_data (Byte *data, Byte size){
   int i;
   for(i=0; i<size; i++)
     printf("%u ", (unsigned int)(data[i]));
@@ -122,15 +122,15 @@ print_data (Byte * data, Byte size){
 }
 #endif
 
-/* Resend data to all clients, except <Client * exception> 
+/* Resend data to all clients, except <Client *exception> 
   who has sent that data to us.
   Send data size (in bytes), then data. */
 
 static void
-resend_data (Client * exception, Byte * data, Byte size){
-  Node * n;
+resend_data (Client *exception, Byte *data, Byte size){
+  Node *n;
   FOR_EACH_NODE(clients, n){
-    Client * c = n->d;
+    Client *c = n->d;
     if(c != exception){
       SDLNet_TCP_Send(c->sock, &size, 1);
       SDLNet_TCP_Send(c->sock, data, (int)size);
@@ -144,11 +144,11 @@ mainloop (void){
   Byte data[32];
   int active_sockets_count;
   while(1){
-    Node * n;
+    Node *n;
     active_sockets_count = SDLNet_CheckSockets(sockets, 1000);
     n = clients.h;
     while(active_sockets_count > 0 && n) {
-      Client * c = n->d;
+      Client *c = n->d;
       if(SDLNet_SocketReady(c->sock)){
         receive_data(c, data, &data_size);
 #if PRINT_DATA

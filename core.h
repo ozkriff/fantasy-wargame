@@ -147,7 +147,7 @@ typedef struct {
 } Scenario;
 
 extern Mcrd    map_size;
-extern Unit *  selected_unit;
+extern Unit   *selected_unit;
 extern Unit_type utypes[30];
 extern bool    is_local;
 extern bool    is_client_active;
@@ -158,8 +158,8 @@ extern Tile   *map;
 void  init (void);
 void  cleanup (void);
 
-void  move (Unit * moving_unit, Mcrd destination);
-void  attack (Unit * a, Unit * d);
+void  move (Unit *moving_unit, Mcrd destination);
+void  attack (Unit *a, Unit *d);
 void  select_next_unit (void);
 void  endturn (void);
 

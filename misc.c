@@ -20,7 +20,7 @@ die(const char *errstr, ...){
 }
 
 int
-str2int (char * str) {
+str2int (char *str) {
   int n;
   if(sscanf(str, "%i", &n) != 1)
     die("str2int error: \'%s\'\n", str);
@@ -36,7 +36,7 @@ mk_mcrd (int x, int y){
 }
 
 Skill *
-find_skill(Unit * u, Skill_id type){
+find_skill(Unit *u, Skill_id type){
   int i;
   for(i=0; i<u->skills_n; i++){
     if(u->skills[i].t == type)
@@ -109,9 +109,9 @@ inboard (Mcrd t){
 
 Unit *
 id2unit (int id){
-  Node * node;
+  Node *node;
   FOR_EACH_NODE(units, node){
-    Unit * u = node->d;
+    Unit *u = node->d;
     if(u->id == id)
       return(u);
   }
@@ -120,9 +120,9 @@ id2unit (int id){
 
 Unit *
 unit_at (Mcrd crd){
-  Node * node;
+  Node *node;
   FOR_EACH_NODE(units, node){
-    Unit * u = node->d;
+    Unit *u = node->d;
     if(mcrdeq(u->m, crd))
       return(u);
   }

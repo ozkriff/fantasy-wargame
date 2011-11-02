@@ -4,24 +4,24 @@
 
 typedef struct Node Node;
 struct Node {
-  Node * n; /* pointer to [n]ext node or NULL */
-  Node * p; /* pointer to [p]revious node or NULL */
-  void * d;   /* pointer to [d]ata */
+  Node *n; /* pointer to [n]ext node or NULL */
+  Node *p; /* pointer to [p]revious node or NULL */
+  void *d;   /* pointer to [d]ata */
 };
 
 typedef struct List List;
 struct List {
-  Node * h; /* pointer to first ([h]ead) node */
-  Node * t; /* pointer to last ([t]ail) node */
+  Node *h; /* pointer to first ([h]ead) node */
+  Node *t; /* pointer to last ([t]ail) node */
   int  count; /* number of nodes in list */
 };
 
 void   insert_node (List *list_p, void *data, Node *after);
-Node * extruct_node(List *list_p, Node *old);
+Node  *extruct_node(List *list_p, Node *old);
 void   delete_node (List *list_p, Node *old);
-void * extruct_data(List *list_p, Node *old);
+void  *extruct_data(List *list_p, Node *old);
 
-Node * data2node (List l, void *d);
+Node  *data2node (List l, void *d);
 
 #define add_node_to_head(list_p, node_p) \
   insert_node(list_p, node_p, NULL)

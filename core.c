@@ -20,18 +20,18 @@ Mcrd    map_size;
 Tile   *map;
 bool    is_local = true;
 bool    is_client_active;
-Unit *  selected_unit = NULL;
+Unit   *selected_unit = NULL;
 List    units = {0, 0, 0};
 Player *current_player = NULL;
 
-static FILE * logfile = NULL;
+static FILE     *logfile = NULL;
 static Scenario *current_scenario = NULL;
 static List      dead_units = {0, 0, 0};
 static List      players = {0, 0, 0};
 static List      eventlist = {0, 0, 0};
 
 static void
-kill_unit (Unit * u){
+kill_unit (Unit *u){
   Node *n = extruct_node(&units, data2node(units, u));
   push_node(&dead_units, n);
   if(u == selected_unit)
@@ -41,7 +41,7 @@ kill_unit (Unit * u){
 }
 
 static void
-update_fog_after_move (Unit * u){
+update_fog_after_move (Unit *u){
   Mcrd m;
   FOR_EACH_MCRD(m){
     if(mdist(m, u->m) <= utypes[u->t].v)
@@ -51,7 +51,7 @@ update_fog_after_move (Unit * u){
 
 static void
 apply_move (Event_move e){
-  Unit * u = id2unit(e.u);
+  Unit *u = id2unit(e.u);
   if(find_skill(u, S_IGNR))
     u->mv -= e.cost;
   else
@@ -65,7 +65,7 @@ apply_move (Event_move e){
 
 /* a - shooting unit, b - target */
 static int
-range_damage (Unit * a, Unit * b){
+range_damage (Unit *a, Unit *b){
   Skill_range s   = find_skill(a, S_RANGE)->range;
   int hits        = 0;
   int wounds      = 0; /*possible wounds(may be blocked by armour)*/
@@ -96,8 +96,8 @@ range_damage (Unit * a, Unit * b){
 
 static void
 apply_melee(Event_melee e){
-  Unit * a = id2unit(e.a);
-  Unit * d = id2unit(e.d);
+  Unit *a = id2unit(e.a);
+  Unit *d = id2unit(e.d);
   a->count -= e.attackers_killed;
   d->count -= e.defenders_killed;
   a->energy -= 2;
@@ -113,8 +113,8 @@ apply_death (Event_death e){
 
 static void
 apply_range (Event_range e){
-  Unit * ua = id2unit(e.a);
-  Unit * ud = id2unit(e.d);
+  Unit *ua = id2unit(e.a);
+  Unit *ud = id2unit(e.d);
   ud->count -= e.defenders_killed;
   ua->can_attack = false;
   find_skill(ua, S_RANGE)->range.shoots--;
@@ -124,10 +124,10 @@ static void
 updatefog (int player){
   Mcrd m;
   FOR_EACH_MCRD(m){
-    Node * node;
+    Node *node;
     tile(m)->visible = false;
     FOR_EACH_NODE(units, node){
-      Unit * u = node->d;
+      Unit *u = node->d;
       if(u->player == player
       && mdist(m, u->m) <= utypes[u->t].v)
         tile(m)->visible = true;
@@ -136,14 +136,14 @@ updatefog (int player){
 }
 
 static bool
-is_invis (Unit * u){
+is_invis (Unit *u){
   int i;
   if(!find_skill(u, S_INVIS)
   || u->player == current_player->id)
     return(false);
   for(i=0; i<6; i++){
     Mcrd nb = neib(u->m, i);
-    Unit * u2 = unit_at(nb);
+    Unit *u2 = unit_at(nb);
     if(u2 && u2->player == current_player->id)
       return(false);
   }
@@ -152,7 +152,7 @@ is_invis (Unit * u){
 
 static bool
 is_move_visible (Event_move e){
-  Unit * u = id2unit(e.u);
+  Unit *u = id2unit(e.u);
   Mcrd m = neib(u->m, e.dir);
   bool fow = tile(m)->visible || tile(u->m)->visible;
   bool hidden = is_invis(u) && u->player != current_player->id;
@@ -175,9 +175,9 @@ is_range_visible (Event_range e){
 
 static bool
 checkunitsleft(){
-  Node * node;
+  Node *node;
   FOR_EACH_NODE(units, node){
-    Unit * u = node->d;
+    Unit *u = node->d;
     if(u->player == current_player->id)
       return(true);
   }
@@ -228,9 +228,9 @@ update_unit_morale (Unit *u){
 
 static void
 refresh_units (int player_id){
-  Node * node;
+  Node *node;
   FOR_EACH_NODE(units, node){
-    Unit * u = node->d;
+    Unit *u = node->d;
     if(u->player == player_id){
       refresh_unit(u);
       update_unit_morale(u);
@@ -258,7 +258,7 @@ mk_event_endturn (int old_id, int new_id){
 }
 
 static Event
-mk_event_move (Unit * u, int dir){
+mk_event_move (Unit *u, int dir){
   Tile_type_id tile_type = tile(neib(u->m, dir))->t;
   Event e;
   e.t = E_MOVE;
@@ -270,8 +270,8 @@ mk_event_move (Unit * u, int dir){
 
 static Event
 mk_event_melee (
-    Unit * a,
-    Unit * d, 
+    Unit *a,
+    Unit *d, 
     int attackers_killed,
     int defenders_killed)
 {
@@ -285,7 +285,7 @@ mk_event_melee (
 }
 
 static Event
-mk_event_range (Unit * a, Unit * d, int dmg){
+mk_event_range (Unit *a, Unit *d, int dmg){
   Event e;
   e.t = E_RANGE;
   e.e.range.a   = a->id;
@@ -295,8 +295,8 @@ mk_event_range (Unit * a, Unit * d, int dmg){
 }
 
 static bool
-ambush(Mcrd next, Unit * moving_unit){
-  Unit * u = unit_at(next);
+ambush(Mcrd next, Unit *moving_unit){
+  Unit *u = unit_at(next);
   if(u && u->player != moving_unit->player){
     add_event( mk_event_melee(u, moving_unit, 1, 3) );
     return(true);
@@ -307,9 +307,9 @@ ambush(Mcrd next, Unit * moving_unit){
 
 /* [a]ttacker, [d]efender */
 static int
-support_range (Unit * a, Unit * d){
+support_range (Unit *a, Unit *d){
   int killed = 0;
-  Unit * sup;  /* [sup]porter */
+  Unit *sup;  /* [sup]porter */
   int i;
   for(i=0; i<6; i++){
     sup = unit_at( neib(d->m, i) );
@@ -385,7 +385,7 @@ flee (Unit *u){
 
 /* [a]ttacker, [d]efender */
 static void
-attack_melee (Unit * a, Unit * d){
+attack_melee (Unit *a, Unit *d){
   Event melee;
   int attackers_killed;
   int defenders_killed;
@@ -408,7 +408,9 @@ attack_melee (Unit * a, Unit * d){
     add_event(mk_event_death(d));
   }else{
     /*TODO check unit's morale*/
-    if(rand()%2)
+#if 0
+    if(d->morale < utypes[d->t].morale/4)
+#endif
       flee(d);
   }
   puts("");
@@ -417,9 +419,9 @@ attack_melee (Unit * a, Unit * d){
 /* Check and update visibility of all units in CW */
 static void
 update_units_visibility (void){
-  Node * node;
+  Node *node;
   FOR_EACH_NODE(units, node){
-    Unit * u = node->d;
+    Unit *u = node->d;
     if(u->player == current_player->id){
       u->is_visible = true;
     }else{
@@ -517,7 +519,7 @@ send_ids_to_server (void){
 
 static void
 undo_move (Event_move e){
-  Unit * u = id2unit(e.u);
+  Unit *u = id2unit(e.u);
   int dir = e.dir + 3;
   if(dir >= 6)
     dir -= 6;
@@ -578,8 +580,8 @@ undo_event (Event e){
 
 void
 select_next_unit (void){
-  Node * node;
-  Unit * u;
+  Node *node;
+  Unit *u;
   if(selected_unit)
     node = data2node(units, selected_unit);
   else
@@ -594,7 +596,7 @@ select_next_unit (void){
 
 void
 add_event_local (Event data){
-  Event * e = calloc(1, sizeof(Event));
+  Event *e = calloc(1, sizeof(Event));
   *e = data;
   add_node_to_tail(&eventlist, e);
 }
@@ -715,15 +717,15 @@ endturn (void){
 }
 
 void
-move (Unit * moving_unit, Mcrd destination){
+move (Unit *moving_unit, Mcrd destination){
   List path;
-  Node * node;
+  Node *node;
   if(tile(destination)->cost > moving_unit->mv)
     return;
   path = get_path(destination);
   for(node=path.h; node->n; node=node->n){
-    Mcrd * next    = node->n->d;
-    Mcrd * current = node->d;
+    Mcrd *next    = node->n->d;
+    Mcrd *current = node->d;
     if(ambush(*next, moving_unit))
       break;
     add_event( mk_event_move(moving_unit,
@@ -735,9 +737,9 @@ move (Unit * moving_unit, Mcrd destination){
 
 /* [a]ttacker, [d]efender */
 void
-attack (Unit * a, Unit * d){
+attack (Unit *a, Unit *d){
   int dist = mdist(a->m, d->m);
-  Skill * range = find_skill(a, S_RANGE);
+  Skill *range = find_skill(a, S_RANGE);
   if(range){
     if(dist <= range->range.range
     && range->range.shoots > 0){
@@ -773,7 +775,7 @@ apply_event (Event e){
 
 void
 add_unit (Mcrd crd, int plr, int type) {
-  Unit * u      = calloc(1, sizeof(Unit));
+  Unit *u       = calloc(1, sizeof(Unit));
   u->player     = plr;
   u->mv         = utypes[type].mv;
   u->count      = utypes[type].count;

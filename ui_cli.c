@@ -12,10 +12,10 @@ char b[200]; /* [b]uffer */
 int ui_done;
 
 void ui_list_units (void){
-  Node * n;
+  Node *n;
   FOR_EACH_NODE(units, n){
-    Unit * u = n->d;
-    char * s = 
+    Unit *u = n->d;
+    char *s = 
         "id=%i mcrd={%i,%i} plr=%i\n";
     printf(s, u->id, u->m.x, u->m.y, u->player);
   }
@@ -23,7 +23,7 @@ void ui_list_units (void){
 }
 
 void ui_help (void){
-  char * helpstr = 
+  char *helpstr = 
     "u - units\n"
     "i - unit info\n"
     "s - show map\n"
@@ -85,8 +85,8 @@ void ui_unit_info (void){
   if(n!=2){
     puts("error.");
   }else{
-    Unit * u = unit_at(m);
-    char * s = 
+    Unit *u = unit_at(m);
+    char *s = 
         "id: %i\n"
         "health: %i\n"
         "player: %i\n";
@@ -98,7 +98,7 @@ void ui_end_turn (void){
   endturn();
 }
 
-void ui_cmd(char * b){
+void ui_cmd(char *b){
   switch(b[0]){
     case 'h': ui_help();        break; 
     case 'u': ui_list_units();  break;   

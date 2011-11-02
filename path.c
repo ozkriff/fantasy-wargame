@@ -15,7 +15,7 @@ static Stack stack = {NULL, NULL, 0};
 update cost and parent of this tile */
 static void
 push (Mcrd crd, Mcrd parent, int newcost) {
-  Mcrd * m = malloc(sizeof(Mcrd));
+  Mcrd *m = malloc(sizeof(Mcrd));
   *m = crd;
   push_node(&stack, m);
   tile(crd)->cost   = newcost;
@@ -24,7 +24,7 @@ push (Mcrd crd, Mcrd parent, int newcost) {
 
 static Mcrd
 pop (void){
-  Mcrd * tmp = pop_node(&stack);
+  Mcrd *tmp = pop_node(&stack);
   Mcrd m = *tmp;
   free(tmp);
   return( m );
@@ -32,12 +32,12 @@ pop (void){
 
 /* zone of control */
 static int
-zoc (Mcrd a, Unit * u, int cost){
+zoc (Mcrd a, Unit *u, int cost){
   int i;
   int mv = utypes[u->t].mv;
   for(i=0; i<6; i++){
     Mcrd n = neib(a, i);
-    Unit * u2 = unit_at(n);
+    Unit *u2 = unit_at(n);
     if(inboard(n) && cost%mv != 0
     && u2 && u2->player != u->player
     && tile(n)->visible
@@ -51,8 +51,8 @@ zoc (Mcrd a, Unit * u, int cost){
 /* process neiborhood */
 /* TODO describe */
 static void
-process_nbh (Unit * u, Mcrd t, Mcrd nb){
-  Unit * u2;
+process_nbh (Unit *u, Mcrd t, Mcrd nb){
+  Unit *u2;
   int n, newcost;
   /* For not to pass through visible enemy. */
   u2 = unit_at(nb);
@@ -70,7 +70,7 @@ process_nbh (Unit * u, Mcrd t, Mcrd nb){
 }
 
 void
-fill_map (Unit * u) {
+fill_map (Unit *u) {
   Mcrd m;
   if(!u)
     return;
@@ -93,8 +93,8 @@ fill_map (Unit * u) {
 }
 
 static void
-addwaypoint (List * path, Mcrd m){
-  Mcrd * tmp = malloc(sizeof(Mcrd));
+addwaypoint (List *path, Mcrd m){
+  Mcrd *tmp = malloc(sizeof(Mcrd));
   *tmp = m;
   push_node(path, tmp);
 }

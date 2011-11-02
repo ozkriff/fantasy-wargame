@@ -75,7 +75,7 @@ static bool is_dirty = true;
 static Scrd mouse_pos = {0, 0};
 
 static SDL_Surface *
-loadimg (char * str){
+loadimg (char *str){
   SDL_Surface *original = IMG_Load(str);
   SDL_Surface *optimized;
   if(!original)
@@ -210,7 +210,7 @@ mbetween(Mcrd a, Mcrd b, int i){
 
 static void
 pixel (int x, int y, Uint32 pixel) {
-  Uint32 * pixels = (Uint32 *)screen->pixels;
+  Uint32 *pixels = (Uint32 *)screen->pixels;
   if(x >= 0 && y >= 0 && x < screen->w && y < screen->h)
     pixels[ (y * screen->w) + x ] = pixel;
 }
@@ -353,7 +353,7 @@ static SDL_Surface *
 create_text (Font *f, char *s){
   Scrd pos = {0, 0};
   Scrd size = get_rendered_size(f, s);
-  SDL_PixelFormat* fmt = screen->format;
+  SDL_PixelFormat *fmt = screen->format;
   SDL_Surface *srf = SDL_CreateRGBSurface(0,
       size.x, size.y, (int)fmt->BitsPerPixel, 0, 0, 0, 0);
   Uint32 color = SDL_MapRGBA(srf->format, 0, 255, 255, 255);
@@ -382,9 +382,9 @@ draw_unit (Unit *u){
 
 static void
 draw_units (void){
-  Node * node;
+  Node *node;
   FOR_EACH_NODE(units, node){
-    Unit * u = node->d;
+    Unit *u = node->d;
     if(ui_mode == MODE_SHOW_EVENT){
       if(current_event->t == E_MOVE
       && current_event->e.move.u == u->id)
@@ -434,7 +434,7 @@ maptext (void){
 
 static void
 draw_move_event (Event_move e){
-  Unit * u = id2unit(e.u);
+  Unit *u = id2unit(e.u);
   Scrd s = mbetween(u->m, neib(u->m, e.dir), eindex);
   draw_img(img_rings[u->player], s);
   draw_img(type2img(u->t), s);
@@ -670,7 +670,7 @@ draw_menu (void){
 static void
 init_colors (void){
   Uint8 x = 255;
-  SDL_PixelFormat * fmt = screen->format;
+  SDL_PixelFormat *fmt = screen->format;
   red   = SDL_MapRGBA(fmt, x, 0, 0, x);
   green = SDL_MapRGBA(fmt, 0, x, 0, x);
   blue  = SDL_MapRGBA(fmt, 0, 0, x, x);

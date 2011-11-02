@@ -12,8 +12,8 @@
   of the list, else it will be added following <after>.
   Only pointer to data is stored, no copying! */
 void
-insert_node (List * list, void * data, Node * after){
-  Node * new = malloc(sizeof(Node));
+insert_node (List *list, void *data, Node *after){
+  Node *new = malloc(sizeof(Node));
   new->d = data;
   if(after){
     new->n = after->n;
@@ -31,7 +31,7 @@ insert_node (List * list, void * data, Node * after){
 /* Extructs node from list, returns pointer to this node.
   No memory is freed */
 Node *
-extruct_node (List * list, Node * old){
+extruct_node (List *list, Node *old){
   if(old){
     if(old->n)  old->n->p=old->p;  else  list->t=old->p;
     if(old->p)  old->p->n=old->n;  else  list->h=old->n;
@@ -42,8 +42,8 @@ extruct_node (List * list, Node * old){
 
 /* Delete data and node. */
 void
-delete_node (List * list, Node * old){
-  Node * node = extruct_node(list, old);
+delete_node (List *list, Node *old){
+  Node *node = extruct_node(list, old);
   free(node->d);
   free(node);
 }
@@ -51,9 +51,9 @@ delete_node (List * list, Node * old){
 /* Extruct node from list, delete node,
   return pointer to data. */
 void *
-extruct_data (List * list, Node * old){
-  Node * node = extruct_node(list, old);
-  void * data = node->d;
+extruct_data (List *list, Node *old){
+  Node *node = extruct_node(list, old);
+  void *data = node->d;
   free(node);
   return(data);
 }

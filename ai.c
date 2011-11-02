@@ -14,10 +14,10 @@
 
 /* if there is enemy at adjustment cell then attack it */
 static void
-ai_attack(Unit * u){
+ai_attack(Unit *u){
   int i;
   for(i=0; i<6; i++){
-    Unit * enm = unit_at( neib(u->m, i) );
+    Unit *enm = unit_at( neib(u->m, i) );
     if(!enm || enm->player == current_player->id)
       continue;
     attack(u, enm);
@@ -26,12 +26,12 @@ ai_attack(Unit * u){
 
 /* random movement */
 static void
-ai_movement(Unit * u){
+ai_movement(Unit *u){
   int i;
   fill_map(u);
   for(i=0; i<6; i++){
     Mcrd m = neib(u->m, i);
-    Unit * u2 = unit_at(m);
+    Unit *u2 = unit_at(m);
     /*if( is_invis(u2) || !mp(m)->fog ){
       mv(u, m);
     }*/
@@ -45,12 +45,12 @@ ai_movement(Unit * u){
 void
 ai (void){
 #if 0
-  Node * n;
+  Node *n;
   while(eq.count > 0){
     apply_event(get_next_event());
   }
   FOR_EACH_NODE(cw->units, n){
-    Unit * u = n->d;
+    Unit *u = n->d;
     if(u->player != cw->id)
       continue;
     ai_attack(u);
