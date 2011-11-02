@@ -716,7 +716,6 @@ tile_action (Mcrd m){
   }
 }
 
-
 static void
 mouseclick (SDL_MouseButtonEvent e){
   Scrd s = mk_scrd((int)e.x, (int)e.y);
