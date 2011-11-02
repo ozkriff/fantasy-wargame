@@ -375,7 +375,7 @@ draw_unit (Unit *u){
   draw_img(type2img(u->t), s);
   if(1){
     char str[100];
-    sprintf(str, "%i,%i", u->count, u->energy);
+    sprintf(str, "%i,%i", u->count, u->stamina);
     text(&font, str, mk_scrd(s.x, s.y+20));
   }
 }

@@ -56,7 +56,7 @@ apply_move (Event_move e){
     u->mv -= e.cost;
   else
     u->mv = 0;
-  u->energy -= e.cost;
+  u->stamina -= e.cost;
   u->m = neib(u->m, e.dir);
   fill_map(selected_unit);
   if(u->player == current_player->id)
@@ -100,8 +100,8 @@ apply_melee(Event_melee e){
   Unit *d = id2unit(e.d);
   a->count -= e.attackers_killed;
   d->count -= e.defenders_killed;
-  a->energy -= 2;
-  d->energy -= 2;
+  a->stamina -= 2;
+  d->stamina -= 2;
   a->can_attack = false;
 }
 
@@ -190,9 +190,9 @@ refresh_unit (Unit *u){
   Unit_type *t = &utypes[u->t];
   u->mv = t->mv;
   u->can_attack = true;
-  u->energy += t->energy_rg;
+  u->stamina += t->stamina_rg;
   u->morale += t->morale_rg;
-  fixnum(0, t->energy, &u->energy);
+  fixnum(0, t->stamina, &u->stamina);
   fixnum(0, t->morale, &u->morale);
   range = find_skill(u, S_RANGE);
   if(range){
@@ -335,12 +335,12 @@ get_wounds (Unit *a, Unit *d){
   int hits     = 0;
   int wounds   = 0; /*possible wounds(may be blocked by armour)*/
   int final    = 0; /*final wounds(not blocked by armour)*/
-  int attacks  = at.attacks * a->count   * a->energy/at.energy;
-  int a_ms     = (at.ms + at.ter_ms[tt]) * a->energy/at.energy;
-  int d_ms     = (dt.ms + dt.ter_ms[tt]) * d->energy/dt.energy;
+  int attacks  = at.attacks * a->count   * a->stamina/at.stamina;
+  int a_ms     = (at.ms + at.ter_ms[tt]) * a->stamina/at.stamina;
+  int d_ms     = (dt.ms + dt.ter_ms[tt]) * d->stamina/dt.stamina;
   /*chances to hit, to wound and to ignore armour. percents.*/
   int to_hit   = 5 + (a_ms - d_ms);
-  int a_stren  = at.strength * a->energy/at.energy;
+  int a_stren  = at.strength * a->stamina/at.stamina;
   int to_wound = 5 + (a_stren - dt.toughness);
   int to_as    = 10- dt.armor;
 #if 1
@@ -527,7 +527,7 @@ undo_move (Event_move e){
     u->mv += e.cost;
   else
     u->mv = utypes[u->t].mv;
-  u->energy += e.cost;
+  u->stamina += e.cost;
   u->m = neib(u->m, dir);
   fill_map(selected_unit);
   if(u->player == current_player->id)
@@ -540,8 +540,8 @@ undo_melee (Event_melee e){
   Unit *d = id2unit(e.d);
   a->count += e.attackers_killed;
   d->count += e.defenders_killed;
-  a->energy += 2;
-  d->energy += 2;
+  a->stamina += 2;
+  d->stamina += 2;
   a->can_attack = true;;
 }
 
@@ -784,7 +784,7 @@ add_unit (Mcrd crd, int plr, int type) {
   u->t          = type;
   u->id         = new_unit_id();
   u->skills_n   = utypes[type].skills_n;
-  u->energy     = utypes[type].energy;
+  u->stamina    = utypes[type].stamina;
   u->morale     = utypes[type].morale;
   memcpy(u->skills, utypes[type].skills,
       u->skills_n*sizeof(Skill));

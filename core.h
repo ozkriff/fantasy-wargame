@@ -52,8 +52,8 @@ typedef struct {
   int ter_ms[10]; /* melee_skill bonuses at different terrains */
   Skill skills[10];
   int skills_n;
-  int energy; /*max unit's energy */
-  int energy_rg; /*regeneration per turn*/
+  int stamina; /*max unit's stamina */
+  int stamina_rg; /*regeneration per turn*/
   int cost;
 } Unit_type;
 
@@ -68,7 +68,7 @@ typedef struct {
   Skill skills[10];
   int   skills_n;
   bool  is_visible;
-  int   energy;
+  int   stamina;
   int   morale;
 } Unit;
 
