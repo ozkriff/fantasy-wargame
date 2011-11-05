@@ -70,6 +70,8 @@ static int final_eindex;
 static int steps = 6;
 
 static bool done;
+
+/* Do we need to redraw screen? */
 static bool is_dirty = true;
 
 static Scrd mouse_pos = {0, 0};
