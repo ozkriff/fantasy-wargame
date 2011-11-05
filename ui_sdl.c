@@ -54,7 +54,6 @@ static Mcrd selected_tile;
 #define MODE_SHOW_EVENT 1
 static int ui_mode = MODE_SELECT;
 
-
 #define SCREEN_MENU     0 /*select scenario*/
 #define SCREEN_SCENARIO 1
 static int screen_id = SCREEN_MENU;
