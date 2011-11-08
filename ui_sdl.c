@@ -424,10 +424,8 @@ static void
 draw_reachable_tiles (void){
   Mcrd m;
   FOR_EACH_MCRD(m){
-    Mcrd p = tile(m)->parent;
     if(tile(m)->cost <= selected_unit->mv) {
       draw_img(img_reacheble, map2scr(m));
-      mbzline(m, p);
     }
   }
 }
