@@ -637,7 +637,7 @@ draw_unit_info (Unit *u, Scrd s){
   Unit_type *t = &utypes[u->t];
   char str[12 * 30];
   char *template =
-      " type_id   %2i \n"
+      " %s(%i) \n"
       " v         %2i \n"
       " morale    %2i \n"
       " morale_rg %2i \n"
@@ -647,10 +647,9 @@ draw_unit_info (Unit *u, Scrd s){
       " attacks   %2i \n"
       " armor     %2i \n"
       " mv        %2i \n"
-      " %s \n"
       " id        %2i \n";
   sprintf(str, template,
-      u->t,
+      unittype2name(u->t), u->t,
       t->v,
       t->morale,
       t->morale_rg,
@@ -660,7 +659,6 @@ draw_unit_info (Unit *u, Scrd s){
       t->attacks,
       t->armor,
       t->mv,
-      unittype2name(u->t),
       u->id);
   text(&font, str, s);
 }
