@@ -358,6 +358,14 @@ text (Font *font, char *s, Scrd pos){
 }
 
 static SDL_Surface *
+create_black_surface (Scrd size){
+  SDL_PixelFormat *fmt = screen->format;
+  SDL_Surface *srf = SDL_CreateRGBSurface(0,
+      size.x, size.y, (int)fmt->BitsPerPixel, 0, 0, 0, 0);
+  return(srf);
+}
+
+static SDL_Surface *
 create_text (Font *f, char *s){
   Scrd pos = {0, 0};
   Scrd size = get_rendered_size(f, s);
