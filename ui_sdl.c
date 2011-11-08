@@ -637,17 +637,17 @@ draw_unit_info (Unit *u, Scrd s){
   Unit_type *t = &utypes[u->t];
   char str[12 * 30];
   char *template =
-      " %s(%i) \n"
-      " v         %2i \n"
-      " morale    %2i \n"
-      " morale_rg %2i \n"
-      " ms        %2i \n"
-      " strength  %2i \n"
-      " toughness %2i \n"
-      " attacks   %2i \n"
-      " armor     %2i \n"
-      " mv        %2i \n"
-      " id        %2i \n";
+      "%s(%i)\n"
+      "v         %2i\n"
+      "morale    %2i\n"
+      "morale_rg %2i\n"
+      "ms        %2i\n"
+      "strength  %2i\n"
+      "toughness %2i\n"
+      "attacks   %2i\n"
+      "armor     %2i\n"
+      "mv        %2i\n"
+      "id        %2i\n";
   sprintf(str, template,
       unittype2name(u->t), u->t,
       t->v,
