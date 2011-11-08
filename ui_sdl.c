@@ -243,6 +243,14 @@ bzline (Scrd a, Scrd b, Uint32 clr){
 }
 
 static void
+draw_img_by_topleft (SDL_Surface *src, Scrd pos){
+  SDL_Rect rect;
+  rect.x = pos.x;
+  rect.y = pos.y;
+  SDL_BlitSurface(src, NULL, screen, &rect);
+}
+
+static void
 draw_img (SDL_Surface *src, Scrd s) {
   SDL_Rect rect;
   rect.x = (Sint16)s.x - src->w/2;
