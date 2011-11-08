@@ -717,7 +717,8 @@ add_label (char *str, Mcrd pos){
   Label *l = calloc(1, sizeof(Label));
   l->frames_left = 60;
   l->pos = pos;
-  l->img = create_text(&font, str);
+  l->img = create_transparent_surface(get_rendered_size(&font, str));
+  render_text(l->img, &font, str, mk_scrd(0, 0));
   push_node(&labels, l);
 }
 
