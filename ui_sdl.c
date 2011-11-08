@@ -977,7 +977,7 @@ mainloop (void){
 }
 
 static void
-cleanup_ui(){
+cleanup_ui (void){
   free_sprites();
   SDL_Quit();
   IMG_Quit();
