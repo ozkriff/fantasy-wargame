@@ -366,6 +366,15 @@ create_black_surface (Scrd size){
 }
 
 static SDL_Surface *
+create_transparent_surface (Scrd size){
+  SDL_Surface *srf = create_black_surface(size);
+  Uint32 color = SDL_MapRGBA(srf->format, 0, 255, 255, 255);
+  SDL_FillRect(srf, NULL, color);
+  SDL_SetColorKey(srf, SDL_SRCCOLORKEY, color); 
+  return(srf);
+}
+
+static SDL_Surface *
 create_text (Font *f, char *s){
   Scrd pos = {0, 0};
   Scrd size = get_rendered_size(f, s);
