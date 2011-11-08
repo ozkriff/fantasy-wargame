@@ -710,6 +710,7 @@ get_next_event (void){
 
 void
 endturn (void){
+  selected_unit = NULL;
   int id = current_player->id + 1;
   if(id == current_scenario->players_count)
     id = 0;

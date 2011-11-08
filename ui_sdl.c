@@ -827,7 +827,6 @@ select_keys (SDL_KeyboardEvent e){
   switch(e.keysym.sym) {
     case SDLK_t:
       endturn();
-      selected_unit = NULL;
       break;
     case SDLK_n:
       select_next_unit();
