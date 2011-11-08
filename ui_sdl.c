@@ -977,8 +977,18 @@ mainloop (void){
 }
 
 static void
+free_labels (void){
+  while(labels.count > 0){
+    Label *l = labels.h->d;
+    SDL_FreeSurface(l->img);
+    delete_node(&labels, labels.h);
+  }
+}
+
+static void
 cleanup_ui (void){
   free_sprites();
+  free_labels();
   SDL_Quit();
   IMG_Quit();
 }
