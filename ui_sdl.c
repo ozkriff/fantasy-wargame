@@ -637,11 +637,11 @@ draw (void){
   draw_bg(black);
   draw_map();
   draw_fog();
-  draw_units();
   if(ui_mode==MODE_SELECT && selected_unit){
     draw_reachable_tiles();
     draw_img(img_selected_hex, map2scr(selected_unit->m));
   }
+  draw_units();
   draw_img(img_selected_hex, map2scr(selected_tile));
   if(ui_mode==MODE_SHOW_EVENT)
     draw_event(*current_event);
