@@ -252,10 +252,9 @@ draw_img_by_topleft (SDL_Surface *src, Scrd pos){
 
 static void
 draw_img (SDL_Surface *src, Scrd s) {
-  SDL_Rect rect;
-  rect.x = (Sint16)s.x - src->w/2;
-  rect.y = (Sint16)s.y - src->h/2;
-  SDL_BlitSurface(src, NULL, screen, &rect);
+  s.x -= src->w / 2;
+  s.y -= src->h / 2;
+  draw_img_by_topleft(src, s);
 }
 
 static void
