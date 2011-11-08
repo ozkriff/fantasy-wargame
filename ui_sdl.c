@@ -29,7 +29,14 @@ typedef struct {
   SDL_Surface *img;
 } Label;
 
+typedef struct {
+  void (*f)(void);
+  Scrd pos;
+  SDL_Surface *img;
+} Button;
+
 static List labels = {NULL, NULL, 0};
+static List buttons = {NULL, NULL, 0};
 
 static Font font;
 
@@ -568,6 +575,15 @@ draw_labels_2 (void){
 }
 
 static void
+draw_buttons (void){
+  Node *node;
+  FOR_EACH_NODE(buttons, node){
+    Button *b = node->d;
+    draw_img_by_topleft(b->img, b->pos);
+  }
+}
+
+static void
 draw_labels (void){
   char str[100];
   sprintf(str, "[pl:%i]", current_player->id);
@@ -578,6 +594,7 @@ draw_labels (void){
     text(&font, s, mk_scrd(0, 20));
   }
   draw_labels_2();
+  draw_buttons();
 }
 
 static char*
@@ -705,6 +722,15 @@ add_label (char *str, Mcrd pos){
 }
 
 static void
+add_button (SDL_Surface *img, Scrd pos, void (*f)(void)){
+  Button *b = calloc(1, sizeof(Button));
+  b->pos = pos;
+  b->img = img;
+  b->f = f;
+  push_node(&buttons, b);
+}
+
+static void
 init_draw (void){
   SDL_Init(SDL_INIT_VIDEO);
   IMG_Init(IMG_INIT_PNG);
@@ -714,6 +740,8 @@ init_draw (void){
   load_sprites();
   init_colors();
   selected_tile = mk_mcrd(-1,-1);
+  add_button(create_text(&font, "[ENDTURN]"),
+      mk_scrd(120, 0), endturn);
 }
 
 static void
@@ -733,10 +761,29 @@ tile_action (Mcrd m){
   }
 }
 
+static Button *
+scrd2button (Scrd pos){
+  Node *node;
+  FOR_EACH_NODE(buttons, node){
+    Button *b = node->d;
+    if(pos.x >= b->pos.x
+    && pos.x <= b->pos.x + b->img->w
+    && pos.y >= b->pos.y
+    && pos.y <= b->pos.y + b->img->h){
+      return(b);
+    }
+  }
+  return(NULL);
+}
+
 static void
 mouseclick (SDL_MouseButtonEvent e){
   Scrd s = mk_scrd((int)e.x, (int)e.y);
-  tile_action(scr2map(s));
+  Button *b = scrd2button(s);
+  if(b)
+    b->f();
+  else
+    tile_action(scr2map(s));
 }
 
 static void
@@ -993,6 +1040,15 @@ mainloop (void){
 }
 
 static void
+free_buttons (void){
+  while(buttons.count > 0){
+    Button *b = buttons.h->d;
+    SDL_FreeSurface(b->img);
+    delete_node(&buttons, buttons.h);
+  }
+}
+
+static void
 free_labels (void){
   while(labels.count > 0){
     Label *l = labels.h->d;
@@ -1005,6 +1061,7 @@ static void
 cleanup_ui (void){
   free_sprites();
   free_labels();
+  free_buttons();
   SDL_Quit();
   IMG_Quit();
 }
