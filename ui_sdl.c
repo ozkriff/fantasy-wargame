@@ -39,6 +39,7 @@ static List labels = {NULL, NULL, 0};
 static List buttons = {NULL, NULL, 0};
 
 static Font font;
+static Font bigfont;
 
 static SDL_Surface *img_tiles[10];
 static SDL_Surface *img_units[30];
@@ -96,6 +97,7 @@ loadimg (char *str){
 static void
 free_sprites (void){
   SDL_FreeSurface(font.bitmap          );
+  SDL_FreeSurface(bigfont.bitmap       );
   SDL_FreeSurface(img_tiles[0]         );
   SDL_FreeSurface(img_tiles[1]         );
   SDL_FreeSurface(img_tiles[2]         );
@@ -717,8 +719,8 @@ add_label (char *str, Mcrd pos){
   Label *l = calloc(1, sizeof(Label));
   l->frames_left = 60;
   l->pos = pos;
-  l->img = create_transparent_surface(get_rendered_size(&font, str));
-  render_text(l->img, &font, str, mk_scrd(0, 0));
+  l->img = create_transparent_surface(get_rendered_size(&bigfont, str));
+  render_text(l->img, &bigfont, str, mk_scrd(0, 0));
   push_node(&labels, l);
 }
 
@@ -738,6 +740,7 @@ init_draw (void){
   screen = SDL_SetVideoMode(640, 480,
       32, SDL_SWSURFACE | SDL_RESIZABLE);
   font = build_font(loadimg("img/font_8x12.png"), 8, 12);
+  bigfont = build_font(loadimg("img/font_16x24.png"), 16, 24);
   load_sprites();
   init_colors();
   selected_tile = mk_mcrd(-1,-1);
