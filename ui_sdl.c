@@ -680,7 +680,9 @@ draw (void){
   if(ui_mode==MODE_SELECT
   && unit_at(selected_tile)
   && unit_at(selected_tile)->is_visible) {
-    draw_unit_info(unit_at(selected_tile), mk_scrd(5, 40));
+    Scrd pos = map2scr(selected_tile);
+    pos.x += 96/2 + 5;
+    draw_unit_info(unit_at(selected_tile), pos);
   }
   draw_labels();
   SDL_Flip(screen);
