@@ -745,7 +745,7 @@ init_draw (void){
   init_colors();
   selected_tile = mk_mcrd(-1,-1);
   add_button(create_text(&font, "[ENDTURN]"),
-      mk_scrd(120, 0), endturn);
+      mk_scrd(120, 20), endturn);
 }
 
 static void
