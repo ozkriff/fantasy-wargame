@@ -964,9 +964,9 @@ add_event_range_label (Event_range e){
 
 static void
 add_event_label (Event e){
-  if(current_event->t == E_MELEE)
+  if(e.t == E_MELEE)
     add_event_melee_label(e.e.melee);
-  if(current_event->t == E_RANGE)
+  if(e.t == E_RANGE)
     add_event_range_label(e.e.range);
 }
 
