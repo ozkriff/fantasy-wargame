@@ -172,7 +172,7 @@ mk_scrd (int x, int y){
   return(s);
 }
 
-/* Get distanse between two screen points. */
+/* Get distance between two screen points. */
 static int
 sdist (Scrd a, Scrd b) {
   float dx = (float)abs(b.x - a.x);
