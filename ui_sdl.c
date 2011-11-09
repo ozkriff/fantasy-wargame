@@ -917,7 +917,7 @@ sdl_events (void){
         break;
       case SDL_VIDEORESIZE:
         screen = SDL_SetVideoMode(e.resize.w, e.resize.h,
-            32, SDL_SWSURFACE | SDL_RESIZABLE);
+            32, SDL_RESIZABLE);
         break;
     }
     is_dirty = true;
