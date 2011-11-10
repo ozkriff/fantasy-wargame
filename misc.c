@@ -168,7 +168,7 @@ char2tiletype (char c){
   if(c=='*') return(T_WATER);
   if(c=='h') return(T_HILLS);
   if(c=='M') return(T_MOUNTAINS);
-  die("ui_sdl: char2tiletype(): "
+  die("misc: char2tiletype(): "
       "unknown tiletype '%c'\n", c);
   return(0);
 }
