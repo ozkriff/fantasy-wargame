@@ -47,7 +47,7 @@ static SDL_Surface *img_selected_hex;
 static SDL_Surface *img_reacheble;
 static SDL_Surface *img_fog_of_war;
 static SDL_Surface *img_arrow;
-static SDL_Surface *screen = NULL;
+static SDL_Surface *screen;
 
 static SDL_Surface *img_rings[10];
 
