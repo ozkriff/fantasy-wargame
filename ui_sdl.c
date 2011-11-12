@@ -97,20 +97,20 @@ loadimg (char *str){
 
 static void
 free_sprites (void){
-  SDL_FreeSurface(font.bitmap          );
-  SDL_FreeSurface(bigfont.bitmap       );
-  SDL_FreeSurface(img_tiles[0]         );
-  SDL_FreeSurface(img_tiles[1]         );
-  SDL_FreeSurface(img_tiles[2]         );
-  SDL_FreeSurface(img_tiles[3]         );
-  SDL_FreeSurface(img_tiles[4]         );
-  SDL_FreeSurface(img_arrow            );
-  SDL_FreeSurface(img_selected_hex     );
-  SDL_FreeSurface(img_reacheble        );
-  SDL_FreeSurface(img_fog_of_war       );
-  SDL_FreeSurface(img_rings[0]         );
-  SDL_FreeSurface(img_rings[1]         );
-  SDL_FreeSurface(img_rings[2]         );
+  SDL_FreeSurface(font.bitmap                );
+  SDL_FreeSurface(bigfont.bitmap             );
+  SDL_FreeSurface(img_tiles[0]               );
+  SDL_FreeSurface(img_tiles[1]               );
+  SDL_FreeSurface(img_tiles[2]               );
+  SDL_FreeSurface(img_tiles[3]               );
+  SDL_FreeSurface(img_tiles[4]               );
+  SDL_FreeSurface(img_arrow                  );
+  SDL_FreeSurface(img_selected_hex           );
+  SDL_FreeSurface(img_reacheble              );
+  SDL_FreeSurface(img_fog_of_war             );
+  SDL_FreeSurface(img_rings[0]               );
+  SDL_FreeSurface(img_rings[1]               );
+  SDL_FreeSurface(img_rings[2]               );
   SDL_FreeSurface(img_units[U_PEASANT       ]);
   SDL_FreeSurface(img_units[U_SWORDSMAN     ]);
   SDL_FreeSurface(img_units[U_FOOT_KNIGHT   ]);
