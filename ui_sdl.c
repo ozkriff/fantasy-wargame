@@ -60,7 +60,8 @@ static Mcrd selected_tile;
 
 #define MODE_SELECT     0
 #define MODE_SHOW_EVENT 1
-static int ui_mode = MODE_SELECT;
+#define MODE_EMPTY      2
+static int ui_mode = MODE_EMPTY;
 
 #define SCREEN_MENU     0 /*select scenario*/
 #define SCREEN_SCENARIO 1
@@ -900,7 +901,11 @@ sdl_events (void){
         done = true;
         break;
       case SDL_KEYUP:
-        if(screen_id == SCREEN_SCENARIO)
+        if(screen_id == SCREEN_SCENARIO
+        && ui_mode == MODE_EMPTY){
+          ui_mode = MODE_SELECT;
+          is_dirty = true;
+        }else if(screen_id == SCREEN_SCENARIO)
           keys(e.key);
         else
           menu_keys(e.key);
@@ -913,6 +918,11 @@ sdl_events (void){
         && ui_mode == MODE_SELECT
         && screen_id == SCREEN_SCENARIO){
           mouseclick(e.button);
+        }
+        if(screen_id == SCREEN_SCENARIO 
+        && ui_mode == MODE_EMPTY){
+          ui_mode = MODE_SELECT;
+          is_dirty = true;
         }
         break;
       case SDL_VIDEORESIZE:
@@ -987,6 +997,11 @@ events (void){
     eindex = 0;
     final_eindex = get_last_event_index(*current_event);
     add_event_label(*current_event);
+    if(current_event->t == E_ENDTURN
+    && current_event->e.endturn.old_id == current_player->id){
+      apply_event(*current_event);
+      ui_mode = MODE_EMPTY;
+    }
     is_dirty = true;
   }
 }
@@ -1023,7 +1038,8 @@ static void
 mainloop (void){
   while(!done){
     sdl_events();
-    if(screen_id == SCREEN_SCENARIO){
+    if(screen_id == SCREEN_SCENARIO
+    && (ui_mode == MODE_SELECT || ui_mode == MODE_SHOW_EVENT)){
       if(current_player->is_ai)
         ai();
       if(!is_local)
@@ -1034,6 +1050,14 @@ mainloop (void){
         draw();
         is_dirty = false;
       }
+    }else if (screen_id == SCREEN_SCENARIO
+    && ui_mode == MODE_EMPTY){
+      char s[50];
+      draw_bg(black);
+      sprintf(s, "Player %i.\nPress any key...",
+          current_player->id);
+      text(&bigfont, s, mk_scrd(20, 20));
+      SDL_Flip(screen);
     }else{
       draw_menu();
       is_dirty = false;
