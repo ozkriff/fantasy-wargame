@@ -759,8 +759,8 @@ tile_action (Mcrd m){
     if(!u || (u && !u->is_visible)){
       move(selected_unit, m);
     }
-    if(u && u->player != current_player->id && u->is_visible
-    && selected_unit){
+    if(u && u->player != current_player->id
+    && u->is_visible && selected_unit){
       attack(selected_unit, u);
     }
   }
