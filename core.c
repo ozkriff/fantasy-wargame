@@ -20,12 +20,12 @@ Mcrd    map_size;
 Tile   *map;
 bool    is_local = true;
 bool    is_client_active;
-Unit   *selected_unit = NULL;
+Unit   *selected_unit;
 List    units = {0, 0, 0};
-Player *current_player = NULL;
+Player *current_player;
 
-static FILE     *logfile = NULL;
-static Scenario *current_scenario = NULL;
+static FILE     *logfile;
+static Scenario *current_scenario;
 static List      dead_units = {0, 0, 0};
 static List      players = {0, 0, 0};
 static List      eventlist = {0, 0, 0};
@@ -875,5 +875,9 @@ init (void){
   init_unit_types();
   init_scenarios();
   is_client_active = true;
+  selected_unit = NULL;
+  current_player = NULL;
+  logfile = NULL;
+  current_scenario = NULL;
 }
 
