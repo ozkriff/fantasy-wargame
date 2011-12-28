@@ -24,7 +24,7 @@ ui_cli: $(cli_obj)
 sdl_obj=ui_sdl.o $(common_obj)
 sdl_lib=-lSDL -lSDL_image -lSDL_net
 ui_sdl: $(sdl_obj)
-	$(CC) $(CFLAGS) -o ui_sdl $(sdl_obj) $(sdl_lib)
+	$(CC) $(CFLAGS) -o ui_sdl $(sdl_obj) $(sdl_lib) -lm
 	
 server: server.o list.o
 	$(CC) $(CFLAGS) -o server server.o list.o -lSDL_net
