@@ -59,7 +59,7 @@ static Event
 mk_event_death (Byte *d){
   Event e;
   e.t = E_DEATH;
-  e.e.death.id = (int)d[1];
+  e.e.death.dead_unit_id = (int)d[1];
   return(e);
 }
 
@@ -116,7 +116,7 @@ send_death (Event_death e){
   Byte size = 2;
   Byte d[2];
   d[0] = E_DEATH;
-  d[1] = (Byte)e.id;
+  d[1] = (Byte)e.dead_unit_id;
   SDLNet_TCP_Send(socket, &size, 1);
   SDLNet_TCP_Send(socket, d, (int)size);
 }

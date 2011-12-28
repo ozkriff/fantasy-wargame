@@ -107,7 +107,7 @@ apply_melee(Event_melee e){
 
 static void
 apply_death (Event_death e){
-  Unit *u = id2unit(e.id);
+  Unit *u = id2unit(e.dead_unit_id);
   kill_unit(u);
 }
 
@@ -366,7 +366,7 @@ static Event
 mk_event_death (Unit *u){
   Event e;
   e.t = E_DEATH;
-  e.e.death.id = u->id;
+  e.e.death.dead_unit_id = u->id;
   return(e);
 }
 
@@ -557,7 +557,7 @@ static void
 undo_death (Event_death e){
   Node *n = deq_node(&dead_units);
   Unit *u = n->d;
-  if(u->id != e.id)
+  if(u->id != e.dead_unit_id)
     die("NOOO");
   push_node(&units, n->d);
   free(n);
@@ -625,7 +625,7 @@ event2log (Event e){
           e.e.endturn.new_id);
       break;
     case E_DEATH:
-      fprintf(logfile, "KILLED %i\n", e.e.death.id);
+      fprintf(logfile, "KILLED %i\n", e.e.death.dead_unit_id);
       break;
     default:
       die("core: event2log(): "
