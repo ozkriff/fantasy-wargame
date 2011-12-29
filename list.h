@@ -6,7 +6,7 @@ typedef struct Node Node;
 struct Node {
   Node *n; /* pointer to [n]ext node or NULL */
   Node *p; /* pointer to [p]revious node or NULL */
-  void *d;   /* pointer to [d]ata */
+  void *d; /* pointer to [d]ata */
 };
 
 typedef struct List List;
