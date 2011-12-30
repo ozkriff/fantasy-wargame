@@ -1035,6 +1035,16 @@ scroll_map(Scrd s){
 }
 
 static void
+draw_empty_screen(){
+  char s[50];
+  draw_bg(black);
+  sprintf(s, "Player %i.\nPress any key...",
+      current_player->id);
+  text(&bigfont, s, mk_scrd(20, 20));
+  SDL_Flip(screen);
+}
+
+static void
 mainloop (void){
   while(!done){
     sdl_events();
@@ -1052,12 +1062,7 @@ mainloop (void){
       }
     }else if (screen_id == SCREEN_SCENARIO
     && ui_mode == MODE_EMPTY){
-      char s[50];
-      draw_bg(black);
-      sprintf(s, "Player %i.\nPress any key...",
-          current_player->id);
-      text(&bigfont, s, mk_scrd(20, 20));
-      SDL_Flip(screen);
+      draw_empty_screen();
     }else{
       draw_menu();
       is_dirty = false;
