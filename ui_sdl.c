@@ -1046,11 +1046,9 @@ mainloop (void){
         do_network();
       events();
       scroll_map(mouse_pos);
-      if(is_dirty){
-        if(ui_mode != MODE_EMPTY){
-          draw();
-          is_dirty = false;
-        }
+      if(is_dirty && ui_mode != MODE_EMPTY){
+        draw();
+        is_dirty = false;
       }
     }else if (screen_id == SCREEN_SCENARIO
     && ui_mode == MODE_EMPTY){
