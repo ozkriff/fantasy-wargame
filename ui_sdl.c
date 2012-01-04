@@ -1047,9 +1047,9 @@ draw_empty_screen(){
 static void
 mainloop (void){
   while(!done){
-    bool is_corect_mode;
+    bool is_correct_mode;
     sdl_events();
-    is_corect_mode = ui_mode == MODE_SELECT 
+    is_correct_mode = ui_mode == MODE_SELECT 
         || ui_mode == MODE_SHOW_EVENT;
     if(screen_id == SCREEN_SCENARIO && is_correct_mode){
       if(current_player->is_ai)
